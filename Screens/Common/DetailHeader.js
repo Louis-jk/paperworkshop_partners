@@ -26,6 +26,15 @@ const DetailHeader = (props) => {
       case 'OrderStep':
         setTitle('견적의뢰');
         break;
+      case 'OrderEdit':
+        setTitle('견적의뢰');
+        break;
+      case 'OrderComplete':
+        setTitle('견적의뢰');
+        break;
+      case 'OrderDetail':
+        setTitle('견적의뢰 세부내용');
+        break;
       case 'MessageDetail':
         setTitle('메세지');
         break;
@@ -40,6 +49,9 @@ const DetailHeader = (props) => {
         break;
       case 'ReqPopular':
         setTitle('인기 파트너스 등록 신청');
+        break;
+      case 'Register':
+        setTitle('회원가입');
         break;
       default:
         return false;

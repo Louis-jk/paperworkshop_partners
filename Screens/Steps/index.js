@@ -175,7 +175,7 @@ const index = (props) => {
         <View style={styles.line} />
         <View style={{paddingHorizontal: 20}}>
           <TouchableOpacity
-            onPress={() => navigation.navigate('OrderStep')}
+            onPress={() => navigation.navigate('OrderEdit')}
             activeOpacity={0.8}>
             <View
               style={{
@@ -204,7 +204,7 @@ const index = (props) => {
         <View style={styles.line} />
         <View style={{paddingHorizontal: 20}}>
           <TouchableOpacity
-            onPress={() => navigation.navigate('OrderStep')}
+            onPress={() => navigation.navigate('OrderEdit')}
             activeOpacity={0.8}>
             <View
               style={{
@@ -235,7 +235,7 @@ const index = (props) => {
         <View style={styles.line} />
         <View style={{paddingHorizontal: 20}}>
           <TouchableOpacity
-            onPress={() => navigation.navigate('OrderStep')}
+            onPress={() => navigation.navigate('OrderEdit')}
             activeOpacity={0.8}>
             <View
               style={{
@@ -266,7 +266,7 @@ const index = (props) => {
         <View style={styles.line} />
         <View style={{paddingHorizontal: 20}}>
           <TouchableOpacity
-            onPress={() => navigation.navigate('OrderStep')}
+            onPress={() => navigation.navigate('OrderEdit')}
             activeOpacity={0.8}>
             <View
               style={{
@@ -297,7 +297,7 @@ const index = (props) => {
         <View style={styles.line} />
         <View style={{paddingHorizontal: 20}}>
           <TouchableOpacity
-            onPress={() => navigation.navigate('OrderStep')}
+            onPress={() => navigation.navigate('OrderEdit')}
             activeOpacity={0.8}>
             <View
               style={{
@@ -328,7 +328,7 @@ const index = (props) => {
         <View style={styles.line} />
         <View style={{paddingHorizontal: 20}}>
           <TouchableOpacity
-            onPress={() => navigation.navigate('OrderStep')}
+            onPress={() => navigation.navigate('OrderEdit')}
             activeOpacity={0.8}>
             <View
               style={{
@@ -359,7 +359,7 @@ const index = (props) => {
         <View style={styles.line} />
         <View style={{paddingHorizontal: 20}}>
           <TouchableOpacity
-            onPress={() => navigation.navigate('OrderStep')}
+            onPress={() => navigation.navigate('OrderComplete')}
             activeOpacity={0.8}>
             <View
               style={{

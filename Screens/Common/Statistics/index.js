@@ -16,6 +16,8 @@ const index = (props) => {
   const routeName = props.route.name;
 
   const [category01, setCategory01] = React.useState(null);
+  const [category02, setCategory02] = React.useState(null);
+  const [category03, setCategory03] = React.useState(null);
 
   return (
     <>
@@ -54,7 +56,8 @@ const index = (props) => {
             flexDirection: 'row',
             justifyContent: 'space-between',
             alignItems: 'center',
-            marginBottom: 10,
+            paddingHorizontal: 20,
+            paddingVertical: 20,
           }}>
           <View
             style={{
@@ -63,6 +66,7 @@ const index = (props) => {
               borderRadius: 4,
               backgroundColor: '#fff',
               width: '30%',
+              marginRight: 5,
             }}>
             <Picker
               selectedValue={category01} //제일 위 선택란에 누른 아이템이 표시된다
@@ -83,11 +87,12 @@ const index = (props) => {
               borderRadius: 4,
               backgroundColor: '#fff',
               width: '25%',
+              marginRight: 5,
             }}>
             <Picker
-              selectedValue={category01} //제일 위 선택란에 누른 아이템이 표시된다
+              selectedValue={category02} //제일 위 선택란에 누른 아이템이 표시된다
               onValueChange={(itemValue, itemIndex) => {
-                setCategory01(itemValue);
+                setCategory02(itemValue);
               }}
               style={{color: '#A2A2A2'}}
               mode="dropdown">
@@ -114,12 +119,14 @@ const index = (props) => {
               width: '45%',
             }}>
             <Picker
-              selectedValue={category01} //제일 위 선택란에 누른 아이템이 표시된다
+              selectedValue={category03} //제일 위 선택란에 누른 아이템이 표시된다
               onValueChange={(itemValue, itemIndex) => {
-                setCategory01(itemValue);
+                setCategory03(itemValue);
               }}
-              style={{color: '#111'}}
+              style={{color: '#A2A2A2'}}
+              itemStyle={{fontSize: 12}}
               mode="dropdown">
+              <Picker.Item label="시/도 전체" value="" />
               <Picker.Item label="서울" value="1" />
               <Picker.Item label="부산" value="2" />
               <Picker.Item label="대구" value="3" />

@@ -4,6 +4,9 @@ import {createStackNavigator} from '@react-navigation/stack';
 
 import MainScreen from '../Screens/Main';
 import OrderScreen from '../Screens/Order';
+import OrderEditScreen from '../Screens/Order/Edit';
+import OrderCompleteScreen from '../Screens/Order/Complete';
+import OrderDetailScreen from '../Screens/Order/Detail';
 import StepsScreen from '../Screens/Steps';
 import ProductScreen from '../Screens/Product';
 import MessageScreen from '../Screens/Message';
@@ -16,6 +19,9 @@ import PartnerInfo from '../Screens/Common/Infos/PartnerInfo';
 import Alarm from '../Screens/Common/Alarm';
 import Statistics from '../Screens/Common/Statistics';
 import ReqPopularScreen from '../Screens/Profile/ReqPopular';
+
+import LoginScreen from '../Screens/Profile/Auth/Login';
+import RegisterScreen from '../Screens/Profile/Auth/Register';
 
 const Stack = createStackNavigator();
 
@@ -49,6 +55,30 @@ export const OrderStackNavigator = () => {
   return (
     <Stack.Navigator screenOptions={{headerShown: false}}>
       <Stack.Screen name="OrderStep" component={OrderScreen} />
+    </Stack.Navigator>
+  );
+};
+
+export const OrderEditStackNavigator = () => {
+  return (
+    <Stack.Navigator screenOptions={{headerShown: false}}>
+      <Stack.Screen name="OrderEdit" component={OrderEditScreen} />
+    </Stack.Navigator>
+  );
+};
+
+export const OrderCompleteStackNavigator = () => {
+  return (
+    <Stack.Navigator screenOptions={{headerShown: false}}>
+      <Stack.Screen name="OrderComplete" component={OrderCompleteScreen} />
+    </Stack.Navigator>
+  );
+};
+
+export const OrderDetailStackNavigator = () => {
+  return (
+    <Stack.Navigator screenOptions={{headerShown: false}}>
+      <Stack.Screen name="OrderDetail" component={OrderDetailScreen} />
     </Stack.Navigator>
   );
 };
@@ -114,6 +144,22 @@ export const MessageDetailStackNavigator = () => {
   return (
     <Stack.Navigator screenOptions={{headerShown: false}}>
       <Stack.Screen name="MessageDetail" component={MessageDetailScreen} />
+    </Stack.Navigator>
+  );
+};
+
+export const LoginStackNavigator = () => {
+  return (
+    <Stack.Navigator screenOptions={{headerShown: false}}>
+      <Stack.Screen name="Login" component={LoginScreen} />
+    </Stack.Navigator>
+  );
+};
+
+export const RegisterStackNavigator = () => {
+  return (
+    <Stack.Navigator screenOptions={{headerShown: false}}>
+      <Stack.Screen name="Register" component={RegisterScreen} />
     </Stack.Navigator>
   );
 };

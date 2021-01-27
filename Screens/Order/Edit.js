@@ -6,14 +6,21 @@ import {
   StyleSheet,
   TextInput,
   Alert,
+  Dimensions,
+  Image,
+  TouchableWithoutFeedback,
+  Linking,
 } from 'react-native';
 import {Picker} from '@react-native-community/picker';
 import DetailHeader from '../Common/DetailHeader';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 
-const index = (props) => {
+const Edit = (props) => {
   const navigation = props.navigation;
   const routeName = props.route.name;
+
+  const phoneNumber = '01012345678';
+  const emailAddress = 'paper_workshop@paperworkshop.com';
 
   const [category01, setCategory01] = React.useState(null);
   const [textInputHeight, setTextInputHeight] = React.useState(0);
@@ -24,7 +31,7 @@ const index = (props) => {
       <ScrollView style={styles.container}>
         <View style={styles.wrap}>
           <View style={styles.infoBox}>
-            <Text style={styles.infoStepDesc}>입찰중</Text>
+            <Text style={styles.infoStepDesc}>파트너스 최종 선정</Text>
             <Text style={styles.infoStepTitle}>
               중소기업 선물용 쇼핑백 제작 요청합니다.
             </Text>
@@ -58,6 +65,134 @@ const index = (props) => {
             </View>
           </View>
         </View>
+        {/* 경계 라인 */}
+        <View
+          style={{
+            height: 1,
+            backgroundColor: '#E3E3E3',
+            width: Dimensions.get('window').width,
+          }}
+        />
+        <View
+          style={{
+            height: 6,
+            backgroundColor: '#F5F5F5',
+            width: Dimensions.get('window').width,
+          }}
+        />
+        {/* // 경계 라인 */}
+
+        <View style={styles.wrap}>
+          <View style={[styles.details, {marginTop: 10, marginBottom: 30}]}>
+            <Image
+              source={{
+                uri:
+                  'https://img.freepik.com/free-photo/portrait-cheerful-attractive-young-woman-longsleeve-standing-with-arms-crossed-smiling_295783-39.jpg?size=626&ext=jpg',
+              }}
+              resizeMode="cover"
+              style={{
+                width: 50,
+                height: 50,
+                borderRadius: 50,
+                marginRight: 15,
+              }}
+            />
+            <View>
+              <Text
+                style={{
+                  fontSize: 14,
+                  fontWeight: 'bold',
+                  color: '#000',
+                  marginBottom: 2,
+                }}>
+                삼보인쇄
+              </Text>
+              <Text style={{fontSize: 14, color: '#000'}}>abcd@naver.com</Text>
+            </View>
+          </View>
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'center',
+              alignItems: 'center',
+              borderWidth: 1,
+              borderColor: '#E3E3E3',
+              borderRadius: 5,
+              backgroundColor: '#fff',
+            }}>
+            <TouchableWithoutFeedback
+              onPress={() => Linking.openURL(`tel:${phoneNumber}`)}>
+              <View
+                style={{
+                  flex: 1,
+                  flexDirection: 'row',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  paddingVertical: 12,
+                }}>
+                <Image
+                  source={require('../../src/assets/icon_call01.png')}
+                  resizeMode="cover"
+                  style={{width: 24, height: 24}}
+                />
+                <Text
+                  style={{
+                    fontSize: 14,
+                    letterSpacing: -1,
+                    marginLeft: 5,
+                  }}>
+                  전화하기
+                </Text>
+              </View>
+            </TouchableWithoutFeedback>
+            <View
+              style={{borderWidth: 0.5, height: '100%', borderColor: '#E3E3E3'}}
+            />
+            <TouchableWithoutFeedback
+              onPress={() => Linking.openURL(`mailto:${emailAddress}`)}>
+              <View
+                style={{
+                  flex: 1,
+                  flexDirection: 'row',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  paddingVertical: 12,
+                }}>
+                <Image
+                  source={require('../../src/assets/icon_msm01.png')}
+                  resizeMode="cover"
+                  style={{width: 24, height: 24}}
+                />
+                <Text
+                  style={{
+                    fontSize: 14,
+                    letterSpacing: -1,
+                    marginLeft: 5,
+                  }}>
+                  메세지보내기
+                </Text>
+              </View>
+            </TouchableWithoutFeedback>
+          </View>
+        </View>
+
+        {/* 경계 라인 */}
+        <View
+          style={{
+            height: 1,
+            backgroundColor: '#E3E3E3',
+            width: Dimensions.get('window').width,
+          }}
+        />
+        <View
+          style={{
+            height: 6,
+            backgroundColor: '#F5F5F5',
+            width: Dimensions.get('window').width,
+          }}
+        />
+        {/* // 경계 라인 */}
+
         <View style={styles.wrap}>
           <Text style={styles.orderInfoTitle}>견적 작성</Text>
           <View style={[styles.flexRow, styles.mgB40]}>
@@ -94,6 +229,7 @@ const index = (props) => {
           </View>
           <View style={styles.mgB40}>
             <TextInput
+              value="직접 작성한 견적 내용입니다."
               placeholder="메모를 입력해주세요."
               placeholderTextColor="#A2A2A2"
               style={{
@@ -109,10 +245,17 @@ const index = (props) => {
             />
           </View>
           <TouchableOpacity
-            onPress={() => Alert.alert('제출')}
+            onPress={() => Alert.alert('견적수정')}
             activeOpacity={0.8}>
-            <View style={styles.submitBtn}>
-              <Text style={styles.submitBtnText}>견적 제출</Text>
+            <View style={[styles.submitBtnBorder, {marginBottom: 10}]}>
+              <Text style={styles.submitBtnBorderText}>견적수정</Text>
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => Alert.alert('MY 견적 의뢰건')}
+            activeOpacity={0.8}>
+            <View style={[styles.submitBtn, {marginBottom: 50}]}>
+              <Text style={styles.submitBtnText}>MY 견적 의뢰건</Text>
             </View>
           </TouchableOpacity>
         </View>
@@ -123,7 +266,7 @@ const index = (props) => {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#F5F5F5',
+    backgroundColor: '#fff',
   },
   flexRow: {
     flexDirection: 'row',
@@ -179,7 +322,7 @@ const styles = StyleSheet.create({
   },
   orderInfoTitle: {
     fontSize: 18,
-    color: '#00A170',
+    color: '#000000',
     marginTop: 20,
     marginBottom: 25,
   },
@@ -231,7 +374,7 @@ const styles = StyleSheet.create({
     color: '#707070',
   },
   submitBtn: {
-    borderRadius: 4,
+    borderRadius: 5,
     backgroundColor: '#00A170',
     width: '100%',
     paddingVertical: 15,
@@ -241,6 +384,19 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
     textAlign: 'center',
   },
+  submitBtnBorder: {
+    borderWidth: 1,
+    borderColor: '#00A170',
+    borderRadius: 5,
+    backgroundColor: '#fff',
+    width: '100%',
+    paddingVertical: 15,
+  },
+  submitBtnBorderText: {
+    fontSize: 16,
+    color: '#00A170',
+    textAlign: 'center',
+  },
 });
 
-export default index;
+export default Edit;

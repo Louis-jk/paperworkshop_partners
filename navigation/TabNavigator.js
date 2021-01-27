@@ -10,11 +10,16 @@ import {
   MessageStackNavigator,
   MessageDetailStackNavigator,
   OrderStackNavigator,
+  OrderEditStackNavigator,
+  OrderCompleteStackNavigator,
+  OrderDetailStackNavigator,
   PartnersInfoStackNavigator,
   AlarmStackNavigator,
   StatisticsStackNavigator,
   ProfileEditStackNavigator,
   ReqPopularStackNavigator,
+  LoginStackNavigator,
+  RegisterStackNavigator,
 } from './StackNavigator';
 import {StackActions} from '@react-navigation/native';
 
@@ -97,17 +102,25 @@ export const BottomTabNavigator = () => {
 const TabNavigator = () => {
   return (
     <Stack.Navigator screenOptions={{headerShown: false}}>
+      <Stack.Screen name="Login" component={LoginStackNavigator} />
       <Stack.Screen name="Stack" component={BottomTabNavigator} />
       <Stack.Screen
         name="MessageDetail"
         component={MessageDetailStackNavigator}
       />
       <Stack.Screen name="OrderStep" component={OrderStackNavigator} />
+      <Stack.Screen name="OrderEdit" component={OrderEditStackNavigator} />
+      <Stack.Screen
+        name="OrderComplete"
+        component={OrderCompleteStackNavigator}
+      />
+      <Stack.Screen name="OrderDetail" component={OrderDetailStackNavigator} />
       <Stack.Screen name="PartnerInfo" component={PartnersInfoStackNavigator} />
       <Stack.Screen name="Alarm" component={AlarmStackNavigator} />
       <Stack.Screen name="Statistics" component={StatisticsStackNavigator} />
       <Stack.Screen name="ProfileEdit" component={ProfileEditStackNavigator} />
       <Stack.Screen name="ReqPopular" component={ReqPopularStackNavigator} />
+      <Stack.Screen name="Register" component={RegisterStackNavigator} />
     </Stack.Navigator>
   );
 };
