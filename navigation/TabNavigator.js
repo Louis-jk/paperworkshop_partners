@@ -10,6 +10,9 @@ import {
   MessageStackNavigator,
   MessageDetailStackNavigator,
   OrderStackNavigator,
+  PartnersInfoStackNavigator,
+  AlarmStackNavigator,
+  StatisticsStackNavigator,
 } from './StackNavigator';
 import {StackActions} from '@react-navigation/native';
 
@@ -98,6 +101,9 @@ const TabNavigator = () => {
         component={MessageDetailStackNavigator}
       />
       <Stack.Screen name="OrderStep" component={OrderStackNavigator} />
+      <Stack.Screen name="PartnerInfo" component={PartnersInfoStackNavigator} />
+      <Stack.Screen name="Alarm" component={AlarmStackNavigator} />
+      <Stack.Screen name="Statistics" component={StatisticsStackNavigator} />
     </Stack.Navigator>
   );
 };

@@ -11,6 +11,9 @@ import MessageDetailScreen from '../Screens/Message/Detail';
 
 import TermsScreen from '../Screens/Common/Terms';
 import PrivacyScreen from '../Screens/Common/Terms/Privacy';
+import PartnerInfo from '../Screens/Common/Infos/PartnerInfo';
+import Alarm from '../Screens/Common/Alarm';
+import Statistics from '../Screens/Common/Statistics';
 
 const Stack = createStackNavigator();
 
@@ -60,6 +63,31 @@ export const MessageStackNavigator = () => {
   return (
     <Stack.Navigator screenOptions={{headerShown: false}}>
       <Stack.Screen name="Message" component={MessageScreen} />
+    </Stack.Navigator>
+  );
+};
+
+export const PartnersInfoStackNavigator = () => {
+  return (
+    <Stack.Navigator screenOptions={{headerShown: false}}>
+      <Stack.Screen name="PartnerInfo" component={PartnerInfo} />
+      <Stack.Screen name="Alarm" component={Alarm} />
+    </Stack.Navigator>
+  );
+};
+
+export const AlarmStackNavigator = () => {
+  return (
+    <Stack.Navigator screenOptions={{headerShown: false}}>
+      <Stack.Screen name="Alarm" component={Alarm} />
+    </Stack.Navigator>
+  );
+};
+
+export const StatisticsStackNavigator = () => {
+  return (
+    <Stack.Navigator screenOptions={{headerShown: false}}>
+      <Stack.Screen name="Statistics" component={Statistics} />
     </Stack.Navigator>
   );
 };

@@ -170,6 +170,8 @@ const DrawerMenu = (props) => {
           </View>
         </View>
         <TouchableOpacity
+          activeOpacity={0.8}
+          onPress={() => navigation.navigate('Statistics')}
           style={{
             flexDirection: 'row',
             justifyContent: 'space-between',
@@ -191,6 +193,8 @@ const DrawerMenu = (props) => {
           }}
         />
         <TouchableOpacity
+          activeOpacity={0.8}
+          onPress={() => navigation.navigate('PartnerInfo')}
           style={{
             flexDirection: 'row',
             justifyContent: 'space-between',
@@ -212,6 +216,7 @@ const DrawerMenu = (props) => {
           }}
         />
         <TouchableOpacity
+          activeOpacity={0.8}
           style={{
             flexDirection: 'row',
             justifyContent: 'space-between',
@@ -233,6 +238,7 @@ const DrawerMenu = (props) => {
           }}
         />
         <TouchableOpacity
+          activeOpacity={0.8}
           style={{
             flexDirection: 'row',
             justifyContent: 'space-between',
@@ -254,6 +260,7 @@ const DrawerMenu = (props) => {
           }}
         />
         <TouchableOpacity
+          activeOpacity={0.8}
           style={{
             flexDirection: 'row',
             justifyContent: 'space-between',
@@ -275,6 +282,8 @@ const DrawerMenu = (props) => {
           }}
         />
         <TouchableOpacity
+          activeOpacity={0.8}
+          onPress={() => navigation.navigate('Alarm')}
           style={{
             flexDirection: 'row',
             justifyContent: 'space-between',

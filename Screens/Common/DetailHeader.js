@@ -29,6 +29,15 @@ const DetailHeader = (props) => {
       case 'MessageDetail':
         setTitle('메세지');
         break;
+      case 'PartnerInfo':
+        setTitle('파트너스 회원 등급 안내');
+        break;
+      case 'Alarm':
+        setTitle('알림 설정');
+        break;
+      case 'Statistics':
+        setTitle('통계');
+        break;
       default:
         return false;
     }
