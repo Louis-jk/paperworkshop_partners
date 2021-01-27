@@ -1,4 +1,4 @@
-package com.paper_workshop_partners;
+package com.dmonster.paperworkshoppartners;
 
 import android.os.Bundle;
 import org.devio.rn.splashscreen.SplashScreen;

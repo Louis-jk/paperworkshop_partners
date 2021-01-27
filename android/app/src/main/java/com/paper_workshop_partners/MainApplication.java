@@ -1,4 +1,4 @@
-package com.paper_workshop_partners;
+package com.dmonster.paperworkshoppartners;
 
 import android.app.Application;
 import android.content.Context;
