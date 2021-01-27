@@ -14,7 +14,7 @@ import {
 } from 'react-native';
 import {Picker} from '@react-native-community/picker';
 import DetailHeader from '../Common/DetailHeader';
-import MessageModal from '../Common/MessageModal';
+// import MessageModal from '../Common/MessageModal';
 
 const Edit = (props) => {
   const navigation = props.navigation;
@@ -33,7 +33,7 @@ const Edit = (props) => {
 
   return (
     <>
-      <MessageModal isVisible={isModalVisible} toggleModal={toggleModal} />
+      {/* <MessageModal isVisible={isModalVisible} toggleModal={toggleModal} /> */}
       <DetailHeader title={routeName} navigation={navigation} />
       <ScrollView style={styles.container}>
         <View style={styles.wrap}>
@@ -152,7 +152,8 @@ const Edit = (props) => {
             <View
               style={{borderWidth: 0.5, height: '100%', borderColor: '#E3E3E3'}}
             />
-            <TouchableWithoutFeedback onPress={toggleModal}>
+            <TouchableWithoutFeedback
+              onPress={() => navigation.navigate('MessageDetail')}>
               <View
                 style={{
                   flex: 1,

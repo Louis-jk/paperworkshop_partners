@@ -72,72 +72,80 @@ const index = (props) => {
               </View>
             </View>
           </TouchableOpacity>
-          <View style={[styles.wrap, styles.msgBox]}>
-            <View style={styles.flexRow}>
-              <Image
-                source={require('../../src/images/package02.jpg')}
-                resizeMode="cover"
-                style={{
-                  width: 50,
-                  height: 50,
-                  borderRadius: 50,
-                  marginRight: 20,
-                }}
-              />
-              <View style={{flex: 2}}>
-                <Text style={styles.msgInfoName}>업체명</Text>
-                <Text style={styles.msgInfoContent} numberOfLines={1}>
-                  안녕하세요. 박스견적 문의 드릴게 있어요 ...
-                </Text>
-              </View>
-              <View style={{position: 'relative'}}>
-                <TouchableOpacity activeOpacity={0.8}>
-                  <Image
-                    source={require('../../src/assets/icon_close01.png')}
-                    resizeMode="contain"
-                    style={{
-                      width: 30,
-                      height: 30,
-                      marginBottom: 20,
-                    }}
-                  />
-                </TouchableOpacity>
-              </View>
-            </View>
-          </View>
-          <View style={[styles.wrap, styles.msgBox]}>
-            <View style={styles.flexRow}>
-              <Image
-                source={require('../../src/images/package03.jpg')}
-                resizeMode="cover"
-                style={{
-                  width: 50,
-                  height: 50,
-                  borderRadius: 50,
-                  marginRight: 20,
-                }}
-              />
-              <View style={{flex: 2}}>
-                <Text style={styles.msgInfoName}>업체명</Text>
-                <Text style={styles.msgInfoContent} numberOfLines={1}>
-                  안녕하세요. 박스견적 문의 드릴게 있어요 ...
-                </Text>
-              </View>
-              <View style={{position: 'relative'}}>
-                <TouchableOpacity activeOpacity={0.8}>
-                  <Image
-                    source={require('../../src/assets/icon_close01.png')}
-                    resizeMode="contain"
-                    style={{
-                      width: 30,
-                      height: 30,
-                      marginBottom: 20,
-                    }}
-                  />
-                </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => navigation.navigate('MessageDetail')}
+            activeOpacity={0.8}>
+            <View style={[styles.wrap, styles.msgBox]}>
+              <View style={styles.flexRow}>
+                <Image
+                  source={require('../../src/images/package02.jpg')}
+                  resizeMode="cover"
+                  style={{
+                    width: 50,
+                    height: 50,
+                    borderRadius: 50,
+                    marginRight: 20,
+                  }}
+                />
+                <View style={{flex: 2}}>
+                  <Text style={styles.msgInfoName}>업체명</Text>
+                  <Text style={styles.msgInfoContent} numberOfLines={1}>
+                    안녕하세요. 박스견적 문의 드릴게 있어요 ...
+                  </Text>
+                </View>
+                <View style={{position: 'relative'}}>
+                  <TouchableOpacity activeOpacity={0.8}>
+                    <Image
+                      source={require('../../src/assets/icon_close01.png')}
+                      resizeMode="contain"
+                      style={{
+                        width: 30,
+                        height: 30,
+                        marginBottom: 20,
+                      }}
+                    />
+                  </TouchableOpacity>
+                </View>
               </View>
             </View>
-          </View>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => navigation.navigate('MessageDetail')}
+            activeOpacity={0.8}>
+            <View style={[styles.wrap, styles.msgBox]}>
+              <View style={styles.flexRow}>
+                <Image
+                  source={require('../../src/images/package03.jpg')}
+                  resizeMode="cover"
+                  style={{
+                    width: 50,
+                    height: 50,
+                    borderRadius: 50,
+                    marginRight: 20,
+                  }}
+                />
+                <View style={{flex: 2}}>
+                  <Text style={styles.msgInfoName}>업체명</Text>
+                  <Text style={styles.msgInfoContent} numberOfLines={1}>
+                    안녕하세요. 박스견적 문의 드릴게 있어요 ...
+                  </Text>
+                </View>
+                <View style={{position: 'relative'}}>
+                  <TouchableOpacity activeOpacity={0.8}>
+                    <Image
+                      source={require('../../src/assets/icon_close01.png')}
+                      resizeMode="contain"
+                      style={{
+                        width: 30,
+                        height: 30,
+                        marginBottom: 20,
+                      }}
+                    />
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </View>
+          </TouchableOpacity>
         </View>
       </ScrollView>
     </>
