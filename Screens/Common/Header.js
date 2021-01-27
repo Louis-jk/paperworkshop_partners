@@ -29,6 +29,9 @@ const Header = (props) => {
       case 'Message':
         setTitle('페이퍼공작소');
         break;
+      case 'ProfileEdit':
+        setTitle('회원 정보 수정');
+        break;
       default:
         return false;
     }
@@ -79,10 +82,11 @@ const styles = StyleSheet.create({
     // backgroundColor: '#ffaaee',
   },
   headerTitle: {
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: 'bold',
     letterSpacing: -1,
     lineHeight: 50,
+    marginBottom: 2,
   },
   icons: {
     flexDirection: 'row',

@@ -38,6 +38,9 @@ const DetailHeader = (props) => {
       case 'Statistics':
         setTitle('통계');
         break;
+      case 'ReqPopular':
+        setTitle('인기 파트너스 등록 신청');
+        break;
       default:
         return false;
     }
@@ -114,10 +117,11 @@ const styles = StyleSheet.create({
     // backgroundColor: '#ffaaee',
   },
   headerTitle: {
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: 'bold',
     letterSpacing: -1,
     lineHeight: 50,
+    marginBottom: 2,
   },
   icons: {
     flexDirection: 'row',

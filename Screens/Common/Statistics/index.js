@@ -118,9 +118,8 @@ const index = (props) => {
               onValueChange={(itemValue, itemIndex) => {
                 setCategory01(itemValue);
               }}
-              style={{color: '#A2A2A2'}}
+              style={{color: '#111'}}
               mode="dropdown">
-              <Picker.Item label="시/도 전체" value="" />
               <Picker.Item label="서울" value="1" />
               <Picker.Item label="부산" value="2" />
               <Picker.Item label="대구" value="3" />
@@ -133,9 +132,9 @@ const index = (props) => {
               <Picker.Item label="충청" value="10" />
               <Picker.Item label="전라북도" value="11" />
               <Picker.Item label="전라남도" value="12" />
-              <Picker.Item label="경상북도" value="12" />
-              <Picker.Item label="경상남도" value="12" />
-              <Picker.Item label="제주" value="12" />
+              <Picker.Item label="경상북도" value="13" />
+              <Picker.Item label="경상남도" value="14" />
+              <Picker.Item label="제주" value="15" />
             </Picker>
           </View>
         </View>

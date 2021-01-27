@@ -89,11 +89,9 @@ const PartnerInfo = (props) => {
               ※
             </Text>
             <View>
-              <Text style={{fontSize: 12, color: '#707070'}}>
-                성실 파트너스 / 인기 파트너스 / 지역 파트너스 3가지 등급에
-              </Text>
-              <Text style={{fontSize: 12, color: '#707070'}}>
-                대해 중복 적용은 불가능합니다.
+              <Text style={{fontSize: 12, lineHeight: 18, color: '#707070'}}>
+                성실 파트너스 / 인기 파트너스 / 지역 파트너스 3가지 등급에 대해
+                중복 적용은 불가능합니다.
               </Text>
             </View>
           </View>

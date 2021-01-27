@@ -13,6 +13,8 @@ import {
   PartnersInfoStackNavigator,
   AlarmStackNavigator,
   StatisticsStackNavigator,
+  ProfileEditStackNavigator,
+  ReqPopularStackNavigator,
 } from './StackNavigator';
 import {StackActions} from '@react-navigation/native';
 
@@ -104,6 +106,8 @@ const TabNavigator = () => {
       <Stack.Screen name="PartnerInfo" component={PartnersInfoStackNavigator} />
       <Stack.Screen name="Alarm" component={AlarmStackNavigator} />
       <Stack.Screen name="Statistics" component={StatisticsStackNavigator} />
+      <Stack.Screen name="ProfileEdit" component={ProfileEditStackNavigator} />
+      <Stack.Screen name="ReqPopular" component={ReqPopularStackNavigator} />
     </Stack.Navigator>
   );
 };

@@ -80,14 +80,18 @@ const DrawerMenu = (props) => {
               alignSelf: 'flex-end',
               marginBottom: 7,
             }}>
-            <TouchableOpacity onPress={() => Alert.alert('Setting? ')}>
+            <TouchableOpacity
+              activeOpacity={0.8}
+              onPress={() => navigation.navigate('Main')}>
               <Image
-                source={require('../../src/assets/icon02.png')}
+                source={require('../../src/assets/home.png')}
                 resizeMode="cover"
-                style={{width: 30, height: 30, marginRight: 7}}
+                style={{width: 20, height: 20, marginRight: 10}}
               />
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => navigation.closeDrawer('right')}>
+            <TouchableOpacity
+              activeOpacity={0.8}
+              onPress={() => navigation.closeDrawer('right')}>
               <Image
                 source={require('../../src/assets/icon_close02.png')}
                 resizeMode="cover"
@@ -163,6 +167,25 @@ const DrawerMenu = (props) => {
                     </Text>
                   </View>
                   <Text style={{color: '#fff', fontSize: 18}}>파트너님</Text>
+                  <TouchableOpacity
+                    activeOpacity={0.8}
+                    onPress={() => navigation.navigate('ProfileEdit')}>
+                    <View
+                      style={{
+                        paddingHorizontal: 10,
+                        paddingVertical: 10,
+                      }}>
+                      <Image
+                        source={require('../../src/assets/icon_pf.png')}
+                        resizeMode="contain"
+                        style={{
+                          width: 15,
+                          height: 15,
+                          marginTop: 2,
+                        }}
+                      />
+                    </View>
+                  </TouchableOpacity>
                 </View>
                 <Text style={styles.whiteFont}>paper@naver.com</Text>
               </View>

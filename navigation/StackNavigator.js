@@ -8,12 +8,14 @@ import StepsScreen from '../Screens/Steps';
 import ProductScreen from '../Screens/Product';
 import MessageScreen from '../Screens/Message';
 import MessageDetailScreen from '../Screens/Message/Detail';
+import ProfileEditScreen from '../Screens/Profile/Edit';
 
 import TermsScreen from '../Screens/Common/Terms';
 import PrivacyScreen from '../Screens/Common/Terms/Privacy';
 import PartnerInfo from '../Screens/Common/Infos/PartnerInfo';
 import Alarm from '../Screens/Common/Alarm';
 import Statistics from '../Screens/Common/Statistics';
+import ReqPopularScreen from '../Screens/Profile/ReqPopular';
 
 const Stack = createStackNavigator();
 
@@ -88,6 +90,22 @@ export const StatisticsStackNavigator = () => {
   return (
     <Stack.Navigator screenOptions={{headerShown: false}}>
       <Stack.Screen name="Statistics" component={Statistics} />
+    </Stack.Navigator>
+  );
+};
+
+export const ProfileEditStackNavigator = () => {
+  return (
+    <Stack.Navigator screenOptions={{headerShown: false}}>
+      <Stack.Screen name="ProfileEdit" component={ProfileEditScreen} />
+    </Stack.Navigator>
+  );
+};
+
+export const ReqPopularStackNavigator = () => {
+  return (
+    <Stack.Navigator screenOptions={{headerShown: false}}>
+      <Stack.Screen name="ReqPopular" component={ReqPopularScreen} />
     </Stack.Navigator>
   );
 };
