@@ -10,10 +10,11 @@ import {
   Image,
   TouchableWithoutFeedback,
   Linking,
+  TouchableOpacity,
 } from 'react-native';
 import {Picker} from '@react-native-community/picker';
 import DetailHeader from '../Common/DetailHeader';
-import {TouchableOpacity} from 'react-native-gesture-handler';
+import MessageModal from '../Common/MessageModal';
 
 const Edit = (props) => {
   const navigation = props.navigation;
@@ -24,9 +25,15 @@ const Edit = (props) => {
 
   const [category01, setCategory01] = React.useState(null);
   const [textInputHeight, setTextInputHeight] = React.useState(0);
+  const [isModalVisible, setModalVisible] = React.useState(false);
+
+  const toggleModal = () => {
+    setModalVisible(!isModalVisible);
+  };
 
   return (
     <>
+      <MessageModal isVisible={isModalVisible} toggleModal={toggleModal} />
       <DetailHeader title={routeName} navigation={navigation} />
       <ScrollView style={styles.container}>
         <View style={styles.wrap}>
@@ -85,10 +92,7 @@ const Edit = (props) => {
         <View style={styles.wrap}>
           <View style={[styles.details, {marginTop: 10, marginBottom: 30}]}>
             <Image
-              source={{
-                uri:
-                  'https://img.freepik.com/free-photo/portrait-cheerful-attractive-young-woman-longsleeve-standing-with-arms-crossed-smiling_295783-39.jpg?size=626&ext=jpg',
-              }}
+              source={require('../../src/images/person01.jpg')}
               resizeMode="cover"
               style={{
                 width: 50,
@@ -148,8 +152,7 @@ const Edit = (props) => {
             <View
               style={{borderWidth: 0.5, height: '100%', borderColor: '#E3E3E3'}}
             />
-            <TouchableWithoutFeedback
-              onPress={() => Linking.openURL(`mailto:${emailAddress}`)}>
+            <TouchableWithoutFeedback onPress={toggleModal}>
               <View
                 style={{
                   flex: 1,

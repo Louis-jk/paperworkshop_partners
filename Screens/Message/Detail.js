@@ -61,10 +61,7 @@ const Detail = (props) => {
                 marginBottom: 20,
               }}>
               <Image
-                source={{
-                  uri:
-                    'https://img.freepik.com/free-photo/portrait-cheerful-attractive-young-woman-longsleeve-standing-with-arms-crossed-smiling_295783-39.jpg?size=626&ext=jpg',
-                }}
+                source={require('../../src/images/person01.jpg')}
                 resizeMode="cover"
                 style={{
                   width: 50,
@@ -145,10 +142,7 @@ const Detail = (props) => {
                   marginLeft: 10,
                 }}>
                 <Image
-                  source={{
-                    uri:
-                      'https://i.pinimg.com/originals/41/46/4d/41464da045fb20d11e7a2d53d066e703.jpg',
-                  }}
+                  source={require('../../src/images/package01.jpg')}
                   resizeMode="cover"
                   style={{width: 120, height: 120, borderRadius: 5}}
                 />
@@ -232,13 +226,30 @@ const Detail = (props) => {
           paddingVertical: 10,
           paddingHorizontal: 20,
         }}>
-        <TextInput
-          placeholder="메세지 글적기..."
-          placeholderTextColor="#FFFFFF"
-          multiline={true}
-          autoCapitalize="none"
-          style={{color: '#fff'}}
-        />
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'flex-start',
+            alignItems: 'center',
+            paddingLeft: 5,
+          }}>
+          <TouchableOpacity
+            activeOpacity={0.8}
+            onPress={() => Alert.alert('파일 선택하는 부분입니다.')}>
+            <Image
+              source={require('../../src/assets/chat_fileupload.png')}
+              resizeMode="contain"
+              style={{width: 22, height: 22, marginRight: 20}}
+            />
+          </TouchableOpacity>
+          <TextInput
+            placeholder="메세지 글적기..."
+            placeholderTextColor="#FFFFFF"
+            multiline={true}
+            autoCapitalize="none"
+            style={{color: '#fff', fontSize: 14}}
+          />
+        </View>
         <TouchableOpacity
           activeOpacity={0.8}
           onPress={() => Alert.alert('메세지 전송!')}>

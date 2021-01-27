@@ -41,10 +41,7 @@ const index = (props) => {
             <View style={[styles.wrap, styles.msgBox]}>
               <View style={styles.flexRow}>
                 <Image
-                  source={{
-                    uri:
-                      'https://img.freepik.com/free-photo/portrait-cheerful-attractive-young-woman-longsleeve-standing-with-arms-crossed-smiling_295783-39.jpg?size=626&ext=jpg',
-                  }}
+                  source={require('../../src/images/person01.jpg')}
                   resizeMode="cover"
                   style={{
                     width: 50,
@@ -78,10 +75,7 @@ const index = (props) => {
           <View style={[styles.wrap, styles.msgBox]}>
             <View style={styles.flexRow}>
               <Image
-                source={{
-                  uri:
-                    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSId_V6IdniMTIkPLs_6LHkBL6o8GyF4U9k6A&usqp=CAU',
-                }}
+                source={require('../../src/images/package02.jpg')}
                 resizeMode="cover"
                 style={{
                   width: 50,
@@ -114,10 +108,7 @@ const index = (props) => {
           <View style={[styles.wrap, styles.msgBox]}>
             <View style={styles.flexRow}>
               <Image
-                source={{
-                  uri:
-                    'https://images.fastcompany.net/image/upload/w_596,c_limit,q_auto:best,f_auto/fc/3025992-inline-i-design-work4.jpg',
-                }}
+                source={require('../../src/images/package03.jpg')}
                 resizeMode="cover"
                 style={{
                   width: 50,
