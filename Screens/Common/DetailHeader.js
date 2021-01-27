@@ -53,6 +53,15 @@ const DetailHeader = (props) => {
       case 'Register':
         setTitle('회원가입');
         break;
+      case 'FindId':
+        setTitle('아이디 찾기');
+        break;
+      case 'FindPwd':
+        setTitle('비밀번호 찾기');
+        break;
+      case 'SetPwd':
+        setTitle('비밀번호 변경');
+        break;
       default:
         return false;
     }

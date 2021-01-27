@@ -85,8 +85,18 @@ const Login = (props) => {
             alignItems: 'center',
             width: Dimensions.get('window').width - 100,
           }}>
-          <Text>아이디 찾기</Text>
-          <Text>비밀번호 찾기</Text>
+          <TouchableOpacity
+            activeOpacity={0.8}
+            onPress={() => navigation.navigate('FindId')}
+            hitSlop={{top: 10, bottom: 10, left: 10, right: 10}}>
+            <Text>아이디 찾기</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            activeOpacity={0.8}
+            onPress={() => navigation.navigate('FindPwd')}
+            hitSlop={{top: 10, bottom: 10, left: 10, right: 10}}>
+            <Text>비밀번호 찾기</Text>
+          </TouchableOpacity>
         </View>
       </View>
       <View

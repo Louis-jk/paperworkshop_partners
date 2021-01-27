@@ -19,6 +19,7 @@ import {Picker} from '@react-native-community/picker';
 
 import Header from '../Common/Header';
 import Footer from '../Common/Footer';
+import Modal from '../Common/PartnersInfoModal';
 
 const Edit = (props) => {
   const navigation = props.navigation;
@@ -28,10 +29,17 @@ const Edit = (props) => {
   const [category02, setCategory02] = React.useState(null);
   const [value, setValue] = React.useState(null);
 
+  const [isModalVisible, setModalVisible] = React.useState(false);
+
+  const toggleModal = () => {
+    setModalVisible(!isModalVisible);
+  };
+
   return (
     <>
+      <Modal isVisible={isModalVisible} toggleModal={toggleModal} />
       <Header title={routeName} navigation={navigation} />
-      <ScrollView style={styles.container}>
+      <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
         <View style={{backgroundColor: '#F5F5F5'}}>
           <View
             style={{
@@ -80,11 +88,18 @@ const Edit = (props) => {
             </Text>
             <View style={[styles.flexRowCenter, {marginBottom: 10}]}>
               <Text style={styles.profileDesc}>일반회원</Text>
-              <Image
-                source={require('../../src/assets/radio_on.png')}
-                resizeMode="contain"
-                style={{width: 16, height: 16, marginLeft: 5, marginRight: 20}}
-              />
+              <TouchableOpacity activeOpacity={0.8} onPress={toggleModal}>
+                <Image
+                  source={require('../../src/assets/radio_on.png')}
+                  resizeMode="contain"
+                  style={{
+                    width: 16,
+                    height: 16,
+                    marginLeft: 5,
+                    marginRight: 20,
+                  }}
+                />
+              </TouchableOpacity>
               <Text style={[styles.profileDesc, {color: '#00A170'}]}>
                 일반회원/인기파트너스
               </Text>

@@ -32,7 +32,7 @@ const index = (props) => {
   return (
     <>
       <Header title={routeName} navigation={navigation} />
-      <ScrollView style={styles.container}>
+      <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
         {/* 카테고리 선택 및 검색 부분 */}
         <View
           style={{

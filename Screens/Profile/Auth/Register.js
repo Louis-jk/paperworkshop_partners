@@ -31,7 +31,7 @@ const Register = (props) => {
   return (
     <>
       <DetailHeader title={routeName} navigation={navigation} />
-      <ScrollView style={styles.container}>
+      <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
         {/* <View style={{backgroundColor: '#F5F5F5'}}>
           <View
             style={{
@@ -394,7 +394,7 @@ const Register = (props) => {
 
         <View style={{paddingHorizontal: 20, marginBottom: 50}}>
           <TouchableOpacity
-            onPress={() => Alert.alert('회원가입완료')}
+            onPress={() => navigation.navigate('Signed')}
             activeOpacity={0.8}>
             <View style={[styles.submitBtn, {marginBottom: 10}]}>
               <Text style={styles.submitBtnText}>회원가입</Text>

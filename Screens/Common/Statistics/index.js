@@ -22,7 +22,7 @@ const index = (props) => {
   return (
     <>
       <DetailHeader title={routeName} navigation={navigation} />
-      <ScrollView style={styles.container}>
+      <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
         <View
           style={{
             paddingHorizontal: 20,

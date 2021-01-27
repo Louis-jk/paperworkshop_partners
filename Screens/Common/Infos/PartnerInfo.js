@@ -17,7 +17,7 @@ const PartnerInfo = (props) => {
   return (
     <>
       <DetailHeader title={routeName} navigation={navigation} />
-      <ScrollView style={styles.container}>
+      <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
         <Image
           source={require('../../../src/assets/img01.png')}
           resizeMode="cover"

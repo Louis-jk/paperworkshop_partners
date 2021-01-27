@@ -28,7 +28,7 @@ const Complete = (props) => {
   return (
     <>
       <DetailHeader title={routeName} navigation={navigation} />
-      <ScrollView style={styles.container}>
+      <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
         <View style={styles.wrap}>
           <View style={styles.infoBox}>
             <Text style={styles.infoStepDesc}>마감</Text>

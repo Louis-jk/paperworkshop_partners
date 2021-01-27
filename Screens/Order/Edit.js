@@ -35,7 +35,7 @@ const Edit = (props) => {
     <>
       {/* <MessageModal isVisible={isModalVisible} toggleModal={toggleModal} /> */}
       <DetailHeader title={routeName} navigation={navigation} />
-      <ScrollView style={styles.container}>
+      <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
         <View style={styles.wrap}>
           <View style={styles.infoBox}>
             <Text style={styles.infoStepDesc}>파트너스 최종 선정</Text>

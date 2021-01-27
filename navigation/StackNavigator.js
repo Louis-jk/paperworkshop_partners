@@ -22,6 +22,11 @@ import ReqPopularScreen from '../Screens/Profile/ReqPopular';
 
 import LoginScreen from '../Screens/Profile/Auth/Login';
 import RegisterScreen from '../Screens/Profile/Auth/Register';
+import SignedScreen from '../Screens/Profile/Auth/Signed';
+import FindIdScreen from '../Screens/Profile/Auth/FindId';
+import FindPwdScreen from '../Screens/Profile/Auth/FindPwd';
+import SetPwdScreen from '../Screens/Profile/Auth/SetPwd';
+import SetPwdCompleteScreen from '../Screens/Profile/Auth/SetPwdComplete';
 
 const Stack = createStackNavigator();
 
@@ -160,6 +165,32 @@ export const RegisterStackNavigator = () => {
   return (
     <Stack.Navigator screenOptions={{headerShown: false}}>
       <Stack.Screen name="Register" component={RegisterScreen} />
+    </Stack.Navigator>
+  );
+};
+
+export const SignedStackNavigator = () => {
+  return (
+    <Stack.Navigator screenOptions={{headerShown: false}}>
+      <Stack.Screen name="Signed" component={SignedScreen} />
+    </Stack.Navigator>
+  );
+};
+
+export const FindIdStackNavigator = () => {
+  return (
+    <Stack.Navigator screenOptions={{headerShown: false}}>
+      <Stack.Screen name="FindId" component={FindIdScreen} />
+    </Stack.Navigator>
+  );
+};
+
+export const FindPwdStackNavigator = () => {
+  return (
+    <Stack.Navigator screenOptions={{headerShown: false}}>
+      <Stack.Screen name="FindPwd" component={FindPwdScreen} />
+      <Stack.Screen name="SetPwd" component={SetPwdScreen} />
+      <Stack.Screen name="SetPwdComplete" component={SetPwdCompleteScreen} />
     </Stack.Navigator>
   );
 };

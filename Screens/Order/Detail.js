@@ -28,7 +28,7 @@ const Detail = (props) => {
   return (
     <>
       <DetailHeader title={routeName} navigation={navigation} />
-      <ScrollView style={styles.container}>
+      <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
         <View style={styles.wrap}>
           <Text style={{fontSize: 16, color: '#00A170', marginBottom: 10}}>
             기본 정보

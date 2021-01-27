@@ -32,6 +32,12 @@ const Header = (props) => {
       case 'ProfileEdit':
         setTitle('회원 정보 수정');
         break;
+      case 'Signed':
+        setTitle('회원 가입 완료');
+        break;
+      case 'SetPwdComplete':
+        setTitle('비밀번호 변경 완료');
+        break;
       default:
         return false;
     }

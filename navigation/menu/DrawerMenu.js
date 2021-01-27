@@ -64,7 +64,7 @@ const DrawerMenu = (props) => {
   };
 
   return (
-    <ScrollView>
+    <ScrollView showsVerticalScrollIndicator={false}>
       <View>
         <View
           style={{

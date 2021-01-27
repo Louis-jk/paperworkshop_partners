@@ -32,7 +32,7 @@ const index = (props) => {
   return (
     <>
       <DetailHeader title={routeName} navigation={navigation} />
-      <ScrollView style={styles.container}>
+      <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
         {/* 경계 라인 */}
         <View
           style={{

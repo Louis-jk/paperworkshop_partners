@@ -32,7 +32,7 @@ const index = (props) => {
   return (
     <>
       <Header title={routeName} navigation={navigation} />
-      <ScrollView style={styles.container}>
+      <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
         <View
           style={{
             flexDirection: 'row',

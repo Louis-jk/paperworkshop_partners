@@ -20,6 +20,9 @@ import {
   ReqPopularStackNavigator,
   LoginStackNavigator,
   RegisterStackNavigator,
+  SignedStackNavigator,
+  FindIdStackNavigator,
+  FindPwdStackNavigator,
 } from './StackNavigator';
 import {StackActions} from '@react-navigation/native';
 
@@ -121,6 +124,9 @@ const TabNavigator = () => {
       <Stack.Screen name="ProfileEdit" component={ProfileEditStackNavigator} />
       <Stack.Screen name="ReqPopular" component={ReqPopularStackNavigator} />
       <Stack.Screen name="Register" component={RegisterStackNavigator} />
+      <Stack.Screen name="Signed" component={SignedStackNavigator} />
+      <Stack.Screen name="FindId" component={FindIdStackNavigator} />
+      <Stack.Screen name="FindPwd" component={FindPwdStackNavigator} />
     </Stack.Navigator>
   );
 };
