@@ -443,10 +443,10 @@ const Edit = (props) => {
 
         <View style={{paddingHorizontal: 20, marginBottom: 50}}>
           <TouchableOpacity
-            onPress={() => Alert.alert('정보 수정 완료')}
+            onPress={() => Alert.alert('수정 완료')}
             activeOpacity={0.8}>
             <View style={[styles.submitBtn, {marginBottom: 10}]}>
-              <Text style={styles.submitBtnText}>정보 수정</Text>
+              <Text style={styles.submitBtnText}>수정 완료</Text>
             </View>
           </TouchableOpacity>
           <TouchableOpacity

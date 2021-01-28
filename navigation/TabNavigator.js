@@ -38,14 +38,15 @@ export const BottomTabNavigator = () => {
         labelStyle: {
           fontSize: 12,
           letterSpacing: -1,
-          paddingBottom: 7,
+          paddingBottom: 5,
         },
         style: {
           justifyContent: 'center',
-          height: 70,
-          paddingTop: 7,
+          height: 65,
           backgroundColor: '#00A170',
+          paddingBottom: 5,
         },
+        showLabel: false,
       }}
       screenOptions={({route}) => ({
         tabBarIcon: ({focused, color, size}) => {
@@ -73,7 +74,7 @@ export const BottomTabNavigator = () => {
             <Image
               source={iconName}
               resizeMode="contain"
-              style={{width: 40, height: 50}}
+              style={{width: 85, height: 60}}
             />
           );
         },
