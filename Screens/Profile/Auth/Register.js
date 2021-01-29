@@ -32,44 +32,6 @@ const Register = (props) => {
     <>
       <DetailHeader title={routeName} navigation={navigation} />
       <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
-        {/* <View style={{backgroundColor: '#F5F5F5'}}>
-          <View
-            style={{
-              justifyContent: 'center',
-              alignItems: 'center',
-              alignSelf: 'center',
-              marginVertical: 10,
-              paddingTop: 10,
-            }}>
-            <TouchableOpacity
-              activeOpacity={0.8}
-              style={{
-                borderWidth: 1,
-                borderColor: '#E3E3E3',
-                borderRadius: 100,
-              }}>
-              <Image
-                source={require('../../../src/assets/photo.png')}
-                resizeMode="cover"
-                style={{
-                  width: 100,
-                  height: 100,
-                  borderRadius: 100,
-                }}
-              />
-            </TouchableOpacity>
-            <Text
-              style={{
-                textAlign: 'center',
-                fontSize: 15,
-                marginVertical: 5,
-                letterSpacing: -1,
-              }}>
-              프로필 이미지 등록
-            </Text>
-          </View>
-        </View>
-         */}
         <View style={{paddingHorizontal: 20, paddingVertical: 20}}>
           {/* 이메일 */}
           <View style={{marginBottom: 20}}>
