@@ -90,7 +90,7 @@ const Edit = (props) => {
               <Text style={styles.profileDesc}>일반회원</Text>
               <TouchableOpacity activeOpacity={0.8} onPress={toggleModal}>
                 <Image
-                  source={require('../../src/assets/radio_on.png')}
+                  source={require('../../src/assets/q.png')}
                   resizeMode="contain"
                   style={{
                     width: 16,
@@ -140,7 +140,7 @@ const Edit = (props) => {
               style={{
                 borderWidth: 1,
                 borderColor: '#E3E3E3',
-                borderRadius: 2,
+                borderRadius: 4,
                 paddingHorizontal: 10,
                 marginBottom: 5,
               }}
@@ -153,7 +153,7 @@ const Edit = (props) => {
               style={{
                 borderWidth: 1,
                 borderColor: '#E3E3E3',
-                borderRadius: 2,
+                borderRadius: 4,
                 paddingHorizontal: 10,
               }}
               autoCapitalize="none"
@@ -172,7 +172,7 @@ const Edit = (props) => {
               style={{
                 borderWidth: 1,
                 borderColor: '#E3E3E3',
-                borderRadius: 2,
+                borderRadius: 4,
                 paddingHorizontal: 10,
               }}
               autoCapitalize="none"
@@ -192,7 +192,7 @@ const Edit = (props) => {
               style={{
                 borderWidth: 1,
                 borderColor: '#E3E3E3',
-                borderRadius: 2,
+                borderRadius: 4,
                 paddingHorizontal: 10,
               }}
               autoCapitalize="none"
@@ -220,7 +220,7 @@ const Edit = (props) => {
                   flex: 1,
                   borderWidth: 1,
                   borderColor: '#E3E3E3',
-                  borderRadius: 2,
+                  borderRadius: 4,
                   paddingHorizontal: 10,
                   marginRight: 10,
                 }}
@@ -233,7 +233,7 @@ const Edit = (props) => {
                   justifyContent: 'center',
                   alignItems: 'center',
                   backgroundColor: '#00A170',
-                  borderRadius: 2,
+                  borderRadius: 4,
                   height: 50,
                   paddingHorizontal: 20,
                 }}>
@@ -257,7 +257,7 @@ const Edit = (props) => {
                   flex: 1,
                   borderWidth: 1,
                   borderColor: '#E3E3E3',
-                  borderRadius: 2,
+                  borderRadius: 4,
                   paddingHorizontal: 10,
                   marginRight: 10,
                 }}
@@ -270,7 +270,7 @@ const Edit = (props) => {
                   justifyContent: 'center',
                   alignItems: 'center',
                   backgroundColor: '#00A170',
-                  borderRadius: 2,
+                  borderRadius: 4,
                   height: 50,
                   paddingHorizontal: 20,
                 }}>
@@ -301,7 +301,7 @@ const Edit = (props) => {
                   flex: 1,
                   borderWidth: 1,
                   borderColor: '#E3E3E3',
-                  borderRadius: 2,
+                  borderRadius: 4,
                   paddingHorizontal: 10,
                   marginRight: 10,
                 }}
@@ -313,7 +313,7 @@ const Edit = (props) => {
                   justifyContent: 'center',
                   alignItems: 'center',
                   backgroundColor: '#00A170',
-                  borderRadius: 2,
+                  borderRadius: 4,
                   height: 50,
                   paddingHorizontal: 20,
                 }}>
@@ -421,7 +421,7 @@ const Edit = (props) => {
               style={{
                 borderWidth: 1,
                 borderColor: '#E3E3E3',
-                borderRadius: 2,
+                borderRadius: 4,
                 paddingHorizontal: 10,
                 marginBottom: 5,
               }}
@@ -433,7 +433,7 @@ const Edit = (props) => {
               style={{
                 borderWidth: 1,
                 borderColor: '#E3E3E3',
-                borderRadius: 2,
+                borderRadius: 4,
                 paddingHorizontal: 10,
               }}
             />

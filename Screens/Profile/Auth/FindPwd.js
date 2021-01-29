@@ -44,7 +44,7 @@ const FindPwd = (props) => {
               style={{
                 borderWidth: 1,
                 borderColor: '#E3E3E3',
-                borderRadius: 2,
+                borderRadius: 4,
                 paddingHorizontal: 10,
               }}
               autoCapitalize="none"
@@ -73,7 +73,7 @@ const FindPwd = (props) => {
                   flex: 1,
                   borderWidth: 1,
                   borderColor: '#E3E3E3',
-                  borderRadius: 2,
+                  borderRadius: 4,
                   paddingHorizontal: 10,
                   marginRight: 10,
                 }}
@@ -86,7 +86,7 @@ const FindPwd = (props) => {
                   justifyContent: 'center',
                   alignItems: 'center',
                   backgroundColor: '#00A170',
-                  borderRadius: 2,
+                  borderRadius: 4,
                   height: 50,
                   paddingHorizontal: 20,
                 }}>
@@ -110,7 +110,7 @@ const FindPwd = (props) => {
                   flex: 1,
                   borderWidth: 1,
                   borderColor: '#E3E3E3',
-                  borderRadius: 2,
+                  borderRadius: 4,
                   paddingHorizontal: 10,
                   marginRight: 10,
                 }}
@@ -123,7 +123,7 @@ const FindPwd = (props) => {
                   justifyContent: 'center',
                   alignItems: 'center',
                   backgroundColor: '#00A170',
-                  borderRadius: 2,
+                  borderRadius: 4,
                   height: 50,
                   paddingHorizontal: 20,
                 }}>

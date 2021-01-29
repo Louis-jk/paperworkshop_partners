@@ -44,7 +44,7 @@ const Register = (props) => {
               style={{
                 borderWidth: 1,
                 borderColor: '#E3E3E3',
-                borderRadius: 2,
+                borderRadius: 4,
                 paddingHorizontal: 10,
                 marginBottom: 5,
               }}
@@ -68,7 +68,7 @@ const Register = (props) => {
               style={{
                 borderWidth: 1,
                 borderColor: '#E3E3E3',
-                borderRadius: 2,
+                borderRadius: 4,
                 paddingHorizontal: 10,
                 marginBottom: 5,
               }}
@@ -81,7 +81,7 @@ const Register = (props) => {
               style={{
                 borderWidth: 1,
                 borderColor: '#E3E3E3',
-                borderRadius: 2,
+                borderRadius: 4,
                 paddingHorizontal: 10,
               }}
               autoCapitalize="none"
@@ -100,7 +100,7 @@ const Register = (props) => {
               style={{
                 borderWidth: 1,
                 borderColor: '#E3E3E3',
-                borderRadius: 2,
+                borderRadius: 4,
                 paddingHorizontal: 10,
               }}
               autoCapitalize="none"
@@ -128,7 +128,7 @@ const Register = (props) => {
                   flex: 1,
                   borderWidth: 1,
                   borderColor: '#E3E3E3',
-                  borderRadius: 2,
+                  borderRadius: 4,
                   paddingHorizontal: 10,
                   marginRight: 10,
                 }}
@@ -141,7 +141,7 @@ const Register = (props) => {
                   justifyContent: 'center',
                   alignItems: 'center',
                   backgroundColor: '#00A170',
-                  borderRadius: 2,
+                  borderRadius: 4,
                   height: 50,
                   paddingHorizontal: 20,
                 }}>
@@ -165,7 +165,7 @@ const Register = (props) => {
                   flex: 1,
                   borderWidth: 1,
                   borderColor: '#E3E3E3',
-                  borderRadius: 2,
+                  borderRadius: 4,
                   paddingHorizontal: 10,
                   marginRight: 10,
                 }}
@@ -178,7 +178,7 @@ const Register = (props) => {
                   justifyContent: 'center',
                   alignItems: 'center',
                   backgroundColor: '#00A170',
-                  borderRadius: 2,
+                  borderRadius: 4,
                   height: 50,
                   paddingHorizontal: 20,
                 }}>
@@ -202,7 +202,7 @@ const Register = (props) => {
               style={{
                 borderWidth: 1,
                 borderColor: '#E3E3E3',
-                borderRadius: 2,
+                borderRadius: 4,
                 paddingHorizontal: 10,
               }}
               autoCapitalize="none"
@@ -230,7 +230,7 @@ const Register = (props) => {
                   flex: 1,
                   borderWidth: 1,
                   borderColor: '#E3E3E3',
-                  borderRadius: 2,
+                  borderRadius: 4,
                   paddingHorizontal: 10,
                   marginRight: 10,
                 }}
@@ -242,7 +242,7 @@ const Register = (props) => {
                   justifyContent: 'center',
                   alignItems: 'center',
                   backgroundColor: '#00A170',
-                  borderRadius: 2,
+                  borderRadius: 4,
                   height: 50,
                   paddingHorizontal: 20,
                 }}>
@@ -264,7 +264,7 @@ const Register = (props) => {
               style={{
                 borderWidth: 1,
                 borderColor: '#E3E3E3',
-                borderRadius: 2,
+                borderRadius: 4,
                 backgroundColor: '#fff',
                 width: '49%',
               }}>
@@ -304,7 +304,7 @@ const Register = (props) => {
               style={{
                 borderWidth: 1,
                 borderColor: '#E3E3E3',
-                borderRadius: 2,
+                borderRadius: 4,
                 backgroundColor: '#fff',
                 width: '49%',
               }}>
@@ -334,7 +334,7 @@ const Register = (props) => {
               style={{
                 borderWidth: 1,
                 borderColor: '#E3E3E3',
-                borderRadius: 2,
+                borderRadius: 4,
                 paddingHorizontal: 10,
                 marginBottom: 5,
               }}
@@ -346,7 +346,7 @@ const Register = (props) => {
               style={{
                 borderWidth: 1,
                 borderColor: '#E3E3E3',
-                borderRadius: 2,
+                borderRadius: 4,
                 paddingHorizontal: 10,
               }}
             />
