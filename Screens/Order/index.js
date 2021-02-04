@@ -55,6 +55,19 @@ const index = (props) => {
                   세부 내용 보기
                 </Text>
               </TouchableOpacity>
+              <TouchableOpacity
+                activeOpacity={0.8}
+                onPress={() => navigation.navigate('OrderDetail2')}
+                style={{alignSelf: 'flex-end'}}>
+                <Text
+                  style={{
+                    fontSize: 12,
+                    textDecorationLine: 'underline',
+                    color: '#A2A2A2',
+                  }}>
+                  세부 내용 보기2
+                </Text>
+              </TouchableOpacity>
             </View>
           </View>
         </View>

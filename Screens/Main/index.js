@@ -451,6 +451,15 @@ const styles = StyleSheet.create({
     height: 1,
     backgroundColor: '#E3E3E3',
   },
+  normalText: {
+    fontFamily: 'SCDream4',
+  },
+  mediumText: {
+    fontFamily: 'SCDream5',
+  },
+  boldText: {
+    fontFamily: 'SCDream6',
+  },
 });
 
 export default index;

@@ -86,7 +86,7 @@ const DrawerMenu = (props) => {
               <Image
                 source={require('../../src/assets/home.png')}
                 resizeMode="cover"
-                style={{width: 20, height: 20, marginRight: 10}}
+                style={{width: 20, height: 20, marginRight: 13}}
               />
             </TouchableOpacity>
             <TouchableOpacity

@@ -35,7 +35,7 @@ const Login = (props) => {
           <View style={{marginBottom: 30}}>
             <TextInput
               placeholder="이메일"
-              style={styles.textInput}
+              style={[styles.normalText, styles.textInput]}
               editable={false}
             />
             <TextInput
@@ -49,7 +49,11 @@ const Login = (props) => {
                 justifyContent: 'flex-end',
                 alignItems: 'center',
               }}>
-              <Text style={{fontSize: 14, color: '#111111', marginRight: 5}}>
+              <Text
+                style={[
+                  styles.normalText,
+                  {fontSize: 14, color: '#111111', marginRight: 5},
+                ]}>
                 자동 로그인
               </Text>
               <Image
@@ -132,6 +136,15 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     paddingHorizontal: 10,
     marginBottom: 10,
+  },
+  normalText: {
+    fontFamily: 'SCDream4',
+  },
+  mediumText: {
+    fontFamily: 'SCDream5',
+  },
+  boldText: {
+    fontFamily: 'SCDream6',
   },
 });
 
