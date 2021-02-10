@@ -13,7 +13,7 @@ const DrawerNavigator = () => {
   return (
     <Drawer.Navigator
       initialRouteName="Home"
-      drawerPosition="left"
+      drawerPosition="right"
       drawerType="front"
       drawerStyle={{
         backgroundColor: '#fff',

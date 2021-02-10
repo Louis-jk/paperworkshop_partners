@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import {
   View,
   Text,
@@ -11,6 +11,11 @@ import {
 
 const Login = (props) => {
   const navigation = props.navigation;
+
+  const [autoLogin, setAutoLogin] = React.useState(false);
+  const toggleCheck = () => {
+    setAutoLogin((prev) => !prev);
+  };
 
   return (
     <View
@@ -40,15 +45,17 @@ const Login = (props) => {
             />
             <TextInput
               placeholder="비밀번호"
-              style={styles.textInput}
+              style={[styles.normalText, styles.textInput]}
               editable={false}
             />
-            <View
+            <TouchableOpacity
+              onPress={toggleCheck}
               style={{
                 flexDirection: 'row',
                 justifyContent: 'flex-end',
                 alignItems: 'center',
-              }}>
+              }}
+              hitSlop={{top: 5, bottom: 5, left: 5, right: 5}}>
               <Text
                 style={[
                   styles.normalText,
@@ -57,14 +64,18 @@ const Login = (props) => {
                 자동 로그인
               </Text>
               <Image
-                source={require('../../../src/assets/radio_on.png')}
+                source={
+                  autoLogin
+                    ? require('../../../src/assets/radio_on.png')
+                    : require('../../../src/assets/radio_off.png')
+                }
                 resizeMode="cover"
                 style={{
                   width: 17,
                   height: 17,
                 }}
               />
-            </View>
+            </TouchableOpacity>
           </View>
         </View>
         <View style={{marginBottom: 20}}>
@@ -79,7 +90,9 @@ const Login = (props) => {
               borderRadius: 4,
               paddingVertical: 15,
             }}>
-            <Text style={{fontSize: 16, color: '#fff'}}>로그인</Text>
+            <Text style={[styles.normalText, {fontSize: 16, color: '#fff'}]}>
+              로그인
+            </Text>
           </TouchableOpacity>
         </View>
         <View
@@ -93,13 +106,13 @@ const Login = (props) => {
             activeOpacity={0.8}
             onPress={() => navigation.navigate('FindId')}
             hitSlop={{top: 10, bottom: 10, left: 10, right: 10}}>
-            <Text>아이디 찾기</Text>
+            <Text style={styles.normalText}>아이디 찾기</Text>
           </TouchableOpacity>
           <TouchableOpacity
             activeOpacity={0.8}
             onPress={() => navigation.navigate('FindPwd')}
             hitSlop={{top: 10, bottom: 10, left: 10, right: 10}}>
-            <Text>비밀번호 찾기</Text>
+            <Text style={styles.normalText}>비밀번호 찾기</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -110,7 +123,11 @@ const Login = (props) => {
           justifyContent: 'center',
           alignItems: 'center',
         }}>
-        <Text style={{fontSize: 14, color: '#ADADAD', marginRight: 10}}>
+        <Text
+          style={[
+            styles.normalText,
+            {fontSize: 14, color: '#ADADAD', marginRight: 10},
+          ]}>
           아직 가입되지 않은 회원입니까?
         </Text>
         <TouchableOpacity
@@ -120,7 +137,9 @@ const Login = (props) => {
             paddingHorizontal: 10,
             paddingVertical: 10,
           }}>
-          <Text style={{fontSize: 14, color: '#00A170'}}>회원가입</Text>
+          <Text style={[styles.normalText, {fontSize: 14, color: '#00A170'}]}>
+            회원가입
+          </Text>
         </TouchableOpacity>
       </View>
     </View>

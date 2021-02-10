@@ -159,6 +159,7 @@ const DrawerMenu = (props) => {
                     }}>
                     <Text
                       style={{
+                        fontFamily: 'SCDream4',
                         color: '#00A170',
                         paddingHorizontal: 10,
                         paddingVertical: 5,
@@ -166,7 +167,14 @@ const DrawerMenu = (props) => {
                       성실파트너스
                     </Text>
                   </View>
-                  <Text style={{color: '#fff', fontSize: 18}}>파트너님</Text>
+                  <Text
+                    style={{
+                      fontFamily: 'SCDream4',
+                      color: '#fff',
+                      fontSize: 18,
+                    }}>
+                    파트너님
+                  </Text>
                   <TouchableOpacity
                     activeOpacity={0.8}
                     onPress={() => navigation.navigate('ProfileEdit')}>
@@ -389,15 +397,17 @@ const DrawerMenu = (props) => {
 
 const styles = StyleSheet.create({
   whiteFont: {
+    fontFamily: 'SCDream4',
     color: '#fff',
   },
   categoryText: {
+    fontFamily: 'SCDream4',
     fontSize: 14,
     lineHeight: 28,
   },
   categoryTitle: {
+    fontFamily: 'SCDream5',
     fontSize: 16,
-    fontWeight: 'bold',
     paddingVertical: 15,
   },
   pdH20: {
@@ -411,6 +421,15 @@ const styles = StyleSheet.create({
   },
   mV10: {
     marginVertical: 10,
+  },
+  normalText: {
+    fontFamily: 'SCDream4',
+  },
+  mediumText: {
+    fontFamily: 'SCDream5',
+  },
+  boldText: {
+    fontFamily: 'SCDream6',
   },
 });
 

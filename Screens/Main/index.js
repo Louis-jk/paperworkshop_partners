@@ -50,6 +50,7 @@ const index = (props) => {
               }}>
               <Text
                 style={{
+                  fontFamily: 'SCDream4',
                   fontSize: 14,
                   paddingHorizontal: 20,
                   paddingVertical: 7,
@@ -67,6 +68,7 @@ const index = (props) => {
               }}>
               <Text
                 style={{
+                  fontFamily: 'SCDream4',
                   fontSize: 14,
                   paddingHorizontal: 20,
                   paddingVertical: 7,
@@ -79,6 +81,7 @@ const index = (props) => {
             <View style={{borderRadius: 5}}>
               <Text
                 style={{
+                  fontFamily: 'SCDream4',
                   fontSize: 14,
                   paddingHorizontal: 20,
                   paddingVertical: 7,
@@ -428,11 +431,13 @@ const styles = StyleSheet.create({
     paddingVertical: 20,
   },
   listTitle: {
+    fontFamily: 'SCDream4',
     fontSize: 14,
     lineHeight: 19,
     marginBottom: 5,
   },
   listDesc: {
+    fontFamily: 'SCDream4',
     fontSize: 12,
     lineHeight: 16,
     color: '#A2A2A2',
@@ -442,6 +447,7 @@ const styles = StyleSheet.create({
     color: '#00A170',
   },
   listDday: {
+    fontFamily: 'SCDream4',
     alignSelf: 'flex-end',
     fontSize: 14,
     color: '#A2A2A2',

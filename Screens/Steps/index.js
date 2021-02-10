@@ -405,34 +405,41 @@ const styles = StyleSheet.create({
     paddingVertical: 20,
   },
   listTitle: {
+    fontFamily: 'SCDream4',
     fontSize: 14,
     lineHeight: 19,
     marginBottom: 5,
   },
   listDesc: {
+    fontFamily: 'SCDream4',
     fontSize: 12,
     lineHeight: 16,
     color: '#A2A2A2',
   },
   listStep: {
+    fontFamily: 'SCDream4',
     fontSize: 14,
     color: '#00A170',
   },
   listDday: {
+    fontFamily: 'SCDream4',
     alignSelf: 'flex-end',
     fontSize: 14,
     color: '#A2A2A2',
   },
   listStep02: {
+    fontFamily: 'SCDream4',
     fontSize: 14,
     color: '#275696',
   },
   listDday02: {
+    fontFamily: 'SCDream4',
     alignSelf: 'flex-end',
     fontSize: 14,
     color: '#000000',
   },
   listStep03: {
+    fontFamily: 'SCDream4',
     fontSize: 14,
     color: '#000000',
   },
@@ -451,6 +458,7 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-start',
   },
   listStep02BadgeText: {
+    fontFamily: 'SCDream4',
     fontSize: 12,
     color: '#000000',
     paddingVertical: 2,
@@ -465,10 +473,20 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-start',
   },
   listStep03BadgeText: {
+    fontFamily: 'SCDream4',
     fontSize: 12,
     color: '#000000',
     paddingVertical: 2,
     paddingHorizontal: 5,
+  },
+  normalText: {
+    fontFamily: 'SCDream4',
+  },
+  mediumText: {
+    fontFamily: 'SCDream5',
+  },
+  boldText: {
+    fontFamily: 'SCDream6',
   },
 });
 

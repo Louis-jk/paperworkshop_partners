@@ -171,13 +171,24 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   msgInfoName: {
+    fontFamily: 'SCDream4',
     fontSize: 14,
     color: '#000000',
     marginBottom: 5,
   },
   msgInfoContent: {
+    fontFamily: 'SCDream4',
     fontSize: 13,
     color: '#000000',
+  },
+  normalText: {
+    fontFamily: 'SCDream4',
+  },
+  mediumText: {
+    fontFamily: 'SCDream5',
+  },
+  boldText: {
+    fontFamily: 'SCDream6',
   },
 });
 

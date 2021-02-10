@@ -23,8 +23,8 @@ const Footer = (props) => {
           <View style={{marginRight: 10}}>
             <Text
               style={{
+                fontFamily: 'SCDream5',
                 fontSize: 14,
-                fontWeight: 'bold',
                 letterSpacing: -1,
                 paddingRight: 10,
                 paddingVertical: 10,
@@ -38,8 +38,8 @@ const Footer = (props) => {
           <View>
             <Text
               style={{
+                fontFamily: 'SCDream5',
                 fontSize: 14,
-                fontWeight: 'bold',
                 letterSpacing: -1,
                 paddingHorizontal: 10,
                 paddingVertical: 10,
@@ -59,10 +59,12 @@ const Footer = (props) => {
             alignItems: 'center',
             marginBottom: 2,
           }}>
-          <Text style={{fontSize: 12, marginRight: 15}}>
+          <Text style={{fontFamily: 'SCDream4', fontSize: 12, marginRight: 15}}>
             상호명 : (주)브릿지빌더스
           </Text>
-          <Text style={{fontSize: 12}}>대표이사 : 김원기</Text>
+          <Text style={{fontFamily: 'SCDream4', fontSize: 12}}>
+            대표이사 : 김원기
+          </Text>
         </View>
         <View style={{marginBottom: 2}}>
           <Text style={{fontSize: 12, marginRight: 15}}>
@@ -70,17 +72,17 @@ const Footer = (props) => {
           </Text>
         </View>
         <View style={{marginBottom: 2}}>
-          <Text style={{fontSize: 12, marginRight: 15}}>
+          <Text style={{fontFamily: 'SCDream4', fontSize: 12, marginRight: 15}}>
             주소 : 부산시 금정구 금샘로 246번길 18 150동 150호
           </Text>
         </View>
         <View style={{marginBottom: 2}}>
-          <Text style={{fontSize: 12, marginRight: 15}}>
+          <Text style={{fontFamily: 'SCDream4', fontSize: 12, marginRight: 15}}>
             사업자등록번호 : 234-13-01682
           </Text>
         </View>
         <View style={{marginBottom: 2}}>
-          <Text style={{fontSize: 12, marginRight: 15}}>
+          <Text style={{fontFamily: 'SCDream4', fontSize: 12, marginRight: 15}}>
             통신판매업신고번호 : 123-45-679812
           </Text>
         </View>

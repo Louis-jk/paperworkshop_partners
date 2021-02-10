@@ -75,18 +75,18 @@ const DetailHeader = (props) => {
       <View style={container}>
         <TouchableWithoutFeedback onPress={() => navigation.goBack()}>
           <View style={headerCtrl}>
-            <View style={{paddingVertical: 10, paddingRight: 10}}>
+            <View style={{paddingVertical: 10, paddingRight: 3}}>
               <Image
-                source={require('../../src/images/left-chevron.png')}
-                resizeMode="contain"
+                source={require('../../src/assets/arr02.png')}
+                resizeMode="cover"
                 style={{
-                  width: 16,
-                  height: 22,
+                  width: 20,
+                  height: 30,
                 }}
               />
             </View>
 
-            <Text style={headerTitle}>{title}</Text>
+            <Text style={[styles.boldText, headerTitle]}>{title}</Text>
           </View>
         </TouchableWithoutFeedback>
         <View style={icons}>
@@ -141,16 +141,23 @@ const styles = StyleSheet.create({
     // backgroundColor: '#ffaaee',
   },
   headerTitle: {
+    fontFamily: 'SCDream5',
     fontSize: 18,
-    fontWeight: 'bold',
-    letterSpacing: -1,
     lineHeight: 50,
-    marginBottom: 2,
   },
   icons: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+  },
+  normalText: {
+    fontFamily: 'SCDream4',
+  },
+  mediumText: {
+    fontFamily: 'SCDream5',
+  },
+  boldText: {
+    fontFamily: 'SCDream6',
   },
 });
 

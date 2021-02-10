@@ -20,7 +20,7 @@ const Detail = (props) => {
   console.log('MSG ROON Props', props);
 
   const exitMsgRoom = () => {
-    Alert.alert('채팅방을 나가시겠습니까?', '메세지는 삭제되지 않습니다.', [
+    Alert.alert('채팅방을 나가시겠습니까?', '메세지는 영구 삭제됩니다.', [
       {
         text: '확인',
         onPress: () => navigation.navigate('Message'),
@@ -41,7 +41,7 @@ const Detail = (props) => {
               alignItems: 'center',
             }}>
             <Text style={{marginRight: 10}}>- - - - - - - -</Text>
-            <Text>2021.08.14 (금)</Text>
+            <Text style={styles.normalText}>2021.08.14 (금)</Text>
             <Text style={{marginLeft: 10}}>- - - - - - - -</Text>
           </View>
           <View
@@ -76,7 +76,12 @@ const Detail = (props) => {
                 </Text>
               </View>
               <Text
-                style={{alignSelf: 'flex-end', fontSize: 12, color: '#000000'}}>
+                style={{
+                  fontFamily: 'SCDream4',
+                  alignSelf: 'flex-end',
+                  fontSize: 12,
+                  color: '#000000',
+                }}>
                 13:56
               </Text>
             </View>
@@ -96,7 +101,12 @@ const Detail = (props) => {
                 <Text style={styles.msgTextP}>안녕하세요! 반갑습니다. </Text>
               </View>
               <Text
-                style={{alignSelf: 'flex-end', fontSize: 12, color: '#000000'}}>
+                style={{
+                  fontFamily: 'SCDream4',
+                  alignSelf: 'flex-end',
+                  fontSize: 12,
+                  color: '#000000',
+                }}>
                 14:01
               </Text>
             </View>
@@ -118,7 +128,12 @@ const Detail = (props) => {
                 </Text>
               </View>
               <Text
-                style={{alignSelf: 'flex-end', fontSize: 12, color: '#000000'}}>
+                style={{
+                  fontFamily: 'SCDream4',
+                  alignSelf: 'flex-end',
+                  fontSize: 12,
+                  color: '#000000',
+                }}>
                 14:02
               </Text>
             </View>
@@ -148,7 +163,12 @@ const Detail = (props) => {
                 />
               </View>
               <Text
-                style={{alignSelf: 'flex-end', fontSize: 12, color: '#000000'}}>
+                style={{
+                  fontFamily: 'SCDream4',
+                  alignSelf: 'flex-end',
+                  fontSize: 12,
+                  color: '#000000',
+                }}>
                 14:15
               </Text>
             </View>
@@ -181,10 +201,15 @@ const Detail = (props) => {
                     style={{width: 30, height: 30, marginRight: 10}}
                   />
                 </TouchableOpacity>
-                <Text>abcdefg.pdf</Text>
+                <Text style={styles.normalText}>abcdefg.pdf</Text>
               </View>
               <Text
-                style={{alignSelf: 'flex-end', fontSize: 12, color: '#000000'}}>
+                style={{
+                  fontFamily: 'SCDream4',
+                  alignSelf: 'flex-end',
+                  fontSize: 12,
+                  color: '#000000',
+                }}>
                 14:15
               </Text>
             </View>
@@ -205,6 +230,7 @@ const Detail = (props) => {
                 }}>
                 <Text
                   style={{
+                    fontFamily: 'SCDream4',
                     fontSize: 14,
                     color: '#000',
                     paddingHorizontal: 30,
@@ -247,7 +273,12 @@ const Detail = (props) => {
             placeholderTextColor="#FFFFFF"
             multiline={true}
             autoCapitalize="none"
-            style={{color: '#fff', fontSize: 14}}
+            style={{
+              fontFamily: 'SCDream4',
+              color: '#fff',
+              fontSize: 14,
+              width: '75%',
+            }}
           />
         </View>
         <TouchableOpacity
@@ -281,8 +312,9 @@ const styles = StyleSheet.create({
     width: 200,
   },
   msgText: {
+    fontFamily: 'SCDream4',
     fontSize: 14,
-    lineHeight: 18,
+    lineHeight: 20,
     color: '#000000',
   },
   msgBubbleP: {
@@ -299,9 +331,19 @@ const styles = StyleSheet.create({
     width: 200,
   },
   msgTextP: {
+    fontFamily: 'SCDream4',
     fontSize: 14,
     lineHeight: 18,
     color: '#fff',
+  },
+  normalText: {
+    fontFamily: 'SCDream4',
+  },
+  mediumText: {
+    fontFamily: 'SCDream5',
+  },
+  boldText: {
+    fontFamily: 'SCDream6',
   },
 });
 

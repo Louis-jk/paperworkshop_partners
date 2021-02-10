@@ -4,29 +4,14 @@ import {
   Text,
   ScrollView,
   StyleSheet,
-  TouchableWithoutFeedback,
   TouchableOpacity,
-  Keyboard,
-  Dimensions,
-  TextInput,
-  Button,
-  Image,
-  Alert,
 } from 'react-native';
 
-// import RNPickerSelect from 'react-native-picker-select';
-import {Picker} from '@react-native-community/picker';
-
 import Header from '../../Common/Header';
-import Footer from '../../Common/Footer';
 
 const Signed = (props) => {
   const navigation = props.navigation;
   const routeName = props.route.name;
-
-  const [category01, setCategory01] = React.useState(null);
-  const [category02, setCategory02] = React.useState(null);
-  const [value, setValue] = React.useState(null);
 
   return (
     <>
@@ -40,11 +25,18 @@ const Signed = (props) => {
             paddingHorizontal: 20,
             paddingVertical: 20,
           }}>
-          <Text style={{fontSize: 18, color: '#00A170', marginTop: 20}}>
+          <Text
+            style={{
+              fontFamily: 'SCDream4',
+              fontSize: 18,
+              color: '#00A170',
+              marginTop: 20,
+            }}>
             회원가입이 정상적으로 완료되었습니다.
           </Text>
           <Text
             style={{
+              fontFamily: 'SCDream4',
               fontSize: 16,
               color: '#111',
               marginTop: 10,
@@ -81,9 +73,19 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
   },
   submitBtnText: {
+    fontFamily: 'SCDream4',
     fontSize: 16,
     color: '#FFFFFF',
     textAlign: 'center',
+  },
+  normalText: {
+    fontFamily: 'SCDream4',
+  },
+  mediumText: {
+    fontFamily: 'SCDream5',
+  },
+  boldText: {
+    fontFamily: 'SCDream6',
   },
 });
 

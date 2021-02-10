@@ -41,16 +41,23 @@ const SetPwdComplete = (props) => {
             paddingHorizontal: 20,
             paddingVertical: 20,
           }}>
-          <Text style={{fontSize: 18, color: '#00A170', marginTop: 20}}>
+          <Text
+            style={[
+              styles.normalText,
+              {fontSize: 18, color: '#00A170', marginTop: 20},
+            ]}>
             비밀번호가 변경되었습니다.
           </Text>
           <Text
-            style={{
-              fontSize: 16,
-              color: '#111',
-              marginTop: 10,
-              marginBottom: 30,
-            }}>
+            style={[
+              styles.normalText,
+              {
+                fontSize: 16,
+                color: '#111',
+                marginTop: 10,
+                marginBottom: 30,
+              },
+            ]}>
             변경된 비밀번호로 이용하실 수 있습니다.
           </Text>
           <View
@@ -82,9 +89,19 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
   },
   submitBtnText: {
+    fontFamily: 'SCDream4',
     fontSize: 16,
     color: '#FFFFFF',
     textAlign: 'center',
+  },
+  normalText: {
+    fontFamily: 'SCDream4',
+  },
+  mediumText: {
+    fontFamily: 'SCDream5',
+  },
+  boldText: {
+    fontFamily: 'SCDream6',
   },
 });
 

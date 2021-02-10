@@ -10,7 +10,6 @@ import {
   Alert,
   TextInput,
 } from 'react-native';
-import {Picker} from '@react-native-community/picker';
 
 import DetailHeader from '../Common/DetailHeader';
 
@@ -18,14 +17,7 @@ const ReqPopular = (props) => {
   const navigation = props.navigation;
   const routeName = props.route.name;
 
-  console.log('Req', routeName);
-
-  const [category01, setCategory01] = React.useState(null);
-  const [oneMonth, setOneMonth] = React.useState(false);
-
-  const oneMonthToggle = () => {
-    setOneMonth((prev) => !prev);
-  };
+  const [price, setPrice] = React.useState(1);
 
   return (
     <>
@@ -37,7 +29,13 @@ const ReqPopular = (props) => {
             paddingVertical: 20,
             marginBottom: 10,
           }}>
-          <Text style={{fontSize: 13, color: '#00A170', marginBottom: 20}}>
+          <Text
+            style={{
+              fontFamily: 'SCDream4',
+              fontSize: 13,
+              color: '#00A170',
+              marginBottom: 20,
+            }}>
             * 인기 파트너스 등록 신청 시, 아래 내용을 확인해주세요.
           </Text>
           <Text style={[styles.orderInfoContentTitle, {marginBottom: 12}]}>
@@ -51,7 +49,7 @@ const ReqPopular = (props) => {
               flexWrap: 'wrap',
             }}>
             <TouchableOpacity
-              onPress={oneMonthToggle}
+              onPress={() => setPrice(1)}
               activeOpacity={1}
               style={{
                 flexDirection: 'row',
@@ -62,18 +60,21 @@ const ReqPopular = (props) => {
               }}>
               <Image
                 source={
-                  oneMonth
+                  price === 1
                     ? require('../../src/assets/radio_on.png')
                     : require('../../src/assets/radio_off.png')
                 }
                 resizeMode="contain"
                 style={{width: 20, height: 20, marginRight: 7}}
               />
-              <Text style={{fontSize: 14, color: '#000'}}>
+              <Text
+                style={{fontFamily: 'SCDream4', fontSize: 14, color: '#000'}}>
                 1개월 : 50,000원
               </Text>
             </TouchableOpacity>
             <TouchableOpacity
+              onPress={() => setPrice(2)}
+              activeOpacity={1}
               style={{
                 flexDirection: 'row',
                 justifyContent: 'flex-start',
@@ -82,15 +83,22 @@ const ReqPopular = (props) => {
                 marginBottom: 10,
               }}>
               <Image
-                source={require('../../src/assets/radio_off.png')}
+                source={
+                  price === 2
+                    ? require('../../src/assets/radio_on.png')
+                    : require('../../src/assets/radio_off.png')
+                }
                 resizeMode="contain"
                 style={{width: 20, height: 20, marginRight: 7}}
               />
-              <Text style={{fontSize: 14, color: '#000'}}>
+              <Text
+                style={{fontFamily: 'SCDream4', fontSize: 14, color: '#000'}}>
                 3개월 : 70,000원
               </Text>
             </TouchableOpacity>
             <TouchableOpacity
+              onPress={() => setPrice(3)}
+              activeOpacity={1}
               style={{
                 flexDirection: 'row',
                 justifyContent: 'flex-start',
@@ -99,15 +107,22 @@ const ReqPopular = (props) => {
                 marginBottom: 10,
               }}>
               <Image
-                source={require('../../src/assets/radio_off.png')}
+                source={
+                  price === 3
+                    ? require('../../src/assets/radio_on.png')
+                    : require('../../src/assets/radio_off.png')
+                }
                 resizeMode="contain"
                 style={{width: 20, height: 20, marginRight: 7}}
               />
-              <Text style={{fontSize: 14, color: '#000'}}>
+              <Text
+                style={{fontFamily: 'SCDream4', fontSize: 14, color: '#000'}}>
                 6개월 : 100,000원
               </Text>
             </TouchableOpacity>
             <TouchableOpacity
+              onPress={() => setPrice(4)}
+              activeOpacity={1}
               style={{
                 flexDirection: 'row',
                 justifyContent: 'flex-start',
@@ -116,11 +131,16 @@ const ReqPopular = (props) => {
                 marginBottom: 10,
               }}>
               <Image
-                source={require('../../src/assets/radio_off.png')}
+                source={
+                  price === 4
+                    ? require('../../src/assets/radio_on.png')
+                    : require('../../src/assets/radio_off.png')
+                }
                 resizeMode="contain"
                 style={{width: 20, height: 20, marginRight: 7}}
               />
-              <Text style={{fontSize: 14, color: '#000'}}>
+              <Text
+                style={{fontFamily: 'SCDream4', fontSize: 14, color: '#000'}}>
                 12개월 : 130,000원
               </Text>
             </TouchableOpacity>
@@ -157,17 +177,34 @@ const ReqPopular = (props) => {
             paddingVertical: 15,
             marginBottom: 20,
           }}>
-          <Text style={{fontSize: 14, color: '#FFFFFF'}}>신한은행</Text>
+          <Text
+            style={{
+              fontFamily: 'SCDream4',
+              fontSize: 14,
+              color: '#FFFFFF',
+              marginBottom: 5,
+            }}>
+            신한은행
+          </Text>
           <View
             style={{
               flexDirection: 'row',
               justifyContent: 'flex-start',
               alignItems: 'center',
             }}>
-            <Text style={{fontSize: 14, color: '#FFFFFF', marginRight: 10}}>
+            <Text
+              style={{
+                fontFamily: 'SCDream4',
+                fontSize: 14,
+                color: '#FFFFFF',
+                marginRight: 10,
+              }}>
               562-66312-4512644
             </Text>
-            <Text style={{fontSize: 14, color: '#FFFFFF'}}>페이퍼공작소</Text>
+            <Text
+              style={{fontFamily: 'SCDream4', fontSize: 14, color: '#FFFFFF'}}>
+              페이퍼공작소
+            </Text>
           </View>
         </View>
 
@@ -181,6 +218,7 @@ const ReqPopular = (props) => {
               placeholder="내용을 적어주세요"
               placeholderTextColor="#A2A2A2"
               style={{
+                fontFamily: 'SCDream4',
                 borderRadius: 5,
                 backgroundColor: '#F5F5F5',
                 height: 120,
@@ -202,6 +240,7 @@ const ReqPopular = (props) => {
               placeholder="내용을 적어주세요"
               placeholderTextColor="#A2A2A2"
               style={{
+                fontFamily: 'SCDream4',
                 borderRadius: 5,
                 backgroundColor: '#F5F5F5',
                 height: 120,
@@ -227,14 +266,21 @@ const ReqPopular = (props) => {
           <View style={{flexDirection: 'row'}}>
             <Text
               style={{
+                fontFamily: 'SCDream4',
                 fontSize: 12,
                 color: '#707070',
                 marginRight: 5,
               }}>
               ※
             </Text>
-            <View>
-              <Text style={{fontSize: 12, lineHeight: 18, color: '#707070'}}>
+            <View style={{paddingRight: 10}}>
+              <Text
+                style={{
+                  fontFamily: 'SCDream4',
+                  fontSize: 12,
+                  lineHeight: 20,
+                  color: '#707070',
+                }}>
                 인기 파트너스 등록 완료 후, 안내드린 금액을 입금 해주시면
                 페이퍼공작소 매니저가 입금 확인 후, 인기 파트너스로
                 등록해드립니다. 신청 후, 일반회원에게 노출될 내용들과 관련하여
@@ -268,6 +314,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   orderInfoContentTitle: {
+    fontFamily: 'SCDream4',
     fontSize: 15,
     color: '#111',
   },
@@ -292,11 +339,13 @@ const styles = StyleSheet.create({
     marginVertical: 15,
   },
   partnerInfoTitle: {
+    fontFamily: 'SCDream4',
     fontSize: 15,
     color: '#00A170',
     marginBottom: 10,
   },
   partnerInfoDesc: {
+    fontFamily: 'SCDream4',
     fontSize: 13,
     lineHeight: 20,
     color: '#000000',
@@ -308,9 +357,19 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
   },
   submitBtnText: {
+    fontFamily: 'SCDream4',
     fontSize: 16,
     color: '#FFFFFF',
     textAlign: 'center',
+  },
+  normalText: {
+    fontFamily: 'SCDream4',
+  },
+  mediumText: {
+    fontFamily: 'SCDream5',
+  },
+  boldText: {
+    fontFamily: 'SCDream6',
   },
 });
 

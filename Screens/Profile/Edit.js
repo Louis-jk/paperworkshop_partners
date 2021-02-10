@@ -4,12 +4,8 @@ import {
   Text,
   ScrollView,
   StyleSheet,
-  TouchableWithoutFeedback,
   TouchableOpacity,
-  Keyboard,
-  Dimensions,
   TextInput,
-  Button,
   Image,
   Alert,
 } from 'react-native';
@@ -18,7 +14,6 @@ import {
 import {Picker} from '@react-native-community/picker';
 
 import Header from '../Common/Header';
-import Footer from '../Common/Footer';
 import Modal from '../Common/PartnersInfoModal';
 
 const Edit = (props) => {
@@ -27,13 +22,20 @@ const Edit = (props) => {
 
   const [category01, setCategory01] = React.useState(null);
   const [category02, setCategory02] = React.useState(null);
-  const [value, setValue] = React.useState(null);
 
   const [isModalVisible, setModalVisible] = React.useState(false);
 
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
   };
+
+  const [name, setName] = React.useState('김성준');
+  const [businessName, setBusinessName] = React.useState('디몬스터');
+  const [mobileNo, setMobileNo] = React.useState('01012345678');
+  const [mobileCert, setMobileCert] = React.useState(null);
+  const [bank, setBank] = React.useState('신한은행');
+  const [bankAccount, setBankAccount] = React.useState('562-123-4567812');
+  const [depositor, setDepositor] = React.useState('김성준');
 
   return (
     <>
@@ -67,12 +69,15 @@ const Edit = (props) => {
               />
             </TouchableOpacity>
             <Text
-              style={{
-                textAlign: 'center',
-                fontSize: 15,
-                marginVertical: 5,
-                letterSpacing: -1,
-              }}>
+              style={[
+                styles.normalText,
+                {
+                  textAlign: 'center',
+                  fontSize: 15,
+                  marginVertical: 5,
+                  letterSpacing: -1,
+                },
+              ]}>
               프로필 이미지 등록
             </Text>
           </View>
@@ -118,6 +123,7 @@ const Edit = (props) => {
                 }}>
                 <Text
                   style={{
+                    fontFamily: 'SCDream4',
                     fontSize: 12,
                     color: '#fff',
                     paddingHorizontal: 10,
@@ -138,6 +144,7 @@ const Edit = (props) => {
               placeholder="비밀번호를 입력해주세요."
               placeholderTextColor="#A2A2A2"
               style={{
+                fontFamily: 'SCDream4',
                 borderWidth: 1,
                 borderColor: '#E3E3E3',
                 borderRadius: 4,
@@ -151,6 +158,7 @@ const Edit = (props) => {
               placeholder="비밀번호를 재입력해주세요."
               placeholderTextColor="#A2A2A2"
               style={{
+                fontFamily: 'SCDream4',
                 borderWidth: 1,
                 borderColor: '#E3E3E3',
                 borderRadius: 4,
@@ -166,10 +174,12 @@ const Edit = (props) => {
           <View style={{marginBottom: 20}}>
             <Text style={[styles.profileTitle, {marginBottom: 10}]}>성함</Text>
             <TextInput
-              value="김성준"
-              placeholder="비밀번호를 입력해주세요."
+              value={name}
+              placeholder="성함을 입력해주세요."
               placeholderTextColor="#A2A2A2"
+              onChangeText={(text) => setName(text)}
               style={{
+                fontFamily: 'SCDream4',
                 borderWidth: 1,
                 borderColor: '#E3E3E3',
                 borderRadius: 4,
@@ -186,14 +196,16 @@ const Edit = (props) => {
               상호명
             </Text>
             <TextInput
-              value="디몬스터"
-              placeholder="비밀번호를 입력해주세요."
+              value={businessName}
+              placeholder="상호명을 입력해주세요."
               placeholderTextColor="#A2A2A2"
+              onChangeText={(text) => setBusinessName(text)}
               style={{
                 borderWidth: 1,
                 borderColor: '#E3E3E3',
                 borderRadius: 4,
                 paddingHorizontal: 10,
+                fontFamily: 'SCDream4',
               }}
               autoCapitalize="none"
             />
@@ -213,9 +225,10 @@ const Edit = (props) => {
                 marginBottom: 5,
               }}>
               <TextInput
-                value="010-1234-5678"
+                value={mobileNo}
                 placeholder="휴대전화번호를 입력해주세요."
                 placeholderTextColor="#A2A2A2"
+                onChangeText={(text) => setMobileNo(text)}
                 style={{
                   flex: 1,
                   borderWidth: 1,
@@ -223,6 +236,7 @@ const Edit = (props) => {
                   borderRadius: 4,
                   paddingHorizontal: 10,
                   marginRight: 10,
+                  fontFamily: 'SCDream4',
                 }}
                 keyboardType="number-pad"
                 autoCapitalize="none"
@@ -235,9 +249,14 @@ const Edit = (props) => {
                   backgroundColor: '#00A170',
                   borderRadius: 4,
                   height: 50,
-                  paddingHorizontal: 20,
+                  paddingHorizontal: 15,
                 }}>
-                <Text style={{color: '#fff', textAlign: 'center'}}>
+                <Text
+                  style={{
+                    fontFamily: 'SCDream4',
+                    color: '#fff',
+                    textAlign: 'center',
+                  }}>
                   인증번호 전송
                 </Text>
               </TouchableOpacity>
@@ -250,9 +269,10 @@ const Edit = (props) => {
                 marginBottom: 5,
               }}>
               <TextInput
-                value=""
+                value={mobileCert}
                 placeholder="인증번호를 입력해주세요."
                 placeholderTextColor="#A2A2A2"
+                onChangeText={(text) => setMobileCert(text)}
                 style={{
                   flex: 1,
                   borderWidth: 1,
@@ -260,6 +280,7 @@ const Edit = (props) => {
                   borderRadius: 4,
                   paddingHorizontal: 10,
                   marginRight: 10,
+                  fontFamily: 'SCDream4',
                 }}
                 keyboardType="number-pad"
                 autoCapitalize="none"
@@ -272,9 +293,14 @@ const Edit = (props) => {
                   backgroundColor: '#00A170',
                   borderRadius: 4,
                   height: 50,
-                  paddingHorizontal: 20,
+                  paddingHorizontal: 15,
                 }}>
-                <Text style={{color: '#fff', textAlign: 'center'}}>
+                <Text
+                  style={{
+                    fontFamily: 'SCDream4',
+                    color: '#fff',
+                    textAlign: 'center',
+                  }}>
                   인증번호 확인
                 </Text>
               </TouchableOpacity>
@@ -304,6 +330,7 @@ const Edit = (props) => {
                   borderRadius: 4,
                   paddingHorizontal: 10,
                   marginRight: 10,
+                  fontFamily: 'SCDream4',
                 }}
                 editable={false}
               />
@@ -317,7 +344,12 @@ const Edit = (props) => {
                   height: 50,
                   paddingHorizontal: 20,
                 }}>
-                <Text style={{color: '#fff', textAlign: 'center'}}>
+                <Text
+                  style={{
+                    fontFamily: 'SCDream4',
+                    color: '#fff',
+                    textAlign: 'center',
+                  }}>
                   파일 선택
                 </Text>
               </TouchableOpacity>
@@ -338,7 +370,7 @@ const Edit = (props) => {
                   resizeMode="contain"
                   style={{width: 20, height: 20, marginRight: 5}}
                 />
-                <Text>사업자등록증.jpg</Text>
+                <Text style={styles.normalText}>사업자등록증.jpg</Text>
               </View>
             </TouchableOpacity>
           </View>
@@ -415,10 +447,12 @@ const Edit = (props) => {
               계좌정보
             </Text>
             <TextInput
-              value="신한은행"
+              value={bank}
               placeholder="은행명을 입력해주세요."
               placeholderTextColor="#A2A2A2"
+              onChangeText={(text) => setBank(text)}
               style={{
+                fontFamily: 'SCDream4',
                 borderWidth: 1,
                 borderColor: '#E3E3E3',
                 borderRadius: 4,
@@ -427,14 +461,31 @@ const Edit = (props) => {
               }}
             />
             <TextInput
-              value="562*123-4567812"
+              value={bankAccount}
               placeholder="계좌번호를 입력해주세요."
               placeholderTextColor="#A2A2A2"
+              onChangeText={(text) => setBankAccount(text)}
               style={{
+                fontFamily: 'SCDream4',
                 borderWidth: 1,
                 borderColor: '#E3E3E3',
                 borderRadius: 4,
                 paddingHorizontal: 10,
+                marginBottom: 5,
+              }}
+            />
+            <TextInput
+              value={depositor}
+              placeholder="예금주를 입력해주세요."
+              placeholderTextColor="#A2A2A2"
+              onChangeText={(text) => setDepositor(text)}
+              style={{
+                fontFamily: 'SCDream4',
+                borderWidth: 1,
+                borderColor: '#E3E3E3',
+                borderRadius: 4,
+                paddingHorizontal: 10,
+                marginBottom: 5,
               }}
             />
           </View>
@@ -475,14 +526,14 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   profileTitle: {
+    fontFamily: 'SCDream5',
     fontSize: 15,
-    fontWeight: 'bold',
     lineHeight: 19,
     marginBottom: 7,
   },
   profileDesc: {
+    fontFamily: 'SCDream4',
     fontSize: 15,
-    lineHeight: 16,
     color: '#111',
   },
   submitBtn: {
@@ -492,6 +543,7 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
   },
   submitBtnText: {
+    fontFamily: 'SCDream4',
     fontSize: 16,
     color: '#FFFFFF',
     textAlign: 'center',
@@ -503,6 +555,7 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
   },
   cancelBtnText: {
+    fontFamily: 'SCDream4',
     fontSize: 16,
     color: '#111',
     textAlign: 'center',
@@ -514,20 +567,24 @@ const styles = StyleSheet.create({
     paddingVertical: 20,
   },
   listTitle: {
+    fontFamily: 'SCDream4',
     fontSize: 14,
     lineHeight: 19,
     marginBottom: 5,
   },
   listDesc: {
+    fontFamily: 'SCDream4',
     fontSize: 12,
     lineHeight: 16,
     color: '#A2A2A2',
   },
   listStep: {
+    fontFamily: 'SCDream4',
     fontSize: 14,
     color: '#00A170',
   },
   listDday: {
+    fontFamily: 'SCDream4',
     alignSelf: 'flex-end',
     fontSize: 14,
     color: '#A2A2A2',
@@ -536,6 +593,15 @@ const styles = StyleSheet.create({
     width: '100%',
     height: 1,
     backgroundColor: '#E3E3E3',
+  },
+  normalText: {
+    fontFamily: 'SCDream4',
+  },
+  mediumText: {
+    fontFamily: 'SCDream5',
+  },
+  boldText: {
+    fontFamily: 'SCDream6',
   },
 });
 
