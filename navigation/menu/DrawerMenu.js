@@ -4,13 +4,9 @@ import {
   Text,
   Dimensions,
   TouchableOpacity,
-  TouchableWithoutFeedback,
   Image,
-  Linking,
   StyleSheet,
   ScrollView,
-  Alert,
-  TextInput,
 } from 'react-native';
 
 import Carousel, {Pagination} from 'react-native-snap-carousel';
@@ -72,7 +68,7 @@ const DrawerMenu = (props) => {
 
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
-      <Modal isVisible={isPopUpVisible}>
+      <Modal isVisible={isPopUpVisible} onBackdropPress={PopUp}>
         <View
           style={{
             flex: 1,
@@ -86,7 +82,7 @@ const DrawerMenu = (props) => {
               position: 'relative',
               backgroundColor: '#fff',
               paddingHorizontal: 20,
-              paddingVertical: 20,
+              paddingVertical: 100,
               borderRadius: 5,
             }}>
             <TouchableOpacity
@@ -112,22 +108,9 @@ const DrawerMenu = (props) => {
                 }}
               />
             </TouchableOpacity>
-            <TextInput
-              placeholder="메세지를 입력해주세요."
-              placeholderTextColor="#A2A2A2"
-              style={{
-                fontFamily: 'SCDream4',
-                borderRadius: 5,
-                backgroundColor: '#F5F5F5',
-                width: Dimensions.get('window').width - 120,
-                height: 150,
-                textAlignVertical: 'top',
-                paddingLeft: 10,
-                paddingVertical: 10,
-              }}
-              multiline={true}
-              autoFocus={true}
-            />
+            <Text style={{fontFamily: 'SCDream4'}}>
+              현재 페이퍼공작소 무료이용 가능합니다.
+            </Text>
           </View>
         </View>
       </Modal>
@@ -292,6 +275,33 @@ const DrawerMenu = (props) => {
         />
         <TouchableOpacity
           activeOpacity={0.8}
+          onPress={() =>
+            navigation.navigate('ProfileDetailEdit', {
+              screen: 'ProfileDetailEdit',
+            })
+          }
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            paddingHorizontal: 20,
+          }}>
+          <Text style={styles.categoryTitle}>파트너스 정보 수정</Text>
+          <Image
+            source={require('../../src/assets/arr03.png')}
+            resizeMode="contain"
+            style={{width: 30, height: 30}}
+          />
+        </TouchableOpacity>
+        <View
+          style={{
+            width: Dimensions.get('window').width,
+            height: 1,
+            backgroundColor: '#F5F5F5',
+          }}
+        />
+        <TouchableOpacity
+          activeOpacity={0.8}
           onPress={() => navigation.navigate('PartnerInfo')}
           style={{
             flexDirection: 'row',
@@ -315,6 +325,7 @@ const DrawerMenu = (props) => {
         />
         <TouchableOpacity
           activeOpacity={0.8}
+          onPress={() => navigation.navigate('Service', {screen: 'Service'})}
           style={{
             flexDirection: 'row',
             justifyContent: 'space-between',
@@ -337,6 +348,7 @@ const DrawerMenu = (props) => {
         />
         <TouchableOpacity
           activeOpacity={0.8}
+          onPress={() => navigation.navigate('Customer', {screen: 'Customer'})}
           style={{
             flexDirection: 'row',
             justifyContent: 'space-between',
@@ -359,6 +371,9 @@ const DrawerMenu = (props) => {
         />
         <TouchableOpacity
           activeOpacity={0.8}
+          onPress={() =>
+            navigation.navigate('CompanyInfo', {screen: 'CompanyInfo'})
+          }
           style={{
             flexDirection: 'row',
             justifyContent: 'space-between',

@@ -14,10 +14,22 @@ import ProductScreen from '../Screens/Product';
 import MessageScreen from '../Screens/Message';
 import MessageDetailScreen from '../Screens/Message/Detail';
 import ProfileEditScreen from '../Screens/Profile/Edit';
+import ProfileDetailEditScreen from '../Screens/Profile/DetailEdit';
 
+// 이용약관 및 개인정보 처리방침
 import TermsScreen from '../Screens/Common/Terms';
 import PrivacyScreen from '../Screens/Common/Terms/Privacy';
-import PartnerInfo from '../Screens/Common/Infos/PartnerInfo';
+
+// 파트너스 소개
+import PartnerInfoScreen from '../Screens/Common/Infos/PartnerInfo';
+// 회사소개
+import CompanyInfoScreen from '../Screens/Common/Infos/CompanyInfo';
+// 서비스 소개
+import ServiceScreen from '../Screens/Common/Infos/Service';
+
+// 고객센터
+import CustomerScreen from '../Screens/Customer';
+
 import Alarm from '../Screens/Common/Alarm';
 import Statistics from '../Screens/Common/Statistics';
 import ReqPopularScreen from '../Screens/Profile/ReqPopular';
@@ -128,8 +140,18 @@ export const MessageStackNavigator = () => {
 export const PartnersInfoStackNavigator = () => {
   return (
     <Stack.Navigator screenOptions={{headerShown: false}}>
-      <Stack.Screen name="PartnerInfo" component={PartnerInfo} />
+      <Stack.Screen name="PartnerInfo" component={PartnerInfoScreen} />
+      <Stack.Screen name="CompanyInfo" component={CompanyInfoScreen} />
+      <Stack.Screen name="Service" component={ServiceScreen} />
       <Stack.Screen name="Alarm" component={Alarm} />
+    </Stack.Navigator>
+  );
+};
+
+export const CustomerStackNavigator = () => {
+  return (
+    <Stack.Navigator screenOptions={{headerShown: false}}>
+      <Stack.Screen name="Customer" component={CustomerScreen} />
     </Stack.Navigator>
   );
 };
@@ -154,6 +176,10 @@ export const ProfileEditStackNavigator = () => {
   return (
     <Stack.Navigator screenOptions={{headerShown: false}}>
       <Stack.Screen name="ProfileEdit" component={ProfileEditScreen} />
+      <Stack.Screen
+        name="ProfileDetailEdit"
+        component={ProfileDetailEditScreen}
+      />
     </Stack.Navigator>
   );
 };

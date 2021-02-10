@@ -5,17 +5,13 @@ import {
   ScrollView,
   StyleSheet,
   TouchableWithoutFeedback,
-  Keyboard,
   Dimensions,
   TextInput,
-  Button,
 } from 'react-native';
 
-// import RNPickerSelect from 'react-native-picker-select';
 import {Picker} from '@react-native-community/picker';
 
 import Header from '../Common/Header';
-import Footer from '../Common/Footer';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 
 const index = (props) => {
@@ -25,7 +21,6 @@ const index = (props) => {
   console.log('props :', props);
 
   const [category01, setCategory01] = React.useState(null);
-  const [value, setValue] = React.useState(null);
 
   console.log('category01 : ', category01);
 

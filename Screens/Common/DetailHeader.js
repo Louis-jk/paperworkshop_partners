@@ -68,6 +68,18 @@ const DetailHeader = (props) => {
       case 'SetPwd':
         setTitle('비밀번호 변경');
         break;
+      case 'ProfileDetailEdit':
+        setTitle('파트너스 정보 수정');
+        break;
+      case 'Service':
+        setTitle('서비스 소개');
+        break;
+      case 'CompanyInfo':
+        setTitle('회사소개');
+        break;
+      case 'Customer':
+        setTitle('고객센터');
+        break;
       default:
         return false;
     }

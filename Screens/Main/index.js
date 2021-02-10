@@ -5,17 +5,14 @@ import {
   ScrollView,
   StyleSheet,
   TouchableWithoutFeedback,
-  Keyboard,
   Dimensions,
   TextInput,
-  Button,
 } from 'react-native';
 
 // import RNPickerSelect from 'react-native-picker-select';
 import {Picker} from '@react-native-community/picker';
 
 import Header from '../Common/Header';
-import Footer from '../Common/Footer';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 
 const index = (props) => {
@@ -25,9 +22,15 @@ const index = (props) => {
   console.log('Main props :', props);
 
   const [category01, setCategory01] = React.useState(null);
-  const [value, setValue] = React.useState(null);
 
   console.log('category01 : ', category01);
+
+  const typeCount = ['패키지', '일반인쇄', '기타인쇄'];
+  const [type, setType] = React.useState('타입선택');
+  const [isActiveToggleType, setIsActiveToggleType] = React.useState(false);
+  const toggleType = () => {
+    setIsActiveToggleType(!isActiveToggleType);
+  };
 
   return (
     <>
@@ -46,7 +49,7 @@ const index = (props) => {
               style={{
                 backgroundColor: '#00A170',
                 borderRadius: 5,
-                marginRight: 5,
+                marginRight: 20,
               }}>
               <Text
                 style={{
@@ -64,13 +67,12 @@ const index = (props) => {
             <View
               style={{
                 borderRadius: 5,
-                marginRight: 5,
+                marginRight: 20,
               }}>
               <Text
                 style={{
                   fontFamily: 'SCDream4',
                   fontSize: 14,
-                  paddingHorizontal: 20,
                   paddingVertical: 7,
                 }}>
                 일반 견적요청건
@@ -83,7 +85,6 @@ const index = (props) => {
                 style={{
                   fontFamily: 'SCDream4',
                   fontSize: 14,
-                  paddingHorizontal: 20,
                   paddingVertical: 7,
                 }}>
                 직접 견적요청건
@@ -97,7 +98,7 @@ const index = (props) => {
           style={{
             width: Dimensions.get('window').width,
             backgroundColor: '#F5F5F5',
-            paddingHorizontal: 20,
+            paddingHorizontal: 10,
             paddingVertical: 20,
           }}>
           <View
@@ -125,6 +126,32 @@ const index = (props) => {
                 <Picker.Item label="패키지" value="package" />
                 <Picker.Item label="일반인쇄물" value="printing" />
               </Picker>
+              {/* <TouchableOpacity
+                onPress={toggleType}
+                activeOpacity={0.8}
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  height: 50,
+                  paddingHorizontal: 10,
+                }}>
+                <Text style={{fontFamily: 'SCDream4'}}>{type}</Text>
+                {isActiveToggleType ? (
+                  <Image
+                    source={require('../../../src/assets/arr01_top.png')}
+                    resizeMode="contain"
+                    style={{width: 20, height: 20}}
+                  />
+                ) : (
+                  <Image
+                    source={require('../../../src/assets/arr01.png')}
+                    resizeMode="contain"
+                    style={{width: 20, height: 20}}
+                  />
+                )}
+              </TouchableOpacity> */}
+              {/* 테스트 */}
             </View>
             <View
               style={{

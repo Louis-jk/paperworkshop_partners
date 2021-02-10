@@ -4,12 +4,14 @@ import {
   Text,
   ScrollView,
   StyleSheet,
-  Image,
   Dimensions,
+  Image,
 } from 'react-native';
 import {Picker} from '@react-native-community/picker';
+import DropDownPicker from 'react-native-dropdown-picker';
 
 import DetailHeader from '../DetailHeader';
+import {TouchableOpacity} from 'react-native-gesture-handler';
 
 const index = (props) => {
   const navigation = props.navigation;
@@ -18,6 +20,41 @@ const index = (props) => {
   const [category01, setCategory01] = React.useState(null);
   const [category02, setCategory02] = React.useState(null);
   const [category03, setCategory03] = React.useState(null);
+
+  const yearCount = [2017, 2018, 2019, 2020, 2021];
+  const [year, setYear] = React.useState('2021');
+  const [isActiveToggleYear, setIsActiveToggleYear] = React.useState(false);
+  const toggleYear = () => {
+    setIsActiveToggleYear(!isActiveToggleYear);
+  };
+
+  const monthCount = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+  const [month, setMonth] = React.useState(1);
+  const [isActiveToggleMonth, setIsActiveToggleMonth] = React.useState(false);
+  const toggleMonth = () => {
+    setIsActiveToggleMonth(!isActiveToggleMonth);
+  };
+
+  const regionCount = [
+    '서울',
+    '부산',
+    '대구',
+    '인천',
+    '광주',
+    '세종/대전/청주',
+    '울산',
+    '경기',
+    '강원',
+    '충청',
+    '전라',
+    '경상',
+    '제주',
+  ];
+  const [region, setRegion] = React.useState('시/도 전체');
+  const [isActiveToggleRegion, setIsActiveToggleRegion] = React.useState(false);
+  const toggleRegion = () => {
+    setIsActiveToggleRegion(!isActiveToggleRegion);
+  };
 
   return (
     <>
@@ -66,10 +103,11 @@ const index = (props) => {
         <View
           style={{
             flexDirection: 'row',
-            justifyContent: 'space-between',
+            justifyContent: 'center',
             alignItems: 'center',
             paddingHorizontal: 20,
             paddingVertical: 20,
+            zIndex: 100,
           }}>
           <View
             style={{
@@ -80,18 +118,62 @@ const index = (props) => {
               width: '30%',
               marginRight: 5,
             }}>
-            <Picker
-              selectedValue={category01} //제일 위 선택란에 누른 아이템이 표시된다
-              onValueChange={(itemValue, itemIndex) => {
-                setCategory01(itemValue);
-              }}
-              style={{color: '#A2A2A2'}}
-              mode="dropdown">
-              <Picker.Item label="2019년" value="2019" />
-              <Picker.Item label="2020년" value="2020" />
-              <Picker.Item label="2021년" value="2021" />
-            </Picker>
+            <TouchableOpacity
+              onPress={toggleYear}
+              activeOpacity={0.8}
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                height: 50,
+                paddingHorizontal: 10,
+              }}>
+              <Text style={{fontFamily: 'SCDream4'}}>{year}년</Text>
+              {isActiveToggleYear ? (
+                <Image
+                  source={require('../../../src/assets/arr01_top.png')}
+                  resizeMode="contain"
+                  style={{width: 20, height: 20}}
+                />
+              ) : (
+                <Image
+                  source={require('../../../src/assets/arr01.png')}
+                  resizeMode="contain"
+                  style={{width: 20, height: 20}}
+                />
+              )}
+            </TouchableOpacity>
           </View>
+          {isActiveToggleYear && (
+            <View
+              style={{
+                position: 'absolute',
+                top: 70,
+                left: '4.1%',
+                width: '30%',
+                backgroundColor: '#fff',
+                paddingHorizontal: 10,
+                paddingVertical: 10,
+                borderWidth: 1,
+                borderColor: '#E3E3E3',
+                borderBottomRightRadius: 5,
+                borderBottomLeftRadius: 5,
+                zIndex: 100,
+              }}>
+              {yearCount.map((v, idx) => (
+                <TouchableOpacity
+                  key={idx}
+                  style={{paddingVertical: 7, marginBottom: 7}}
+                  activeOpacity={0.8}
+                  onPress={() => {
+                    setYear(v);
+                    setIsActiveToggleYear(false);
+                  }}>
+                  <Text style={{fontFamily: 'SCDream4'}}>{v}년</Text>
+                </TouchableOpacity>
+              ))}
+            </View>
+          )}
           <View
             style={{
               borderWidth: 1,
@@ -101,27 +183,62 @@ const index = (props) => {
               width: '25%',
               marginRight: 5,
             }}>
-            <Picker
-              selectedValue={category02} //제일 위 선택란에 누른 아이템이 표시된다
-              onValueChange={(itemValue, itemIndex) => {
-                setCategory02(itemValue);
-              }}
-              style={{color: '#A2A2A2'}}
-              mode="dropdown">
-              <Picker.Item label="1월" value="1" />
-              <Picker.Item label="2월" value="2" />
-              <Picker.Item label="3월" value="3" />
-              <Picker.Item label="4월" value="4" />
-              <Picker.Item label="5월" value="5" />
-              <Picker.Item label="6월" value="6" />
-              <Picker.Item label="7월" value="7" />
-              <Picker.Item label="8월" value="8" />
-              <Picker.Item label="9월" value="9" />
-              <Picker.Item label="10월" value="10" />
-              <Picker.Item label="11월" value="11" />
-              <Picker.Item label="12월" value="12" />
-            </Picker>
+            <TouchableOpacity
+              onPress={toggleMonth}
+              activeOpacity={0.8}
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                height: 50,
+                paddingHorizontal: 10,
+              }}>
+              <Text style={{fontFamily: 'SCDream4'}}>{month}월</Text>
+              {isActiveToggleMonth ? (
+                <Image
+                  source={require('../../../src/assets/arr01_top.png')}
+                  resizeMode="contain"
+                  style={{width: 20, height: 20}}
+                />
+              ) : (
+                <Image
+                  source={require('../../../src/assets/arr01.png')}
+                  resizeMode="contain"
+                  style={{width: 20, height: 20}}
+                />
+              )}
+            </TouchableOpacity>
           </View>
+          {isActiveToggleMonth && (
+            <View
+              style={{
+                position: 'absolute',
+                top: 70,
+                left: '35.4%',
+                width: '25%',
+                backgroundColor: '#fff',
+                paddingHorizontal: 10,
+                paddingVertical: 10,
+                borderWidth: 1,
+                borderColor: '#E3E3E3',
+                borderBottomRightRadius: 5,
+                borderBottomLeftRadius: 5,
+                zIndex: 100,
+              }}>
+              {monthCount.map((v, idx) => (
+                <TouchableOpacity
+                  key={idx}
+                  style={{paddingVertical: 7, marginBottom: 7}}
+                  activeOpacity={0.8}
+                  onPress={() => {
+                    setMonth(v);
+                    setIsActiveToggleMonth(false);
+                  }}>
+                  <Text style={{fontFamily: 'SCDream4'}}>{v}월</Text>
+                </TouchableOpacity>
+              ))}
+            </View>
+          )}
           <View
             style={{
               borderWidth: 1,
@@ -130,32 +247,62 @@ const index = (props) => {
               backgroundColor: '#fff',
               width: '45%',
             }}>
-            <Picker
-              selectedValue={category03} //제일 위 선택란에 누른 아이템이 표시된다
-              onValueChange={(itemValue, itemIndex) => {
-                setCategory03(itemValue);
-              }}
-              style={{color: '#A2A2A2'}}
-              itemStyle={{fontSize: 12}}
-              mode="dropdown">
-              <Picker.Item label="시/도 전체" value="" />
-              <Picker.Item label="서울" value="1" />
-              <Picker.Item label="부산" value="2" />
-              <Picker.Item label="대구" value="3" />
-              <Picker.Item label="인천" value="4" />
-              <Picker.Item label="광주" value="5" />
-              <Picker.Item label="세종/대전/청주" value="6" />
-              <Picker.Item label="울산" value="7" />
-              <Picker.Item label="경기" value="8" />
-              <Picker.Item label="강원" value="9" />
-              <Picker.Item label="충청" value="10" />
-              <Picker.Item label="전라북도" value="11" />
-              <Picker.Item label="전라남도" value="12" />
-              <Picker.Item label="경상북도" value="13" />
-              <Picker.Item label="경상남도" value="14" />
-              <Picker.Item label="제주" value="15" />
-            </Picker>
+            <TouchableOpacity
+              onPress={toggleRegion}
+              activeOpacity={0.8}
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                height: 50,
+                paddingHorizontal: 10,
+              }}>
+              <Text style={{fontFamily: 'SCDream4'}}>{region}</Text>
+              {isActiveToggleRegion ? (
+                <Image
+                  source={require('../../../src/assets/arr01_top.png')}
+                  resizeMode="contain"
+                  style={{width: 20, height: 20}}
+                />
+              ) : (
+                <Image
+                  source={require('../../../src/assets/arr01.png')}
+                  resizeMode="contain"
+                  style={{width: 20, height: 20}}
+                />
+              )}
+            </TouchableOpacity>
           </View>
+          {isActiveToggleRegion && (
+            <View
+              style={{
+                position: 'absolute',
+                top: 70,
+                right: '4%',
+                width: '45%',
+                backgroundColor: '#fff',
+                paddingHorizontal: 10,
+                paddingVertical: 10,
+                borderWidth: 1,
+                borderColor: '#E3E3E3',
+                borderBottomRightRadius: 5,
+                borderBottomLeftRadius: 5,
+                zIndex: 100,
+              }}>
+              {regionCount.map((v, idx) => (
+                <TouchableOpacity
+                  key={idx}
+                  style={{paddingVertical: 7, marginBottom: 7}}
+                  activeOpacity={0.8}
+                  onPress={() => {
+                    setRegion(v);
+                    setIsActiveToggleRegion(false);
+                  }}>
+                  <Text style={{fontFamily: 'SCDream4'}}>{v}</Text>
+                </TouchableOpacity>
+              ))}
+            </View>
+          )}
         </View>
 
         {/* // 날짜 선택 Area */}
@@ -179,6 +326,9 @@ const index = (props) => {
 
         <View
           style={{
+            height: 500,
+            // height: Dimensions.get('window').height - 500,
+            backgroundColor: '#fff',
             paddingHorizontal: 20,
           }}>
           <View

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {View, Text, Image} from 'react-native';
+import {Image} from 'react-native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {createStackNavigator} from '@react-navigation/stack';
 
@@ -25,8 +25,8 @@ import {
   SignedStackNavigator,
   FindIdStackNavigator,
   FindPwdStackNavigator,
+  CustomerStackNavigator,
 } from './StackNavigator';
-import {StackActions} from '@react-navigation/native';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -130,14 +130,21 @@ const TabNavigator = () => {
         component={OrderDetailPropsStackNavigator}
       />
       <Stack.Screen name="PartnerInfo" component={PartnersInfoStackNavigator} />
+      <Stack.Screen name="CompanyInfo" component={PartnersInfoStackNavigator} />
+      <Stack.Screen name="Service" component={PartnersInfoStackNavigator} />
       <Stack.Screen name="Alarm" component={AlarmStackNavigator} />
       <Stack.Screen name="Statistics" component={StatisticsStackNavigator} />
       <Stack.Screen name="ProfileEdit" component={ProfileEditStackNavigator} />
+      <Stack.Screen
+        name="ProfileDetailEdit"
+        component={ProfileEditStackNavigator}
+      />
       <Stack.Screen name="ReqPopular" component={ReqPopularStackNavigator} />
       <Stack.Screen name="Register" component={RegisterStackNavigator} />
       <Stack.Screen name="Signed" component={SignedStackNavigator} />
       <Stack.Screen name="FindId" component={FindIdStackNavigator} />
       <Stack.Screen name="FindPwd" component={FindPwdStackNavigator} />
+      <Stack.Screen name="Customer" component={CustomerStackNavigator} />
     </Stack.Navigator>
   );
 };

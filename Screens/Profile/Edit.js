@@ -227,7 +227,7 @@ const Edit = (props) => {
               }}>
               <TextInput
                 value={mobileNo}
-                placeholder="휴대전화번호를 입력해주세요."
+                placeholder="휴대전화번호를 - 빼고 입력해주세요."
                 placeholderTextColor="#A2A2A2"
                 onChangeText={(text) => setMobileNo(text)}
                 style={{
@@ -463,7 +463,7 @@ const Edit = (props) => {
             />
             <TextInput
               value={bankAccount}
-              placeholder="계좌번호를 입력해주세요."
+              placeholder="계좌번호를 - 빼고 입력해주세요."
               placeholderTextColor="#A2A2A2"
               onChangeText={(text) => setBankAccount(text)}
               style={{
@@ -491,6 +491,105 @@ const Edit = (props) => {
             />
           </View>
           {/* // 계좌정보 변경 */}
+
+          {/* 회사 소개서 변경 */}
+          <View style={{marginBottom: 20}}>
+            <Text style={[styles.profileTitle, {marginBottom: 10}]}>
+              회사 소개서
+            </Text>
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'flex-start',
+                alignItems: 'center',
+              }}>
+              <TextInput
+                value="회사소개서.jpg"
+                placeholder="회사 소개서를 첨부해주세요."
+                placeholderTextColor="#A2A2A2"
+                style={{
+                  flex: 1,
+                  borderWidth: 1,
+                  borderColor: '#E3E3E3',
+                  borderRadius: 4,
+                  paddingHorizontal: 10,
+                  marginRight: 10,
+                  fontFamily: 'SCDream4',
+                }}
+                editable={false}
+              />
+              <TouchableOpacity
+                activeOpacity={0.8}
+                style={{
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  backgroundColor: '#00A170',
+                  borderRadius: 4,
+                  height: 50,
+                  paddingHorizontal: 20,
+                }}>
+                <Text
+                  style={{
+                    fontFamily: 'SCDream4',
+                    color: '#fff',
+                    textAlign: 'center',
+                  }}>
+                  파일 선택
+                </Text>
+              </TouchableOpacity>
+            </View>
+            <TouchableOpacity
+              activeOpacity={0.8}
+              onPress={() => Alert.alert('다운로드')}>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'flex-start',
+                  alignItems: 'baseline',
+                  marginTop: 10,
+                }}>
+                <Image
+                  source={require('../../src/assets/icon_down.png')}
+                  resizeMode="contain"
+                  style={{width: 20, height: 20, marginRight: 5}}
+                />
+                <Text style={styles.normalText}>회사소개서.jpg</Text>
+              </View>
+            </TouchableOpacity>
+          </View>
+          {/* <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'flex-start',
+              alignItems: 'flex-start',
+            }}>
+            <Text
+              style={[
+                styles.normalText,
+                {
+                  color: '#00A170',
+                  fontSize: 12,
+                  lineHeight: 20,
+                  marginRight: 5,
+                },
+              ]}>
+              *
+            </Text>
+            <View>
+              <Text
+                style={[
+                  styles.normalText,
+                  {color: '#00A170', fontSize: 12, lineHeight: 20},
+                ]}>
+                문서파일(doc, hwp, xls, xlsx) 또는 이미지파일(jpg,png,gif)
+              </Text>
+              <Text
+                style={[styles.normalText, {color: '#00A170', fontSize: 12}]}>
+                첨부 가능합니다.
+              </Text>
+            </View>
+          </View> */}
+          {/* // 회사 소개서 변경 */}
         </View>
 
         <View style={{paddingHorizontal: 20, marginBottom: 50}}>

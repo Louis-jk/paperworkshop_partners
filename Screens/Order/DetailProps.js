@@ -1,13 +1,5 @@
 import * as React from 'react';
-import {
-  View,
-  Text,
-  ScrollView,
-  StyleSheet,
-  TextInput,
-  Alert,
-} from 'react-native';
-import {Picker} from '@react-native-community/picker';
+import {View, Text, ScrollView, StyleSheet, TextInput} from 'react-native';
 import DetailHeader from '../Common/DetailHeader';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 
@@ -16,9 +8,6 @@ const DetailProps = (props) => {
   const routeName = props.route.name;
   const title = props.route.params.title;
   console.log(props);
-
-  const [category01, setCategory01] = React.useState(null);
-  const [textInputHeight, setTextInputHeight] = React.useState(0);
 
   return (
     <>

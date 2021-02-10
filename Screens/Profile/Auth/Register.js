@@ -28,6 +28,15 @@ const Register = (props) => {
   const [category02, setCategory02] = React.useState(null);
   const [value, setValue] = React.useState(null);
 
+  const [email, setEmail] = React.useState('');
+  const [name, setName] = React.useState('');
+  const [businessName, setBusinessName] = React.useState('');
+  const [mobileNo, setMobileNo] = React.useState('');
+  const [mobileCert, setMobileCert] = React.useState(null);
+  const [bank, setBank] = React.useState('');
+  const [bankAccount, setBankAccount] = React.useState('');
+  const [depositor, setDepositor] = React.useState('');
+
   return (
     <>
       <DetailHeader title={routeName} navigation={navigation} />
@@ -39,8 +48,10 @@ const Register = (props) => {
               이메일
             </Text>
             <TextInput
+              value={email}
               placeholder="이메일을 입력해주세요."
               placeholderTextColor="#A2A2A2"
+              onChangeText={(text) => setEmail(text)}
               style={[
                 styles.normalText,
                 {
@@ -103,9 +114,10 @@ const Register = (props) => {
           <View style={{marginBottom: 20}}>
             <Text style={[styles.profileTitle, {marginBottom: 10}]}>성함</Text>
             <TextInput
-              value=""
+              value={name}
               placeholder="성함을 입력해주세요."
               placeholderTextColor="#A2A2A2"
+              onChangeText={(text) => setName(text)}
               style={[
                 styles.normalText,
                 {
@@ -133,9 +145,10 @@ const Register = (props) => {
                 marginBottom: 5,
               }}>
               <TextInput
-                value=""
-                placeholder="휴대전화번호를 입력해주세요."
+                value={mobileNo}
+                placeholder="휴대전화번호를 - 빼고 입력해주세요."
                 placeholderTextColor="#A2A2A2"
+                onChangeText={(text) => setMobileNo(text)}
                 style={[
                   styles.normalText,
                   {
@@ -177,9 +190,10 @@ const Register = (props) => {
                 marginBottom: 5,
               }}>
               <TextInput
-                value=""
+                value={mobileCert}
                 placeholder="인증번호를 입력해주세요."
                 placeholderTextColor="#A2A2A2"
+                onChangeText={(text) => setMobileCert(text)}
                 style={[
                   styles.normalText,
                   {
@@ -222,9 +236,10 @@ const Register = (props) => {
               상호명
             </Text>
             <TextInput
-              value=""
+              value={businessName}
               placeholder="상호명을 입력해주세요."
               placeholderTextColor="#A2A2A2"
+              onChangeText={(text) => setBusinessName(text)}
               style={[
                 styles.normalText,
                 {
@@ -364,9 +379,10 @@ const Register = (props) => {
               계좌정보
             </Text>
             <TextInput
-              value=""
+              value={bank}
               placeholder="은행명을 입력해주세요."
               placeholderTextColor="#A2A2A2"
+              onChangeText={(text) => setBank(text)}
               style={[
                 styles.normalText,
                 {
@@ -379,9 +395,11 @@ const Register = (props) => {
               ]}
             />
             <TextInput
-              value=""
-              placeholder="계좌번호를 입력해주세요."
+              value={bankAccount}
+              placeholder="계좌번호를 - 빼고 입력해주세요."
               placeholderTextColor="#A2A2A2"
+              onChangeText={(text) => setBankAccount(text)}
+              keyboardType="number-pad"
               style={[
                 styles.normalText,
                 {
@@ -389,11 +407,127 @@ const Register = (props) => {
                   borderColor: '#E3E3E3',
                   borderRadius: 4,
                   paddingHorizontal: 10,
+                  marginBottom: 5,
                 },
               ]}
             />
+            <TextInput
+              value={depositor}
+              placeholder="예금주를 입력해주세요."
+              placeholderTextColor="#A2A2A2"
+              onChangeText={(text) => setDepositor(text)}
+              style={{
+                fontFamily: 'SCDream4',
+                borderWidth: 1,
+                borderColor: '#E3E3E3',
+                borderRadius: 4,
+                paddingHorizontal: 10,
+                marginBottom: 5,
+              }}
+            />
           </View>
           {/* // 계좌정보  */}
+
+          {/* 회사 소개서 */}
+          <View style={{marginBottom: 20}}>
+            <Text style={[styles.profileTitle, {marginBottom: 10}]}>
+              회사 소개서
+            </Text>
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'flex-start',
+                alignItems: 'center',
+                marginBottom: 5,
+              }}>
+              <TextInput
+                value=""
+                placeholder="회사 소개서를 첨부해주세요."
+                placeholderTextColor="#A2A2A2"
+                style={{
+                  flex: 1,
+                  borderWidth: 1,
+                  borderColor: '#E3E3E3',
+                  borderRadius: 4,
+                  paddingHorizontal: 10,
+                  marginRight: 10,
+                  fontFamily: 'SCDream4',
+                }}
+                editable={false}
+              />
+              <TouchableOpacity
+                activeOpacity={0.8}
+                style={{
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  backgroundColor: '#00A170',
+                  borderRadius: 4,
+                  height: 50,
+                  paddingHorizontal: 20,
+                }}>
+                <Text
+                  style={{
+                    fontFamily: 'SCDream4',
+                    color: '#fff',
+                    textAlign: 'center',
+                  }}>
+                  파일 선택
+                </Text>
+              </TouchableOpacity>
+            </View>
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'flex-start',
+                alignItems: 'flex-start',
+              }}>
+              <Text
+                style={[
+                  styles.normalText,
+                  {
+                    color: '#00A170',
+                    fontSize: 12,
+                    lineHeight: 20,
+                    marginRight: 5,
+                  },
+                ]}>
+                *
+              </Text>
+              <View>
+                <Text
+                  style={[
+                    styles.normalText,
+                    {color: '#00A170', fontSize: 12, lineHeight: 20},
+                  ]}>
+                  문서파일(doc, hwp, xls, xlsx) 또는 이미지파일(jpg,png,gif)
+                </Text>
+                <Text
+                  style={[styles.normalText, {color: '#00A170', fontSize: 12}]}>
+                  첨부 가능합니다.
+                </Text>
+              </View>
+            </View>
+            {/* <TouchableOpacity
+              activeOpacity={0.8}
+              onPress={() => Alert.alert('다운로드')}>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'flex-start',
+                  alignItems: 'baseline',
+                  marginTop: 10,
+                  marginBottom: 5,
+                }}>
+                <Image
+                  source={require('../../../src/assets/icon_down.png')}
+                  resizeMode="contain"
+                  style={{width: 20, height: 20, marginRight: 5}}
+                />
+                <Text style={styles.normalText}>회사소개서.jpg</Text>
+              </View>
+            </TouchableOpacity> */}
+          </View>
+          {/* // 회사 소개서 */}
         </View>
 
         <View style={{paddingHorizontal: 20, marginBottom: 50}}>

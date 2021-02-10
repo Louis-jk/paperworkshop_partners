@@ -16,7 +16,6 @@ const index = (props) => {
   const routeName = props.route.name;
 
   const [category01, setCategory01] = React.useState(null);
-  const [textInputHeight, setTextInputHeight] = React.useState(0);
 
   return (
     <>

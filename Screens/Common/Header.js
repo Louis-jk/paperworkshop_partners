@@ -38,6 +38,7 @@ const Header = (props) => {
       case 'SetPwdComplete':
         setTitle('비밀번호 변경 완료');
         break;
+
       default:
         return false;
     }
