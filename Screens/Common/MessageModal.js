@@ -67,6 +67,7 @@ const MessageModal = ({toggleModal, isVisible}) => {
               placeholder="메세지를 입력해주세요."
               placeholderTextColor="#A2A2A2"
               style={{
+                fontFamily: 'SCDream4',
                 borderRadius: 5,
                 backgroundColor: '#F5F5F5',
                 width: Dimensions.get('window').width - 120,
@@ -89,7 +90,9 @@ const MessageModal = ({toggleModal, isVisible}) => {
                 borderRadius: 5,
                 marginTop: 10,
               }}>
-              <Text style={{color: '#fff'}}>메세지 보내기</Text>
+              <Text style={{fontFamily: 'SCDream4', color: '#fff'}}>
+                메세지 보내기
+              </Text>
             </TouchableOpacity>
           </View>
         </View>

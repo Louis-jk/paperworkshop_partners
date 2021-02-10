@@ -110,8 +110,18 @@ const styles = StyleSheet.create({
     marginBottom: 25,
   },
   alarmText: {
+    fontFamily: 'SCDream4',
     fontSize: 15,
     color: '#111111',
+  },
+  normalText: {
+    fontFamily: 'SCDream4',
+  },
+  mediumText: {
+    fontFamily: 'SCDream5',
+  },
+  boldText: {
+    fontFamily: 'SCDream6',
   },
 });
 

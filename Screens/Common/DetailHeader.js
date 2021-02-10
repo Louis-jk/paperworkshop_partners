@@ -38,6 +38,9 @@ const DetailHeader = (props) => {
       case 'OrderDetail2':
         setTitle('견적의뢰 세부내용');
         break;
+      case 'OrderDetailProps':
+        setTitle('제작/납품');
+        break;
       case 'MessageDetail':
         setTitle('메세지');
         break;
@@ -141,7 +144,7 @@ const styles = StyleSheet.create({
     // backgroundColor: '#ffaaee',
   },
   headerTitle: {
-    fontFamily: 'SCDream5',
+    fontFamily: 'SCDream6',
     fontSize: 18,
     lineHeight: 50,
   },

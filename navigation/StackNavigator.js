@@ -8,6 +8,7 @@ import OrderEditScreen from '../Screens/Order/Edit';
 import OrderCompleteScreen from '../Screens/Order/Complete';
 import OrderDetailScreen from '../Screens/Order/Detail';
 import OrderDetail2Screen from '../Screens/Order/Detail2';
+import OrderDetailPropsScreen from '../Screens/Order/DetailProps';
 import StepsScreen from '../Screens/Steps';
 import ProductScreen from '../Screens/Product';
 import MessageScreen from '../Screens/Message';
@@ -85,7 +86,6 @@ export const OrderDetailStackNavigator = () => {
   return (
     <Stack.Navigator screenOptions={{headerShown: false}}>
       <Stack.Screen name="OrderDetail" component={OrderDetailScreen} />
-      <Stack.Screen name="OrderDetail" component={OrderDetail2Screen} />
     </Stack.Navigator>
   );
 };
@@ -94,6 +94,17 @@ export const OrderDetail2StackNavigator = () => {
   return (
     <Stack.Navigator screenOptions={{headerShown: false}}>
       <Stack.Screen name="OrderDetail2" component={OrderDetail2Screen} />
+    </Stack.Navigator>
+  );
+};
+
+export const OrderDetailPropsStackNavigator = () => {
+  return (
+    <Stack.Navigator screenOptions={{headerShown: false}}>
+      <Stack.Screen
+        name="OrderDetailProps"
+        component={OrderDetailPropsScreen}
+      />
     </Stack.Navigator>
   );
 };

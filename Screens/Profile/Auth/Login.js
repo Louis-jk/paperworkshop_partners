@@ -49,6 +49,7 @@ const Login = (props) => {
               editable={false}
             />
             <TouchableOpacity
+              activeOpacity={0.8}
               onPress={toggleCheck}
               style={{
                 flexDirection: 'row',

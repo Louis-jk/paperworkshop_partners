@@ -31,14 +31,31 @@ const PartnerInfo = (props) => {
             marginBottom: 20,
           }}>
           <View style={{flexDirection: 'row'}}>
-            <Text style={{fontSize: 13, color: '#00A170', marginRight: 5}}>
+            <Text
+              style={{
+                fontFamily: 'SCDream4',
+                fontSize: 13,
+                color: '#00A170',
+                marginRight: 5,
+              }}>
               *
             </Text>
             <View>
-              <Text style={{fontSize: 13, color: '#00A170'}}>
+              <Text
+                style={{
+                  fontFamily: 'SCDream4',
+                  fontSize: 13,
+                  color: '#00A170',
+                  marginBottom: 5,
+                }}>
                 페이퍼 공작소의 파트너스 회원은 4가지 분류로 나누어집니다.
               </Text>
-              <Text style={{fontSize: 13, color: '#00A170'}}>
+              <Text
+                style={{
+                  fontFamily: 'SCDream4',
+                  fontSize: 13,
+                  color: '#00A170',
+                }}>
                 자세한 설명은 아래의 내용을 참고해주세요.
               </Text>
             </View>
@@ -85,11 +102,24 @@ const PartnerInfo = (props) => {
             marginBottom: 50,
           }}>
           <View style={{flexDirection: 'row'}}>
-            <Text style={{fontSize: 12, color: '#707070', marginRight: 5}}>
+            <Text
+              style={{
+                fontFamily: 'SCDream4',
+                fontSize: 12,
+                lineHeight: 20,
+                color: '#707070',
+                marginRight: 5,
+              }}>
               ※
             </Text>
-            <View>
-              <Text style={{fontSize: 12, lineHeight: 18, color: '#707070'}}>
+            <View style={{paddingRight: 10}}>
+              <Text
+                style={{
+                  fontFamily: 'SCDream4',
+                  fontSize: 12,
+                  lineHeight: 20,
+                  color: '#707070',
+                }}>
                 성실 파트너스 / 인기 파트너스 / 지역 파트너스 3가지 등급에 대해
                 중복 적용은 불가능합니다.
               </Text>
@@ -110,14 +140,25 @@ const styles = StyleSheet.create({
     marginVertical: 15,
   },
   partnerInfoTitle: {
+    fontFamily: 'SCDream4',
     fontSize: 15,
     color: '#00A170',
     marginBottom: 10,
   },
   partnerInfoDesc: {
+    fontFamily: 'SCDream4',
     fontSize: 13,
     lineHeight: 20,
     color: '#000000',
+  },
+  normalText: {
+    fontFamily: 'SCDream4',
+  },
+  mediumText: {
+    fontFamily: 'SCDream5',
+  },
+  boldText: {
+    fontFamily: 'SCDream6',
   },
 });
 

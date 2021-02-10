@@ -2,11 +2,9 @@ import * as React from 'react';
 import {
   View,
   Text,
-  TextInput,
   Dimensions,
   TouchableOpacity,
   Image,
-  Alert,
   ScrollView,
   StyleSheet,
 } from 'react-native';
@@ -14,15 +12,6 @@ import {
 import Modal from 'react-native-modal';
 
 const PartnersInfoModal = ({toggleModal, isVisible}) => {
-  const sendMessage = () => {
-    Alert.alert('메세지 보내기 성공', '상대방에게 메세지가 보내졌습니다.', [
-      {
-        text: '확인',
-        onPress: () => toggleModal(),
-      },
-    ]);
-  };
-
   return (
     <View>
       <Modal isVisible={isVisible}>
@@ -80,16 +69,40 @@ const PartnersInfoModal = ({toggleModal, isVisible}) => {
                   backgroundColor: 'rgba(0, 161, 112, 0.07)',
                   marginBottom: 20,
                 }}>
-                <View style={{flexDirection: 'row'}}>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    justifyContent: 'flex-start',
+                    alignItems: 'flex-start',
+                    paddingHorizontal: 0,
+                  }}>
                   <Text
-                    style={{fontSize: 13, color: '#00A170', marginRight: 5}}>
+                    style={{
+                      fontFamily: 'SCDream4',
+                      fontSize: 12,
+                      lineHeight: 20,
+                      color: '#00A170',
+                      marginRight: 5,
+                    }}>
                     *
                   </Text>
                   <View>
-                    <Text style={{fontSize: 13, color: '#00A170'}}>
+                    <Text
+                      style={{
+                        fontFamily: 'SCDream4',
+                        fontSize: 12,
+                        lineHeight: 20,
+                        color: '#00A170',
+                      }}>
                       페이퍼 공작소의 파트너스 회원은 4가지 분류로 나누어집니다.
                     </Text>
-                    <Text style={{fontSize: 13, color: '#00A170'}}>
+                    <Text
+                      style={{
+                        fontFamily: 'SCDream4',
+                        fontSize: 12,
+                        lineHeight: 20,
+                        color: '#00A170',
+                      }}>
                       자세한 설명은 아래의 내용을 참고해주세요.
                     </Text>
                   </View>
@@ -139,12 +152,23 @@ const PartnersInfoModal = ({toggleModal, isVisible}) => {
                 }}>
                 <View style={{flexDirection: 'row'}}>
                   <Text
-                    style={{fontSize: 12, color: '#707070', marginRight: 5}}>
+                    style={{
+                      fontFamily: 'SCDream4',
+                      fontSize: 12,
+                      lineHeight: 20,
+                      color: '#707070',
+                      marginRight: 5,
+                    }}>
                     ※
                   </Text>
                   <View>
                     <Text
-                      style={{fontSize: 12, lineHeight: 18, color: '#707070'}}>
+                      style={{
+                        fontFamily: 'SCDream4',
+                        fontSize: 12,
+                        lineHeight: 20,
+                        color: '#707070',
+                      }}>
                       성실 파트너스 / 인기 파트너스 / 지역 파트너스 3가지 등급에
                       대해 중복 적용은 불가능합니다.
                     </Text>
@@ -170,14 +194,25 @@ const styles = StyleSheet.create({
     marginVertical: 15,
   },
   partnerInfoTitle: {
+    fontFamily: 'SCDream4',
     fontSize: 15,
     color: '#00A170',
     marginBottom: 10,
   },
   partnerInfoDesc: {
+    fontFamily: 'SCDream4',
     fontSize: 13,
     lineHeight: 20,
     color: '#000000',
+  },
+  normalText: {
+    fontFamily: 'SCDream4',
+  },
+  mediumText: {
+    fontFamily: 'SCDream5',
+  },
+  boldText: {
+    fontFamily: 'SCDream6',
   },
 });
 

@@ -105,7 +105,8 @@ const Edit = (props) => {
                   }}
                 />
               </TouchableOpacity>
-              <Text style={[styles.profileDesc, {color: '#00A170'}]}>
+              <Text
+                style={[styles.profileDesc, {color: '#00A170', fontSize: 13}]}>
                 일반회원/인기파트너스
               </Text>
             </View>

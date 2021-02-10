@@ -14,6 +14,7 @@ import {
   OrderCompleteStackNavigator,
   OrderDetailStackNavigator,
   OrderDetail2StackNavigator,
+  OrderDetailPropsStackNavigator,
   PartnersInfoStackNavigator,
   AlarmStackNavigator,
   StatisticsStackNavigator,
@@ -123,6 +124,10 @@ const TabNavigator = () => {
       <Stack.Screen
         name="OrderDetail2"
         component={OrderDetail2StackNavigator}
+      />
+      <Stack.Screen
+        name="OrderDetailProps"
+        component={OrderDetailPropsStackNavigator}
       />
       <Stack.Screen name="PartnerInfo" component={PartnersInfoStackNavigator} />
       <Stack.Screen name="Alarm" component={AlarmStackNavigator} />

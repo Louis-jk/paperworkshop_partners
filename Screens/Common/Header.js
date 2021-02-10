@@ -88,11 +88,9 @@ const styles = StyleSheet.create({
     // backgroundColor: '#ffaaee',
   },
   headerTitle: {
-    fontFamily: 'SCDream5',
+    fontFamily: 'SCDream6',
     fontSize: 18,
-    letterSpacing: -1,
     lineHeight: 50,
-    marginBottom: 2,
   },
   icons: {
     flexDirection: 'row',

@@ -149,7 +149,12 @@ const index = (props) => {
         {/* 리스트 출력 부분 */}
         <View style={{paddingHorizontal: 20}}>
           <TouchableOpacity
-            onPress={() => navigation.navigate('OrderStep')}
+            onPress={() =>
+              navigation.navigate('OrderDetailProps', {
+                screen: 'OrderDetailProps',
+                params: {title: '제작 요청'},
+              })
+            }
             activeOpacity={0.8}>
             <View
               style={{
@@ -179,7 +184,12 @@ const index = (props) => {
         <View style={styles.line} />
         <View style={{paddingHorizontal: 20}}>
           <TouchableOpacity
-            onPress={() => navigation.navigate('OrderStep')}
+            onPress={() =>
+              navigation.navigate('OrderDetailProps', {
+                screen: 'OrderDetailProps',
+                params: {title: '납품 완료'},
+              })
+            }
             activeOpacity={0.8}>
             <View
               style={{
@@ -209,7 +219,12 @@ const index = (props) => {
         <View style={styles.line} />
         <View style={{paddingHorizontal: 20}}>
           <TouchableOpacity
-            onPress={() => navigation.navigate('OrderStep')}
+            onPress={() =>
+              navigation.navigate('OrderDetailProps', {
+                screen: 'OrderDetailProps',
+                params: {title: '수령 완료'},
+              })
+            }
             activeOpacity={0.8}>
             <View
               style={{
@@ -239,7 +254,12 @@ const index = (props) => {
         <View style={styles.line} />
         <View style={{paddingHorizontal: 20}}>
           <TouchableOpacity
-            onPress={() => navigation.navigate('OrderStep')}
+            onPress={() =>
+              navigation.navigate('OrderDetailProps', {
+                screen: 'OrderDetailProps',
+                params: {title: '수령 완료'},
+              })
+            }
             activeOpacity={0.8}>
             <View
               style={{
@@ -269,7 +289,12 @@ const index = (props) => {
         <View style={styles.line} />
         <View style={{paddingHorizontal: 20}}>
           <TouchableOpacity
-            onPress={() => navigation.navigate('OrderStep')}
+            onPress={() =>
+              navigation.navigate('OrderDetailProps', {
+                screen: 'OrderDetailProps',
+                params: {title: '수령 완료'},
+              })
+            }
             activeOpacity={0.8}>
             <View
               style={{
@@ -299,7 +324,12 @@ const index = (props) => {
         <View style={styles.line} />
         <View style={{paddingHorizontal: 20}}>
           <TouchableOpacity
-            onPress={() => navigation.navigate('OrderStep')}
+            onPress={() =>
+              navigation.navigate('OrderDetailProps', {
+                screen: 'OrderDetailProps',
+                params: {title: '수령 완료'},
+              })
+            }
             activeOpacity={0.8}>
             <View
               style={{
@@ -329,7 +359,12 @@ const index = (props) => {
         <View style={styles.line} />
         <View style={{paddingHorizontal: 20}}>
           <TouchableOpacity
-            onPress={() => navigation.navigate('OrderStep')}
+            onPress={() =>
+              navigation.navigate('OrderDetailProps', {
+                screen: 'OrderDetailProps',
+                params: {title: '수령 완료'},
+              })
+            }
             activeOpacity={0.8}>
             <View
               style={{
@@ -359,7 +394,12 @@ const index = (props) => {
         <View style={styles.line} />
         <View style={{paddingHorizontal: 20}}>
           <TouchableOpacity
-            onPress={() => navigation.navigate('OrderStep')}
+            onPress={() =>
+              navigation.navigate('OrderDetailProps', {
+                screen: 'OrderDetailProps',
+                params: {title: '수령 완료'},
+              })
+            }
             activeOpacity={0.8}>
             <View
               style={{

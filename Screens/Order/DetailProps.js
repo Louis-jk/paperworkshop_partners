@@ -11,9 +11,11 @@ import {Picker} from '@react-native-community/picker';
 import DetailHeader from '../Common/DetailHeader';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 
-const index = (props) => {
+const DetailProps = (props) => {
   const navigation = props.navigation;
   const routeName = props.route.name;
+  const title = props.route.params.title;
+  console.log(props);
 
   const [category01, setCategory01] = React.useState(null);
   const [textInputHeight, setTextInputHeight] = React.useState(0);
@@ -24,7 +26,7 @@ const index = (props) => {
       <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
         <View style={styles.wrap}>
           <View style={styles.infoBox}>
-            <Text style={styles.infoStepDesc}>입찰중</Text>
+            <Text style={styles.infoStepDesc}>{title}</Text>
             <Text style={styles.infoStepTitle}>
               중소기업 선물용 쇼핑백 제작 요청합니다.
             </Text>
@@ -78,26 +80,20 @@ const index = (props) => {
             <View style={styles.wd50per}>
               <Text style={styles.orderInfoDesc}>견적 금액(원)</Text>
               <TextInput
+                value="2,000,000"
                 placeholder="금액을 입력하세요."
                 style={styles.textInput}
+                editable={false}
               />
             </View>
             <View style={styles.wd50per}>
               <Text style={styles.orderInfoDesc}>계약금(선금) 비율</Text>
-              <View style={styles.pickerWrap}>
-                <Picker
-                  style={{color: '#A2A2A2'}}
-                  selectedValue={category01}
-                  onValueChange={(itemValue, itemIndex) => {
-                    setCategory01(itemValue);
-                  }}>
-                  <Picker.Item label="10%" value="10" />
-                  <Picker.Item label="20%" value="20" />
-                  <Picker.Item label="30%" value="30" />
-                  <Picker.Item label="40%" value="40" />
-                  <Picker.Item label="50%" value="50" />
-                </Picker>
-              </View>
+              <TextInput
+                value="10%"
+                placeholder="계약금(선금) 비율"
+                style={styles.textInput}
+                editable={false}
+              />
             </View>
           </View>
           <View style={[styles.orderInfoContentRow, styles.mgB10]}>
@@ -108,6 +104,7 @@ const index = (props) => {
           </View>
           <View style={styles.mgB40}>
             <TextInput
+              value="견적시 적었던 내용입니다."
               placeholder="메모를 입력해주세요."
               placeholderTextColor="#A2A2A2"
               style={{
@@ -121,13 +118,14 @@ const index = (props) => {
                 paddingVertical: 10,
               }}
               multiline={true}
+              editable={false}
             />
           </View>
           <TouchableOpacity
-            onPress={() => Alert.alert('제출')}
+            onPress={() => navigation.goBack()}
             activeOpacity={0.8}>
             <View style={styles.submitBtn}>
-              <Text style={styles.submitBtnText}>견적 제출</Text>
+              <Text style={styles.submitBtnText}>확인</Text>
             </View>
           </TouchableOpacity>
         </View>
@@ -277,4 +275,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default index;
+export default DetailProps;

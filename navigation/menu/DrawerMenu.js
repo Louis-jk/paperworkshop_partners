@@ -10,9 +10,11 @@ import {
   StyleSheet,
   ScrollView,
   Alert,
+  TextInput,
 } from 'react-native';
 
 import Carousel, {Pagination} from 'react-native-snap-carousel';
+import Modal from 'react-native-modal';
 
 const DrawerMenu = (props) => {
   const navigation = props.navigation;
@@ -63,8 +65,73 @@ const DrawerMenu = (props) => {
     );
   };
 
+  const [isPopUpVisible, setIsPopUpVisible] = React.useState(false);
+  const PopUp = () => {
+    setIsPopUpVisible(!isPopUpVisible);
+  };
+
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
+      <Modal isVisible={isPopUpVisible}>
+        <View
+          style={{
+            flex: 1,
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}>
+          {/* <Button title="Show modal" onPress={toggleModal} /> */}
+
+          <View
+            style={{
+              position: 'relative',
+              backgroundColor: '#fff',
+              paddingHorizontal: 20,
+              paddingVertical: 20,
+              borderRadius: 5,
+            }}>
+            <TouchableOpacity
+              activeOpacity={0.8}
+              onPress={PopUp}
+              hitSlop={{top: 50, bottom: 50, left: 50, right: 50}}
+              style={{
+                backgroundColor: '#00A170',
+                padding: 10,
+                borderRadius: 30,
+                position: 'absolute',
+                top: -15,
+                right: -15,
+                zIndex: 1,
+                elevation: 1,
+              }}>
+              <Image
+                source={require('../../src/assets/icon_close02.png')}
+                resizeMode="contain"
+                style={{
+                  width: 20,
+                  height: 20,
+                }}
+              />
+            </TouchableOpacity>
+            <TextInput
+              placeholder="메세지를 입력해주세요."
+              placeholderTextColor="#A2A2A2"
+              style={{
+                fontFamily: 'SCDream4',
+                borderRadius: 5,
+                backgroundColor: '#F5F5F5',
+                width: Dimensions.get('window').width - 120,
+                height: 150,
+                textAlignVertical: 'top',
+                paddingLeft: 10,
+                paddingVertical: 10,
+              }}
+              multiline={true}
+              autoFocus={true}
+            />
+          </View>
+        </View>
+      </Modal>
+
       <View>
         <View
           style={{
@@ -328,6 +395,31 @@ const DrawerMenu = (props) => {
             style={{width: 30, height: 30}}
           />
         </TouchableOpacity>
+
+        <View
+          style={{
+            width: Dimensions.get('window').width,
+            height: 1,
+            backgroundColor: '#F5F5F5',
+          }}
+        />
+        <TouchableOpacity
+          activeOpacity={0.8}
+          onPress={PopUp}
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            paddingHorizontal: 20,
+          }}>
+          <Text style={styles.categoryTitle}>견적의뢰 이용권 구매</Text>
+          <Image
+            source={require('../../src/assets/arr03.png')}
+            resizeMode="contain"
+            style={{width: 30, height: 30}}
+          />
+        </TouchableOpacity>
+
         <View
           style={{
             width: Dimensions.get('window').width,

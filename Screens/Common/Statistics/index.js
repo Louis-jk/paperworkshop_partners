@@ -36,8 +36,14 @@ const index = (props) => {
               alignItems: 'center',
               marginVertical: 5,
             }}>
-            <Text style={{fontSize: 15, color: '#000000'}}>누적건수</Text>
-            <Text style={{fontSize: 15, color: '#00A170'}}>99,999건</Text>
+            <Text
+              style={{fontFamily: 'SCDream4', fontSize: 15, color: '#000000'}}>
+              누적건수
+            </Text>
+            <Text
+              style={{fontFamily: 'SCDream4', fontSize: 15, color: '#00A170'}}>
+              99,999건
+            </Text>
           </View>
           <View
             style={{
@@ -46,8 +52,14 @@ const index = (props) => {
               alignItems: 'center',
               marginVertical: 5,
             }}>
-            <Text style={{fontSize: 15, color: '#000000'}}>누적 견적 금액</Text>
-            <Text style={{fontSize: 15, color: '#00A170'}}>999,999,000원</Text>
+            <Text
+              style={{fontFamily: 'SCDream4', fontSize: 15, color: '#000000'}}>
+              누적 견적 금액
+            </Text>
+            <Text
+              style={{fontFamily: 'SCDream4', fontSize: 15, color: '#00A170'}}>
+              999,999,000원
+            </Text>
           </View>
         </View>
         {/* 날짜 선택 Area */}
@@ -174,10 +186,17 @@ const index = (props) => {
               flexDirection: 'row',
               justifyContent: 'space-between',
               alignItems: 'center',
-              marginVertical: 5,
+              marginTop: 5,
+              marginBottom: 10,
             }}>
-            <Text style={{fontSize: 15, color: '#111111'}}>낙찰 건 수</Text>
-            <Text style={{fontSize: 15, color: '#00A170'}}>50건</Text>
+            <Text
+              style={{fontFamily: 'SCDream4', fontSize: 15, color: '#111111'}}>
+              낙찰 건 수
+            </Text>
+            <Text
+              style={{fontFamily: 'SCDream4', fontSize: 15, color: '#00A170'}}>
+              50건
+            </Text>
           </View>
           <View
             style={{
@@ -191,10 +210,17 @@ const index = (props) => {
               flexDirection: 'row',
               justifyContent: 'space-between',
               alignItems: 'center',
-              marginVertical: 5,
+              marginTop: 10,
+              marginBottom: 5,
             }}>
-            <Text style={{fontSize: 15, color: '#111111'}}>납품 실적 금액</Text>
-            <Text style={{fontSize: 15, color: '#00A170'}}>99,999,000원</Text>
+            <Text
+              style={{fontFamily: 'SCDream4', fontSize: 15, color: '#111111'}}>
+              납품 실적 금액
+            </Text>
+            <Text
+              style={{fontFamily: 'SCDream4', fontSize: 15, color: '#00A170'}}>
+              99,999,000원
+            </Text>
           </View>
         </View>
       </ScrollView>
@@ -211,14 +237,25 @@ const styles = StyleSheet.create({
     marginVertical: 15,
   },
   partnerInfoTitle: {
+    fontFamily: 'SCDream4',
     fontSize: 15,
     color: '#00A170',
     marginBottom: 10,
   },
   partnerInfoDesc: {
+    fontFamily: 'SCDream4',
     fontSize: 13,
     lineHeight: 20,
     color: '#000000',
+  },
+  normalText: {
+    fontFamily: 'SCDream4',
+  },
+  mediumText: {
+    fontFamily: 'SCDream5',
+  },
+  boldText: {
+    fontFamily: 'SCDream6',
   },
 });
 
