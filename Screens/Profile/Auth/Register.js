@@ -26,7 +26,6 @@ const Register = (props) => {
 
   const [category01, setCategory01] = React.useState(null);
   const [category02, setCategory02] = React.useState(null);
-  const [value, setValue] = React.useState(null);
 
   const [email, setEmail] = React.useState('');
   const [name, setName] = React.useState('');
@@ -36,6 +35,60 @@ const Register = (props) => {
   const [bank, setBank] = React.useState('');
   const [bankAccount, setBankAccount] = React.useState('');
   const [depositor, setDepositor] = React.useState('');
+
+  const regionCount = [
+    '서울',
+    '부산',
+    '대구',
+    '인천',
+    '광주',
+    '세종/대전/청주',
+    '울산',
+    '경기',
+    '강원',
+    '충청',
+    '전라',
+    '경상',
+    '제주',
+  ];
+  const [region, setRegion] = React.useState('시/도 전체');
+  const [isActiveToggleRegion, setIsActiveToggleRegion] = React.useState(false);
+  const toggleRegion = () => {
+    setIsActiveToggleRegion(!isActiveToggleRegion);
+  };
+
+  const printTypes = ['패키지', '일반인쇄', '기타인쇄'];
+  const [printType, setPrintType] = React.useState('패키지');
+  const [isActiveTogglePrintType, setIsActiveTogglePrintType] = React.useState(
+    false,
+  );
+  const togglePrintType = () => {
+    setIsActiveTogglePrintType(!isActiveTogglePrintType);
+    setPrintDetail('세부 카테고리');
+  };
+
+  const packageTypes = [
+    '칼라박스',
+    '골판지박스',
+    '합지골판지박스',
+    '싸바리박스',
+    '식품박스',
+    '쇼핑백',
+  ];
+  const generalTypes = [
+    '카달로그/브로슈어/팜플렛',
+    '책자/서적류',
+    '전단/포스터/안내장',
+    '스티커/라벨',
+    '봉투/명함',
+  ];
+  const etcTypes = ['상품권/티켓', '초대장/카드', '비닐BAG', '감압지', '기타'];
+
+  const [printDetailType, setPrintDetail] = React.useState(null);
+  const [isActiveToggleDetail, setIsActiveToggleDetail] = React.useState(false);
+  const toggleDetail = () => {
+    setIsActiveToggleDetail(!isActiveToggleDetail);
+  };
 
   return (
     <>
@@ -315,34 +368,69 @@ const Register = (props) => {
               style={{
                 borderWidth: 1,
                 borderColor: '#E3E3E3',
-                borderRadius: 4,
+                borderTopRightRadius: 4,
+                borderTopLeftRadius: 4,
+                borderBottomRightRadius: isActiveToggleRegion ? 0 : 4,
+                borderBottomLeftRadius: isActiveToggleRegion ? 0 : 4,
                 backgroundColor: '#fff',
                 width: '49%',
               }}>
-              <Picker
-                selectedValue={category01} //제일 위 선택란에 누른 아이템이 표시된다
-                onValueChange={(itemValue, itemIndex) => {
-                  setCategory01(itemValue);
-                }}
-                style={{color: '#111'}}
-                mode="dropdown">
-                <Picker.Item label="서울" value="1" />
-                <Picker.Item label="부산" value="2" />
-                <Picker.Item label="대구" value="3" />
-                <Picker.Item label="인천" value="4" />
-                <Picker.Item label="광주" value="5" />
-                <Picker.Item label="세종/대전/청주" value="6" />
-                <Picker.Item label="울산" value="7" />
-                <Picker.Item label="경기" value="8" />
-                <Picker.Item label="강원" value="9" />
-                <Picker.Item label="충청" value="10" />
-                <Picker.Item label="전라북도" value="11" />
-                <Picker.Item label="전라남도" value="12" />
-                <Picker.Item label="경상북도" value="13" />
-                <Picker.Item label="경상남도" value="14" />
-                <Picker.Item label="제주" value="15" />
-              </Picker>
+              <TouchableOpacity
+                onPress={toggleRegion}
+                activeOpacity={0.8}
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  height: 50,
+                  paddingHorizontal: 10,
+                }}>
+                <Text style={{fontFamily: 'SCDream4'}}>{region}</Text>
+                {isActiveToggleRegion ? (
+                  <Image
+                    source={require('../../../src/assets/arr01_top.png')}
+                    resizeMode="contain"
+                    style={{width: 20, height: 20}}
+                  />
+                ) : (
+                  <Image
+                    source={require('../../../src/assets/arr01.png')}
+                    resizeMode="contain"
+                    style={{width: 20, height: 20}}
+                  />
+                )}
+              </TouchableOpacity>
             </View>
+            {isActiveToggleRegion && (
+              <View
+                style={{
+                  position: 'absolute',
+                  top: 80,
+                  left: 0,
+                  width: '49%',
+                  backgroundColor: '#fff',
+                  paddingHorizontal: 10,
+                  paddingVertical: 10,
+                  borderWidth: 1,
+                  borderColor: '#E3E3E3',
+                  borderBottomRightRadius: 5,
+                  borderBottomLeftRadius: 5,
+                  zIndex: 100,
+                }}>
+                {regionCount.map((v, idx) => (
+                  <TouchableOpacity
+                    key={idx}
+                    style={{paddingVertical: 7, marginBottom: 7}}
+                    activeOpacity={0.8}
+                    onPress={() => {
+                      setRegion(v);
+                      setIsActiveToggleRegion(false);
+                    }}>
+                    <Text style={{fontFamily: 'SCDream4'}}>{v}</Text>
+                  </TouchableOpacity>
+                ))}
+              </View>
+            )}
           </View>
           {/* // 위치  */}
 
@@ -353,28 +441,211 @@ const Register = (props) => {
             </Text>
             <View
               style={{
-                borderWidth: 1,
-                borderColor: '#E3E3E3',
-                borderRadius: 4,
-                backgroundColor: '#fff',
-                width: '49%',
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'center',
               }}>
-              <Picker
-                selectedValue={category02} //제일 위 선택란에 누른 아이템이 표시된다
-                onValueChange={(itemValue, itemIndex) => {
-                  setCategory02(itemValue);
-                }}
-                style={{color: '#111'}}
-                mode="dropdown">
-                <Picker.Item label="패키지" value="package" />
-                <Picker.Item label="일반인쇄" value="printing" />
-              </Picker>
+              <View style={{width: '40%'}}>
+                <View
+                  style={{
+                    borderWidth: 1,
+                    borderColor: '#E3E3E3',
+                    borderTopRightRadius: 4,
+                    borderTopLeftRadius: 4,
+                    borderBottomRightRadius: isActiveTogglePrintType ? 0 : 4,
+                    borderBottomLeftRadius: isActiveTogglePrintType ? 0 : 4,
+                    backgroundColor: '#fff',
+                  }}>
+                  <TouchableOpacity
+                    onPress={togglePrintType}
+                    activeOpacity={0.8}
+                    style={{
+                      flexDirection: 'row',
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
+                      height: 50,
+                      paddingHorizontal: 10,
+                    }}>
+                    <Text style={{fontFamily: 'SCDream4'}}>{printType}</Text>
+                    {isActiveTogglePrintType ? (
+                      <Image
+                        source={require('../../../src/assets/arr01_top.png')}
+                        resizeMode="contain"
+                        style={{width: 20, height: 20}}
+                      />
+                    ) : (
+                      <Image
+                        source={require('../../../src/assets/arr01.png')}
+                        resizeMode="contain"
+                        style={{width: 20, height: 20}}
+                      />
+                    )}
+                  </TouchableOpacity>
+                </View>
+                {isActiveTogglePrintType && (
+                  <View
+                    style={{
+                      position: 'absolute',
+                      top: 51,
+                      left: 0,
+                      width: '100%',
+                      backgroundColor: '#fff',
+                      paddingHorizontal: 10,
+                      paddingVertical: 10,
+                      borderWidth: 1,
+                      borderColor: '#E3E3E3',
+                      borderBottomRightRadius: 5,
+                      borderBottomLeftRadius: 5,
+                      zIndex: 100,
+                    }}>
+                    {printTypes.map((v, idx) => (
+                      <TouchableOpacity
+                        key={idx}
+                        style={{
+                          paddingVertical: 7,
+                          backgroundColor: '#fff',
+                          marginBottom: 7,
+                          zIndex: 100,
+                        }}
+                        activeOpacity={0.8}
+                        onPress={() => {
+                          setPrintType(v);
+                          setIsActiveTogglePrintType(false);
+                          setIsActiveToggleDetail(false);
+                        }}>
+                        <Text style={{fontFamily: 'SCDream4'}}>{v}</Text>
+                      </TouchableOpacity>
+                    ))}
+                  </View>
+                )}
+              </View>
+              <View style={{width: '59%'}}>
+                <View
+                  style={{
+                    borderWidth: 1,
+                    borderColor: '#E3E3E3',
+                    borderTopRightRadius: 4,
+                    borderTopLeftRadius: 4,
+                    borderBottomRightRadius: isActiveToggleDetail ? 0 : 4,
+                    borderBottomLeftRadius: isActiveToggleDetail ? 0 : 4,
+                    backgroundColor: '#fff',
+                  }}>
+                  <TouchableOpacity
+                    onPress={toggleDetail}
+                    activeOpacity={0.8}
+                    style={{
+                      flexDirection: 'row',
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
+                      height: 50,
+                      paddingHorizontal: 10,
+                    }}>
+                    <Text style={{fontFamily: 'SCDream4'}}>
+                      {printType === '패키지' && !printDetailType
+                        ? packageTypes[0]
+                        : printType === '일반인쇄' && !printDetailType
+                        ? generalTypes[0]
+                        : printType === '기타인쇄' && !printDetailType
+                        ? etcTypes[0]
+                        : printDetailType}
+                    </Text>
+                    {isActiveTogglePrintType ? (
+                      <Image
+                        source={require('../../../src/assets/arr01_top.png')}
+                        resizeMode="contain"
+                        style={{width: 20, height: 20}}
+                      />
+                    ) : (
+                      <Image
+                        source={require('../../../src/assets/arr01.png')}
+                        resizeMode="contain"
+                        style={{width: 20, height: 20}}
+                      />
+                    )}
+                  </TouchableOpacity>
+                </View>
+                {isActiveToggleDetail && (
+                  <View
+                    style={{
+                      position: 'absolute',
+                      top: 51,
+                      left: 0,
+                      width: '100%',
+                      backgroundColor: '#fff',
+                      paddingHorizontal: 10,
+                      paddingVertical: 10,
+                      borderWidth: 1,
+                      borderColor: '#E3E3E3',
+                      borderBottomRightRadius: 5,
+                      borderBottomLeftRadius: 5,
+                      zIndex: 100,
+                    }}>
+                    {printType === '패키지'
+                      ? packageTypes.map((v, idx) => (
+                          <TouchableOpacity
+                            key={idx}
+                            style={{
+                              paddingVertical: 7,
+                              backgroundColor: '#fff',
+                              marginBottom: 7,
+                              zIndex: 100,
+                            }}
+                            activeOpacity={0.8}
+                            onPress={() => {
+                              setPrintDetail(v);
+                              setIsActiveToggleDetail(false);
+                              // setIsActiveTogglePrintType(false);
+                            }}>
+                            <Text style={{fontFamily: 'SCDream4'}}>{v}</Text>
+                          </TouchableOpacity>
+                        ))
+                      : printType === '일반인쇄'
+                      ? generalTypes.map((v, idx) => (
+                          <TouchableOpacity
+                            key={idx}
+                            style={{
+                              paddingVertical: 7,
+                              backgroundColor: '#fff',
+                              marginBottom: 7,
+                              zIndex: 100,
+                            }}
+                            activeOpacity={0.8}
+                            onPress={() => {
+                              setPrintDetail(v);
+                              setIsActiveToggleDetail(false);
+                              // setIsActiveTogglePrintType(false);
+                            }}>
+                            <Text style={{fontFamily: 'SCDream4'}}>{v}</Text>
+                          </TouchableOpacity>
+                        ))
+                      : etcTypes.map((v, idx) => (
+                          <TouchableOpacity
+                            key={idx}
+                            style={{
+                              paddingVertical: 7,
+                              backgroundColor: '#fff',
+                              marginBottom: 7,
+                              zIndex: 100,
+                            }}
+                            activeOpacity={0.8}
+                            onPress={() => {
+                              setPrintDetail(v);
+                              setIsActiveToggleDetail(false);
+                              // setIsActiveTogglePrintType(false);
+                            }}>
+                            <Text style={{fontFamily: 'SCDream4'}}>{v}</Text>
+                          </TouchableOpacity>
+                        ))}
+                  </View>
+                )}
+              </View>
             </View>
           </View>
+
           {/* // 제작물 카테고리  */}
 
           {/* 계좌정보  */}
-          <View style={{marginBottom: 20}}>
+          <View style={{marginBottom: 20, zIndex: -1}}>
             <Text style={[styles.profileTitle, {marginBottom: 10}]}>
               계좌정보
             </Text>
