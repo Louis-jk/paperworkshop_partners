@@ -96,10 +96,11 @@ const index = (props) => {
         {/* // 경계 라인 */}
         <View style={styles.wrap}>
           <Text style={styles.orderInfoTitle}>견적 작성</Text>
-          <View style={[styles.flexRow, styles.mgB40]}>
+          <View style={[styles.flexRow, styles.mgB30]}>
             <View style={styles.wd50per}>
               <Text style={styles.orderInfoDesc}>견적 금액(원)</Text>
               <TextInput
+                value="200,000"
                 placeholder="금액을 입력하세요."
                 style={styles.textInput}
               />
@@ -175,14 +176,16 @@ const index = (props) => {
             </View>
           </View>
           <View style={[styles.orderInfoContentRow, styles.mgB10]}>
-            <Text style={styles.orderInfoContentTitle}>견적 내용</Text>
+            <Text style={[styles.orderInfoContentTitle, {marginRight: 5}]}>
+              견적 상세 설명
+            </Text>
             <Text style={styles.orderInfoContentDetail}>
-              (100자 내외로 적어주세요 예시)
+              (100자 내외로 적어주세요.)
             </Text>
           </View>
-          <View style={styles.mgB40}>
+          <View style={styles.mgB30}>
             <TextInput
-              placeholder="메모를 입력해주세요."
+              placeholder="견적 상세 설명을 입력해주세요."
               placeholderTextColor="#A2A2A2"
               style={{
                 fontFamily: 'SCDream4',
@@ -197,6 +200,88 @@ const index = (props) => {
               multiline={true}
             />
           </View>
+
+          {/* 견적서 파일 */}
+          <View style={{marginBottom: 40}}>
+            <Text style={[styles.orderInfoContentTitle, {marginBottom: 10}]}>
+              견적서 파일
+            </Text>
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'flex-start',
+                alignItems: 'center',
+                marginBottom: 5,
+              }}>
+              <TextInput
+                value="견적서파일.pdf"
+                placeholder="견적서파일을 첨부해주세요."
+                placeholderTextColor="#A2A2A2"
+                style={{
+                  flex: 1,
+                  borderWidth: 1,
+                  borderColor: '#E3E3E3',
+                  borderRadius: 4,
+                  paddingHorizontal: 10,
+                  marginRight: 10,
+                  fontFamily: 'SCDream4',
+                }}
+                editable={false}
+              />
+              <TouchableOpacity
+                activeOpacity={0.8}
+                style={{
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  backgroundColor: '#00A170',
+                  borderRadius: 4,
+                  height: 50,
+                  paddingHorizontal: 20,
+                }}>
+                <Text
+                  style={{
+                    fontFamily: 'SCDream4',
+                    color: '#fff',
+                    textAlign: 'center',
+                  }}>
+                  파일 선택
+                </Text>
+              </TouchableOpacity>
+            </View>
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'flex-start',
+                alignItems: 'flex-start',
+              }}>
+              <Text
+                style={[
+                  styles.normalText,
+                  {
+                    color: '#00A170',
+                    fontSize: 12,
+                    lineHeight: 20,
+                    marginRight: 5,
+                  },
+                ]}>
+                *
+              </Text>
+              <View>
+                <Text
+                  style={[
+                    styles.normalText,
+                    {color: '#00A170', fontSize: 12, lineHeight: 20},
+                  ]}>
+                  문서파일(doc, hwp, xls, xlsx) 또는 이미지파일(jpg,png,gif)
+                </Text>
+                <Text
+                  style={[styles.normalText, {color: '#00A170', fontSize: 12}]}>
+                  첨부 가능합니다.
+                </Text>
+              </View>
+            </View>
+          </View>
+          {/* // 견적서 파일 */}
           <TouchableOpacity
             onPress={() => Alert.alert('제출')}
             activeOpacity={0.8}>

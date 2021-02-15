@@ -206,6 +206,7 @@ const Edit = (props) => {
             <View style={styles.wd50per}>
               <Text style={styles.orderInfoDesc}>견적 금액(원)</Text>
               <TextInput
+                value="200,000"
                 placeholder="금액을 입력하세요."
                 style={styles.textInput}
               />
@@ -281,15 +282,17 @@ const Edit = (props) => {
             </View>
           </View>
           <View style={[styles.orderInfoContentRow, styles.mgB10]}>
-            <Text style={styles.orderInfoContentTitle}>견적 내용</Text>
+            <Text style={[styles.orderInfoContentTitle, {marginRight: 5}]}>
+              견적 상세 설명
+            </Text>
             <Text style={styles.orderInfoContentDetail}>
-              (100자 내외로 적어주세요 예시)
+              (100자 내외로 적어주세요.)
             </Text>
           </View>
           <View style={styles.mgB40}>
             <TextInput
               value="직접 작성한 견적 내용입니다."
-              placeholder="메모를 입력해주세요."
+              placeholder="견적 상세 설명을 입력해주세요."
               placeholderTextColor="#A2A2A2"
               style={{
                 fontFamily: 'SCDream4',
