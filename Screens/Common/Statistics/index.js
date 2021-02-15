@@ -17,10 +17,6 @@ const index = (props) => {
   const navigation = props.navigation;
   const routeName = props.route.name;
 
-  const [category01, setCategory01] = React.useState(null);
-  const [category02, setCategory02] = React.useState(null);
-  const [category03, setCategory03] = React.useState(null);
-
   const yearCount = [2017, 2018, 2019, 2020, 2021];
   const [year, setYear] = React.useState('2021');
   const [isActiveToggleYear, setIsActiveToggleYear] = React.useState(false);
