@@ -1,5 +1,12 @@
 import * as React from 'react';
-import {View, Text, ScrollView, StyleSheet, TextInput} from 'react-native';
+import {
+  View,
+  Text,
+  ScrollView,
+  StyleSheet,
+  TextInput,
+  Dimensions,
+} from 'react-native';
 import DetailHeader from '../Common/DetailHeader';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 
@@ -63,6 +70,22 @@ const DetailProps = (props) => {
             </View>
           </View>
         </View>
+        {/* 경계 라인 */}
+        <View
+          style={{
+            height: 1,
+            backgroundColor: '#E3E3E3',
+            width: Dimensions.get('window').width,
+          }}
+        />
+        <View
+          style={{
+            height: 6,
+            backgroundColor: '#F5F5F5',
+            width: Dimensions.get('window').width,
+          }}
+        />
+        {/* // 경계 라인 */}
         <View style={styles.wrap}>
           <Text style={styles.orderInfoTitle}>견적 작성</Text>
           <View style={[styles.flexRow, styles.mgB40]}>
@@ -125,7 +148,7 @@ const DetailProps = (props) => {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#F5F5F5',
+    backgroundColor: '#fff',
   },
   flexRow: {
     flexDirection: 'row',

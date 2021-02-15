@@ -21,7 +21,12 @@ const Edit = (props) => {
 
   const phoneNumber = '01012345678';
 
-  const [category01, setCategory01] = React.useState(null);
+  const payPerType = ['10%', '20%', '30%', '40%', '50%'];
+  const [payPer, setPayPer] = React.useState(payPerType[0]);
+  const [isActiveTogglePayPer, setIsActiveTogglePayPer] = React.useState(false);
+  const togglePayPer = () => {
+    setIsActiveTogglePayPer(!isActiveTogglePayPer);
+  };
 
   return (
     <>
@@ -207,20 +212,72 @@ const Edit = (props) => {
             </View>
             <View style={styles.wd50per}>
               <Text style={styles.orderInfoDesc}>계약금(선금) 비율</Text>
-              <View style={styles.pickerWrap}>
-                <Picker
-                  style={{color: '#A2A2A2'}}
-                  selectedValue={category01}
-                  onValueChange={(itemValue, itemIndex) => {
-                    setCategory01(itemValue);
+              <View
+                style={{
+                  borderWidth: 1,
+                  borderColor: '#E3E3E3',
+                  borderTopRightRadius: 4,
+                  borderTopLeftRadius: 4,
+                  borderBottomLeftRadius: isActiveTogglePayPer ? 0 : 4,
+                  borderBottomRightRadius: isActiveTogglePayPer ? 0 : 4,
+                  backgroundColor: '#fff',
+                }}>
+                <TouchableOpacity
+                  onPress={togglePayPer}
+                  activeOpacity={0.8}
+                  style={{
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    height: 50,
+                    paddingHorizontal: 10,
                   }}>
-                  <Picker.Item label="10%" value="10" />
-                  <Picker.Item label="20%" value="20" />
-                  <Picker.Item label="30%" value="30" />
-                  <Picker.Item label="40%" value="40" />
-                  <Picker.Item label="50%" value="50" />
-                </Picker>
+                  <Text style={{fontFamily: 'SCDream4'}}>{payPer}</Text>
+                  {isActiveTogglePayPer ? (
+                    <Image
+                      source={require('../../src/assets/arr01_top.png')}
+                      resizeMode="contain"
+                      style={{width: 20, height: 20}}
+                    />
+                  ) : (
+                    <Image
+                      source={require('../../src/assets/arr01.png')}
+                      resizeMode="contain"
+                      style={{width: 20, height: 20}}
+                    />
+                  )}
+                </TouchableOpacity>
               </View>
+              {isActiveTogglePayPer && (
+                <View
+                  style={{
+                    position: 'absolute',
+                    top: 81,
+                    left: 0,
+                    width: '100%',
+                    backgroundColor: '#fff',
+                    paddingHorizontal: 10,
+                    paddingVertical: 10,
+                    borderWidth: 1,
+                    borderColor: '#E3E3E3',
+                    borderBottomRightRadius: 5,
+                    borderBottomLeftRadius: 5,
+                    zIndex: 100,
+                  }}>
+                  {payPerType.map((v, idx) => (
+                    <TouchableOpacity
+                      key={idx}
+                      style={{paddingVertical: 7, marginBottom: 7}}
+                      activeOpacity={0.8}
+                      onPress={() => {
+                        setPayPer(v);
+                        setIsActiveTogglePayPer(false);
+                      }}>
+                      <Text style={{fontFamily: 'SCDream4'}}>{v}</Text>
+                    </TouchableOpacity>
+                  ))}
+                </View>
+              )}
             </View>
           </View>
           <View style={[styles.orderInfoContentRow, styles.mgB10]}>
