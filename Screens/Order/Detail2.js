@@ -6,6 +6,8 @@ import {
   StyleSheet,
   Dimensions,
   Image,
+  TouchableOpacity,
+  Alert,
 } from 'react-native';
 import DetailHeader from '../Common/DetailHeader';
 
@@ -41,6 +43,15 @@ const Detail = (props) => {
             <View style={styles.details}>
               <Text style={styles.detailsTitle}>견적 마감일</Text>
               <Text style={styles.detailsDesc}>2020.11.01</Text>
+              {/* <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'flex-start',
+                  alignItems: 'center',
+                }}>
+                <Text style={{fontFamily: 'SCDream4'}}>견적 마감일</Text>
+                <Text style={{fontFamily: 'SCDream4'}}>2020.11.01</Text>
+              </View> */}
             </View>
             <View style={styles.details}>
               <Text style={styles.detailsTitle}>납품 희망일</Text>
@@ -180,6 +191,13 @@ const Detail = (props) => {
               <Text style={styles.detailsDesc}>코팅 없음</Text>
             </View>
           </View>
+          {/* <TouchableOpacity
+            onPress={() => Alert.alert('제출')}
+            activeOpacity={0.8}>
+            <View style={styles.submitBtn}>
+              <Text style={styles.submitBtnText}>견적 조정</Text>
+            </View>
+          </TouchableOpacity> */}
         </View>
       </ScrollView>
     </>
