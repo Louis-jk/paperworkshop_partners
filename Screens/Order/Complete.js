@@ -11,19 +11,12 @@ import {
   TouchableWithoutFeedback,
   Linking,
 } from 'react-native';
-import {Picker} from '@react-native-community/picker';
 import DetailHeader from '../Common/DetailHeader';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 
 const Complete = (props) => {
   const navigation = props.navigation;
   const routeName = props.route.name;
-
-  const phoneNumber = '01012345678';
-  const emailAddress = 'paper_workshop@paperworkshop.com';
-
-  const [category01, setCategory01] = React.useState(null);
-  const [textInputHeight, setTextInputHeight] = React.useState(0);
 
   return (
     <>
