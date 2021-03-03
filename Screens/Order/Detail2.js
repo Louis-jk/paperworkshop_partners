@@ -43,15 +43,6 @@ const Detail = (props) => {
             <View style={styles.details}>
               <Text style={styles.detailsTitle}>견적 마감일</Text>
               <Text style={styles.detailsDesc}>2020.11.01</Text>
-              {/* <View
-                style={{
-                  flexDirection: 'row',
-                  justifyContent: 'flex-start',
-                  alignItems: 'center',
-                }}>
-                <Text style={{fontFamily: 'SCDream4'}}>견적 마감일</Text>
-                <Text style={{fontFamily: 'SCDream4'}}>2020.11.01</Text>
-              </View> */}
             </View>
             <View style={styles.details}>
               <Text style={styles.detailsTitle}>납품 희망일</Text>

@@ -18,8 +18,11 @@ import DetailHeader from '../Common/DetailHeader';
 const Edit = (props) => {
   const navigation = props.navigation;
   const routeName = props.route.name;
+  const status = props.route.params.status;
 
   const phoneNumber = '01012345678';
+
+  console.log('오더 디테일', props);
 
   const payPerType = ['10%', '20%', '30%', '40%', '50%'];
   const [payPer, setPayPer] = React.useState(payPerType[0]);
@@ -307,13 +310,40 @@ const Edit = (props) => {
               multiline={true}
             />
           </View>
-          <TouchableOpacity
-            onPress={() => Alert.alert('견적수정')}
-            activeOpacity={0.8}>
-            <View style={[styles.submitBtnBorder, {marginBottom: 10}]}>
-              <Text style={styles.submitBtnBorderText}>견적수정</Text>
-            </View>
-          </TouchableOpacity>
+          {status !== 'payDone' ? (
+            <TouchableOpacity
+              onPress={() => Alert.alert('견적수정')}
+              activeOpacity={0.8}>
+              <View style={[styles.submitBtnBorder, {marginBottom: 10}]}>
+                <Text style={styles.submitBtnBorderText}>견적 수정하기</Text>
+              </View>
+            </TouchableOpacity>
+          ) : (
+            <TouchableOpacity
+              onPress={() => navigation.goBack()}
+              activeOpacity={0.8}>
+              <View style={[styles.submitBtnBorder, {marginBottom: 10}]}>
+                <Text style={styles.submitBtnBorderText}>확인</Text>
+              </View>
+            </TouchableOpacity>
+          )}
+          {status === 'choiceWait' ? (
+            <TouchableOpacity
+              onPress={() => Alert.alert('견적수정')}
+              activeOpacity={0.8}>
+              <View style={[styles.submitBtn, {marginBottom: 10}]}>
+                <Text style={styles.submitBtnText}>견적 확정하기</Text>
+              </View>
+            </TouchableOpacity>
+          ) : status === 'payWait' ? (
+            <TouchableOpacity
+              onPress={() => Alert.alert('견적수정')}
+              activeOpacity={0.8}>
+              <View style={[styles.submitBtn, {marginBottom: 10}]}>
+                <Text style={styles.submitBtnText}>계약금 입금 확인 완료</Text>
+              </View>
+            </TouchableOpacity>
+          ) : null}
           <TouchableOpacity
             onPress={() => Alert.alert('MY 견적 의뢰건')}
             activeOpacity={0.8}>

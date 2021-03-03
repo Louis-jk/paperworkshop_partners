@@ -153,8 +153,31 @@ const index = (props) => {
             onPress={() => {
               item.status === '입찰중'
                 ? navigation.navigate('OrderStep')
-                : item.status === '파트너 선정'
-                ? navigation.navigate('OrderEdit')
+                : item.status === '파트너 선정' && item.order === false
+                ? navigation.navigate('OrderEdit', {
+                    screen: 'OrderEdit',
+                    params: {
+                      status: 'choiceWait',
+                    },
+                  })
+                : item.status === '파트너 선정' &&
+                  item.order === true &&
+                  item.pay === false
+                ? navigation.navigate('OrderEdit', {
+                    screen: 'OrderEdit',
+                    params: {
+                      status: 'payWait',
+                    },
+                  })
+                : item.status === '파트너 선정' &&
+                  item.order === true &&
+                  item.pay === true
+                ? navigation.navigate('OrderEdit', {
+                    screen: 'OrderEdit',
+                    params: {
+                      status: 'payDone',
+                    },
+                  })
                 : navigation.navigate('OrderComplete');
             }}
             activeOpacity={0.8}>

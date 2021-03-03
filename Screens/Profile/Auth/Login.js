@@ -7,15 +7,45 @@ import {
   TouchableOpacity,
   StyleSheet,
   Dimensions,
+  Alert,
+  Platform,
 } from 'react-native';
+import {useDispatch, useSelector} from 'react-redux';
+
+import {
+  UserId,
+  UserName,
+  UserMobile,
+  UserEmail,
+  UserCompany,
+  UserMobileCfm,
+  UserType,
+  UserProfileImg,
+  UserEstimateCnt,
+} from '../../../Modules/UserInfoReducer';
 
 const Login = (props) => {
   const navigation = props.navigation;
+
+  const dispatch = useDispatch();
+
+  const [fFcmToken, setFfcmToken] = React.useState(null); // fcmtoken 현재 페이지 저장
+  const [checkPlatform, setCheckPlatform] = React.useState(null); // OS 체크
+  const [userId, setUserId] = React.useState(null);
+  const [userPwd, setUserPwd] = React.useState(null);
 
   const [autoLogin, setAutoLogin] = React.useState(false);
   const toggleCheck = () => {
     setAutoLogin((prev) => !prev);
   };
+
+  React.useEffect(() => {
+    if (Platform.OS === 'ios') {
+      setCheckPlatform('ios');
+    } else {
+      setCheckPlatform('aos');
+    }
+  }, []);
 
   return (
     <View
