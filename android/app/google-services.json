@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "267202544921",
+    "project_id": "paperworkshop-partners",
+    "storage_bucket": "paperworkshop-partners.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:267202544921:android:25ed1b6e09d2dffc0af188",
+        "android_client_info": {
+          "package_name": "com.dmonster.paperworkshoppartners"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "267202544921-b3es595nol10mqdv1rcpp930e6db1tot.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAmsH_cerEpgOp2qdyMFTrYoBRdG6bPVyw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "267202544921-b3es595nol10mqdv1rcpp930e6db1tot.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
