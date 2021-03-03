@@ -1,4 +1,5 @@
 apply plugin: "com.android.application"
+apply plugin: 'com.google.gms.google-services' // firebase
 
 import com.android.build.OutputFile
 
@@ -132,6 +133,7 @@ android {
         applicationId "com.dmonster.paperworkshoppartners"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
+        multiDexEnabled true
         versionCode 1
         versionName "1.0"
     }
@@ -184,6 +186,15 @@ dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
     //noinspection GradleDynamicVersion
     implementation "com.facebook.react:react-native:+"  // From node_modules
+
+    implementation 'androidx.multidex:multidex:2.0.1'  // <-- MultiDex
+
+    // Import the Firebase BoM    
+    implementation platform('com.google.firebase:firebase-bom:26.6.0')
+
+    // gif 파일 렌더링 때문에 필요
+    implementation 'com.facebook.fresco:fresco:1.+' 
+    implementation 'com.facebook.fresco:animated-gif:1.+'
 
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.0.0"
 
