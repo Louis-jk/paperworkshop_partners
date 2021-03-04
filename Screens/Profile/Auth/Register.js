@@ -22,6 +22,7 @@ import DocumentPicker from 'react-native-document-picker';
 import {Picker} from '@react-native-community/picker';
 
 import DetailHeader from '../../Common/DetailHeader';
+import RegCates from './RegCates';
 import Auth from '../../../src/api/Auth';
 import Timer from '../../Common/Timer';
 import {ProductStackNavigator} from '../../../navigation/StackNavigator';
@@ -62,32 +63,32 @@ const Register = (props) => {
     setIsActiveToggleRegion(!isActiveToggleRegion);
   };
 
-  const printTypes = ['패키지', '일반인쇄', '기타인쇄'];
-  const [printType, setPrintType] = React.useState('패키지');
-  const [isActiveTogglePrintType, setIsActiveTogglePrintType] = React.useState(
-    false,
-  );
-  const togglePrintType = () => {
-    setIsActiveTogglePrintType(!isActiveTogglePrintType);
-    setPrintDetail('세부 카테고리');
-  };
+  // const printTypes = ['패키지', '일반인쇄', '기타인쇄'];
+  // const [printType, setPrintType] = React.useState('패키지');
+  // const [isActiveTogglePrintType, setIsActiveTogglePrintType] = React.useState(
+  //   false,
+  // );
+  // const togglePrintType = () => {
+  //   setIsActiveTogglePrintType(!isActiveTogglePrintType);
+  //   setPrintDetail('세부 카테고리');
+  // };
 
-  const packageTypes = [
-    '칼라박스',
-    '골판지박스',
-    '합지골판지박스',
-    '싸바리박스',
-    '식품박스',
-    '쇼핑백',
-  ];
-  const generalTypes = [
-    '카달로그/브로슈어/팜플렛',
-    '책자/서적류',
-    '전단/포스터/안내장',
-    '스티커/라벨',
-    '봉투/명함',
-  ];
-  const etcTypes = ['상품권/티켓', '초대장/카드', '비닐BAG', '감압지', '기타'];
+  // const packageTypes = [
+  //   '칼라박스',
+  //   '골판지박스',
+  //   '합지골판지박스',
+  //   '싸바리박스',
+  //   '식품박스',
+  //   '쇼핑백',
+  // ];
+  // const generalTypes = [
+  //   '카달로그/브로슈어/팜플렛',
+  //   '책자/서적류',
+  //   '전단/포스터/안내장',
+  //   '스티커/라벨',
+  //   '봉투/명함',
+  // ];
+  // const etcTypes = ['상품권/티켓', '초대장/카드', '비닐BAG', '감압지', '기타'];
 
   const [printDetailType, setPrintDetail] = React.useState(null);
   const [isActiveToggleDetail, setIsActiveToggleDetail] = React.useState(false);
@@ -334,7 +335,7 @@ const Register = (props) => {
 
   const addMore = () => {};
 
-  const categoryRef = React.useRef(null);
+  // const categoryRef = React.useRef(null);
   const cloneElement = () => {
     const elementAssign = Object.assign({}, categoryRef.current);
     console.log('elementAssign', elementAssign);
@@ -1169,9 +1170,7 @@ const Register = (props) => {
 
                 {/* 위치  */}
                 <View style={{marginBottom: 25}}>
-                  <Text style={[styles.profileTitle, {marginBottom: 10}]}>
-                    위치 (지역)
-                  </Text>
+                  <Text style={styles.profileTitle}>위치 (지역)</Text>
                   {/* <View
                     style={{
                       borderWidth: 1,
@@ -1238,7 +1237,7 @@ const Register = (props) => {
                           borderWidth: 1,
                           borderColor: region.find((re) => re === r)
                             ? '#00A170'
-                            : '#B5B5B5',
+                            : '#E3E3E3',
                           borderRadius: 4,
                         }}>
                         {/* <Image
@@ -1348,235 +1347,40 @@ const Register = (props) => {
                       style={{
                         backgroundColor: '#fff',
                         paddingHorizontal: 10,
-                        paddingVertical: 7,
+                        paddingVertical: 3,
                         borderWidth: 1,
-                        borderColor: '#B5B5B5',
+                        borderColor: '#E3E3E3',
                         borderRadius: 3,
                       }}>
-                      <Text
+                      <View
                         style={{
-                          fontFamily: 'SCDream4',
-                          fontSize: 12,
-                          color: '#B5B5B5',
+                          flexDirection: 'row',
+                          justifyContent: 'center',
+                          alignItems: 'center',
                         }}>
-                        추가하기
-                      </Text>
+                        <Text
+                          style={{
+                            fontFamily: 'SCDream5',
+                            fontSize: 20,
+                            color: '#00A170',
+                            marginRight: 5,
+                          }}>
+                          +
+                        </Text>
+                        <Text
+                          style={{
+                            fontFamily: 'SCDream4',
+                            fontSize: 12,
+                            color: '#B5B5B5',
+                          }}>
+                          추가하기
+                        </Text>
+                      </View>
                     </TouchableOpacity>
                   </View>
-                  <View
-                    ref={categoryRef}
-                    style={{
-                      flexDirection: 'row',
-                      justifyContent: 'space-between',
-                      alignItems: 'center',
-                    }}>
-                    <View style={{width: '40%'}}>
-                      <View
-                        style={{
-                          borderWidth: 1,
-                          borderColor: '#E3E3E3',
-                          borderTopRightRadius: 4,
-                          borderTopLeftRadius: 4,
-                          borderBottomRightRadius: isActiveTogglePrintType
-                            ? 0
-                            : 4,
-                          borderBottomLeftRadius: isActiveTogglePrintType
-                            ? 0
-                            : 4,
-                          backgroundColor: '#fff',
-                        }}>
-                        <TouchableOpacity
-                          onPress={togglePrintType}
-                          activeOpacity={0.8}
-                          style={{
-                            flexDirection: 'row',
-                            justifyContent: 'space-between',
-                            alignItems: 'center',
-                            height: 50,
-                            paddingHorizontal: 10,
-                          }}>
-                          <Text style={{fontFamily: 'SCDream4'}}>
-                            {printType}
-                          </Text>
-                          {isActiveTogglePrintType ? (
-                            <Image
-                              source={require('../../../src/assets/arr01_top.png')}
-                              resizeMode="contain"
-                              style={{width: 20, height: 20}}
-                            />
-                          ) : (
-                            <Image
-                              source={require('../../../src/assets/arr01.png')}
-                              resizeMode="contain"
-                              style={{width: 20, height: 20}}
-                            />
-                          )}
-                        </TouchableOpacity>
-                      </View>
-                      {isActiveTogglePrintType && (
-                        <View
-                          style={{
-                            position: 'absolute',
-                            top: 51,
-                            left: 0,
-                            width: '100%',
-                            backgroundColor: '#fff',
-                            paddingHorizontal: 10,
-                            paddingVertical: 10,
-                            borderWidth: 1,
-                            borderColor: '#E3E3E3',
-                            borderBottomRightRadius: 5,
-                            borderBottomLeftRadius: 5,
-                            zIndex: 100,
-                          }}>
-                          {printTypes.map((v, idx) => (
-                            <TouchableOpacity
-                              key={idx}
-                              style={{
-                                paddingVertical: 7,
-                                backgroundColor: '#fff',
-                                marginBottom: 7,
-                                zIndex: 100,
-                              }}
-                              activeOpacity={0.8}
-                              onPress={() => {
-                                setPrintType(v);
-                                setIsActiveTogglePrintType(false);
-                                setIsActiveToggleDetail(false);
-                              }}>
-                              <Text style={{fontFamily: 'SCDream4'}}>{v}</Text>
-                            </TouchableOpacity>
-                          ))}
-                        </View>
-                      )}
-                    </View>
-                    <View style={{width: '59%'}}>
-                      <View
-                        style={{
-                          borderWidth: 1,
-                          borderColor: '#E3E3E3',
-                          borderTopRightRadius: 4,
-                          borderTopLeftRadius: 4,
-                          borderBottomRightRadius: isActiveToggleDetail ? 0 : 4,
-                          borderBottomLeftRadius: isActiveToggleDetail ? 0 : 4,
-                          backgroundColor: '#fff',
-                        }}>
-                        <TouchableOpacity
-                          onPress={toggleDetail}
-                          activeOpacity={0.8}
-                          style={{
-                            flexDirection: 'row',
-                            justifyContent: 'space-between',
-                            alignItems: 'center',
-                            height: 50,
-                            paddingHorizontal: 10,
-                          }}>
-                          <Text style={{fontFamily: 'SCDream4'}}>
-                            {printType === '패키지' && !printDetailType
-                              ? packageTypes[0]
-                              : printType === '일반인쇄' && !printDetailType
-                              ? generalTypes[0]
-                              : printType === '기타인쇄' && !printDetailType
-                              ? etcTypes[0]
-                              : printDetailType}
-                          </Text>
-                          {isActiveTogglePrintType ? (
-                            <Image
-                              source={require('../../../src/assets/arr01_top.png')}
-                              resizeMode="contain"
-                              style={{width: 20, height: 20}}
-                            />
-                          ) : (
-                            <Image
-                              source={require('../../../src/assets/arr01.png')}
-                              resizeMode="contain"
-                              style={{width: 20, height: 20}}
-                            />
-                          )}
-                        </TouchableOpacity>
-                      </View>
-                      {isActiveToggleDetail && (
-                        <View
-                          style={{
-                            position: 'absolute',
-                            top: 51,
-                            left: 0,
-                            width: '100%',
-                            backgroundColor: '#fff',
-                            paddingHorizontal: 10,
-                            paddingVertical: 10,
-                            borderWidth: 1,
-                            borderColor: '#E3E3E3',
-                            borderBottomRightRadius: 5,
-                            borderBottomLeftRadius: 5,
-                            zIndex: 100,
-                          }}>
-                          {printType === '패키지'
-                            ? packageTypes.map((v, idx) => (
-                                <TouchableOpacity
-                                  key={idx}
-                                  style={{
-                                    paddingVertical: 7,
-                                    backgroundColor: '#fff',
-                                    marginBottom: 7,
-                                    zIndex: 100,
-                                  }}
-                                  activeOpacity={0.8}
-                                  onPress={() => {
-                                    setPrintDetail(v);
-                                    setIsActiveToggleDetail(false);
-                                    // setIsActiveTogglePrintType(false);
-                                  }}>
-                                  <Text style={{fontFamily: 'SCDream4'}}>
-                                    {v}
-                                  </Text>
-                                </TouchableOpacity>
-                              ))
-                            : printType === '일반인쇄'
-                            ? generalTypes.map((v, idx) => (
-                                <TouchableOpacity
-                                  key={idx}
-                                  style={{
-                                    paddingVertical: 7,
-                                    backgroundColor: '#fff',
-                                    marginBottom: 7,
-                                    zIndex: 100,
-                                  }}
-                                  activeOpacity={0.8}
-                                  onPress={() => {
-                                    setPrintDetail(v);
-                                    setIsActiveToggleDetail(false);
-                                    // setIsActiveTogglePrintType(false);
-                                  }}>
-                                  <Text style={{fontFamily: 'SCDream4'}}>
-                                    {v}
-                                  </Text>
-                                </TouchableOpacity>
-                              ))
-                            : etcTypes.map((v, idx) => (
-                                <TouchableOpacity
-                                  key={idx}
-                                  style={{
-                                    paddingVertical: 7,
-                                    backgroundColor: '#fff',
-                                    marginBottom: 7,
-                                    zIndex: 100,
-                                  }}
-                                  activeOpacity={0.8}
-                                  onPress={() => {
-                                    setPrintDetail(v);
-                                    setIsActiveToggleDetail(false);
-                                    // setIsActiveTogglePrintType(false);
-                                  }}>
-                                  <Text style={{fontFamily: 'SCDream4'}}>
-                                    {v}
-                                  </Text>
-                                </TouchableOpacity>
-                              ))}
-                        </View>
-                      )}
-                    </View>
-                  </View>
+                  {/* RegCates */}
+                  <RegCates />
+                  {/* // RegCates */}
                 </View>
 
                 {/* // 제작물 카테고리  */}
@@ -1693,7 +1497,7 @@ const Register = (props) => {
                       style={[
                         styles.normalText,
                         {
-                          color: '#00A170',
+                          color: '#B5B5B5',
                           fontSize: 12,
                           lineHeight: 20,
                           marginRight: 5,
@@ -1705,7 +1509,7 @@ const Register = (props) => {
                       <Text
                         style={[
                           styles.normalText,
-                          {color: '#00A170', fontSize: 12, lineHeight: 20},
+                          {color: '#B5B5B5', fontSize: 12, lineHeight: 20},
                         ]}>
                         문서파일(doc, hwp, xls, xlsx) 또는
                         이미지파일(jpg,png,gif)
@@ -1713,7 +1517,7 @@ const Register = (props) => {
                       <Text
                         style={[
                           styles.normalText,
-                          {color: '#00A170', fontSize: 12},
+                          {color: '#B5B5B5', fontSize: 12},
                         ]}>
                         첨부 가능합니다.
                       </Text>
