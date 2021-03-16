@@ -14,6 +14,8 @@ import {
   Alert,
 } from 'react-native';
 
+import {useDispatch} from 'react-redux';
+
 import {Formik} from 'formik';
 import * as yup from 'yup';
 import DocumentPicker from 'react-native-document-picker';
@@ -25,11 +27,27 @@ import DetailHeader from '../../Common/DetailHeader';
 import RegCates from './RegCates';
 import Auth from '../../../src/api/Auth';
 import Timer from '../../Common/Timer';
-import {ProductStackNavigator} from '../../../navigation/StackNavigator';
+import {
+  joinEmail,
+  joinPwd,
+  joinName,
+  joinMobile,
+  joinMobileCfm,
+  joinCompany,
+  joinLicense,
+  joinLocation,
+  joinCate1,
+  joinCaId,
+  joinBankName,
+  joinBankAccount,
+  joinBankDepositor,
+} from '../../../Modules/JoinReducer';
 
 const Register = (props) => {
   const navigation = props.navigation;
   const routeName = props.route.name;
+
+  const dispatch = useDispatch();
 
   const [category01, setCategory01] = React.useState(null);
   const [category02, setCategory02] = React.useState(null);
@@ -41,6 +59,17 @@ const Register = (props) => {
   const [bank, setBank] = React.useState('');
   const [bankAccount, setBankAccount] = React.useState('');
   const [depositor, setDepositor] = React.useState('');
+
+  const emailRef = React.useRef(null);
+  const passwordRef = React.useRef(null);
+  const passwordCfmRef = React.useRef(null);
+  const nameRef = React.useRef(null);
+  const mobileRef = React.useRef(null);
+  const mobileCfmRef = React.useRef(null);
+  const companyRef = React.useRef(null);
+  const bankNameRef = React.useRef(null);
+  const bankAccountRef = React.useRef(null);
+  const bankDepoRef = React.useRef(null);
 
   const regionCount = [
     'seoul',
@@ -63,37 +92,65 @@ const Register = (props) => {
     setIsActiveToggleRegion(!isActiveToggleRegion);
   };
 
-  // const printTypes = ['패키지', '일반인쇄', '기타인쇄'];
-  // const [printType, setPrintType] = React.useState('패키지');
-  // const [isActiveTogglePrintType, setIsActiveTogglePrintType] = React.useState(
-  //   false,
-  // );
-  // const togglePrintType = () => {
-  //   setIsActiveTogglePrintType(!isActiveTogglePrintType);
-  //   setPrintDetail('세부 카테고리');
-  // };
-
-  // const packageTypes = [
-  //   '칼라박스',
-  //   '골판지박스',
-  //   '합지골판지박스',
-  //   '싸바리박스',
-  //   '식품박스',
-  //   '쇼핑백',
-  // ];
-  // const generalTypes = [
-  //   '카달로그/브로슈어/팜플렛',
-  //   '책자/서적류',
-  //   '전단/포스터/안내장',
-  //   '스티커/라벨',
-  //   '봉투/명함',
-  // ];
-  // const etcTypes = ['상품권/티켓', '초대장/카드', '비닐BAG', '감압지', '기타'];
-
   const [printDetailType, setPrintDetail] = React.useState(null);
   const [isActiveToggleDetail, setIsActiveToggleDetail] = React.useState(false);
   const toggleDetail = () => {
     setIsActiveToggleDetail(!isActiveToggleDetail);
+  };
+
+  // 아이디 중복체크
+  const [checkedId, setCheckedId] = React.useState(false);
+
+  const checkUserId = (register_id) => {
+    const reg = RegExp(
+      /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+    );
+
+    const checkRegId = register_id;
+
+    if (register_id == '') {
+      Alert.alert('이메일을 입력해주세요.');
+    } else if (reg.test(checkRegId) === false) {
+      Alert.alert(
+        '이메일 형식이 아닙니다.',
+        '이메일 형식이 맞는지 확인해주세요.',
+      );
+      return false;
+    } else {
+      Auth.onEmailCheck(register_id)
+        .then((res) => {
+          if (res.data.result == '1') {
+            Alert.alert('사용 가능한 이메일입니다.', '', [
+              {
+                text: '확인',
+              },
+            ]);
+            setCheckedId(true);
+          } else {
+            IdAlertMsg();
+          }
+        })
+        .catch((err) =>
+          Alert.alert('문제가 있습니다.', err, [
+            {
+              text: '확인',
+            },
+          ]),
+        );
+    }
+  };
+
+  const IdAlertMsg = () => {
+    setCheckedId(false);
+    Alert.alert(
+      '이미 사용 중인 아이디입니다.',
+      '다른 아이디를 사용해 주십시요.',
+      [
+        {
+          text: '확인',
+        },
+      ],
+    );
   };
 
   // 모바일 번호 임시 저장
@@ -154,15 +211,7 @@ const Register = (props) => {
           },
         ],
       );
-      axios({
-        method: 'post',
-        url: `${baseUrl}`,
-        data: qs.stringify({
-          method: 'proc_cert_mb_hp',
-          mb_hp: register_mobile,
-          mb_level: '2',
-        }),
-      })
+      Auth.onMobileConfirm(register_mobile)
         .then((res) => {
           if (res.data.result == '1') {
             setMobileConfimed(false);
@@ -198,16 +247,8 @@ const Register = (props) => {
           },
         ],
       );
-      axios({
-        method: 'post',
-        url: `${baseUrl}`,
-        data: qs.stringify({
-          method: 'proc_cert_confirm',
-          mb_hp: mobileNo,
-          cert_num: null,
-          rt_yn: 'Y',
-        }),
-      })
+
+      Auth.onMobileConfirmNo(mobileNo, null, 'Y')
         .then((res) => {
           if (res.data.result == '1') {
             setMobileConfimed(false);
@@ -247,16 +288,7 @@ const Register = (props) => {
       );
       return false;
     } else {
-      axios({
-        method: 'post',
-        url: `${baseUrl}`,
-        data: qs.stringify({
-          method: 'proc_cert_confirm',
-          mb_hp: mobileNo,
-          cert_num: mobileConfirmId,
-          rt_yn: 'N',
-        }),
-      })
+      Auth.onMobileConfirmNo(mobileNo, mobileConfirmId, 'N')
         .then((res) => {
           console.log('본인 인증 response 11', res);
           if (res.data.result == '1') {
@@ -281,35 +313,6 @@ const Register = (props) => {
     }
   };
 
-  const [fileUrlCurrent, setFileUrlCurrent] = React.useState(null);
-  const [fileTypeCurrent, setFileTypeCurrent] = React.useState(null);
-  const [fileNameCurrent, setFileNameCurrent] = React.useState(null);
-  const [fileSizeCurrent, setFileSizeCurrent] = React.useState(null);
-  const [extension, setExtension] = React.useState(null);
-
-  // 파일 업로드 (document picker)
-  const filePicker = async () => {
-    try {
-      const res = await DocumentPicker.pick({
-        type: [DocumentPicker.types.images],
-      });
-      // console.log('이미지', res);
-      const imgName = res.name.split('.');
-      const extArray = res.type.split('/');
-      setFileUrlCurrent(res.uri);
-      setFileTypeCurrent(res.type);
-      setFileNameCurrent(imgName[0]);
-      setFileSizeCurrent(res.size);
-      setExtension(extArray[1]);
-    } catch (err) {
-      if (DocumentPicker.isCancel(err)) {
-        // User cancelled the picker, exit any dialogs or menus and move on
-      } else {
-        throw err;
-      }
-    }
-  };
-
   //  지역 선택 (최대 5 지역까지)
   const [region, setRegion] = React.useState([]);
   const [countRegion, setCountRegion] = React.useState(0);
@@ -331,14 +334,199 @@ const Register = (props) => {
     }
   };
 
-  const [categorySelector, setCategorySelector] = React.useState(1);
+  const [categories, setCategories] = React.useState([1]);
 
-  const addMore = () => {};
+  const addCategory = () => {
+    if (categories.length < 10) {
+      setCategories((prev) => [...prev, prev + 1]);
+    } else {
+      Alert.alert('카테고리는 10개까지만 지정하실 수 있습니다.', '', [
+        {
+          text: '확인',
+        },
+      ]);
+    }
+  };
+
+  console.log('categories', categories);
+
+  const removeCategory = () => {
+    setCategories((prev) => [...prev, categories.pop()]);
+  };
 
   // const categoryRef = React.useRef(null);
   const cloneElement = () => {
     const elementAssign = Object.assign({}, categoryRef.current);
     console.log('elementAssign', elementAssign);
+  };
+
+  // 비밀번호 보이기 기능
+  const [pwdEyes, setPwdEyes] = React.useState(true);
+  const togglePwdEyes = () => {
+    setPwdEyes(!pwdEyes);
+  };
+
+  const [pwdReEyes, setPwdReEyes] = React.useState(true);
+  const togglePwdReEyes = () => {
+    setPwdReEyes(!pwdReEyes);
+  };
+
+  // 파일 업로드 (document picker)
+
+  // 사업자 등록증
+  const [fileUrlCurrent, setFileUrlCurrent] = React.useState(null);
+  const [fileTypeCurrent, setFileTypeCurrent] = React.useState(null);
+  const [fileNameCurrent, setFileNameCurrent] = React.useState(null); // 확장자 분리 이미지명
+  const [fileOriginName, setFileOriginName] = React.useState(null); // 확장자 달린 이미지명
+  const [fileSizeCurrent, setFileSizeCurrent] = React.useState(null);
+  const [extension, setExtension] = React.useState(null);
+  const [licenseFile, setLicenseFile] = React.useState(null);
+
+  const filePicker01 = async () => {
+    try {
+      const res = await DocumentPicker.pick({
+        type: [DocumentPicker.types.images],
+      });
+      // console.log('이미지', res);
+      const fileName = res.name.split('.');
+      const extArray = res.type.split('/');
+      setFileUrlCurrent(res.uri);
+      setFileTypeCurrent(res.type);
+      setFileOriginName(res.name);
+      setFileNameCurrent(fileName[0]);
+      setFileSizeCurrent(res.size);
+      setExtension(extArray[1]);
+      setLicenseFile({
+        uri: res.uri,
+        type: res.type,
+        name: res.name,
+      });
+    } catch (err) {
+      if (DocumentPicker.isCancel(err)) {
+        // User cancelled the picker, exit any dialogs or menus and move on
+      } else {
+        throw err;
+      }
+    }
+  };
+
+  console.log('이미지', fileUrlCurrent);
+
+  // 회사 소개서
+  const [fileUrlCurrent02, setFileUrlCurrent02] = React.useState(null);
+  const [fileTypeCurrent02, setFileTypeCurrent02] = React.useState(null);
+  const [fileNameCurrent02, setFileNameCurrent02] = React.useState(null); // 확장자 분리 이미지명
+  const [fileOriginName02, setFileOriginName02] = React.useState(null); // 확장자 달린 이미지명
+  const [fileSizeCurrent02, setFileSizeCurrent02] = React.useState(null);
+  const [extension02, setExtension02] = React.useState(null);
+  const [companyInfoFile, setComponyInfoFile] = React.useState(null);
+
+  const filePicker02 = async () => {
+    try {
+      const res = await DocumentPicker.pick({
+        type: [DocumentPicker.types.images],
+      });
+      // console.log('이미지', res);
+      const fileName = res.name.split('.');
+      const extArray = res.type.split('/');
+      setFileUrlCurrent02(res.uri);
+      setFileTypeCurrent02(res.type);
+      setFileOriginName02(res.name);
+      setFileNameCurrent02(fileName[0]);
+      setFileSizeCurrent02(res.size);
+      setExtension02(extArray[1]);
+      setComponyInfoFile({
+        uri: res.uri,
+        type: res.type,
+        name: res.name,
+      });
+    } catch (err) {
+      if (DocumentPicker.isCancel(err)) {
+        // User cancelled the picker, exit any dialogs or menus and move on
+      } else {
+        throw err;
+      }
+    }
+  };
+
+  console.log('licenseFile', licenseFile);
+  console.log('companyInfoFile', companyInfoFile);
+
+  // 회원가입
+
+  const [licenseObj, setLicenseObj] = React.useState(null);
+  const [cate1Arr, setCate1Arr] = React.useState(null);
+  const [caIdArr, setCaIdArr] = React.useState(null);
+
+  const beforeSignIn = (
+    email,
+    password,
+    passwordRe,
+    name,
+    mobile,
+    mobileCfm,
+    company,
+    bankName,
+    bankAccount,
+    bankDepositor,
+  ) => {
+    const frmData = new FormData();
+    frmData.append('method', 'proc_add_partner');
+    frmData.append('mb_id', email);
+    frmData.append('mb_password', password);
+    frmData.append('mb_password_re', passwordRe);
+    frmData.append('mb_name', name);
+    frmData.append('mb_hp', mobile);
+    frmData.append('mb_1', mobileCfm);
+    frmData.append('mb_2', company);
+    frmData.append('license[]', licenseFile);
+    frmData.append('location[]', region);
+    frmData.append('cate1[]', cate1Arr);
+    frmData.append('ca_id[]', caIdArr);
+    frmData.append('bank_name', bankName);
+    frmData.append('bank_account', bankAccount);
+    frmData.append('bank_depositor', bankDepositor);
+
+    console.log('frmData', frmData);
+    // signIn(frmData);
+
+    dispatch(joinEmail(email));
+    dispatch(joinPwd(password));
+    dispatch(joinName(name));
+    dispatch(joinMobile(mobile));
+    dispatch(joinMobileCfm(mobileCfm));
+    dispatch(joinCompany(company));
+
+    dispatch(joinLicense(licenseFile));
+    // dispatch(joinLocation(values.register_company));
+    // dispatch(joinCate1(values.register_company));
+    // dispatch(joinCaId(values.register_company));
+
+    dispatch(joinBankName(bankName));
+    dispatch(joinBankAccount(bankAccount));
+    dispatch(joinBankDepositor(bankDepositor));
+  };
+
+  const signIn = (frmData) => {
+    Auth.onSignIn(frmData)
+      .then((res) => {
+        if (res.data.result === '1') {
+          navigation.navigate('Signed');
+        } else {
+          Alert.alert('회원가입에 실패하였습니다.', res.data.message, [
+            {
+              text: '확인',
+            },
+          ]);
+        }
+      })
+      .catch((err) =>
+        Alert.alert(`${err.message()}`, '관리자에게 문의하세요', [
+          {
+            text: '확인',
+          },
+        ]),
+      );
   };
 
   // 유효성 체크
@@ -625,25 +813,18 @@ const Register = (props) => {
           onSubmit={(values, actions) => {
             if (checkedId) {
               let mb_1 = isMobileConfimed ? 'Y' : 'N';
-              signIn(
+              beforeSignIn(
                 values.register_email,
                 values.register_pw,
                 values.register_confirmPw,
                 values.register_name,
                 values.register_mobile,
-                mb_1,
+                values.register_confirmMobile,
                 values.register_company,
                 values.register_bankName,
                 values.register_bankAccount,
                 values.register_bankDepositor,
               );
-              dispatch(joinId(values.register_id));
-              dispatch(joinPwd(values.register_pw));
-              dispatch(joinName(values.register_name));
-              dispatch(joinMobile(values.register_mobile));
-              dispatch(joinMobileCfm(values.register_confirmMobile));
-              dispatch(joinEmail(values.register_email));
-              dispatch(joinCompany(values.register_company));
             } else {
               Alert.alert('인증되지 않은 입력란이 있습니다.', '확인해주세요.', [
                 {
@@ -665,25 +846,64 @@ const Register = (props) => {
                   <Text style={[styles.profileTitle, {marginBottom: 10}]}>
                     이메일
                   </Text>
-                  <TextInput
-                    value={email}
-                    placeholder="이메일을 입력해주세요."
-                    placeholderTextColor="#A2A2A2"
-                    onChangeText={formikProps.handleChange('register_email')}
-                    onBlur={formikProps.handleBlur('register_email')}
-                    style={[
-                      styles.normalText,
-                      {
-                        borderWidth: 1,
-                        borderColor: '#E3E3E3',
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      justifyContent: 'flex-start',
+                      alignItems: 'center',
+                      marginBottom: 5,
+                    }}>
+                    <TextInput
+                      ref={emailRef}
+                      placeholder="이메일을 입력해주세요."
+                      placeholderTextColor="#A2A2A2"
+                      style={[
+                        styles.normalText,
+                        {
+                          flex: 1,
+                          borderWidth: 1,
+                          borderColor: '#E3E3E3',
+                          borderRadius: 4,
+                          paddingHorizontal: 10,
+                          marginRight: 10,
+                          height: 50,
+                        },
+                      ]}
+                      onChangeText={(value) => {
+                        setCheckedId(false);
+                        formikProps.setFieldValue('register_email', value);
+                      }}
+                      onBlur={formikProps.handleBlur('register_email')}
+                      autoCapitalize="none"
+                      keyboardType="email-address"
+                      onSubmitEditing={() =>
+                        checkUserId(formikProps.values.register_email)
+                      }
+                    />
+                    <TouchableOpacity
+                      activeOpacity={0.8}
+                      onPress={() => {
+                        checkUserId(formikProps.values.register_email);
+                        Keyboard.dismiss();
+                      }}
+                      style={{
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        backgroundColor: checkedId ? '#ccc' : '#00A170',
                         borderRadius: 4,
-                        paddingHorizontal: 10,
-                        marginBottom: 5,
-                      },
-                    ]}
-                    autoCapitalize="none"
-                    keyboardType="email-address"
-                  />
+                        height: 50,
+                        paddingHorizontal: 20,
+                      }}
+                      disabled={checkedId ? true : false}>
+                      <Text
+                        style={[
+                          styles.normalText,
+                          {color: '#fff', textAlign: 'center'},
+                        ]}>
+                        중복확인
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
                   {formikProps.touched.register_email &&
                     formikProps.errors.register_email && (
                       <Text
@@ -714,28 +934,47 @@ const Register = (props) => {
                   <Text style={[styles.profileTitle, {marginBottom: 10}]}>
                     비밀번호
                   </Text>
-                  <TextInput
-                    placeholder="비밀번호를 입력해주세요."
-                    placeholderTextColor="#A2A2A2"
-                    style={[
-                      styles.normalText,
-                      {
-                        borderWidth: 1,
-                        borderColor: '#E3E3E3',
-                        borderRadius: 4,
-                        paddingHorizontal: 10,
-                        marginBottom:
-                          formikProps.touched.register_pw &&
-                          formikProps.errors.register_pw
-                            ? 0
-                            : 5,
-                      },
-                    ]}
-                    onChangeText={formikProps.handleChange('register_pw')}
-                    onBlur={formikProps.handleBlur('register_pw')}
-                    autoCapitalize="none"
-                    secureTextEntry
-                  />
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
+                      paddingHorizontal: 10,
+                      borderWidth: 1,
+                      borderColor: '#E3E3E3',
+                      borderRadius: 4,
+                      marginBottom:
+                        formikProps.touched.register_pw &&
+                        formikProps.errors.register_pw
+                          ? 0
+                          : 5,
+                      height: 50,
+                    }}>
+                    <TextInput
+                      ref={passwordRef}
+                      placeholder="비밀번호를 입력해주세요."
+                      placeholderTextColor="#A2A2A2"
+                      style={[styles.normalText, {width: '90%'}]}
+                      onChangeText={formikProps.handleChange('register_pw')}
+                      autoCapitalize="none"
+                      onBlur={formikProps.handleBlur('register_pw')}
+                      secureTextEntry={pwdEyes}
+                      onSubmitEditing={() => passwordCfmRef.current.focus()}
+                    />
+                    <TouchableOpacity
+                      activeOpacity={0.8}
+                      onPress={togglePwdEyes}>
+                      <Image
+                        source={
+                          pwdEyes
+                            ? require('../../../src/assets/icon_eye.png')
+                            : require('../../../src/assets/icon_eye_on.png')
+                        }
+                        resizeMode="center"
+                        style={{width: 35, height: 20}}
+                      />
+                    </TouchableOpacity>
+                  </View>
                   {!formikProps.values.register_pw &&
                   !formikProps.errors.register_pw ? (
                     <Text
@@ -767,30 +1006,49 @@ const Register = (props) => {
                         formikProps.errors.register_pw}
                     </Text>
                   ) : null}
-                  <TextInput
-                    placeholder="비밀번호를 재입력해주세요."
-                    placeholderTextColor="#A2A2A2"
-                    style={[
-                      styles.normalText,
-                      {
-                        borderWidth: 1,
-                        borderColor: '#E3E3E3',
-                        borderRadius: 4,
-                        paddingHorizontal: 10,
-                        marginBottom:
-                          formikProps.touched.register_confirmPw &&
-                          formikProps.errors.register_confirmPw
-                            ? 5
-                            : 0,
-                      },
-                    ]}
-                    onChangeText={formikProps.handleChange(
-                      'register_confirmPw',
-                    )}
-                    onBlur={formikProps.handleBlur('register_confirmPw')}
-                    autoCapitalize="none"
-                    secureTextEntry
-                  />
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
+                      paddingHorizontal: 10,
+                      borderWidth: 1,
+                      borderColor: '#E3E3E3',
+                      borderRadius: 4,
+                      marginBottom:
+                        formikProps.touched.register_confirmPw &&
+                        formikProps.errors.register_confirmPw
+                          ? 5
+                          : 0,
+                      height: 50,
+                    }}>
+                    <TextInput
+                      ref={passwordCfmRef}
+                      placeholder="비밀번호를 재입력해주세요."
+                      placeholderTextColor="#A2A2A2"
+                      style={[styles.normalText, {width: '90%'}]}
+                      onChangeText={formikProps.handleChange(
+                        'register_confirmPw',
+                      )}
+                      autoCapitalize="none"
+                      onBlur={formikProps.handleBlur('register_confirmPw')}
+                      secureTextEntry={pwdReEyes}
+                      onSubmitEditing={() => nameRef.current.focus()}
+                    />
+                    <TouchableOpacity
+                      activeOpacity={0.8}
+                      onPress={togglePwdReEyes}>
+                      <Image
+                        source={
+                          pwdReEyes
+                            ? require('../../../src/assets/icon_eye.png')
+                            : require('../../../src/assets/icon_eye_on.png')
+                        }
+                        resizeMode="center"
+                        style={{width: 35, height: 20}}
+                      />
+                    </TouchableOpacity>
+                  </View>
                   {formikProps.touched.register_confirmPw &&
                     formikProps.errors.register_confirmPw && (
                       <Text
@@ -815,6 +1073,7 @@ const Register = (props) => {
                     성함
                   </Text>
                   <TextInput
+                    ref={nameRef}
                     placeholder="성함을 입력해주세요."
                     placeholderTextColor="#A2A2A2"
                     style={[
@@ -836,6 +1095,7 @@ const Register = (props) => {
                     }}
                     onBlur={formikProps.handleBlur('register_name')}
                     autoCapitalize="none"
+                    onSubmitEditing={() => mobileRef.current.focus()}
                   />
                   {formikProps.touched.register_name &&
                     formikProps.errors.register_name && (
@@ -865,14 +1125,10 @@ const Register = (props) => {
                       flexDirection: 'row',
                       justifyContent: 'flex-start',
                       alignItems: 'center',
-                      marginBottom:
-                        formikProps.touched.register_mobile &&
-                        formikProps.errors.register_mobile &&
-                        !formikProps.values.register_mobile
-                          ? 0
-                          : 5,
+                      marginBottom: 5,
                     }}>
                     <TextInput
+                      ref={mobileRef}
                       placeholder="휴대전화번호를 - 빼고 입력해주세요."
                       placeholderTextColor="#A2A2A2"
                       onChangeText={(text) => setMobileNo(text)}
@@ -895,6 +1151,10 @@ const Register = (props) => {
                       editable={!isSend ? true : false}
                       keyboardType="number-pad"
                       autoCapitalize="none"
+                      onSubmitEditing={() => {
+                        authenticateSMS(formikProps.values.register_mobile);
+                        setMobileNo(formikProps.values.register_mobile);
+                      }}
                     />
                     {!reSend ? (
                       <TouchableOpacity
@@ -976,14 +1236,10 @@ const Register = (props) => {
                       flexDirection: 'row',
                       justifyContent: 'flex-start',
                       alignItems: 'center',
-                      marginBottom:
-                        formikProps.touched.register_confirmMobile &&
-                        formikProps.errors.register_confirmMobile
-                          ? 0
-                          : 5,
+                      marginBottom: 5,
                     }}>
                     <TextInput
-                      value=""
+                      ref={mobileCfmRef}
                       placeholder="인증번호를 입력해주세요."
                       placeholderTextColor="#A2A2A2"
                       style={[
@@ -1014,6 +1270,9 @@ const Register = (props) => {
                       keyboardType="number-pad"
                       autoCapitalize="none"
                       editable={isMobileConfimed ? false : true}
+                      onSubmitEditing={() =>
+                        confirmMobile(formikProps.values.register_confirmMobile)
+                      }
                     />
                     <TouchableOpacity
                       activeOpacity={0.8}
@@ -1063,6 +1322,7 @@ const Register = (props) => {
                     상호명
                   </Text>
                   <TextInput
+                    ref={companyRef}
                     placeholder="상호명을 입력해주세요."
                     placeholderTextColor="#A2A2A2"
                     style={[
@@ -1139,7 +1399,7 @@ const Register = (props) => {
                       editable={false}
                     />
                     <TouchableOpacity
-                      onPress={filePicker}
+                      onPress={filePicker01}
                       activeOpacity={0.8}
                       style={{
                         justifyContent: 'center',
@@ -1158,12 +1418,19 @@ const Register = (props) => {
                       </Text>
                     </TouchableOpacity>
                   </View>
+                  <View>
+                    <Image
+                      source={{uri: `${fileUrlCurrent}`}}
+                      resizeMode="contain"
+                      style={{width: 100}}
+                    />
+                  </View>
                   <Text
                     style={[
                       styles.normalText,
                       {color: '#B5B5B5', fontSize: 12},
                     ]}>
-                    * 이미지 파일만 첨부 가능합니다.
+                    * 이미지이나 pdf파일 등 첨부 가능합니다.
                   </Text>
                 </View>
                 {/* // 사업자 등록증  */}
@@ -1171,44 +1438,6 @@ const Register = (props) => {
                 {/* 위치  */}
                 <View style={{marginBottom: 25}}>
                   <Text style={styles.profileTitle}>위치 (지역)</Text>
-                  {/* <View
-                    style={{
-                      borderWidth: 1,
-                      borderColor: '#E3E3E3',
-                      borderTopRightRadius: 4,
-                      borderTopLeftRadius: 4,
-                      borderBottomRightRadius: isActiveToggleRegion ? 0 : 4,
-                      borderBottomLeftRadius: isActiveToggleRegion ? 0 : 4,
-                      backgroundColor: '#fff',
-                      width: '49%',
-                    }}>
-                    <TouchableOpacity
-                      onPress={toggleRegion}
-                      activeOpacity={0.8}
-                      style={{
-                        flexDirection: 'row',
-                        justifyContent: 'space-between',
-                        alignItems: 'center',
-                        height: 50,
-                        paddingHorizontal: 10,
-                      }}>
-                      <Text style={{fontFamily: 'SCDream4'}}>{region}</Text>
-                      {isActiveToggleRegion ? (
-                        <Image
-                          source={require('../../../src/assets/arr01_top.png')}
-                          resizeMode="contain"
-                          style={{width: 20, height: 20}}
-                        />
-                      ) : (
-                        <Image
-                          source={require('../../../src/assets/arr01.png')}
-                          resizeMode="contain"
-                          style={{width: 20, height: 20}}
-                        />
-                      )}
-                    </TouchableOpacity>
-                  </View> */}
-
                   <View
                     style={{
                       flexDirection: 'row',
@@ -1240,15 +1469,6 @@ const Register = (props) => {
                             : '#E3E3E3',
                           borderRadius: 4,
                         }}>
-                        {/* <Image
-                          source={
-                            region.find((re) => re === r)
-                              ? require('../../../src/assets/radio_on.png')
-                              : require('../../../src/assets/radio_off.png')
-                          }
-                          resizeMode="contain"
-                          style={{width: 20, height: 20, marginRight: 5}}
-                        /> */}
                         <Text
                           style={[
                             styles.normalText,
@@ -1341,45 +1561,92 @@ const Register = (props) => {
                       marginBottom: 5,
                     }}>
                     <Text style={[styles.profileTitle]}>제작물 카테고리</Text>
-                    <TouchableOpacity
-                      onPress={addMore}
-                      activeOpacity={0.8}
+                    <View
                       style={{
-                        backgroundColor: '#fff',
-                        paddingHorizontal: 10,
-                        paddingVertical: 3,
-                        borderWidth: 1,
-                        borderColor: '#E3E3E3',
-                        borderRadius: 3,
+                        flexDirection: 'row',
+                        justifyContent: 'center',
+                        alignItems: 'center',
                       }}>
-                      <View
+                      <TouchableOpacity
+                        onPress={addCategory}
+                        activeOpacity={0.8}
                         style={{
-                          flexDirection: 'row',
-                          justifyContent: 'center',
-                          alignItems: 'center',
+                          backgroundColor: '#fff',
+                          paddingHorizontal: 10,
+                          paddingVertical: 2,
+                          borderWidth: 1,
+                          borderColor: '#E3E3E3',
+                          borderRadius: 3,
+                          marginRight: 10,
                         }}>
-                        <Text
+                        <View
                           style={{
-                            fontFamily: 'SCDream5',
-                            fontSize: 20,
-                            color: '#00A170',
-                            marginRight: 5,
+                            flexDirection: 'row',
+                            justifyContent: 'center',
+                            alignItems: 'center',
                           }}>
-                          +
-                        </Text>
-                        <Text
+                          <Text
+                            style={{
+                              fontFamily: 'SCDream5',
+                              fontSize: 20,
+                              color: '#00A170',
+                              marginRight: 5,
+                            }}>
+                            +
+                          </Text>
+                          <Text
+                            style={{
+                              fontFamily: 'SCDream4',
+                              fontSize: 12,
+                              color: '#B5B5B5',
+                            }}>
+                            추가
+                          </Text>
+                        </View>
+                      </TouchableOpacity>
+                      <TouchableOpacity
+                        onPress={removeCategory}
+                        activeOpacity={0.8}
+                        style={{
+                          backgroundColor: '#fff',
+                          paddingHorizontal: 10,
+                          paddingVertical: 2,
+                          borderWidth: 1,
+                          borderColor: '#E3E3E3',
+                          borderRadius: 3,
+                        }}>
+                        <View
                           style={{
-                            fontFamily: 'SCDream4',
-                            fontSize: 12,
-                            color: '#B5B5B5',
+                            flexDirection: 'row',
+                            justifyContent: 'center',
+                            alignItems: 'center',
                           }}>
-                          추가하기
-                        </Text>
-                      </View>
-                    </TouchableOpacity>
+                          <Text
+                            style={{
+                              fontFamily: 'SCDream5',
+                              fontSize: 20,
+                              color: '#00A170',
+                              marginRight: 5,
+                            }}>
+                            -
+                          </Text>
+                          <Text
+                            style={{
+                              fontFamily: 'SCDream4',
+                              fontSize: 12,
+                              color: '#B5B5B5',
+                            }}>
+                            제거
+                          </Text>
+                        </View>
+                      </TouchableOpacity>
+                    </View>
                   </View>
                   {/* RegCates */}
-                  <RegCates />
+                  {categories.map((c) => (
+                    <RegCates key={c} />
+                  ))}
+
                   {/* // RegCates */}
                 </View>
 
@@ -1391,10 +1658,11 @@ const Register = (props) => {
                     계좌정보
                   </Text>
                   <TextInput
-                    value={bank}
+                    ref={bankNameRef}
                     placeholder="은행명을 입력해주세요."
                     placeholderTextColor="#A2A2A2"
-                    onChangeText={(text) => setBank(text)}
+                    onChangeText={formikProps.handleChange('register_bankName')}
+                    onBlur={formikProps.handleBlur('register_bankName')}
                     style={[
                       styles.normalText,
                       {
@@ -1405,12 +1673,31 @@ const Register = (props) => {
                         marginBottom: 5,
                       },
                     ]}
+                    onSubmitEditing={() => bankAccountRef.current.focus()}
                   />
+                  {formikProps.touched.register_bankName &&
+                    formikProps.errors.register_bankName && (
+                      <Text
+                        style={{
+                          width: '100%',
+                          fontFamily: 'SCDream4',
+                          fontSize: 12,
+                          lineHeight: 18,
+                          color: '#00A170',
+                          marginBottom: 10,
+                        }}>
+                        {formikProps.touched.register_bankName &&
+                          formikProps.errors.register_bankName}
+                      </Text>
+                    )}
                   <TextInput
-                    value={bankAccount}
+                    ref={bankAccountRef}
                     placeholder="계좌번호를 - 빼고 입력해주세요."
                     placeholderTextColor="#A2A2A2"
-                    onChangeText={(text) => setBankAccount(text)}
+                    onChangeText={formikProps.handleChange(
+                      'register_bankAccount',
+                    )}
+                    onBlur={formikProps.handleBlur('register_bankAccount')}
                     keyboardType="number-pad"
                     style={[
                       styles.normalText,
@@ -1422,12 +1709,31 @@ const Register = (props) => {
                         marginBottom: 5,
                       },
                     ]}
+                    onSubmitEditing={() => bankDepoRef.current.focus()}
                   />
+                  {formikProps.touched.register_bankAccount &&
+                    formikProps.errors.register_bankAccount && (
+                      <Text
+                        style={{
+                          width: '100%',
+                          fontFamily: 'SCDream4',
+                          fontSize: 12,
+                          lineHeight: 18,
+                          color: '#00A170',
+                          marginBottom: 10,
+                        }}>
+                        {formikProps.touched.register_bankAccount &&
+                          formikProps.errors.register_bankAccount}
+                      </Text>
+                    )}
                   <TextInput
-                    value={depositor}
+                    ref={bankDepoRef}
                     placeholder="예금주를 입력해주세요."
                     placeholderTextColor="#A2A2A2"
-                    onChangeText={(text) => setDepositor(text)}
+                    onChangeText={formikProps.handleChange(
+                      'register_bankDepositor',
+                    )}
+                    onBlur={formikProps.handleBlur('register_bankDepositor')}
                     style={{
                       fontFamily: 'SCDream4',
                       borderWidth: 1,
@@ -1437,10 +1743,26 @@ const Register = (props) => {
                       marginBottom: 5,
                     }}
                   />
+                  {formikProps.touched.register_bankDepositor &&
+                    formikProps.errors.register_bankDepositor && (
+                      <Text
+                        style={{
+                          width: '100%',
+                          fontFamily: 'SCDream4',
+                          fontSize: 12,
+                          lineHeight: 18,
+                          color: '#00A170',
+                          marginBottom: 5,
+                        }}>
+                        {formikProps.touched.register_bankDepositor &&
+                          formikProps.errors.register_bankDepositor}
+                      </Text>
+                    )}
                 </View>
                 {/* // 계좌정보  */}
 
                 {/* 회사 소개서 */}
+                {/* 
                 <View style={{marginBottom: 25}}>
                   <Text style={[styles.profileTitle, {marginBottom: 10}]}>
                     회사 소개서
@@ -1453,7 +1775,13 @@ const Register = (props) => {
                       marginBottom: 5,
                     }}>
                     <TextInput
-                      value=""
+                      value={
+                        fileNameCurrent02
+                          ? `${fileNameCurrent02}.${
+                              extension === 'jpeg' ? 'jpg' : extension
+                            }`
+                          : null
+                      }
                       placeholder="회사 소개서를 첨부해주세요."
                       placeholderTextColor="#A2A2A2"
                       style={{
@@ -1468,6 +1796,7 @@ const Register = (props) => {
                       editable={false}
                     />
                     <TouchableOpacity
+                      onPress={filePicker02}
                       activeOpacity={0.8}
                       style={{
                         justifyContent: 'center',
@@ -1523,32 +1852,14 @@ const Register = (props) => {
                       </Text>
                     </View>
                   </View>
-                  {/* <TouchableOpacity
-              activeOpacity={0.8}
-              onPress={() => Alert.alert('다운로드')}>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  justifyContent: 'flex-start',
-                  alignItems: 'baseline',
-                  marginTop: 10,
-                  marginBottom: 5,
-                }}>
-                <Image
-                  source={require('../../../src/assets/icon_down.png')}
-                  resizeMode="contain"
-                  style={{width: 20, height: 20, marginRight: 5}}
-                />
-                <Text style={styles.normalText}>회사소개서.jpg</Text>
-              </View>
-            </TouchableOpacity> */}
-                </View>
+                </View> */}
+
                 {/* // 회사 소개서 */}
               </View>
 
               <View style={{paddingHorizontal: 20, marginBottom: 50}}>
                 <TouchableOpacity
-                  onPress={() => navigation.navigate('Signed')}
+                  onPress={() => formikProps.handleSubmit()}
                   activeOpacity={0.8}>
                   <View style={[styles.submitBtn, {marginBottom: 10}]}>
                     <Text style={styles.submitBtnText}>회원가입</Text>

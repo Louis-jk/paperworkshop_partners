@@ -11,4 +11,34 @@ export default {
       },
     });
   },
+  onEmailCheck(mb_id) {
+    return Send({
+      method: 'post',
+      data: qs.stringify({
+        method: 'proc_duplicate_id',
+        mb_id,
+      }),
+    });
+  },
+  onMobileConfirm(mb_hp) {
+    return Send({
+      method: 'post',
+      data: qs.stringify({
+        method: 'proc_cert_mb_hp',
+        mb_hp,
+        mb_level: '4',
+      }),
+    });
+  },
+  onMobileConfirmNo(mb_hp, cert_num, rt_yn) {
+    return Send({
+      method: 'post',
+      data: qs.stringify({
+        method: 'proc_cert_confirm',
+        mb_hp,
+        cert_num,
+        rt_yn,
+      }),
+    });
+  },
 };
