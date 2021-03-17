@@ -334,11 +334,14 @@ const Register = (props) => {
     }
   };
 
-  const [categories, setCategories] = React.useState([1]);
-
+  const [categories, setCategories] = React.useState(['category']);
+  const [categories_item, setCategories_item] = React.useState([
+    {key: 0, cate: '', ca_id: ''},
+  ]);
+  console.log('categories_item : ', categories_item);
   const addCategory = () => {
     if (categories.length < 10) {
-      setCategories((prev) => [...prev, prev + 1]);
+      setCategories((prev) => [...prev, 'category']);
     } else {
       Alert.alert('카테고리는 10개까지만 지정하실 수 있습니다.', '', [
         {
@@ -351,7 +354,19 @@ const Register = (props) => {
   console.log('categories', categories);
 
   const removeCategory = () => {
-    setCategories((prev) => [...prev, categories.pop()]);
+    if (categories.length === 1) {
+      Alert.alert('카테고리는 1개이상 지정하셔야합니다.', '', [
+        {
+          text: '확인',
+        },
+      ]);
+    } else {
+      console.log('categories remove before', categories);
+      let index = categories.lastIndexOf('category');
+      categories.splice(index, 1);
+      setCategories(categories);
+      console.log('categories remove after', categories);
+    }
   };
 
   // const categoryRef = React.useRef(null);
@@ -1643,9 +1658,12 @@ const Register = (props) => {
                     </View>
                   </View>
                   {/* RegCates */}
-                  {categories.map((c) => (
-                    <RegCates key={c} />
-                  ))}
+
+                  <RegCates
+                    categories={categories}
+                    setCategories_item={setCategories_item}
+                    categories_item={categories_item}
+                  />
 
                   {/* // RegCates */}
                 </View>

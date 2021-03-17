@@ -7,6 +7,7 @@ import messaging from '@react-native-firebase/messaging';
 
 import DrawerNavigator from './navigation/DrawerNavigator';
 import {useDispatch, useSelector} from 'react-redux';
+import Toast from 'react-native-simple-toast';
 import {setFcmToken} from './Modules/InfoReducer';
 
 // import MainScreen from './Screens/Main';
@@ -39,9 +40,19 @@ const App = () => {
         ]),
       );
 
-    messaging().onMessage(async (remoteMessage) => {
-      Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
-      // console.log(remoteMessage);
+    // messaging().onMessage(async (remoteMessage) => {
+    //   Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
+    //   console.log(remoteMessage);
+    // });
+
+    messaging().onMessage((remoteMessage) => {
+      console.log('remoteMessage', remoteMessage);
+      Toast.showWithGravity(
+        `${remoteMessage.data.message}`,
+        Toast.LONG,
+        Toast.TOP,
+        [' UIAlertController '],
+      );
     });
   }, []);
 

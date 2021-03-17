@@ -10,12 +10,12 @@ import {
   Image,
   TouchableOpacity,
   FlatList,
+  ActivityIndicator,
 } from 'react-native';
-
-// import RNPickerSelect from 'react-native-picker-select';
-import {Picker} from '@react-native-community/picker';
+import {useSelector} from 'react-redux';
 
 import Header from '../Common/Header';
+import Estimate from '../../src/api/Estimate';
 
 const index = (props) => {
   const navigation = props.navigation;
@@ -23,9 +23,49 @@ const index = (props) => {
 
   console.log('Main props :', props);
 
+  const [isLoading, setIsLoading] = React.useState(false);
+  const [list, setList] = React.useState([]);
+
+  // 파트너스회원 email(Unique Key)
+  const {mb_email} = useSelector((state) => state.UserInfoReducer);
+
+  const getEstimateSendAPI = () => {
+    setIsLoading(true);
+    Estimate.getEstimateSend('test01@test.com')
+      .then((res) => {
+        if (res.data.result === '1' && res.data.count > 0) {
+          setList(res.data.item);
+          setIsLoading(false);
+        } else if (res.data.result === '1' && res.data.count == 0) {
+          setList(res.data.item);
+          setIsLoading(false);
+        } else {
+          Alert.alert(res.data.message, '', [
+            {
+              text: '확인',
+            },
+          ]);
+          setIsLoading(false);
+        }
+      })
+      .catch((err) => {
+        Alert.alert('문제가 있습니다.', err, [
+          {
+            text: '확인',
+          },
+        ]);
+        setIsLoading(false);
+      });
+  };
+
+  React.useEffect(() => {
+    getEstimateSendAPI();
+  }, []);
+
   const [category01, setCategory01] = React.useState(null);
 
   console.log('category01 : ', category01);
+  console.log('list!!!!!!!!!!! : ', list);
 
   const printTypes = ['패키지', '일반인쇄', '기타인쇄'];
   const [printType, setPrintType] = React.useState('패키지');
@@ -151,27 +191,26 @@ const index = (props) => {
         <View style={{paddingHorizontal: 20}}>
           <TouchableOpacity
             onPress={() => {
-              item.status === '입찰중'
-                ? navigation.navigate('OrderStep')
-                : item.status === '파트너 선정' && item.order === false
+              item.status === '0' || item.company_id === mb_email
+                ? navigation.navigate('OrderStep', {
+                    screen: 'OrderStep',
+                    params: {pe_id: item.pe_id},
+                  })
+                : item.status === '1'
                 ? navigation.navigate('OrderEdit', {
                     screen: 'OrderEdit',
                     params: {
                       status: 'choiceWait',
                     },
                   })
-                : item.status === '파트너 선정' &&
-                  item.order === true &&
-                  item.pay === false
+                : item.status === '2'
                 ? navigation.navigate('OrderEdit', {
                     screen: 'OrderEdit',
                     params: {
                       status: 'payWait',
                     },
                   })
-                : item.status === '파트너 선정' &&
-                  item.order === true &&
-                  item.pay === true
+                : item.status === '3'
                 ? navigation.navigate('OrderEdit', {
                     screen: 'OrderEdit',
                     params: {
@@ -188,53 +227,64 @@ const index = (props) => {
                 alignItems: 'center',
               }}>
               <View style={styles.listWrap}>
-                {item.status !== '입찰중' &&
-                item.status === '파트너 선정' &&
-                item.order === false ? (
+                {item.company_id === mb_email ? (
+                  <View style={styles.listStep02Badge}>
+                    <Text style={styles.listStep02BadgeText}>
+                      사용자로부터 직접 견적요청
+                    </Text>
+                  </View>
+                ) : item.status === '1' ? (
                   <View style={styles.listStep02Badge}>
                     <Text style={styles.listStep02BadgeText}>
                       견적 확정 대기
                     </Text>
                   </View>
-                ) : item.status !== '입찰중' &&
-                  item.status === '파트너 선정' &&
-                  item.order === true &&
-                  item.pay === false ? (
+                ) : item.status === '2' ? (
                   <View style={styles.listStep02Badge}>
                     <Text style={styles.listStep02BadgeText}>
                       계약금 입금 대기
                     </Text>
                   </View>
-                ) : (item.status !== '입찰중' &&
-                    item.status === '파트너 선정') ||
-                  (item.status === '마감' &&
-                    item.order === true &&
-                    item.pay === true) ? (
+                ) : item.status === '3' ? (
                   <View style={styles.listStep03Badge}>
                     <Text style={styles.listStep03BadgeText}>
                       계약금 입금 완료
                     </Text>
                   </View>
                 ) : null}
-                <Text style={styles.listTitle}>
-                  [인쇄+디자인] 중소기업 박람회 리플렛 제...
-                </Text>
-                <Text style={styles.listDesc}>
-                  칼라 박스 - B형 십자 (경기/김성규)
-                </Text>
+                <Text style={styles.listTitle}>{item.title}</Text>
+                <Text style={styles.listDesc}>{item.ca_name}</Text>
               </View>
               <View>
                 <Text
                   style={
-                    item.status === '입찰중'
+                    item.status === '1'
                       ? styles.listStep
-                      : item.status === '파트너 선정'
+                      : item.status === '2'
                       ? styles.listStep02
                       : {fontFamily: 'SCDream4', color: '#000'}
                   }>
-                  {item.status}
+                  {item.company_id !== mb_email
+                    ? item.status === '1'
+                      ? '견적발송'
+                      : item.status === '2'
+                      ? '파트너스최종선정(견적확정대기)'
+                      : item.status === '3'
+                      ? '파트너스최종선정(계약금입금대기)'
+                      : item.status === '4'
+                      ? '파트너스최종선정(계약금입금완료)'
+                      : item.status === '5'
+                      ? '입금제작요청'
+                      : item.status === '6'
+                      ? '납품완료'
+                      : item.status === '7'
+                      ? '수령완료'
+                      : item.status === '8'
+                      ? '마감'
+                      : null
+                    : '직접요청'}
                 </Text>
-                <Text style={styles.listDday02}>{item.dDay}</Text>
+                <Text style={styles.listDday02}>{item.dday}</Text>
               </View>
             </View>
           </TouchableOpacity>
@@ -244,9 +294,81 @@ const index = (props) => {
     );
   };
 
+  // const renderRow = ({item, idx}) => {
+  //   return (
+  //     <>
+  //       <View style={{paddingHorizontal: 20}} key={idx}>
+  //         <TouchableOpacity
+  //           onPress={() =>
+  //             navigation.navigate('OrderStep', {
+  //               screen: 'OrderStep',
+  //               params: {pe_id: item.pe_id},
+  //             })
+  //           }
+  //           activeOpacity={0.8}
+  //           style={{zIndex: -1}}>
+  //           <View
+  //             style={{
+  //               flexDirection: 'row',
+  //               justifyContent: 'space-between',
+  //               alignItems: 'center',
+  //             }}>
+  //             <View style={styles.listWrap}>
+  //               <Text style={styles.listTitle}>{item.title}</Text>
+  //               <Text style={styles.listDesc}>{item.ca_name}</Text>
+  //             </View>
+  //             <View>
+  //               <Text style={styles.listStep}>
+  //                 {item.status === '0'
+  //                   ? '입찰중'
+  //                   : item.status === '1'
+  //                   ? '파트너스최종선정(견적확정대기)'
+  //                   : item.status === '2'
+  //                   ? '파트너스최종선정(계약금입금대기)'
+  //                   : item.status === '3'
+  //                   ? '파트너스최종선정(계약금입금완료)'
+  //                   : item.status === '4'
+  //                   ? '입금제작요청'
+  //                   : item.status === '5'
+  //                   ? '납품완료'
+  //                   : item.status === '6'
+  //                   ? '수령완료'
+  //                   : item.status === '7'
+  //                   ? '마감'
+  //                   : null}
+  //               </Text>
+  //               <Text style={styles.listDday}>{item.dday}</Text>
+  //             </View>
+  //           </View>
+  //         </TouchableOpacity>
+  //       </View>
+  //       <View style={styles.line} />
+  //     </>
+  //   );
+  // };
+
   return (
     <>
       <Header title={routeName} navigation={navigation} />
+      {isLoading && (
+        <View
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            bottom: 0,
+            right: 0,
+            flex: 1,
+            height: Dimensions.get('window').height,
+            justifyContent: 'center',
+            alignItems: 'center',
+            zIndex: 100,
+            elevation: 0,
+            backgroundColor: 'rgba(255,255,255,0.5)',
+          }}>
+          <ActivityIndicator size="large" color="#00A170" />
+        </View>
+      )}
       <View style={styles.container}>
         {/* 카테고리 선택 및 검색 부분 */}
         <View
@@ -443,12 +565,12 @@ const index = (props) => {
         {/* 리스트 출력 부분 */}
 
         <FlatList
-          data={orders}
+          data={list}
           renderItem={renderRow}
           keyExtractor={(list, index) => index.toString()}
           persistentScrollbar={true}
           showsVerticalScrollIndicator={false}
-          style={{marginBottom: 200}}
+          style={{marginBottom: 120}}
           // onEndReached={handleLoadMore}
         />
 
@@ -607,6 +729,7 @@ const index = (props) => {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: '#fff',
+    height: Dimensions.get('window').height,
   },
   picker: {
     width: 180,
@@ -630,6 +753,7 @@ const styles = StyleSheet.create({
     fontFamily: 'SCDream4',
     fontSize: 14,
     color: '#00A170',
+    marginBottom: 5,
   },
   listDday: {
     fontFamily: 'SCDream4',
@@ -645,7 +769,8 @@ const styles = StyleSheet.create({
   listStep02: {
     fontFamily: 'SCDream4',
     fontSize: 14,
-    color: '#275696',
+    color: '#00A170',
+    marginBottom: 5,
   },
   listDday02: {
     fontFamily: 'SCDream4',

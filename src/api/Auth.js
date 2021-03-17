@@ -41,4 +41,16 @@ export default {
       }),
     });
   },
+  onLogin(mb_id, mb_password, mb_3, mb_4) {
+    return Send({
+      method: 'post',
+      data: qs.stringify({
+        method: 'proc_login_partner',
+        mb_id,
+        mb_password,
+        mb_3,
+        mb_4,
+      }),
+    });
+  },
 };

@@ -9,13 +9,19 @@ import {
   Dimensions,
   Image,
   TouchableOpacity,
+  ActivityIndicator,
 } from 'react-native';
-import {Picker} from '@react-native-community/picker';
+
 import DetailHeader from '../Common/DetailHeader';
+import Estimate from '../../src/api/Estimate';
 
 const index = (props) => {
   const navigation = props.navigation;
   const routeName = props.route.name;
+  const pe_id = props.route.params.pe_id;
+
+  console.log('detail props', props);
+  console.log('detail pe_id', pe_id);
 
   const payPerType = ['10%', '20%', '30%', '40%', '50%'];
   const [payPer, setPayPer] = React.useState(payPerType[0]);
@@ -23,30 +29,111 @@ const index = (props) => {
   const togglePayPer = () => {
     setIsActiveTogglePayPer(!isActiveTogglePayPer);
   };
+  const [isLoading, setIsLoading] = React.useState(false);
+  const [detail, setDetail] = React.useState([]);
+
+  const getEstimateDetailAPI = () => {
+    setIsLoading(true);
+    Estimate.getDetail(pe_id)
+      .then((res) => {
+        if (res.data.result === '1' && res.data.count > 0) {
+          console.log(res);
+          setDetail(res.data.item[0]);
+          setIsLoading(false);
+        } else if (res.data.result === '1' && res.data.count == 0) {
+          setList(res.data.item);
+          setIsLoading(false);
+        } else {
+          Alert.alert(res.data.message, '', [
+            {
+              text: '확인',
+            },
+          ]);
+          setIsLoading(false);
+        }
+      })
+      .catch((err) => {
+        Alert.alert('문제가 있습니다.', err, [
+          {
+            text: '확인',
+          },
+        ]);
+        setIsLoading(false);
+      });
+  };
+
+  React.useEffect(() => {
+    getEstimateDetailAPI();
+  }, []);
 
   return (
     <>
       <DetailHeader title={routeName} navigation={navigation} />
+      {isLoading && (
+        <View
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            bottom: 0,
+            right: 0,
+            flex: 1,
+            height: Dimensions.get('window').height,
+            justifyContent: 'center',
+            alignItems: 'center',
+            zIndex: 100,
+            elevation: 0,
+            backgroundColor: 'rgba(255,255,255,0.5)',
+          }}>
+          <ActivityIndicator size="large" color="#00A170" />
+        </View>
+      )}
       <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
         <View style={styles.wrap}>
           <View style={styles.infoBox}>
-            <Text style={styles.infoStepDesc}>입찰중</Text>
-            <Text style={styles.infoStepTitle}>
-              중소기업 선물용 쇼핑백 제작 요청합니다.
+            <Text style={styles.infoStepDesc}>
+              {detail.status === '1'
+                ? '입찰중'
+                : detail.status === '2'
+                ? '파트너스최종선정(견적확정대기)'
+                : detail.status === '3'
+                ? '파트너스최종선정(계약금입금대기)'
+                : detail.status === '4'
+                ? '파트너스최종선정(계약금입금완료)'
+                : detail.status === '5'
+                ? '입금제작요청'
+                : detail.status === '6'
+                ? '납품완료'
+                : detail.status === '7'
+                ? '수령완료'
+                : detail.status === '8'
+                ? '마감'
+                : null}
             </Text>
+            <Text style={styles.infoStepTitle}>{detail.title}</Text>
             <View style={styles.line} />
             <View style={styles.details}>
               <Text style={styles.detailsTitle}>분류</Text>
-              <Text style={styles.detailsDesc}>단상자/선물세트/쇼핑백</Text>
+              <Text style={styles.detailsDesc}>{detail.ca_name}</Text>
             </View>
             <View style={styles.details}>
               <Text style={styles.detailsTitle}>견적 마감일</Text>
-              <Text style={styles.detailsDesc}>2020.11.01</Text>
+              <Text style={styles.detailsDesc}>{detail.estimate_date}</Text>
+            </View>
+            <View style={styles.details}>
+              <Text style={styles.detailsTitle}>납품 희망일</Text>
+              <Text style={styles.detailsDesc}>{detail.delivery_date}</Text>
             </View>
             <View style={styles.detailsEnd}>
               <View style={styles.detailsEnd}>
-                <Text style={styles.detailsTitle}>납품 희망일</Text>
-                <Text style={styles.detailsDesc}>2020.12.01</Text>
+                <Text style={styles.detailsTitle}>디자인 의뢰</Text>
+                <Text style={styles.detailsDesc}>
+                  {detail.design_print === 'P'
+                    ? '인쇄만 의뢰'
+                    : detail.design_print === 'D'
+                    ? '인쇄 + 디자인의뢰'
+                    : null}
+                </Text>
               </View>
               {/* <TouchableOpacity
                 activeOpacity={0.8}

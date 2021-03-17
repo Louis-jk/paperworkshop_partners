@@ -2,6 +2,10 @@ import * as React from 'react';
 import {View, Text, TouchableOpacity, Image} from 'react-native';
 
 const RegCates = (props) => {
+  console.log('props', props);
+  const categories = props.categories;
+  const {categories_item} = props;
+  const {setCategories_item} = props;
   const printTypes = ['패키지', '일반인쇄', '기타인쇄'];
   const [printType, setPrintType] = React.useState('패키지');
   const [isActiveTogglePrintType, setIsActiveTogglePrintType] = React.useState(
@@ -37,8 +41,39 @@ const RegCates = (props) => {
 
   const categoryRef = React.useRef(null);
 
-  return (
+  React.useEffect(() => {}, [categories]);
+  const setCategories_item_handle = (key, item) => {
+    const filter = categories_item.filter((item, idx) => {
+      return idx === key;
+    });
+    console.log(filter);
+    console.log(key);
+    if (filter.length !== 0) {
+      console.log('여기로 들어오나 ?');
+      setCategories_item(
+        categories_item.map((element, idx) => {
+          if (idx === key) {
+            return {
+              key: key,
+              cate: item,
+            };
+          }
+        }),
+      );
+    } else {
+      setCategories_item([
+        ...categories_item,
+        {
+          key: key,
+          cate: item,
+          ca_id: '',
+        },
+      ]);
+    }
+  };
+  return categories.map((c, idx) => (
     <View
+      key={idx}
       ref={categoryRef}
       style={{
         flexDirection: 'row',
@@ -99,9 +134,9 @@ const RegCates = (props) => {
               borderBottomLeftRadius: 5,
               zIndex: 100,
             }}>
-            {printTypes.map((v, idx) => (
+            {printTypes.map((v, idx_key) => (
               <TouchableOpacity
-                key={idx}
+                key={idx_key}
                 style={{
                   paddingVertical: 7,
                   backgroundColor: '#fff',
@@ -113,6 +148,7 @@ const RegCates = (props) => {
                   setPrintType(v);
                   setIsActiveTogglePrintType(false);
                   setIsActiveToggleDetail(false);
+                  setCategories_item_handle(idx, v);
                 }}>
                 <Text style={{fontFamily: 'SCDream4'}}>{v}</Text>
               </TouchableOpacity>
@@ -241,7 +277,7 @@ const RegCates = (props) => {
         )}
       </View>
     </View>
-  );
+  ));
 };
 
 export default RegCates;

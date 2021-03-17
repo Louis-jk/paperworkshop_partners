@@ -1,33 +1,62 @@
 {
   "project_info": {
-    "project_number": "267202544921",
-    "project_id": "paperworkshop-partners",
-    "storage_bucket": "paperworkshop-partners.appspot.com"
+    "project_number": "512027257209",
+    "project_id": "paperworkshop-7328d",
+    "storage_bucket": "paperworkshop-7328d.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:267202544921:android:25ed1b6e09d2dffc0af188",
+        "mobilesdk_app_id": "1:512027257209:android:64085d0b9900f6c1e6e7a8",
         "android_client_info": {
-          "package_name": "com.dmonster.paperworkshoppartners"
+          "package_name": "com.dmonster.paperworkshop"
         }
       },
       "oauth_client": [
         {
-          "client_id": "267202544921-b3es595nol10mqdv1rcpp930e6db1tot.apps.googleusercontent.com",
+          "client_id": "512027257209-o83borl6om72r886gb1qrf7ag6sh46ne.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAmsH_cerEpgOp2qdyMFTrYoBRdG6bPVyw"
+          "current_key": "AIzaSyAX9y6SNf3bLFLaLZOQN-O07Cj67qQRXLg"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "267202544921-b3es595nol10mqdv1rcpp930e6db1tot.apps.googleusercontent.com",
+              "client_id": "512027257209-o83borl6om72r886gb1qrf7ag6sh46ne.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:512027257209:android:d010c2f1554960afe6e7a8",
+        "android_client_info": {
+          "package_name": "com.dmonster.paperworkshoppartners"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "512027257209-o83borl6om72r886gb1qrf7ag6sh46ne.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAX9y6SNf3bLFLaLZOQN-O07Cj67qQRXLg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "512027257209-o83borl6om72r886gb1qrf7ag6sh46ne.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
