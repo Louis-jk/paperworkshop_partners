@@ -20,13 +20,11 @@ import {Formik} from 'formik';
 import * as yup from 'yup';
 import DocumentPicker from 'react-native-document-picker';
 
-// import RNPickerSelect from 'react-native-picker-select';
-import {Picker} from '@react-native-community/picker';
-
 import DetailHeader from '../../Common/DetailHeader';
 import RegCates from './RegCates';
 import Auth from '../../../src/api/Auth';
 import Timer from '../../Common/Timer';
+
 import {
   joinEmail,
   joinPwd,
@@ -42,6 +40,7 @@ import {
   joinBankAccount,
   joinBankDepositor,
 } from '../../../Modules/JoinReducer';
+import CategoryDetailWrap from './Components/CategoryDetailWrap';
 
 const Register = (props) => {
   const navigation = props.navigation;
@@ -49,16 +48,64 @@ const Register = (props) => {
 
   const dispatch = useDispatch();
 
-  const [category01, setCategory01] = React.useState(null);
-  const [category02, setCategory02] = React.useState(null);
+  const [isLoading, setIsLoading] = React.useState(false); // 로딩 유무
+  const [businessError, setBusinessError] = React.useState(false); // 사업자 등록증 첨부 유효성 체크
+  const [regionError, setRegionError] = React.useState(false); // 지역 지정 유효성 체크
+  const [categoryError, setCategoryError] = React.useState(false); // 카테고리 지정 유효성 체크
 
-  const [email, setEmail] = React.useState('');
-  const [name, setName] = React.useState('');
-  const [businessName, setBusinessName] = React.useState('');
-  const [mobileCert, setMobileCert] = React.useState(null);
-  const [bank, setBank] = React.useState('');
-  const [bankAccount, setBankAccount] = React.useState('');
-  const [depositor, setDepositor] = React.useState('');
+  const [cateId, setCateId] = React.useState('1'); // 탭 기능으로 해당 카테고리의 id 값
+  const [categoryList, setCategoryList] = React.useState([]); // 제작물 카테고리 각 카테고리별 세부 종목 리스트
+
+  const getCategoriesAPI = (cate1) => {
+    setIsLoading(true);
+    if (cate1) {
+      Auth.getCategory(cate1)
+        .then((res) => {
+          if (res.data.result === '1' && res.data.count > 0) {
+            setCategoryList(res.data.item);
+          } else {
+            Alert.alert(res.data.message, '', [
+              {
+                text: '확인',
+              },
+            ]);
+          }
+        })
+        .catch((err) => {
+          Alert.alert(err, '관리자에게 문의하세요.', [
+            {
+              text: '확인',
+            },
+          ]);
+        });
+    } else {
+      Auth.getCategory(cateId)
+        .then((res) => {
+          if (res.data.result === '1' && res.data.count > 0) {
+            setCategoryList(res.data.item);
+          } else {
+            Alert.alert(res.data.message, '', [
+              {
+                text: '확인',
+              },
+            ]);
+          }
+        })
+        .catch((err) => {
+          Alert.alert(err, '관리자에게 문의하세요.', [
+            {
+              text: '확인',
+            },
+          ]);
+        });
+    }
+  };
+
+  React.useEffect(() => {
+    getCategoriesAPI();
+  }, []);
+
+  console.log('categoryList', categoryList);
 
   const emailRef = React.useRef(null);
   const passwordRef = React.useRef(null);
@@ -126,6 +173,7 @@ const Register = (props) => {
               },
             ]);
             setCheckedId(true);
+            passwordRef.current.focus();
           } else {
             IdAlertMsg();
           }
@@ -216,7 +264,11 @@ const Register = (props) => {
           if (res.data.result == '1') {
             setMobileConfimed(false);
           } else {
-            Alert.alert('휴대전화번호를 올바르게 입력해주세요.');
+            Alert.alert(res.data.message, '', [
+              {
+                text: '확인',
+              },
+            ]);
           }
           console.log('휴대폰 인증 response', res);
         })
@@ -326,7 +378,11 @@ const Register = (props) => {
         setRegion((prev) => [...prev, v]);
         setCountRegion((prev) => prev + 1);
       } else {
-        Alert.alert('최대 5 지역까지 정하실 수 있습니다.');
+        Alert.alert('지역은 최대 5지역까지 정하실 수 있습니다.', '', [
+          {
+            text: '확인',
+          },
+        ]);
         return false;
       }
     } else {
@@ -334,45 +390,35 @@ const Register = (props) => {
     }
   };
 
-  const [categories, setCategories] = React.useState(['category']);
-  const [categories_item, setCategories_item] = React.useState([
-    {key: 0, cate: '', ca_id: ''},
-  ]);
-  console.log('categories_item : ', categories_item);
-  const addCategory = () => {
-    if (categories.length < 10) {
-      setCategories((prev) => [...prev, 'category']);
+  //  카테고리 선택 (최대 5개 까지)
+  const [cate1Arr, setCate1Arr] = React.useState([]); // 제작물 카테고리 대카테고리 지정시 배열형태 담을 값
+  const [caIdArr, setCaIdArr] = React.useState([]); // 제작물 카테고리 세부 종목 지정시 배열형태 담을 값
+  const [categoryArr, setCategoryArr] = React.useState([]); // 제작물 카테고리 대분류 id 세부 종목 id 한묶음씩 배열로 담기
+  const [countCategory, setCountCategory] = React.useState(0);
+
+  const setCategoryArrFuc = (d01, d02) => {
+    let result = categoryArr.find((x) => x.cate1 === d01 && x.ca_id === d02);
+
+    if (result) {
+      let newArr = categoryArr.filter((x) => x !== result);
+      console.log('newArr', newArr);
+      setCategoryArr(newArr);
+      setCountCategory((prev) => prev - 1);
+    } else if (countCategory < 5) {
+      setCategoryArr((prev) => [...prev, {cate1: d01, ca_id: d02}]);
+      setCountCategory((prev) => prev + 1);
     } else {
-      Alert.alert('카테고리는 10개까지만 지정하실 수 있습니다.', '', [
-        {
-          text: '확인',
-        },
-      ]);
+      Alert.alert(
+        '최대 5종목까지 정하실 수 있습니다.',
+        '대분류 포함하여 5개까지 추가 가능합니다.',
+        [
+          {
+            text: '확인',
+          },
+        ],
+      );
+      return false;
     }
-  };
-
-  console.log('categories', categories);
-
-  const removeCategory = () => {
-    if (categories.length === 1) {
-      Alert.alert('카테고리는 1개이상 지정하셔야합니다.', '', [
-        {
-          text: '확인',
-        },
-      ]);
-    } else {
-      console.log('categories remove before', categories);
-      let index = categories.lastIndexOf('category');
-      categories.splice(index, 1);
-      setCategories(categories);
-      console.log('categories remove after', categories);
-    }
-  };
-
-  // const categoryRef = React.useRef(null);
-  const cloneElement = () => {
-    const elementAssign = Object.assign({}, categoryRef.current);
-    console.log('elementAssign', elementAssign);
   };
 
   // 비밀번호 보이기 기능
@@ -468,11 +514,6 @@ const Register = (props) => {
   console.log('companyInfoFile', companyInfoFile);
 
   // 회원가입
-
-  const [licenseObj, setLicenseObj] = React.useState(null);
-  const [cate1Arr, setCate1Arr] = React.useState(null);
-  const [caIdArr, setCaIdArr] = React.useState(null);
-
   const beforeSignIn = (
     email,
     password,
@@ -485,6 +526,66 @@ const Register = (props) => {
     bankAccount,
     bankDepositor,
   ) => {
+    console.log('hey!!');
+    // if (
+    //   licenseFile === null ||
+    //   licenseFile === '' ||
+    //   licenseFile.length === 0
+    // ) {
+    //   Alert.alert('사업자 등록증을 첨부해주세요.');
+    //   setBusinessError(true);
+    // }
+    // if (region.length === 0 || countRegion < 1) {
+    //   Alert.alert('지역을 지정해주세요.');
+    //   setRegionError(true);
+    // }
+    // if (categoryArr.length === 0 || countCategory < 1) {
+    //   Alert.alert('카테고리를 지정해주세요.');
+    //   setCategoryError(true);
+    // } else {
+    //   categoryArr.map((c) => setCate1Arr(c.cate1));
+    //   categoryArr.map((c) => setCaIdArr(c.ca_id));
+
+    //   const frmData = new FormData();
+    //   frmData.append('method', 'proc_add_partner');
+    //   frmData.append('mb_id', email);
+    //   frmData.append('mb_password', password);
+    //   frmData.append('mb_password_re', passwordRe);
+    //   frmData.append('mb_name', name);
+    //   frmData.append('mb_hp', mobile);
+    //   frmData.append('mb_1', mobileCfm);
+    //   frmData.append('mb_2', company);
+    //   frmData.append('license[]', licenseFile);
+    //   frmData.append('location[]', region);
+    //   frmData.append('cate1[]', cate1Arr);
+    //   frmData.append('ca_id[]', caIdArr);
+    //   frmData.append('bank_name', bankName);
+    //   frmData.append('bank_account', bankAccount);
+    //   frmData.append('bank_depositor', bankDepositor);
+
+    //   console.log('frmData', frmData);
+    //   // signIn(frmData);
+
+    //   dispatch(joinEmail(email));
+    //   dispatch(joinPwd(password));
+    //   dispatch(joinName(name));
+    //   dispatch(joinMobile(mobile));
+    //   dispatch(joinMobileCfm(mobileCfm));
+    //   dispatch(joinCompany(company));
+
+    //   dispatch(joinLicense(licenseFile));
+    //   // dispatch(joinLocation(values.register_company));
+    //   // dispatch(joinCate1(values.register_company));
+    //   // dispatch(joinCaId(values.register_company));
+
+    //   dispatch(joinBankName(bankName));
+    //   dispatch(joinBankAccount(bankAccount));
+    //   dispatch(joinBankDepositor(bankDepositor));
+    // }
+
+    categoryArr.map((c) => setCate1Arr(c.cate1));
+    categoryArr.map((c) => setCaIdArr(c.ca_id));
+
     const frmData = new FormData();
     frmData.append('method', 'proc_add_partner');
     frmData.append('mb_id', email);
@@ -600,213 +701,11 @@ const Register = (props) => {
       .string()
       .required('예금주를 입력해주세요.')
       .label('BankDepositor'),
+    licenseFile: yup
+      .string()
+      .required('사업자 등록증을 첨부해주세요.')
+      .label('BusinessLicense'),
   });
-
-  const categorySelectorDiv = () => {
-    return (
-      <View
-        style={{
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-        }}>
-        <View style={{width: '40%'}}>
-          <View
-            style={{
-              borderWidth: 1,
-              borderColor: '#E3E3E3',
-              borderTopRightRadius: 4,
-              borderTopLeftRadius: 4,
-              borderBottomRightRadius: isActiveTogglePrintType ? 0 : 4,
-              borderBottomLeftRadius: isActiveTogglePrintType ? 0 : 4,
-              backgroundColor: '#fff',
-            }}>
-            <TouchableOpacity
-              onPress={togglePrintType}
-              activeOpacity={0.8}
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                height: 50,
-                paddingHorizontal: 10,
-              }}>
-              <Text style={{fontFamily: 'SCDream4'}}>{printType}</Text>
-              {isActiveTogglePrintType ? (
-                <Image
-                  source={require('../../../src/assets/arr01_top.png')}
-                  resizeMode="contain"
-                  style={{width: 20, height: 20}}
-                />
-              ) : (
-                <Image
-                  source={require('../../../src/assets/arr01.png')}
-                  resizeMode="contain"
-                  style={{width: 20, height: 20}}
-                />
-              )}
-            </TouchableOpacity>
-          </View>
-          {isActiveTogglePrintType && (
-            <View
-              style={{
-                position: 'absolute',
-                top: 51,
-                left: 0,
-                width: '100%',
-                backgroundColor: '#fff',
-                paddingHorizontal: 10,
-                paddingVertical: 10,
-                borderWidth: 1,
-                borderColor: '#E3E3E3',
-                borderBottomRightRadius: 5,
-                borderBottomLeftRadius: 5,
-                zIndex: 100,
-              }}>
-              {printTypes.map((v, idx) => (
-                <TouchableOpacity
-                  key={idx}
-                  style={{
-                    paddingVertical: 7,
-                    backgroundColor: '#fff',
-                    marginBottom: 7,
-                    zIndex: 100,
-                  }}
-                  activeOpacity={0.8}
-                  onPress={() => {
-                    setPrintType(v);
-                    setIsActiveTogglePrintType(false);
-                    setIsActiveToggleDetail(false);
-                  }}>
-                  <Text style={{fontFamily: 'SCDream4'}}>{v}</Text>
-                </TouchableOpacity>
-              ))}
-            </View>
-          )}
-        </View>
-        <View style={{width: '59%'}}>
-          <View
-            style={{
-              borderWidth: 1,
-              borderColor: '#E3E3E3',
-              borderTopRightRadius: 4,
-              borderTopLeftRadius: 4,
-              borderBottomRightRadius: isActiveToggleDetail ? 0 : 4,
-              borderBottomLeftRadius: isActiveToggleDetail ? 0 : 4,
-              backgroundColor: '#fff',
-            }}>
-            <TouchableOpacity
-              onPress={toggleDetail}
-              activeOpacity={0.8}
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                height: 50,
-                paddingHorizontal: 10,
-              }}>
-              <Text style={{fontFamily: 'SCDream4'}}>
-                {printType === '패키지' && !printDetailType
-                  ? packageTypes[0]
-                  : printType === '일반인쇄' && !printDetailType
-                  ? generalTypes[0]
-                  : printType === '기타인쇄' && !printDetailType
-                  ? etcTypes[0]
-                  : printDetailType}
-              </Text>
-              {isActiveTogglePrintType ? (
-                <Image
-                  source={require('../../../src/assets/arr01_top.png')}
-                  resizeMode="contain"
-                  style={{width: 20, height: 20}}
-                />
-              ) : (
-                <Image
-                  source={require('../../../src/assets/arr01.png')}
-                  resizeMode="contain"
-                  style={{width: 20, height: 20}}
-                />
-              )}
-            </TouchableOpacity>
-          </View>
-          {isActiveToggleDetail && (
-            <View
-              style={{
-                position: 'absolute',
-                top: 51,
-                left: 0,
-                width: '100%',
-                backgroundColor: '#fff',
-                paddingHorizontal: 10,
-                paddingVertical: 10,
-                borderWidth: 1,
-                borderColor: '#E3E3E3',
-                borderBottomRightRadius: 5,
-                borderBottomLeftRadius: 5,
-                zIndex: 100,
-              }}>
-              {printType === '패키지'
-                ? packageTypes.map((v, idx) => (
-                    <TouchableOpacity
-                      key={idx}
-                      style={{
-                        paddingVertical: 7,
-                        backgroundColor: '#fff',
-                        marginBottom: 7,
-                        zIndex: 100,
-                      }}
-                      activeOpacity={0.8}
-                      onPress={() => {
-                        setPrintDetail(v);
-                        setIsActiveToggleDetail(false);
-                        // setIsActiveTogglePrintType(false);
-                      }}>
-                      <Text style={{fontFamily: 'SCDream4'}}>{v}</Text>
-                    </TouchableOpacity>
-                  ))
-                : printType === '일반인쇄'
-                ? generalTypes.map((v, idx) => (
-                    <TouchableOpacity
-                      key={idx}
-                      style={{
-                        paddingVertical: 7,
-                        backgroundColor: '#fff',
-                        marginBottom: 7,
-                        zIndex: 100,
-                      }}
-                      activeOpacity={0.8}
-                      onPress={() => {
-                        setPrintDetail(v);
-                        setIsActiveToggleDetail(false);
-                        // setIsActiveTogglePrintType(false);
-                      }}>
-                      <Text style={{fontFamily: 'SCDream4'}}>{v}</Text>
-                    </TouchableOpacity>
-                  ))
-                : etcTypes.map((v, idx) => (
-                    <TouchableOpacity
-                      key={idx}
-                      style={{
-                        paddingVertical: 7,
-                        backgroundColor: '#fff',
-                        marginBottom: 7,
-                        zIndex: 100,
-                      }}
-                      activeOpacity={0.8}
-                      onPress={() => {
-                        setPrintDetail(v);
-                        setIsActiveToggleDetail(false);
-                        // setIsActiveTogglePrintType(false);
-                      }}>
-                      <Text style={{fontFamily: 'SCDream4'}}>{v}</Text>
-                    </TouchableOpacity>
-                  ))}
-            </View>
-          )}
-        </View>
-      </View>
-    );
-  };
 
   return (
     <>
@@ -826,28 +725,41 @@ const Register = (props) => {
             register_bankDepositor: '',
           }}
           onSubmit={(values, actions) => {
-            if (checkedId) {
-              let mb_1 = isMobileConfimed ? 'Y' : 'N';
-              beforeSignIn(
-                values.register_email,
-                values.register_pw,
-                values.register_confirmPw,
-                values.register_name,
-                values.register_mobile,
-                values.register_confirmMobile,
-                values.register_company,
-                values.register_bankName,
-                values.register_bankAccount,
-                values.register_bankDepositor,
-              );
-            } else {
-              Alert.alert('인증되지 않은 입력란이 있습니다.', '확인해주세요.', [
-                {
-                  text: '확인',
-                },
-              ]);
-              return false;
-            }
+            // if (checkedId) {
+            //   let mb_1 = isMobileConfimed ? 'Y' : 'N';
+            //   beforeSignIn(
+            //     values.register_email,
+            //     values.register_pw,
+            //     values.register_confirmPw,
+            //     values.register_name,
+            //     values.register_mobile,
+            //     values.register_confirmMobile,
+            //     values.register_company,
+            //     values.register_bankName,
+            //     values.register_bankAccount,
+            //     values.register_bankDepositor,
+            //   );
+            // } else {
+            //   Alert.alert('인증되지 않은 입력란이 있습니다.', '확인해주세요.', [
+            //     {
+            //       text: '확인',
+            //     },
+            //   ]);
+            //   return false;
+            // }
+
+            beforeSignIn(
+              values.register_email,
+              values.register_pw,
+              values.register_confirmPw,
+              values.register_name,
+              values.register_mobile,
+              values.register_confirmMobile,
+              values.register_company,
+              values.register_bankName,
+              values.register_bankAccount,
+              values.register_bankDepositor,
+            );
             setTimeout(() => {
               actions.setSubmitting(false);
             }, 1000);
@@ -1440,13 +1352,27 @@ const Register = (props) => {
                       style={{width: 100}}
                     />
                   </View>
-                  <Text
-                    style={[
-                      styles.normalText,
-                      {color: '#B5B5B5', fontSize: 12},
-                    ]}>
-                    * 이미지이나 pdf파일 등 첨부 가능합니다.
-                  </Text>
+                  {businessError ? (
+                    <Text
+                      style={{
+                        width: '100%',
+                        fontFamily: 'SCDream4',
+                        fontSize: 12,
+                        lineHeight: 18,
+                        color: '#00A170',
+                        marginBottom: 5,
+                      }}>
+                      사업자 등록증을 첨부해주세요.
+                    </Text>
+                  ) : (
+                    <Text
+                      style={[
+                        styles.normalText,
+                        {color: '#B5B5B5', fontSize: 12},
+                      ]}>
+                      * 이미지 파일 또는 pdf파일 등 첨부 가능합니다.
+                    </Text>
+                  )}
                 </View>
                 {/* // 사업자 등록증  */}
 
@@ -1491,7 +1417,7 @@ const Register = (props) => {
                               fontSize: 14,
                               color: region.find((re) => re === r)
                                 ? '#fff'
-                                : '#B5B5B5',
+                                : '#A2A2A2',
                             },
                           ]}>
                           {r === 'seoul'
@@ -1525,43 +1451,26 @@ const Register = (props) => {
                       </TouchableOpacity>
                     ))}
                   </View>
-                  <Text
-                    style={[
-                      styles.normalText,
-                      {color: '#B5B5B5', fontSize: 12},
-                    ]}>
-                    * 지역은 최대 5곳까지 등록하실 수 있습니다.
-                  </Text>
-
-                  {isActiveToggleRegion && (
-                    <View
+                  {regionError ? (
+                    <Text
                       style={{
-                        position: 'absolute',
-                        top: 80,
-                        left: 0,
-                        width: '49%',
-                        backgroundColor: '#fff',
-                        paddingHorizontal: 10,
-                        paddingVertical: 10,
-                        borderWidth: 1,
-                        borderColor: '#E3E3E3',
-                        borderBottomRightRadius: 5,
-                        borderBottomLeftRadius: 5,
-                        zIndex: 100,
+                        width: '100%',
+                        fontFamily: 'SCDream4',
+                        fontSize: 12,
+                        lineHeight: 18,
+                        color: '#00A170',
+                        marginBottom: 5,
                       }}>
-                      {regionCount.map((v, idx) => (
-                        <TouchableOpacity
-                          key={idx}
-                          style={{paddingVertical: 7, marginBottom: 7}}
-                          activeOpacity={0.8}
-                          onPress={() => {
-                            setRegion(v);
-                            setIsActiveToggleRegion(false);
-                          }}>
-                          <Text style={{fontFamily: 'SCDream4'}}>{v}</Text>
-                        </TouchableOpacity>
-                      ))}
-                    </View>
+                      지역을 지정해주세요.
+                    </Text>
+                  ) : (
+                    <Text
+                      style={[
+                        styles.normalText,
+                        {color: '#B5B5B5', fontSize: 12},
+                      ]}>
+                      * 지역은 최대 5곳까지 등록하실 수 있습니다.
+                    </Text>
                   )}
                 </View>
                 {/* // 위치  */}
@@ -1576,96 +1485,186 @@ const Register = (props) => {
                       marginBottom: 5,
                     }}>
                     <Text style={[styles.profileTitle]}>제작물 카테고리</Text>
+                  </View>
+
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      justifyContent: 'flex-start',
+                      alignItems: 'center',
+                    }}>
+                    <TouchableOpacity
+                      activeOpacity={1}
+                      onPress={() => {
+                        setCateId('1');
+                        getCategoriesAPI('1');
+                      }}
+                      style={{
+                        marginRight: 20,
+                        backgroundColor:
+                          cateId === '1' ? '#f6f6f6' : 'transparent',
+                        borderWidth: cateId === '1' ? 1 : 0,
+                        paddingHorizontal: cateId === '1' ? 20 : 0,
+                        borderTopRightRadius: cateId === '1' ? 5 : null,
+                        borderTopLeftRadius: cateId === '1' ? 5 : null,
+                        borderColor: cateId === '1' ? '#f6f6f6' : null,
+                        borderBottomColor: cateId === '1' ? '#f6f6f6' : null,
+                      }}>
+                      <Text
+                        style={{
+                          fontFamily: 'SCDream4',
+                          fontSize: 14,
+                          marginVertical: 10,
+                        }}>
+                        패키지
+                      </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      activeOpacity={1}
+                      onPress={() => {
+                        setCateId('0');
+                        getCategoriesAPI('0');
+                      }}
+                      style={{
+                        marginRight: 20,
+                        backgroundColor:
+                          cateId === '0' ? '#f6f6f6' : 'transparent',
+                        borderWidth: cateId === '0' ? 1 : 0,
+                        paddingHorizontal: cateId === '0' ? 20 : 0,
+                        borderTopRightRadius: cateId === '0' ? 5 : null,
+                        borderTopLeftRadius: cateId === '0' ? 5 : null,
+                        borderColor: cateId === '0' ? '#f6f6f6' : null,
+                        borderBottomColor: cateId === '0' ? '#f6f6f6' : null,
+                      }}>
+                      <Text
+                        style={{
+                          fontFamily: 'SCDream4',
+                          fontSize: 14,
+                          marginVertical: 10,
+                        }}>
+                        일반인쇄
+                      </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      activeOpacity={1}
+                      onPress={() => {
+                        setCateId('2');
+                        getCategoriesAPI('2');
+                      }}
+                      style={{
+                        marginRight: 20,
+                        backgroundColor:
+                          cateId === '2' ? '#f6f6f6' : 'transparent',
+                        borderWidth: cateId === '2' ? 1 : 0,
+                        paddingHorizontal: cateId === '2' ? 20 : 0,
+                        borderTopRightRadius: cateId === '2' ? 5 : null,
+                        borderTopLeftRadius: cateId === '2' ? 5 : null,
+                        borderColor: cateId === '2' ? '#f6f6f6' : null,
+                        borderBottomColor: cateId === '2' ? '#f6f6f6' : null,
+                      }}>
+                      <Text
+                        style={{
+                          fontFamily: 'SCDream4',
+                          fontSize: 14,
+                          marginVertical: 10,
+                        }}>
+                        기타인쇄
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+
+                  {/* 세부종목 */}
+
+                  {categoryList !== null && (
                     <View
                       style={{
                         flexDirection: 'row',
-                        justifyContent: 'center',
-                        alignItems: 'center',
+                        flexWrap: 'wrap',
+                        justifyContent: 'flex-start',
+                        padding: 20,
+                        backgroundColor: '#f6f6f6',
+                        borderWidth: 1,
+                        borderColor: '#f6f6f6',
+                        borderBottomLeftRadius: 5,
+                        borderBottomRightRadius: 5,
+                        borderTopRightRadius: 5,
+                        borderTopLeftRadius:
+                          cateId === '0' ? 5 : cateId === '2' ? 5 : 0,
+                        marginBottom: 15,
                       }}>
-                      <TouchableOpacity
-                        onPress={addCategory}
-                        activeOpacity={0.8}
-                        style={{
-                          backgroundColor: '#fff',
-                          paddingHorizontal: 10,
-                          paddingVertical: 2,
-                          borderWidth: 1,
-                          borderColor: '#E3E3E3',
-                          borderRadius: 3,
-                          marginRight: 10,
-                        }}>
-                        <View
+                      {categoryList.map((category) => (
+                        <TouchableOpacity
+                          activeOpacity={1}
+                          onPress={() => {
+                            setCategoryArrFuc(cateId, category.ca_id);
+                          }}
+                          key={category.ca_id}
                           style={{
                             flexDirection: 'row',
-                            justifyContent: 'center',
+                            justifyContent: 'flex-start',
                             alignItems: 'center',
                           }}>
-                          <Text
+                          <Image
+                            source={
+                              categoryArr.find(
+                                (x) =>
+                                  x.cate1 === cateId &&
+                                  x.ca_id === category.ca_id,
+                              )
+                                ? require('../../../src/assets/radio_on.png')
+                                : require('../../../src/assets/radio_off.png')
+                            }
+                            resizeMode="contain"
                             style={{
-                              fontFamily: 'SCDream5',
-                              fontSize: 20,
-                              color: '#00A170',
+                              width: 20,
+                              height: 20,
+                              borderRadius: 20,
                               marginRight: 5,
-                            }}>
-                            +
-                          </Text>
+                            }}
+                          />
                           <Text
                             style={{
                               fontFamily: 'SCDream4',
-                              fontSize: 12,
-                              color: '#B5B5B5',
+                              fontSize: 13,
+                              marginRight: 15,
+                              marginVertical: 7,
                             }}>
-                            추가
+                            {category.ca_name}
                           </Text>
-                        </View>
-                      </TouchableOpacity>
-                      <TouchableOpacity
-                        onPress={removeCategory}
-                        activeOpacity={0.8}
-                        style={{
-                          backgroundColor: '#fff',
-                          paddingHorizontal: 10,
-                          paddingVertical: 2,
-                          borderWidth: 1,
-                          borderColor: '#E3E3E3',
-                          borderRadius: 3,
-                        }}>
-                        <View
-                          style={{
-                            flexDirection: 'row',
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                          }}>
-                          <Text
-                            style={{
-                              fontFamily: 'SCDream5',
-                              fontSize: 20,
-                              color: '#00A170',
-                              marginRight: 5,
-                            }}>
-                            -
-                          </Text>
-                          <Text
-                            style={{
-                              fontFamily: 'SCDream4',
-                              fontSize: 12,
-                              color: '#B5B5B5',
-                            }}>
-                            제거
-                          </Text>
-                        </View>
-                      </TouchableOpacity>
+                        </TouchableOpacity>
+                      ))}
                     </View>
-                  </View>
-                  {/* RegCates */}
+                  )}
 
-                  <RegCates
+                  {categoryError ? (
+                    <Text
+                      style={{
+                        width: '100%',
+                        fontFamily: 'SCDream4',
+                        fontSize: 12,
+                        lineHeight: 18,
+                        color: '#00A170',
+                        marginBottom: 5,
+                      }}>
+                      카테고리를 지정해주세요.
+                    </Text>
+                  ) : (
+                    <Text
+                      style={[
+                        styles.normalText,
+                        {color: '#B5B5B5', fontSize: 12},
+                      ]}>
+                      * 카테고리는 최대 5개(대분류포함)까지 등록하실 수
+                      있습니다.
+                    </Text>
+                  )}
+                  {/* // 세부종목 */}
+
+                  {/* <RegCates
                     categories={categories}
                     setCategories_item={setCategories_item}
                     categories_item={categories_item}
-                  />
-
-                  {/* // RegCates */}
+                  /> */}
                 </View>
 
                 {/* // 제작물 카테고리  */}
