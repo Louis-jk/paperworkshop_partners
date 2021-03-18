@@ -235,9 +235,7 @@ const index = (props) => {
                   </View>
                 ) : item.status === '1' ? (
                   <View style={styles.listStep02Badge}>
-                    <Text style={styles.listStep02BadgeText}>
-                      견적 확정 대기
-                    </Text>
+                    <Text style={styles.listStep02BadgeText}>견적발송</Text>
                   </View>
                 ) : item.status === '2' ? (
                   <View style={styles.listStep02Badge}>
@@ -256,34 +254,6 @@ const index = (props) => {
                 <Text style={styles.listDesc}>{item.ca_name}</Text>
               </View>
               <View>
-                <Text
-                  style={
-                    item.status === '1'
-                      ? styles.listStep
-                      : item.status === '2'
-                      ? styles.listStep02
-                      : {fontFamily: 'SCDream4', color: '#000'}
-                  }>
-                  {item.company_id !== mb_email
-                    ? item.status === '1'
-                      ? '견적발송'
-                      : item.status === '2'
-                      ? '파트너스최종선정(견적확정대기)'
-                      : item.status === '3'
-                      ? '파트너스최종선정(계약금입금대기)'
-                      : item.status === '4'
-                      ? '파트너스최종선정(계약금입금완료)'
-                      : item.status === '5'
-                      ? '입금제작요청'
-                      : item.status === '6'
-                      ? '납품완료'
-                      : item.status === '7'
-                      ? '수령완료'
-                      : item.status === '8'
-                      ? '마감'
-                      : null
-                    : '직접요청'}
-                </Text>
                 <Text style={styles.listDday02}>{item.dday}</Text>
               </View>
             </View>

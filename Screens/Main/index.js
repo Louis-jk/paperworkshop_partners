@@ -136,7 +136,29 @@ const index = (props) => {
                 {item.company_id === mb_email ? (
                   <View style={styles.listStep02Badge}>
                     <Text style={styles.listStep02BadgeText}>
-                      사용자로부터 직접 견적요청
+                      직접 견적요청
+                    </Text>
+                  </View>
+                ) : item.status === '0' ? (
+                  <View style={styles.listStep03Badge}>
+                    <Text style={styles.listStep03BadgeText}>
+                      비교 견적요청
+                    </Text>
+                  </View>
+                ) : item.status === '1' ? (
+                  <View style={styles.listStep02Badge}>
+                    <Text style={styles.listStep02BadgeText}>입찰중</Text>
+                  </View>
+                ) : item.status === '2' ? (
+                  <View style={styles.listStep02Badge}>
+                    <Text style={styles.listStep02BadgeText}>
+                      계약금 입금 대기
+                    </Text>
+                  </View>
+                ) : item.status === '3' ? (
+                  <View style={styles.listStep03Badge}>
+                    <Text style={styles.listStep03BadgeText}>
+                      계약금 입금 완료
                     </Text>
                   </View>
                 ) : null}
@@ -144,38 +166,6 @@ const index = (props) => {
                 <Text style={styles.listDesc}>{item.ca_name}</Text>
               </View>
               <View>
-                <Text
-                  style={[
-                    styles.listStep,
-                    {
-                      color:
-                        item.dstatus !== 'Y' && item.status === '0'
-                          ? '#111'
-                          : '#00A170',
-                    },
-                  ]}>
-                  {item.dstatus !== 'Y'
-                    ? item.status === '0'
-                      ? '견적요청'
-                      : item.status === '1'
-                      ? '입찰중'
-                      : item.status === '2'
-                      ? '파트너스최종선정(견적확정대기)'
-                      : item.status === '3'
-                      ? '파트너스최종선정(계약금입금대기)'
-                      : item.status === '4'
-                      ? '파트너스최종선정(계약금입금완료)'
-                      : item.status === '5'
-                      ? '입금제작요청'
-                      : item.status === '6'
-                      ? '납품완료'
-                      : item.status === '7'
-                      ? '수령완료'
-                      : item.status === '8'
-                      ? '마감'
-                      : null
-                    : '직접요청'}
-                </Text>
                 <Text style={styles.listDday}>{item.dday}</Text>
               </View>
             </View>
@@ -690,7 +680,7 @@ const styles = StyleSheet.create({
     fontFamily: 'SCDream4',
     alignSelf: 'flex-end',
     fontSize: 14,
-    color: '#A2A2A2',
+    color: '#111',
   },
   line: {
     width: '100%',
@@ -707,6 +697,7 @@ const styles = StyleSheet.create({
     fontFamily: 'SCDream6',
   },
   listStep02Badge: {
+    alignSelf: 'flex-start',
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 5,
@@ -715,6 +706,22 @@ const styles = StyleSheet.create({
     borderRadius: 2,
   },
   listStep02BadgeText: {
+    fontFamily: 'SCDream4',
+    fontSize: 12,
+    color: '#000000',
+    paddingVertical: 2,
+    paddingHorizontal: 5,
+  },
+  listStep03Badge: {
+    alignSelf: 'flex-start',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 5,
+    borderWidth: 1,
+    borderColor: '#B5B5B5',
+    borderRadius: 2,
+  },
+  listStep03BadgeText: {
     fontFamily: 'SCDream4',
     fontSize: 12,
     color: '#000000',
