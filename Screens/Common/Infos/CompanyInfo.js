@@ -1,5 +1,15 @@
 import React from 'react';
-import {View, Text, ScrollView, StyleSheet, Dimensions} from 'react-native';
+import {
+  View,
+  Text,
+  ScrollView,
+  StyleSheet,
+  Dimensions,
+  Platform,
+} from 'react-native';
+
+import {WebView} from 'react-native-webview';
+import AutoHeightWebView from 'react-native-autoheight-webview';
 
 import Header from '../DetailHeader';
 
@@ -10,7 +20,7 @@ const CompanyInfo = (props) => {
   return (
     <>
       <Header title={routeName} navigation={navigation} />
-      <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
+      {/* <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
         <View
           style={{
             flex: 1,
@@ -20,7 +30,18 @@ const CompanyInfo = (props) => {
           }}>
           <Text style={styles.normalText}>회사 소개</Text>
         </View>
-      </ScrollView>
+      </ScrollView> */}
+      <AutoHeightWebView
+        style={{
+          width: Dimensions.get('window').width - 20,
+          height: Dimensions.get('window').height - 300,
+        }}
+        source={{
+          uri: `http://dmonster1506.cafe24.com/bbs/content.php?co_id=company`,
+        }}
+        scalesPageToFit={Platform.OS === 'Android' ? true : false}
+        viewportContent={'width=device-width, user-scalable=no'}
+      />
     </>
   );
 };
