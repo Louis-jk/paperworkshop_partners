@@ -10,15 +10,15 @@ import {
   Alert,
 } from 'react-native';
 
-// import RNPickerSelect from 'react-native-picker-select';
-import {Picker} from '@react-native-community/picker';
-
+import {useSelector} from 'react-redux';
 import Header from '../Common/Header';
 import Modal from '../Common/PartnersInfoModal';
 
 const Edit = (props) => {
   const navigation = props.navigation;
   const routeName = props.route.name;
+
+  const {mb_name, mb_2, mb_hp} = useSelector((state) => state.UserInfoReducer);
 
   const [category01, setCategory01] = React.useState(null);
   const [category02, setCategory02] = React.useState(null);
