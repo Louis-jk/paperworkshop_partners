@@ -2920,6 +2920,11 @@
   "resolved" "https://registry.npmjs.org/escape-string-regexp/-/escape-string-regexp-4.0.0.tgz"
   "version" "4.0.0"
 
+"escape-string-regexp@2.0.0":
+  "integrity" "sha512-UpzcLCXolUWcNu5HtVMHYdXJjArjsF9C0aNnquZYY4uW/Vu0miy5YoWvbV345HauVvcAUnpRuhMMcqTcGOY2+w=="
+  "resolved" "https://registry.npmjs.org/escape-string-regexp/-/escape-string-regexp-2.0.0.tgz"
+  "version" "2.0.0"
+
 "escodegen@^1.14.1":
   "integrity" "sha512-qFcX0XJkdg+PB3xjZZG/wKSuT1PnQWx57+TVSjIMmILd2yC/6ByYElPwJnslDsuWuSAp4AwJGumarAAmJch5Kw=="
   "resolved" "https://registry.npmjs.org/escodegen/-/escodegen-1.14.3.tgz"
@@ -3955,7 +3960,7 @@
   "resolved" "https://registry.npmjs.org/interpret/-/interpret-1.4.0.tgz"
   "version" "1.4.0"
 
-"invariant@^2.2.4":
+"invariant@^2.2.4", "invariant@2.2.4":
   "integrity" "sha512-phJfQVBuaJM5raOpJjSfkiD6BpbCE4Ns//LaXl6wGYtUBY83nWS6Rf9tXm2e8VaK60JEjYldbPif/A2B1C2gNA=="
   "resolved" "https://registry.npmjs.org/invariant/-/invariant-2.2.4.tgz"
   "version" "2.2.4"
@@ -6398,6 +6403,13 @@
   dependencies:
     "prop-types" "^15.7.2"
 
+"react-native-autoheight-webview@1.5.8":
+  "integrity" "sha512-6+LY0a47AsnfnGgqMP2JzNVgX0/sGnkgq7UV39OKgUf2Im/glFjUOggYm8EiyzmA93gb9tYVB1mRTORElWAiGQ=="
+  "resolved" "https://registry.npmjs.org/react-native-autoheight-webview/-/react-native-autoheight-webview-1.5.8.tgz"
+  "version" "1.5.8"
+  dependencies:
+    "prop-types" "^15.7.2"
+
 "react-native-dash@0.0.11":
   "integrity" "sha512-edgspmVtGVYxOhGs8STCj7+VyQYUR1RkiGHkWDGwiQkEEIFrxWLa3D9ZIrLsm3LKU4XGQ2iEqCv9fJQSeTyAJA=="
   "resolved" "https://registry.npmjs.org/react-native-dash/-/react-native-dash-0.0.11.tgz"
@@ -6540,6 +6552,14 @@
     "prop-types" "^15.7.2"
     "yargs" "^15.0.2"
 
+"react-native-webview@>= 10.9.0", "react-native-webview@11.3.1":
+  "integrity" "sha512-qHvD2DVbUVSuRLU33RU4LbfISoJ3q5PWj4fuDcMgEYaEnlvOiOQqR/x5t9z4kdVZ83T+WG8ktp19F2uTCaOKRg=="
+  "resolved" "https://registry.npmjs.org/react-native-webview/-/react-native-webview-11.3.1.tgz"
+  "version" "11.3.1"
+  dependencies:
+    "escape-string-regexp" "2.0.0"
+    "invariant" "2.2.4"
+
 "react-native-windows@>=0.62":
   "integrity" "sha512-+FITwiEUBbjtK0JsyoZXDBM3seQsF1R3IwQfGJSdRKeekhTIALZmb/1JK8fii7MTFKiBZ7KHAhVnf17qbhazmA=="
   "resolved" "https://registry.npmjs.org/react-native-windows/-/react-native-windows-0.63.22.tgz"
@@ -6565,7 +6585,7 @@
     "use-subscription" "^1.0.0"
     "whatwg-fetch" "^3.0.0"
 
-"react-native@*", "react-native@^0.63.0", "react-native@^0.63.0-0", "react-native@>= 0.33", "react-native@>=0.38.0", "react-native@>=0.40.0", "react-native@>=0.42.0", "react-native@>=0.43.0", "react-native@>=0.56.0", "react-native@>=0.57", "react-native@>=0.57.0", "react-native@>=0.60", "react-native@>=0.60.0", "react-native@>=0.62.0-rc.0 <0.64.0", "react-native@>=0.63.0", "react-native@0.63.4":
+"react-native@*", "react-native@^0.63.0", "react-native@^0.63.0-0", "react-native@>= 0.33", "react-native@>= 0.60.0", "react-native@>=0.38.0", "react-native@>=0.40.0", "react-native@>=0.42.0", "react-native@>=0.43.0", "react-native@>=0.56.0", "react-native@>=0.57", "react-native@>=0.57.0", "react-native@>=0.60", "react-native@>=0.60 <0.64", "react-native@>=0.60.0", "react-native@>=0.62.0-rc.0 <0.64.0", "react-native@>=0.63.0", "react-native@0.63.4":
   "integrity" "sha512-I4kM8kYO2mWEYUFITMcpRulcy4/jd+j9T6PbIzR0FuMcz/xwd+JwHoLPa1HmCesvR1RDOw9o4D+OFLwuXXfmGw=="
   "resolved" "https://registry.npmjs.org/react-native/-/react-native-0.63.4.tgz"
   "version" "0.63.4"
@@ -6632,7 +6652,7 @@
     "raf" "^3.1.0"
     "tween-functions" "^1.0.1"
 
-"react@*", "react@^16.0", "react@^16.13.1", "react@^16.8.0", "react@^16.8.0 || ^17.0.0", "react@^16.8.3 || ^17", "react@^16.8.6", "react@>=15.0.0", "react@>=16.0.0-alpha.3", "react@>=16.4.1", "react@>=16.8.0", "react@>=16.8.3", "react@16.13.1":
+"react@*", "react@^16.0", "react@^16.13.1", "react@^16.8.0", "react@^16.8.0 || ^17.0.0", "react@^16.8.3 || ^17", "react@^16.8.6", "react@>= 16.8.0", "react@>=15.0.0", "react@>=16.0.0-alpha.3", "react@>=16.4.1", "react@>=16.8.0", "react@>=16.8.3", "react@16.13.1":
   "integrity" "sha512-YMZQQq32xHLX0bz5Mnibv1/LHb3Sqzngu7xstSM+vrkE5Kzr9xE0yMByK5kMoTK30YVJE61WfbxIFFvfeDKT1w=="
   "resolved" "https://registry.npmjs.org/react/-/react-16.13.1.tgz"
   "version" "16.13.1"
