@@ -53,4 +53,13 @@ export default {
       }),
     });
   },
+  getCategory(cate1) {
+    return Send({
+      method: 'post',
+      data: qs.stringify({
+        method: 'proc_cate_list',
+        cate1,
+      }),
+    });
+  },
 };
