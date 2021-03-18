@@ -5,13 +5,66 @@ import {
   ScrollView,
   StyleSheet,
   TouchableOpacity,
+  Platform,
+  Alert,
 } from 'react-native';
 
+import {useSelector} from 'react-redux';
+
 import Header from '../../Common/Header';
+import Auth from '../../../src/api/Auth';
 
 const Signed = (props) => {
   const navigation = props.navigation;
   const routeName = props.route.name;
+
+  const {fcmToken} = useSelector((state) => state.InfoReducer);
+  const {mb_email, mb_password} = useSelector((state) => state.JoinReducer);
+  const [checkPlatform, setCheckPlatform] = React.useState(null); // OS 체크
+
+  React.useEffect(() => {
+    if (Platform.OS === 'ios') {
+      setCheckPlatform('ios');
+    } else {
+      setCheckPlatform('aos');
+    }
+  }, []);
+
+  const onLogin = () => {
+    Auth.onLogin(mb_email, mb_password, fcmToken, checkPlatform)
+      .then((res) => {
+        if (res.data.result === '1') {
+          dispatch(UserId(res.data.item.mb_email));
+          dispatch(UserEmail(res.data.item.mb_email));
+          dispatch(UserName(res.data.item.mb_name));
+          dispatch(UserMobile(res.data.item.mb_hp));
+          dispatch(UserMobileCfm(res.data.item.mb_1));
+          dispatch(UserCompany(res.data.item.mb_2));
+          dispatch(UserType(res.data.item.mb_level));
+          dispatch(UserProfile(res.data.item.mb_profile));
+          dispatch(UserPtype(res.data.item.ptype));
+          dispatch(UserEstimateCnt(res.data.item.estimate_cnt));
+          dispatch(UserProfileImg(res.data.item.profileImg));
+
+          navigation.navigate('Stack');
+        } else {
+          Alert.alert(res.data.message, '다시 확인해주세요.', [
+            {
+              text: '확인',
+              onPress: () => loginEmailRef.current.focus(),
+            },
+          ]);
+        }
+        console.log('로그인 res', res);
+      })
+      .catch((err) => {
+        Alert.alert('관리자에게 문의해주세요.', err, [
+          {
+            text: '확인',
+          },
+        ]);
+      });
+  };
 
   return (
     <>
@@ -48,9 +101,7 @@ const Signed = (props) => {
             style={{
               width: '100%',
             }}>
-            <TouchableOpacity
-              onPress={() => navigation.navigate('Stack')}
-              activeOpacity={0.8}>
+            <TouchableOpacity onPress={() => onLogin()} activeOpacity={0.8}>
               <View style={[styles.submitBtn, {marginBottom: 10}]}>
                 <Text style={styles.submitBtnText}>홈으로</Text>
               </View>
