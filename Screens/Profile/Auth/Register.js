@@ -4,12 +4,9 @@ import {
   Text,
   ScrollView,
   StyleSheet,
-  TouchableWithoutFeedback,
   TouchableOpacity,
   Keyboard,
-  Dimensions,
   TextInput,
-  Button,
   Image,
   Alert,
 } from 'react-native';
@@ -21,7 +18,6 @@ import * as yup from 'yup';
 import DocumentPicker from 'react-native-document-picker';
 
 import DetailHeader from '../../Common/DetailHeader';
-import RegCates from './RegCates';
 import Auth from '../../../src/api/Auth';
 import Timer from '../../Common/Timer';
 
@@ -40,7 +36,6 @@ import {
   joinBankAccount,
   joinBankDepositor,
 } from '../../../Modules/JoinReducer';
-import CategoryDetailWrap from './Components/CategoryDetailWrap';
 
 const Register = (props) => {
   const navigation = props.navigation;
@@ -149,6 +144,7 @@ const Register = (props) => {
   const [checkedId, setCheckedId] = React.useState(false);
 
   const checkUserId = (register_id) => {
+    // 이메일 정규식
     const reg = RegExp(
       /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
     );
@@ -246,6 +242,7 @@ const Register = (props) => {
     if (register_mobile === '') {
       Alert.alert('휴대전화번호를 입력해주세요.');
     } else {
+      confirmCount(3);
       Alert.alert(
         `${register_mobile}로 인증번호가 발송되었습니다.`,
         '인증번호 확인 후 입력해주세요.',
@@ -254,7 +251,7 @@ const Register = (props) => {
             text: '확인',
             onPress: () => {
               setIsSend(true);
-              confirmCount(3);
+              mobileCfmRef.current.focus();
             },
           },
         ],
@@ -286,6 +283,7 @@ const Register = (props) => {
     if (register_mobile === '') {
       Alert.alert('휴대전화번호를 입력해주세요.');
     } else {
+      confirmCount(3);
       Alert.alert(
         `${register_mobile}로 인증번호가 발송되었습니다.`,
         '인증번호 확인 후 입력해주세요.',
@@ -294,7 +292,7 @@ const Register = (props) => {
             text: '확인',
             onPress: () => {
               setIsSend(true);
-              confirmCount(3);
+              mobileCfmRef.current.focus();
             },
           },
         ],
@@ -511,7 +509,7 @@ const Register = (props) => {
   };
 
   console.log('licenseFile', licenseFile);
-  console.log('companyInfoFile', companyInfoFile);
+  console.log('categoryArr', categoryArr);
 
   // 회원가입
   const beforeSignIn = (
@@ -526,123 +524,83 @@ const Register = (props) => {
     bankAccount,
     bankDepositor,
   ) => {
-    console.log('hey!!');
-    // if (
-    //   licenseFile === null ||
-    //   licenseFile === '' ||
-    //   licenseFile.length === 0
-    // ) {
-    //   Alert.alert('사업자 등록증을 첨부해주세요.');
-    //   setBusinessError(true);
-    // }
-    // if (region.length === 0 || countRegion < 1) {
-    //   Alert.alert('지역을 지정해주세요.');
-    //   setRegionError(true);
-    // }
-    // if (categoryArr.length === 0 || countCategory < 1) {
-    //   Alert.alert('카테고리를 지정해주세요.');
-    //   setCategoryError(true);
-    // } else {
-    //   categoryArr.map((c) => setCate1Arr(c.cate1));
-    //   categoryArr.map((c) => setCaIdArr(c.ca_id));
+    let cate1NewArr = [];
+    let caIdNewArr = [];
 
-    //   const frmData = new FormData();
-    //   frmData.append('method', 'proc_add_partner');
-    //   frmData.append('mb_id', email);
-    //   frmData.append('mb_password', password);
-    //   frmData.append('mb_password_re', passwordRe);
-    //   frmData.append('mb_name', name);
-    //   frmData.append('mb_hp', mobile);
-    //   frmData.append('mb_1', mobileCfm);
-    //   frmData.append('mb_2', company);
-    //   frmData.append('license[]', licenseFile);
-    //   frmData.append('location[]', region);
-    //   frmData.append('cate1[]', cate1Arr);
-    //   frmData.append('ca_id[]', caIdArr);
-    //   frmData.append('bank_name', bankName);
-    //   frmData.append('bank_account', bankAccount);
-    //   frmData.append('bank_depositor', bankDepositor);
+    categoryArr.map((c) => cate1NewArr.push(c.cate1));
+    categoryArr.map((c) => caIdNewArr.push(c.ca_id));
 
-    //   console.log('frmData', frmData);
-    //   // signIn(frmData);
+    const cate1Stringify = JSON.stringify(cate1NewArr);
+    const caIdStringify = JSON.stringify(caIdNewArr);
+    const regionStringify = JSON.stringify(region);
 
-    //   dispatch(joinEmail(email));
-    //   dispatch(joinPwd(password));
-    //   dispatch(joinName(name));
-    //   dispatch(joinMobile(mobile));
-    //   dispatch(joinMobileCfm(mobileCfm));
-    //   dispatch(joinCompany(company));
+    if (
+      licenseFile === null ||
+      licenseFile === '' ||
+      licenseFile.length === 0
+    ) {
+      setBusinessError(true);
+    }
+    if (region.length === 0 || countRegion < 1) {
+      setRegionError(true);
+    }
+    if (categoryArr.length === 0 || countCategory < 1) {
+      setCategoryError(true);
+    } else {
+      const frmData = new FormData();
+      frmData.append('method', 'proc_add_partner');
+      frmData.append('mb_id', email);
+      frmData.append('mb_password', password);
+      frmData.append('mb_password_re', passwordRe);
+      frmData.append('mb_name', name);
+      frmData.append('mb_hp', mobile);
+      frmData.append('mb_1', mobileCfm);
+      frmData.append('mb_2', company);
+      frmData.append('license', licenseFile, '');
+      frmData.append('location', regionStringify);
+      frmData.append('cate1', cate1Stringify);
+      frmData.append('ca_id', caIdStringify);
+      frmData.append('bank_name', bankName);
+      frmData.append('bank_account', bankAccount);
+      frmData.append('bank_depositor', bankDepositor);
 
-    //   dispatch(joinLicense(licenseFile));
-    //   // dispatch(joinLocation(values.register_company));
-    //   // dispatch(joinCate1(values.register_company));
-    //   // dispatch(joinCaId(values.register_company));
-
-    //   dispatch(joinBankName(bankName));
-    //   dispatch(joinBankAccount(bankAccount));
-    //   dispatch(joinBankDepositor(bankDepositor));
-    // }
-
-    categoryArr.map((c) => setCate1Arr(c.cate1));
-    categoryArr.map((c) => setCaIdArr(c.ca_id));
-
-    const frmData = new FormData();
-    frmData.append('method', 'proc_add_partner');
-    frmData.append('mb_id', email);
-    frmData.append('mb_password', password);
-    frmData.append('mb_password_re', passwordRe);
-    frmData.append('mb_name', name);
-    frmData.append('mb_hp', mobile);
-    frmData.append('mb_1', mobileCfm);
-    frmData.append('mb_2', company);
-    frmData.append('license[]', licenseFile);
-    frmData.append('location[]', region);
-    frmData.append('cate1[]', cate1Arr);
-    frmData.append('ca_id[]', caIdArr);
-    frmData.append('bank_name', bankName);
-    frmData.append('bank_account', bankAccount);
-    frmData.append('bank_depositor', bankDepositor);
-
-    console.log('frmData', frmData);
-    // signIn(frmData);
-
-    dispatch(joinEmail(email));
-    dispatch(joinPwd(password));
-    dispatch(joinName(name));
-    dispatch(joinMobile(mobile));
-    dispatch(joinMobileCfm(mobileCfm));
-    dispatch(joinCompany(company));
-
-    dispatch(joinLicense(licenseFile));
-    // dispatch(joinLocation(values.register_company));
-    // dispatch(joinCate1(values.register_company));
-    // dispatch(joinCaId(values.register_company));
-
-    dispatch(joinBankName(bankName));
-    dispatch(joinBankAccount(bankAccount));
-    dispatch(joinBankDepositor(bankDepositor));
-  };
-
-  const signIn = (frmData) => {
-    Auth.onSignIn(frmData)
-      .then((res) => {
-        if (res.data.result === '1') {
-          navigation.navigate('Signed');
-        } else {
-          Alert.alert('회원가입에 실패하였습니다.', res.data.message, [
+      Auth.onSignIn(frmData)
+        .then((res) => {
+          console.log('파트너스 회원가입 res', res);
+          if (res.data.result === '1' && res.data.count > 0) {
+            navigation.navigate('Signed');
+          } else {
+            Alert.alert(res.data.message, '회원가입에 실패하였습니다.', [
+              {
+                text: '확인',
+              },
+            ]);
+          }
+        })
+        .catch((err) =>
+          Alert.alert(err, '관리자에게 문의하세요', [
             {
               text: '확인',
             },
-          ]);
-        }
-      })
-      .catch((err) =>
-        Alert.alert(`${err.message()}`, '관리자에게 문의하세요', [
-          {
-            text: '확인',
-          },
-        ]),
-      );
+          ]),
+        );
+
+      dispatch(joinEmail(email));
+      dispatch(joinPwd(password));
+      dispatch(joinName(name));
+      dispatch(joinMobile(mobile));
+      dispatch(joinMobileCfm(mobileCfm));
+      dispatch(joinCompany(company));
+
+      dispatch(joinLicense(licenseFile));
+      // dispatch(joinLocation(values.register_company));
+      // dispatch(joinCate1(values.register_company));
+      // dispatch(joinCaId(values.register_company));
+
+      dispatch(joinBankName(bankName));
+      dispatch(joinBankAccount(bankAccount));
+      dispatch(joinBankDepositor(bankDepositor));
+    }
   };
 
   // 유효성 체크
@@ -701,10 +659,6 @@ const Register = (props) => {
       .string()
       .required('예금주를 입력해주세요.')
       .label('BankDepositor'),
-    licenseFile: yup
-      .string()
-      .required('사업자 등록증을 첨부해주세요.')
-      .label('BusinessLicense'),
   });
 
   return (
@@ -725,41 +679,49 @@ const Register = (props) => {
             register_bankDepositor: '',
           }}
           onSubmit={(values, actions) => {
-            // if (checkedId) {
-            //   let mb_1 = isMobileConfimed ? 'Y' : 'N';
-            //   beforeSignIn(
-            //     values.register_email,
-            //     values.register_pw,
-            //     values.register_confirmPw,
-            //     values.register_name,
-            //     values.register_mobile,
-            //     values.register_confirmMobile,
-            //     values.register_company,
-            //     values.register_bankName,
-            //     values.register_bankAccount,
-            //     values.register_bankDepositor,
-            //   );
-            // } else {
-            //   Alert.alert('인증되지 않은 입력란이 있습니다.', '확인해주세요.', [
-            //     {
-            //       text: '확인',
-            //     },
-            //   ]);
-            //   return false;
-            // }
+            if (
+              checkedId &&
+              (licenseFile !== null ||
+                licenseFile !== '' ||
+                licenseFile.length !== 0) &&
+              (region.length !== 0 || countRegion > 0) &&
+              (categoryArr.length !== 0 || countCategory > 0)
+            ) {
+              let mb_1 = isMobileConfimed ? 'Y' : 'N';
+              beforeSignIn(
+                values.register_email,
+                values.register_pw,
+                values.register_confirmPw,
+                values.register_name,
+                values.register_mobile,
+                mb_1,
+                values.register_company,
+                values.register_bankName,
+                values.register_bankAccount,
+                values.register_bankDepositor,
+              );
+            } else {
+              if (
+                licenseFile === null ||
+                licenseFile === '' ||
+                licenseFile.length === 0
+              ) {
+                setBusinessError(true);
+              }
+              if (region.length === 0 || countRegion < 1) {
+                setRegionError(true);
+              }
+              if (categoryArr.length === 0 || countCategory < 1) {
+                setCategoryError(true);
+              }
+              Alert.alert('인증되지 않은 입력란이 있습니다.', '확인해주세요.', [
+                {
+                  text: '확인',
+                },
+              ]);
+              return false;
+            }
 
-            beforeSignIn(
-              values.register_email,
-              values.register_pw,
-              values.register_confirmPw,
-              values.register_name,
-              values.register_mobile,
-              values.register_confirmMobile,
-              values.register_company,
-              values.register_bankName,
-              values.register_bankAccount,
-              values.register_bankDepositor,
-            );
             setTimeout(() => {
               actions.setSubmitting(false);
             }, 1000);
@@ -1326,7 +1288,10 @@ const Register = (props) => {
                       editable={false}
                     />
                     <TouchableOpacity
-                      onPress={filePicker01}
+                      onPress={() => {
+                        filePicker01();
+                        setBusinessError(false);
+                      }}
                       activeOpacity={0.8}
                       style={{
                         justifyContent: 'center',
@@ -1392,7 +1357,10 @@ const Register = (props) => {
                         key={idx}
                         activeOpacity={1}
                         hitSlop={{top: 10, bottom: 10, left: 10, right: 10}}
-                        onPress={() => setRegionChoise(r)}
+                        onPress={() => {
+                          setRegionError(false);
+                          setRegionChoise(r);
+                        }}
                         style={{
                           flexDirection: 'row',
                           justifyContent: 'flex-start',
@@ -1597,6 +1565,7 @@ const Register = (props) => {
                           activeOpacity={1}
                           onPress={() => {
                             setCategoryArrFuc(cateId, category.ca_id);
+                            setCategoryError(false);
                           }}
                           key={category.ca_id}
                           style={{
