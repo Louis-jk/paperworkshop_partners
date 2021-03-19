@@ -34,7 +34,7 @@ const index = (props) => {
   const [keyword, setKeyword] = React.useState(null);
 
   const searchTypes = ['제목', '회사'];
-  const [search, setSearch] = React.useState(null);
+  const [search, setSearch] = React.useState('제목');
 
   const [
     isActiveToggleSearchType,
@@ -417,7 +417,7 @@ const index = (props) => {
                     height: 50,
                     paddingHorizontal: 10,
                   }}>
-                  <Text style={{fontFamily: 'SCDream4'}}>{searchType}</Text>
+                  <Text style={{fontFamily: 'SCDream4'}}>{search}</Text>
                   {isActiveToggleSearchType ? (
                     <Image
                       source={require('../../src/assets/arr01_top.png')}
