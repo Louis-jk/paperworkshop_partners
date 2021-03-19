@@ -2,7 +2,7 @@ import Send from '../utils/Send.js';
 import qs from 'qs';
 
 export default {
-  getList(type, step, company_id) {
+  getList(type, step, company_id, cate1, ca_id, sfl, search) {
     return Send({
       method: 'post',
       data: qs.stringify({
@@ -10,6 +10,10 @@ export default {
         type,
         step,
         company_id,
+        cate1,
+        ca_id,
+        sfl,
+        search,
       }),
     });
   },

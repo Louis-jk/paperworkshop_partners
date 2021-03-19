@@ -13,17 +13,16 @@ import {
 import {useDispatch, useSelector} from 'react-redux';
 
 import {
-  UserId,
+  UserEmail,
   UserName,
   UserMobile,
-  UserEmail,
   UserMobileCfm,
-  UserType,
   UserCompany,
+  UserType,
   UserProfile,
   UserPtype,
-  UserProfileImg,
   UserEstimateCnt,
+  UserProfileImg,
 } from '../../../Modules/UserInfoReducer';
 
 import Auth from '../../../src/api/Auth';
@@ -65,7 +64,6 @@ const Login = (props) => {
     Auth.onLogin(loginEmail, loginPwd, fcmToken, checkPlatform)
       .then((res) => {
         if (res.data.result === '1') {
-          dispatch(UserId(res.data.item.mb_email));
           dispatch(UserEmail(res.data.item.mb_email));
           dispatch(UserName(res.data.item.mb_name));
           dispatch(UserMobile(res.data.item.mb_hp));

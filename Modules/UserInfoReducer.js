@@ -3,7 +3,6 @@ const USER_NAME = 'USER_NAME';
 const USER_MOBILE = 'USER_MOBILE';
 const USER_EMAIL = 'USER_EMAIL';
 const USER_COMPANY = 'USER_COMPANY';
-const USER_ID = 'USER_ID';
 const USER_MOBILE_CFM = 'USER_MOBILE_CFM';
 const USER_TYPE = 'USER_TYPE';
 const USER_PROFILE = 'USER_PROFILE';
@@ -12,7 +11,6 @@ const USER_PTYPE = 'USER_PTYPE';
 const USER_PROFILE_IMG = 'USER_PROFILE_IMG';
 
 // action method
-export const UserId = (payload) => ({type: USER_ID, payload});
 export const UserName = (payload) => ({type: USER_NAME, payload});
 export const UserMobile = (payload) => ({type: USER_MOBILE, payload});
 export const UserEmail = (payload) => ({type: USER_EMAIL, payload});
@@ -64,11 +62,6 @@ export default function setJoinInfo(state = initialize, action) {
       return {
         ...state,
         mb_2: action.payload,
-      };
-    case USER_ID:
-      return {
-        ...state,
-        mb_id: action.payload,
       };
     case USER_MOBILE_CFM:
       return {

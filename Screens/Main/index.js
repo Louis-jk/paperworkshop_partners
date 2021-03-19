@@ -28,6 +28,21 @@ const index = (props) => {
   const [menu, setMenu] = React.useState('All');
   const [isLoading, setIsLoading] = React.useState(false);
   const [list, setList] = React.useState([]);
+  const [cateV, setCateV] = React.useState(null);
+  const [caIdV, setCaIdV] = React.useState(null);
+  // const [searchType, setSearchType] = React.useState(null);
+  const [keyword, setKeyword] = React.useState(null);
+
+  const searchTypes = ['제목', '회사'];
+  const [search, setSearch] = React.useState(null);
+
+  const [
+    isActiveToggleSearchType,
+    setIsActiveToggleSearchType,
+  ] = React.useState(false);
+  const toggleSearchType = () => {
+    setIsActiveToggleSearchType(!isActiveToggleSearchType);
+  };
 
   // 파트너스회원 email(Unique Key)
   const {mb_email} = useSelector((state) => state.UserInfoReducer);
@@ -35,7 +50,7 @@ const index = (props) => {
   const getEstimateAllListAPI = () => {
     setIsLoading(true);
 
-    Estimate.getList(type, '0', mb_email)
+    Estimate.getList(type, '0', mb_email, cateV, caIdV, search, keyword)
       .then((res) => {
         if (res.data.result === '1' && res.data.count > 0) {
           setList(res.data.item);
@@ -100,16 +115,6 @@ const index = (props) => {
   const [isActiveToggleDetail, setIsActiveToggleDetail] = React.useState(false);
   const toggleDetail = () => {
     setIsActiveToggleDetail(!isActiveToggleDetail);
-  };
-
-  const searchTypes = ['제목', '회사'];
-  const [searchType, setSearchType] = React.useState('제목');
-  const [
-    isActiveToggleSearchType,
-    setIsActiveToggleSearchType,
-  ] = React.useState(false);
-  const toggleSearchType = () => {
-    setIsActiveToggleSearchType(!isActiveToggleSearchType);
   };
 
   console.log('list', list);
@@ -632,7 +637,7 @@ const index = (props) => {
                 }}
                 activeOpacity={0.8}
                 onPress={() => {
-                  setSearchType(v);
+                  setSearch(v);
                   setIsActiveToggleSearchType(false);
                   // setIsActiveTogglePrintType(false);
                   // setIsActiveToggleDetail(false);

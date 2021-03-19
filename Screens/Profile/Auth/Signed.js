@@ -9,18 +9,32 @@ import {
   Alert,
 } from 'react-native';
 
-import {useSelector} from 'react-redux';
+import {useSelector, useDispatch} from 'react-redux';
 
 import Header from '../../Common/Header';
 import Auth from '../../../src/api/Auth';
+import {
+  UserEmail,
+  UserName,
+  UserMobile,
+  UserMobileCfm,
+  UserCompany,
+  UserType,
+  UserProfile,
+  UserPtype,
+  UserEstimateCnt,
+  UserProfileImg,
+} from '../../../Modules/UserInfoReducer';
 
 const Signed = (props) => {
-  const navigation = props.navigation;
+  const {navigation} = props;
   const routeName = props.route.name;
 
   const {fcmToken} = useSelector((state) => state.InfoReducer);
   const {mb_email, mb_password} = useSelector((state) => state.JoinReducer);
   const [checkPlatform, setCheckPlatform] = React.useState(null); // OS 체크
+
+  const dispatch = useDispatch();
 
   React.useEffect(() => {
     if (Platform.OS === 'ios') {
@@ -33,8 +47,8 @@ const Signed = (props) => {
   const onLogin = () => {
     Auth.onLogin(mb_email, mb_password, fcmToken, checkPlatform)
       .then((res) => {
-        if (res.data.result === '1') {
-          dispatch(UserId(res.data.item.mb_email));
+        console.log('Login 시도', res);
+        if (res.data.result === '1' && res.data.count > 0) {
           dispatch(UserEmail(res.data.item.mb_email));
           dispatch(UserName(res.data.item.mb_name));
           dispatch(UserMobile(res.data.item.mb_hp));
