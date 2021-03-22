@@ -13,16 +13,31 @@ import {
 import {useDispatch, useSelector} from 'react-redux';
 
 import {
-  UserEmail,
+  UserNo,
   UserName,
   UserMobile,
+  UserEmail,
   UserMobileCfm,
+  UserLevel,
   UserCompany,
-  UserType,
   UserProfile,
   UserPtype,
+  UserLicense,
+  UserLicenseSource,
+  UserCate1,
+  UserCaId,
+  UserCaName,
+  UserDescription,
+  UserUsed,
+  UserBankName,
+  UserBankAccount,
+  UserBankDepositor,
+  UserNoticeYn,
+  UserQaYn,
+  UserEstimateYn,
+  UserPortfolio,
   UserEstimateCnt,
-  UserProfileImg,
+  UserLocation,
 } from '../../../Modules/UserInfoReducer';
 
 import Auth from '../../../src/api/Auth';
@@ -64,16 +79,31 @@ const Login = (props) => {
     Auth.onLogin(loginEmail, loginPwd, fcmToken, checkPlatform)
       .then((res) => {
         if (res.data.result === '1') {
+          dispatch(UserNo(res.data.item.mb_no));
           dispatch(UserEmail(res.data.item.mb_email));
           dispatch(UserName(res.data.item.mb_name));
           dispatch(UserMobile(res.data.item.mb_hp));
           dispatch(UserMobileCfm(res.data.item.mb_1));
           dispatch(UserCompany(res.data.item.mb_2));
-          dispatch(UserType(res.data.item.mb_level));
+          dispatch(UserLevel(res.data.item.mb_level));
           dispatch(UserProfile(res.data.item.mb_profile));
           dispatch(UserPtype(res.data.item.ptype));
+          dispatch(UserLicense(res.data.item.license));
+          dispatch(UserLicenseSource(res.data.item.license_source));
+          dispatch(UserCate1(res.data.item.cate1));
+          dispatch(UserCaId(res.data.item.ca_id));
+          dispatch(UserCaName(res.data.item.ca_name));
+          dispatch(UserDescription(res.data.item.description));
+          dispatch(UserUsed(res.data.item.used));
+          dispatch(UserBankName(res.data.item.bank_name));
+          dispatch(UserBankAccount(res.data.item.bank_account));
+          dispatch(UserBankDepositor(res.data.item.bank_depositor));
           dispatch(UserEstimateCnt(res.data.item.estimate_cnt));
-          dispatch(UserProfileImg(res.data.item.profileImg));
+          dispatch(UserNoticeYn(res.data.item.notice_yn));
+          dispatch(UserQaYn(res.data.item.qa_yn));
+          dispatch(UserEstimateYn(res.data.item.estimate_yn));
+          dispatch(UserPortfolio(res.data.item.portfolioImg));
+          dispatch(UserLocation(res.data.item.location));
 
           navigation.navigate('Stack');
         } else {
