@@ -30,8 +30,6 @@ const DrawerMenu = (props) => {
     }
   }, [mb_profile_img]);
 
-  console.log('imgMime', imgMime);
-
   const bannerCarouselRef = React.useRef(null);
 
   const banners = [
