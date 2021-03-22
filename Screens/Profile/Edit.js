@@ -11,6 +11,9 @@ import {
 } from 'react-native';
 
 import {useSelector} from 'react-redux';
+import RNFetchBlob from 'rn-fetch-blob'; // 파일 다운로드 패키지
+import DocumentPicker from 'react-native-document-picker'; // 파일 업로드 패키지
+
 import Header from '../Common/Header';
 import Modal from '../Common/PartnersInfoModal';
 
@@ -18,24 +21,157 @@ const Edit = (props) => {
   const navigation = props.navigation;
   const routeName = props.route.name;
 
-  const {mb_name, mb_2, mb_hp} = useSelector((state) => state.UserInfoReducer);
+  const {
+    mb_profile_img,
+    ptype,
+    mb_2,
+    mb_email,
+    mb_name,
+    mb_hp,
+    license,
+    license_source,
+    cate1,
+    ca_id,
+    bank_name,
+    bank_account,
+    bank_depositor,
+  } = useSelector((state) => state.UserInfoReducer);
 
   const [category01, setCategory01] = React.useState(null);
   const [category02, setCategory02] = React.useState(null);
 
   const [isModalVisible, setModalVisible] = React.useState(false);
 
+  const [imgMime, setImgMime] = React.useState(null);
+
+  const extSplitFn = (file) => {
+    if (file) {
+      const sliceFile = file.slice(mb_profile_img.lastIndexOf('.'));
+      setImgMime(sliceFile);
+    }
+  };
+
+  React.useEffect(() => {
+    if (mb_profile_img) {
+      extSplitFn(mb_profile_img);
+    }
+    return () => extSplitFn();
+  }, [mb_profile_img]);
+
+  console.log('imgMime', imgMime);
+
+  // 파일 다운로드 핸들러
+  const fileDownloadHandler = (filePath, fileName) => {
+    Alert.alert('파일을 다운로드 하시겠습니까?', '', [
+      {
+        text: '다운드로',
+        // onPress: () => console.log(filePath, fileName),
+        onPress: () => downloader(filePath, fileName),
+      },
+      {
+        text: '취소',
+      },
+    ]);
+  };
+
+  // 파일 다운로드 메소드
+  const downloader = async (filePath, fileName) => {
+    await RNFetchBlob.config({
+      fileCache: true,
+      addAndroidDownloads: {
+        useDownloadManager: true,
+        notification: true,
+        trusty: false,
+        path: `${RNFetchBlob.fs.dirs.DownloadDir}/${fileName}`,
+      },
+    })
+      .fetch('GET', filePath, {
+        'Content-Type': 'multipart/form-data',
+      })
+      .then((res) => {
+        Alert.alert('다운로드 되었습니다.', '내파일에서 확인해주세요.', [
+          {
+            text: '확인',
+          },
+        ]);
+        console.log('The file saved to ', res.path());
+      });
+  };
+
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
   };
 
-  const [name, setName] = React.useState('김성준');
-  const [businessName, setBusinessName] = React.useState('디몬스터');
-  const [mobileNo, setMobileNo] = React.useState('01012345678');
+  const [name, setName] = React.useState(null);
+  const [businessName, setBusinessName] = React.useState(null);
+  const [mobileNo, setMobileNo] = React.useState(null);
   const [mobileCert, setMobileCert] = React.useState(null);
-  const [bank, setBank] = React.useState('신한은행');
-  const [bankAccount, setBankAccount] = React.useState('562-123-4567812');
-  const [depositor, setDepositor] = React.useState('김성준');
+  const [bank, setBank] = React.useState(null);
+  const [bankAccount, setBankAccount] = React.useState(null);
+  const [depositor, setDepositor] = React.useState(null);
+  const [licenseFileNameCur, setLicenseFileNameCur] = React.useState(null);
+  const [licenseFilePathCur, setLicenseFilePathCur] = React.useState(null);
+
+  const [fileUrlCurrent, setFileUrlCurrent] = React.useState(null);
+  const [fileTypeCurrent, setFileTypeCurrent] = React.useState(null);
+  const [fileSizeCurrent, setFileSizeCurrent] = React.useState(null);
+  const [licenseFile, setLicenseFile] = React.useState(null);
+
+  // 파일 업로드 fn
+  const filePicker01 = async () => {
+    try {
+      const res = await DocumentPicker.pick({
+        type: [DocumentPicker.types.images],
+      });
+      setFileUrlCurrent(res.uri);
+      setFileTypeCurrent(res.type);
+      setLicenseFileNameCur(res.name);
+      setFileSizeCurrent(res.size);
+      setLicenseFile({
+        uri: res.uri,
+        type: res.type,
+        name: res.name,
+      });
+    } catch (err) {
+      if (DocumentPicker.isCancel(err)) {
+        // User cancelled the picker, exit any dialogs or menus and move on
+      } else {
+        throw err;
+      }
+    }
+  };
+
+  React.useEffect(() => {
+    setName(mb_name);
+    setBusinessName(mb_2);
+    setMobileNo(mb_hp);
+    setBank(bank_name);
+    setBankAccount(bank_account);
+    setDepositor(bank_depositor);
+    setLicenseFileNameCur(license_source);
+    setLicenseFilePathCur(license);
+
+    return () => {
+      setName();
+      setBusinessName();
+      setMobileNo();
+      setBank();
+      setBankAccount();
+      setDepositor();
+      setLicenseFileNameCur();
+      setLicenseFilePathCur();
+    };
+  }, [
+    mb_name,
+    mb_2,
+    mb_hp,
+    bank_name,
+    bank_account,
+    bank_depositor,
+    bank_depositor,
+    license_source,
+    license,
+  ]);
 
   const regionCount = [
     '서울',
@@ -110,17 +246,49 @@ const Edit = (props) => {
               style={{
                 borderWidth: 1,
                 borderColor: '#E3E3E3',
-                borderRadius: 100,
+                borderRadius: 80,
               }}>
-              <Image
-                source={require('../../src/assets/photo.png')}
-                resizeMode="cover"
+              <View
                 style={{
-                  width: 100,
-                  height: 100,
-                  borderRadius: 100,
-                }}
-              />
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  width: 80,
+                  height: 80,
+                  borderRadius: 80,
+                  backgroundColor: '#fff',
+                }}>
+                {mb_profile_img && imgMime !== '.gif' ? (
+                  <Image
+                    source={{uri: `${mb_profile_img}`}}
+                    resizeMode="cover"
+                    style={{
+                      width: 80,
+                      height: 80,
+                      borderRadius: 80,
+                    }}
+                  />
+                ) : mb_profile_img && imgMime === '.gif' ? (
+                  <FastImage
+                    source={{uri: `${mb_profile_img}`}}
+                    resizeMode={FastImage.resizeMode.contain}
+                    style={{
+                      width: 80,
+                      height: 80,
+                      borderRadius: 80,
+                    }}
+                  />
+                ) : (
+                  <Image
+                    source={require('../../src/assets/photo.png')}
+                    resizeMode="cover"
+                    style={{
+                      width: 80,
+                      height: 80,
+                      borderRadius: 80,
+                    }}
+                  />
+                )}
+              </View>
             </TouchableOpacity>
             <Text
               style={[
@@ -139,14 +307,22 @@ const Edit = (props) => {
         <View style={{paddingHorizontal: 20, paddingVertical: 20}}>
           <View style={styles.profileBox}>
             <Text style={styles.profileTitle}>이메일</Text>
-            <Text style={styles.profileDesc}>abcd@naver.com</Text>
+            <Text style={styles.profileDesc}>{mb_email}</Text>
           </View>
           <View style={{marginBottom: 20}}>
             <Text style={[styles.profileTitle, {marginBottom: 10}]}>
               회원등급
             </Text>
             <View style={[styles.flexRowCenter, {marginBottom: 10}]}>
-              <Text style={styles.profileDesc}>일반회원</Text>
+              <Text style={styles.profileDesc}>
+                {ptype === 'sincere'
+                  ? '성실파트너스'
+                  : ptype === 'popular'
+                  ? '인기파트너스'
+                  : ptype === 'local'
+                  ? '지역파트너스'
+                  : '일반회원'}
+              </Text>
               <TouchableOpacity activeOpacity={0.8} onPress={toggleModal}>
                 <Image
                   source={require('../../src/assets/q.png')}
@@ -159,10 +335,15 @@ const Edit = (props) => {
                   }}
                 />
               </TouchableOpacity>
-              <Text
-                style={[styles.profileDesc, {color: '#00A170', fontSize: 13}]}>
-                일반회원/인기파트너스
-              </Text>
+              <TouchableOpacity activeOpacity={0.8} onPress={toggleModal}>
+                <Text
+                  style={[
+                    styles.profileDesc,
+                    {color: '#00A170', fontSize: 13},
+                  ]}>
+                  일반회원/인기파트너스
+                </Text>
+              </TouchableOpacity>
             </View>
 
             <TouchableOpacity
@@ -375,7 +556,7 @@ const Edit = (props) => {
                 alignItems: 'center',
               }}>
               <TextInput
-                value="사업자등록증.jpg"
+                value={licenseFileNameCur}
                 placeholder="사업자 등록증을 첨부해주세요."
                 placeholderTextColor="#A2A2A2"
                 style={{
@@ -391,6 +572,7 @@ const Edit = (props) => {
               />
               <TouchableOpacity
                 activeOpacity={0.8}
+                onPress={() => filePicker01()}
                 style={{
                   justifyContent: 'center',
                   alignItems: 'center',
@@ -411,7 +593,10 @@ const Edit = (props) => {
             </View>
             <TouchableOpacity
               activeOpacity={0.8}
-              onPress={() => Alert.alert('다운로드')}>
+              // onPress={() => Alert.alert('다운로드')}
+              onPress={() =>
+                fileDownloadHandler(licenseFilePathCur, licenseFileNameCur)
+              }>
               <View
                 style={{
                   flexDirection: 'row',
@@ -425,7 +610,7 @@ const Edit = (props) => {
                   resizeMode="contain"
                   style={{width: 20, height: 20, marginRight: 5}}
                 />
-                <Text style={styles.normalText}>사업자등록증.jpg</Text>
+                <Text style={styles.normalText}>{licenseFileNameCur}</Text>
               </View>
             </TouchableOpacity>
           </View>

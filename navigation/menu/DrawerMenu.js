@@ -9,11 +9,28 @@ import {
   ScrollView,
 } from 'react-native';
 
+import {useSelector} from 'react-redux';
 import Carousel, {Pagination} from 'react-native-snap-carousel';
 import Modal from 'react-native-modal';
+import FastImage from 'react-native-fast-image';
 
 const DrawerMenu = (props) => {
   const navigation = props.navigation;
+
+  const {mb_profile_img, ptype, mb_2, mb_email} = useSelector(
+    (state) => state.UserInfoReducer,
+  );
+
+  const [imgMime, setImgMime] = React.useState(null);
+
+  React.useEffect(() => {
+    if (mb_profile_img) {
+      const sliceImg = mb_profile_img.slice(mb_profile_img.lastIndexOf('.'));
+      setImgMime(sliceImg);
+    }
+  }, [mb_profile_img]);
+
+  console.log('imgMime', imgMime);
 
   const bannerCarouselRef = React.useRef(null);
 
@@ -153,103 +170,113 @@ const DrawerMenu = (props) => {
             style={{
               flexDirection: 'row',
               alignItems: 'center',
-              justifyContent: 'space-between',
-              paddingHorizontal: 20,
+              justifyContent: 'flex-start',
             }}>
             <View
               style={{
-                flexDirection: 'row',
+                justifyContent: 'center',
                 alignItems: 'center',
-                justifyContent: 'space-between',
+                width: 80,
+                height: 80,
+                borderRadius: 160,
+                backgroundColor: '#fff',
+                marginRight: 20,
               }}>
+              {mb_profile_img && imgMime !== '.gif' ? (
+                <Image
+                  source={{uri: `${mb_profile_img}`}}
+                  resizeMode="cover"
+                  style={{
+                    width: 80,
+                    height: 80,
+                    borderRadius: 80,
+                  }}
+                />
+              ) : mb_profile_img && imgMime === '.gif' ? (
+                <FastImage
+                  source={{uri: `${mb_profile_img}`}}
+                  resizeMode={FastImage.resizeMode.contain}
+                  style={{
+                    width: 80,
+                    height: 80,
+                    borderRadius: 80,
+                  }}
+                />
+              ) : (
+                <Image
+                  source={require('../../src/assets/photo.png')}
+                  resizeMode="cover"
+                  style={{
+                    width: 80,
+                    height: 80,
+                    borderRadius: 80,
+                  }}
+                />
+              )}
+            </View>
+            <View>
               <View
                 style={{
+                  flexDirection: 'row',
                   justifyContent: 'center',
                   alignItems: 'center',
-                  width: 80,
-                  height: 80,
-                  borderRadius: 160,
-                  backgroundColor: '#fff',
-                  marginRight: 20,
+                  marginBottom: 5,
                 }}>
-                <View>
-                  <Text
-                    style={{
-                      color: '#00A170',
-                      fontSize: 12,
-                      fontWeight: 'bold',
-                      lineHeight: 14,
-                    }}>
-                    페이퍼
-                  </Text>
-                  <Text
-                    style={{
-                      color: '#00A170',
-                      fontSize: 12,
-                      fontWeight: 'bold',
-                      lineHeight: 14,
-                    }}>
-                    공작소
-                  </Text>
-                </View>
-              </View>
-              <View>
                 <View
                   style={{
-                    flexDirection: 'row',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    marginBottom: 5,
+                    backgroundColor: '#fff',
+                    borderRadius: 20,
+                    marginRight: 5,
                   }}>
-                  <View
-                    style={{
-                      backgroundColor: '#fff',
-                      borderRadius: 20,
-                      marginRight: 5,
-                    }}>
-                    <Text
-                      style={{
-                        fontFamily: 'SCDream4',
-                        color: '#00A170',
-                        paddingHorizontal: 10,
-                        paddingVertical: 5,
-                      }}>
-                      성실파트너스
-                    </Text>
-                  </View>
                   <Text
                     style={{
                       fontFamily: 'SCDream4',
-                      color: '#fff',
-                      fontSize: 18,
+                      color: '#00A170',
+                      paddingHorizontal: 10,
+                      paddingVertical: 5,
                     }}>
-                    파트너님
+                    {ptype === 'sincere'
+                      ? '성실파트너스'
+                      : ptype === 'popular'
+                      ? '인기파트너스'
+                      : ptype === 'local'
+                      ? '지역파트너스'
+                      : '일반회원'}
                   </Text>
-                  <TouchableOpacity
-                    activeOpacity={0.8}
-                    onPress={() => navigation.navigate('ProfileEdit')}>
-                    <View
-                      style={{
-                        paddingHorizontal: 10,
-                        paddingVertical: 10,
-                      }}>
-                      <Image
-                        source={require('../../src/assets/icon_pf.png')}
-                        resizeMode="contain"
-                        style={{
-                          width: 15,
-                          height: 15,
-                          marginTop: 2,
-                        }}
-                      />
-                    </View>
-                  </TouchableOpacity>
                 </View>
-                <Text style={styles.whiteFont}>paper@naver.com</Text>
+                <Text
+                  style={{
+                    fontFamily: 'SCDream4',
+                    color: '#fff',
+                    fontSize: 18,
+                  }}>
+                  {mb_2} 님
+                </Text>
+                <TouchableOpacity
+                  activeOpacity={0.8}
+                  onPress={() => navigation.navigate('ProfileEdit')}>
+                  <View
+                    style={{
+                      paddingHorizontal: 10,
+                      paddingVertical: 10,
+                    }}>
+                    <Image
+                      source={require('../../src/assets/icon_pf.png')}
+                      resizeMode="contain"
+                      style={{
+                        width: 15,
+                        height: 15,
+                        marginTop: 2,
+                      }}
+                    />
+                  </View>
+                </TouchableOpacity>
               </View>
+              <Text style={styles.whiteFont}>{mb_email}</Text>
             </View>
           </View>
         </View>
+
         <TouchableOpacity
           activeOpacity={0.8}
           onPress={() => navigation.navigate('Statistics')}
@@ -442,6 +469,7 @@ const DrawerMenu = (props) => {
             backgroundColor: '#F5F5F5',
           }}
         />
+
         <View style={{height: 80}} />
 
         {/* 배너 광고 section */}
