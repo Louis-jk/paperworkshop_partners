@@ -113,33 +113,6 @@ const Register = (props) => {
   const bankAccountRef = React.useRef(null);
   const bankDepoRef = React.useRef(null);
 
-  const regionCount = [
-    'seoul',
-    'busan',
-    'daegu',
-    'incheon',
-    'gwangju',
-    'sejong',
-    'ulsan',
-    'gyeongi',
-    'gangwon',
-    'choongcheong',
-    'jeonra',
-    'gyeongsang',
-    'jeju',
-  ];
-  // const [region, setRegion] = React.useState('시/도 전체');
-  const [isActiveToggleRegion, setIsActiveToggleRegion] = React.useState(false);
-  const toggleRegion = () => {
-    setIsActiveToggleRegion(!isActiveToggleRegion);
-  };
-
-  const [printDetailType, setPrintDetail] = React.useState(null);
-  const [isActiveToggleDetail, setIsActiveToggleDetail] = React.useState(false);
-  const toggleDetail = () => {
-    setIsActiveToggleDetail(!isActiveToggleDetail);
-  };
-
   // 아이디 중복체크
   const [checkedId, setCheckedId] = React.useState(false);
 
@@ -363,6 +336,23 @@ const Register = (props) => {
     }
   };
 
+  // 지역 값
+  const regionCount = [
+    'seoul',
+    'busan',
+    'daegu',
+    'incheon',
+    'gwangju',
+    'sejong',
+    'ulsan',
+    'gyeongi',
+    'gangwon',
+    'choongcheong',
+    'jeonra',
+    'gyeongsang',
+    'jeju',
+  ];
+
   //  지역 선택 (최대 5 지역까지)
   const [region, setRegion] = React.useState([]);
   const [countRegion, setCountRegion] = React.useState(0);
@@ -389,8 +379,6 @@ const Register = (props) => {
   };
 
   //  카테고리 선택 (최대 5개 까지)
-  const [cate1Arr, setCate1Arr] = React.useState([]); // 제작물 카테고리 대카테고리 지정시 배열형태 담을 값
-  const [caIdArr, setCaIdArr] = React.useState([]); // 제작물 카테고리 세부 종목 지정시 배열형태 담을 값
   const [categoryArr, setCategoryArr] = React.useState([]); // 제작물 카테고리 대분류 id 세부 종목 id 한묶음씩 배열로 담기
   const [countCategory, setCountCategory] = React.useState(0);
 
