@@ -15,6 +15,7 @@ import RNFetchBlob from 'rn-fetch-blob'; // 파일 다운로드 패키지
 import DocumentPicker from 'react-native-document-picker'; // 파일 업로드 패키지
 
 import Header from '../Common/Header';
+import Auth from '../../src/api/Auth';
 import Modal from '../Common/PartnersInfoModal';
 
 const Edit = (props) => {
@@ -35,14 +36,139 @@ const Edit = (props) => {
     bank_name,
     bank_account,
     bank_depositor,
+    location,
   } = useSelector((state) => state.UserInfoReducer);
 
-  const [category01, setCategory01] = React.useState(null);
-  const [category02, setCategory02] = React.useState(null);
-
+  const [isLoading, setIsLoading] = React.useState(false); // 로딩 유무
+  const [regionError, setRegionError] = React.useState(false); // 지역 지정 유효성 체크
+  const [categoryError, setCategoryError] = React.useState(false); // 카테고리 지정 유효성 체크
   const [isModalVisible, setModalVisible] = React.useState(false);
 
   const [imgMime, setImgMime] = React.useState(null);
+  const [locationCur, setLocationCur] = React.useState([]);
+
+  const [cateId, setCateId] = React.useState('1'); // 탭 기능으로 해당 카테고리의 id 값
+  const [categoryList, setCategoryList] = React.useState([]); // 제작물 카테고리 각 카테고리별 세부 종목 리스트
+
+  const getCategoriesAPI = (cate1) => {
+    setIsLoading(true);
+    if (cate1) {
+      Auth.getCategory(cate1)
+        .then((res) => {
+          if (res.data.result === '1' && res.data.count > 0) {
+            setCategoryList(res.data.item);
+          } else {
+            Alert.alert(res.data.message, '', [
+              {
+                text: '확인',
+              },
+            ]);
+          }
+        })
+        .catch((err) => {
+          Alert.alert(err, '관리자에게 문의하세요.', [
+            {
+              text: '확인',
+            },
+          ]);
+        });
+    } else {
+      Auth.getCategory(cateId)
+        .then((res) => {
+          if (res.data.result === '1' && res.data.count > 0) {
+            setCategoryList(res.data.item);
+          } else {
+            Alert.alert(res.data.message, '', [
+              {
+                text: '확인',
+              },
+            ]);
+          }
+        })
+        .catch((err) => {
+          Alert.alert(err, '관리자에게 문의하세요.', [
+            {
+              text: '확인',
+            },
+          ]);
+        });
+    }
+  };
+
+  React.useEffect(() => {
+    getCategoriesAPI();
+  }, []);
+
+  // 지역 값
+  const regionCount = [
+    'seoul',
+    'busan',
+    'daegu',
+    'incheon',
+    'gwangju',
+    'sejong',
+    'ulsan',
+    'gyeongi',
+    'gangwon',
+    'choongcheong',
+    'jeonra',
+    'gyeongsang',
+    'jeju',
+  ];
+
+  //  지역 선택 (최대 5 지역까지)
+  const [region, setRegion] = React.useState([]);
+  const [countRegion, setCountRegion] = React.useState(0);
+  const setRegionChoise = (v) => {
+    if (v) {
+      const alreadyValue = region.find((re) => re === v);
+      if (alreadyValue) {
+        setRegion(region.filter((re) => re !== alreadyValue));
+        setCountRegion((prev) => prev - 1);
+      } else if (countRegion < 5) {
+        setRegion((prev) => [...prev, v]);
+        setCountRegion((prev) => prev + 1);
+      } else {
+        Alert.alert('지역은 최대 5지역까지 정하실 수 있습니다.', '', [
+          {
+            text: '확인',
+          },
+        ]);
+        return false;
+      }
+    } else {
+      return false;
+    }
+  };
+
+  //  카테고리 선택 (최대 5개 까지)
+  const [categoryArr, setCategoryArr] = React.useState([]); // 제작물 카테고리 대분류 id 세부 종목 id 한묶음씩 배열로 담기
+  const [countCategory, setCountCategory] = React.useState(0);
+
+  const setCategoryArrFuc = (d01, d02) => {
+    let result = categoryArr.find((x) => x.cate1 === d01 && x.ca_id === d02);
+
+    if (result) {
+      let newArr = categoryArr.filter((x) => x !== result);
+      console.log('newArr', newArr);
+      setCategoryArr(newArr);
+      setCountCategory((prev) => prev - 1);
+    } else if (countCategory < 5) {
+      setCategoryArr((prev) => [...prev, {cate1: d01, ca_id: d02}]);
+      setCountCategory((prev) => prev + 1);
+    } else {
+      Alert.alert(
+        '최대 5종목까지 정하실 수 있습니다.',
+        '대분류 포함하여 5개까지 추가 가능합니다.',
+        [
+          {
+            text: '확인',
+          },
+        ],
+      );
+      return false;
+    }
+  };
 
   const extSplitFn = (file) => {
     if (file) {
@@ -55,10 +181,15 @@ const Edit = (props) => {
     if (mb_profile_img) {
       extSplitFn(mb_profile_img);
     }
+    if (location) {
+      const locationArr = location.split(',');
+      setRegion(locationArr);
+    }
     return () => extSplitFn();
   }, [mb_profile_img]);
 
-  console.log('imgMime', imgMime);
+  console.log('locationCur', locationCur);
+  console.log('region', region);
 
   // 파일 다운로드 핸들러
   const fileDownloadHandler = (filePath, fileName) => {
@@ -172,27 +303,6 @@ const Edit = (props) => {
     license_source,
     license,
   ]);
-
-  const regionCount = [
-    '서울',
-    '부산',
-    '대구',
-    '인천',
-    '광주',
-    '세종/대전/청주',
-    '울산',
-    '경기',
-    '강원',
-    '충청',
-    '전라',
-    '경상',
-    '제주',
-  ];
-  const [region, setRegion] = React.useState('시/도 전체');
-  const [isActiveToggleRegion, setIsActiveToggleRegion] = React.useState(false);
-  const toggleRegion = () => {
-    setIsActiveToggleRegion(!isActiveToggleRegion);
-  };
 
   const printTypes = ['패키지', '일반인쇄', '기타인쇄'];
   const [printType, setPrintType] = React.useState('패키지');
@@ -616,284 +726,197 @@ const Edit = (props) => {
           </View>
           {/* // 사업자 등록증 변경 */}
 
-          {/* 위치 변경 */}
-          <View style={{marginBottom: 20}}>
-            <Text style={[styles.profileTitle, {marginBottom: 10}]}>위치</Text>
+          {/* 위치  */}
+          <View style={{marginBottom: 25}}>
+            <Text style={styles.profileTitle}>위치 (지역)</Text>
             <View
               style={{
-                borderWidth: 1,
-                borderColor: '#E3E3E3',
-                borderTopRightRadius: 4,
-                borderTopLeftRadius: 4,
-                borderBottomRightRadius: isActiveToggleRegion ? 0 : 4,
-                borderBottomLeftRadius: isActiveToggleRegion ? 0 : 4,
-                backgroundColor: '#fff',
-                width: '49%',
+                flexDirection: 'row',
+                justifyContent: 'flex-start',
+                alignItems: 'center',
+                flexWrap: 'wrap',
+                marginBottom: 10,
               }}>
-              <TouchableOpacity
-                onPress={toggleRegion}
-                activeOpacity={0.8}
-                style={{
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                  height: 50,
-                  paddingHorizontal: 10,
-                }}>
-                <Text style={{fontFamily: 'SCDream4'}}>{region}</Text>
-                {isActiveToggleRegion ? (
-                  <Image
-                    source={require('../../src/assets/arr01_top.png')}
-                    resizeMode="contain"
-                    style={{width: 20, height: 20}}
-                  />
-                ) : (
-                  <Image
-                    source={require('../../src/assets/arr01.png')}
-                    resizeMode="contain"
-                    style={{width: 20, height: 20}}
-                  />
-                )}
-              </TouchableOpacity>
+              {regionCount.map((r, idx) => (
+                <TouchableOpacity
+                  key={idx}
+                  activeOpacity={1}
+                  hitSlop={{top: 10, bottom: 10, left: 10, right: 10}}
+                  onPress={() => {
+                    setRegionError(false);
+                    setRegionChoise(r);
+                  }}
+                  style={{
+                    flexDirection: 'row',
+                    justifyContent: 'flex-start',
+                    alignItems: 'center',
+                    marginRight: 20,
+                    marginBottom: 15,
+                    backgroundColor: region.find((re) => re === r)
+                      ? '#00A170'
+                      : '#fff',
+                    paddingHorizontal: 10,
+                    paddingVertical: 5,
+                    borderWidth: 1,
+                    borderColor: region.find((re) => re === r)
+                      ? '#00A170'
+                      : '#E3E3E3',
+                    borderRadius: 4,
+                  }}>
+                  <Text
+                    style={[
+                      styles.normalText,
+                      {
+                        fontSize: 14,
+                        color: region.find((re) => re === r)
+                          ? '#fff'
+                          : '#A2A2A2',
+                      },
+                    ]}>
+                    {r === 'seoul'
+                      ? '서울'
+                      : r === 'busan'
+                      ? '부산'
+                      : r === 'daegu'
+                      ? '대구'
+                      : r === 'incheon'
+                      ? '인천'
+                      : r === 'gwangju'
+                      ? '광주'
+                      : r === 'sejong'
+                      ? '세종/대전/청주'
+                      : r === 'ulsan'
+                      ? '울산'
+                      : r === 'gyeongi'
+                      ? '경기'
+                      : r === 'gangwon'
+                      ? '강원'
+                      : r === 'choongcheong'
+                      ? '충청'
+                      : r === 'jeonra'
+                      ? '전라'
+                      : r === 'gyeongsang'
+                      ? '경상'
+                      : r === 'jeju'
+                      ? '제주'
+                      : null}
+                  </Text>
+                </TouchableOpacity>
+              ))}
             </View>
-            {isActiveToggleRegion && (
-              <View
+            {regionError ? (
+              <Text
                 style={{
-                  position: 'absolute',
-                  top: 80,
-                  left: 0,
-                  width: '49%',
-                  backgroundColor: '#fff',
-                  paddingHorizontal: 10,
-                  paddingVertical: 10,
-                  borderWidth: 1,
-                  borderColor: '#E3E3E3',
-                  borderBottomRightRadius: 5,
-                  borderBottomLeftRadius: 5,
-                  zIndex: 100,
+                  width: '100%',
+                  fontFamily: 'SCDream4',
+                  fontSize: 12,
+                  lineHeight: 18,
+                  color: '#00A170',
+                  marginBottom: 5,
                 }}>
-                {regionCount.map((v, idx) => (
-                  <TouchableOpacity
-                    key={idx}
-                    style={{paddingVertical: 7, marginBottom: 7}}
-                    activeOpacity={0.8}
-                    onPress={() => {
-                      setRegion(v);
-                      setIsActiveToggleRegion(false);
-                    }}>
-                    <Text style={{fontFamily: 'SCDream4'}}>{v}</Text>
-                  </TouchableOpacity>
-                ))}
-              </View>
+                지역을 지정해주세요.
+              </Text>
+            ) : (
+              <Text
+                style={[styles.normalText, {color: '#B5B5B5', fontSize: 12}]}>
+                * 지역은 최대 5곳까지 등록하실 수 있습니다.
+              </Text>
             )}
           </View>
-          {/* // 위치 변경 */}
+          {/* // 위치  */}
 
           {/* 제작물 카테고리 변경 */}
-          <View style={{marginBottom: 20}}>
-            <Text style={[styles.profileTitle, {marginBottom: 10}]}>
-              제작물 카테고리
-            </Text>
+          <View style={{marginBottom: 25}}>
             <View
               style={{
                 flexDirection: 'row',
                 justifyContent: 'space-between',
+                alignItems: 'baseline',
+                marginBottom: 5,
+              }}>
+              <Text style={[styles.profileTitle]}>제작물 카테고리</Text>
+            </View>
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'flex-start',
                 alignItems: 'center',
               }}>
-              <View style={{width: '40%'}}>
-                <View
+              <TouchableOpacity
+                activeOpacity={1}
+                onPress={() => {
+                  setCateId('1');
+                  getCategoriesAPI('1');
+                }}
+                style={{
+                  marginRight: 20,
+                  backgroundColor: cateId === '1' ? '#f6f6f6' : 'transparent',
+                  borderWidth: cateId === '1' ? 1 : 0,
+                  paddingHorizontal: cateId === '1' ? 20 : 0,
+                  borderTopRightRadius: cateId === '1' ? 5 : null,
+                  borderTopLeftRadius: cateId === '1' ? 5 : null,
+                  borderColor: cateId === '1' ? '#f6f6f6' : null,
+                  borderBottomColor: cateId === '1' ? '#f6f6f6' : null,
+                }}>
+                <Text
                   style={{
-                    borderWidth: 1,
-                    borderColor: '#E3E3E3',
-                    borderTopRightRadius: 4,
-                    borderTopLeftRadius: 4,
-                    borderBottomRightRadius: isActiveTogglePrintType ? 0 : 4,
-                    borderBottomLeftRadius: isActiveTogglePrintType ? 0 : 4,
-                    backgroundColor: '#fff',
+                    fontFamily: 'SCDream4',
+                    fontSize: 14,
+                    marginVertical: 10,
                   }}>
-                  <TouchableOpacity
-                    onPress={togglePrintType}
-                    activeOpacity={0.8}
-                    style={{
-                      flexDirection: 'row',
-                      justifyContent: 'space-between',
-                      alignItems: 'center',
-                      height: 50,
-                      paddingHorizontal: 10,
-                    }}>
-                    <Text style={{fontFamily: 'SCDream4'}}>{printType}</Text>
-                    {isActiveTogglePrintType ? (
-                      <Image
-                        source={require('../../src/assets/arr01_top.png')}
-                        resizeMode="contain"
-                        style={{width: 20, height: 20}}
-                      />
-                    ) : (
-                      <Image
-                        source={require('../../src/assets/arr01.png')}
-                        resizeMode="contain"
-                        style={{width: 20, height: 20}}
-                      />
-                    )}
-                  </TouchableOpacity>
-                </View>
-                {isActiveTogglePrintType && (
-                  <View
-                    style={{
-                      position: 'absolute',
-                      top: 51,
-                      left: 0,
-                      width: '100%',
-                      backgroundColor: '#fff',
-                      paddingHorizontal: 10,
-                      paddingVertical: 10,
-                      borderWidth: 1,
-                      borderColor: '#E3E3E3',
-                      borderBottomRightRadius: 5,
-                      borderBottomLeftRadius: 5,
-                      zIndex: 100,
-                    }}>
-                    {printTypes.map((v, idx) => (
-                      <TouchableOpacity
-                        key={idx}
-                        style={{
-                          paddingVertical: 7,
-                          backgroundColor: '#fff',
-                          marginBottom: 7,
-                          zIndex: 100,
-                        }}
-                        activeOpacity={0.8}
-                        onPress={() => {
-                          setPrintType(v);
-                          setIsActiveTogglePrintType(false);
-                          setIsActiveToggleDetail(false);
-                        }}>
-                        <Text style={{fontFamily: 'SCDream4'}}>{v}</Text>
-                      </TouchableOpacity>
-                    ))}
-                  </View>
-                )}
-              </View>
-              <View style={{width: '59%'}}>
-                <View
+                  패키지
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                activeOpacity={1}
+                onPress={() => {
+                  setCateId('0');
+                  getCategoriesAPI('0');
+                }}
+                style={{
+                  marginRight: 20,
+                  backgroundColor: cateId === '0' ? '#f6f6f6' : 'transparent',
+                  borderWidth: cateId === '0' ? 1 : 0,
+                  paddingHorizontal: cateId === '0' ? 20 : 0,
+                  borderTopRightRadius: cateId === '0' ? 5 : null,
+                  borderTopLeftRadius: cateId === '0' ? 5 : null,
+                  borderColor: cateId === '0' ? '#f6f6f6' : null,
+                  borderBottomColor: cateId === '0' ? '#f6f6f6' : null,
+                }}>
+                <Text
                   style={{
-                    borderWidth: 1,
-                    borderColor: '#E3E3E3',
-                    borderTopRightRadius: 4,
-                    borderTopLeftRadius: 4,
-                    borderBottomRightRadius: isActiveToggleDetail ? 0 : 4,
-                    borderBottomLeftRadius: isActiveToggleDetail ? 0 : 4,
-                    backgroundColor: '#fff',
+                    fontFamily: 'SCDream4',
+                    fontSize: 14,
+                    marginVertical: 10,
                   }}>
-                  <TouchableOpacity
-                    onPress={toggleDetail}
-                    activeOpacity={0.8}
-                    style={{
-                      flexDirection: 'row',
-                      justifyContent: 'space-between',
-                      alignItems: 'center',
-                      height: 50,
-                      paddingHorizontal: 10,
-                    }}>
-                    <Text style={{fontFamily: 'SCDream4'}}>
-                      {printType === '패키지' && !printDetailType
-                        ? packageTypes[0]
-                        : printType === '일반인쇄' && !printDetailType
-                        ? generalTypes[0]
-                        : printType === '기타인쇄' && !printDetailType
-                        ? etcTypes[0]
-                        : printDetailType}
-                    </Text>
-                    {isActiveTogglePrintType ? (
-                      <Image
-                        source={require('../../src/assets/arr01_top.png')}
-                        resizeMode="contain"
-                        style={{width: 20, height: 20}}
-                      />
-                    ) : (
-                      <Image
-                        source={require('../../src/assets/arr01.png')}
-                        resizeMode="contain"
-                        style={{width: 20, height: 20}}
-                      />
-                    )}
-                  </TouchableOpacity>
-                </View>
-                {isActiveToggleDetail && (
-                  <View
-                    style={{
-                      position: 'absolute',
-                      top: 51,
-                      left: 0,
-                      width: '100%',
-                      backgroundColor: '#fff',
-                      paddingHorizontal: 10,
-                      paddingVertical: 10,
-                      borderWidth: 1,
-                      borderColor: '#E3E3E3',
-                      borderBottomRightRadius: 5,
-                      borderBottomLeftRadius: 5,
-                      zIndex: 100,
-                    }}>
-                    {printType === '패키지'
-                      ? packageTypes.map((v, idx) => (
-                          <TouchableOpacity
-                            key={idx}
-                            style={{
-                              paddingVertical: 7,
-                              backgroundColor: '#fff',
-                              marginBottom: 7,
-                              zIndex: 100,
-                            }}
-                            activeOpacity={0.8}
-                            onPress={() => {
-                              setPrintDetail(v);
-                              setIsActiveToggleDetail(false);
-                              // setIsActiveTogglePrintType(false);
-                            }}>
-                            <Text style={{fontFamily: 'SCDream4'}}>{v}</Text>
-                          </TouchableOpacity>
-                        ))
-                      : printType === '일반인쇄'
-                      ? generalTypes.map((v, idx) => (
-                          <TouchableOpacity
-                            key={idx}
-                            style={{
-                              paddingVertical: 7,
-                              backgroundColor: '#fff',
-                              marginBottom: 7,
-                              zIndex: 100,
-                            }}
-                            activeOpacity={0.8}
-                            onPress={() => {
-                              setPrintDetail(v);
-                              setIsActiveToggleDetail(false);
-                              // setIsActiveTogglePrintType(false);
-                            }}>
-                            <Text style={{fontFamily: 'SCDream4'}}>{v}</Text>
-                          </TouchableOpacity>
-                        ))
-                      : etcTypes.map((v, idx) => (
-                          <TouchableOpacity
-                            key={idx}
-                            style={{
-                              paddingVertical: 7,
-                              backgroundColor: '#fff',
-                              marginBottom: 7,
-                              zIndex: 100,
-                            }}
-                            activeOpacity={0.8}
-                            onPress={() => {
-                              setPrintDetail(v);
-                              setIsActiveToggleDetail(false);
-                              // setIsActiveTogglePrintType(false);
-                            }}>
-                            <Text style={{fontFamily: 'SCDream4'}}>{v}</Text>
-                          </TouchableOpacity>
-                        ))}
-                  </View>
-                )}
-              </View>
+                  일반인쇄
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                activeOpacity={1}
+                onPress={() => {
+                  setCateId('2');
+                  getCategoriesAPI('2');
+                }}
+                style={{
+                  marginRight: 20,
+                  backgroundColor: cateId === '2' ? '#f6f6f6' : 'transparent',
+                  borderWidth: cateId === '2' ? 1 : 0,
+                  paddingHorizontal: cateId === '2' ? 20 : 0,
+                  borderTopRightRadius: cateId === '2' ? 5 : null,
+                  borderTopLeftRadius: cateId === '2' ? 5 : null,
+                  borderColor: cateId === '2' ? '#f6f6f6' : null,
+                  borderBottomColor: cateId === '2' ? '#f6f6f6' : null,
+                }}>
+                <Text
+                  style={{
+                    fontFamily: 'SCDream4',
+                    fontSize: 14,
+                    marginVertical: 10,
+                  }}>
+                  기타인쇄
+                </Text>
+              </TouchableOpacity>
             </View>
           </View>
           {/* // 제작물 카테고리 변경 */}
