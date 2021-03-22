@@ -17,6 +17,7 @@ import {
 import {useSelector} from 'react-redux';
 import Header from '../Common/Header';
 import Estimate from '../../src/api/Estimate'; // 견적 요청 리스트 API
+import Category from '../../src/api/Category'; // 견적 요청 리스트 API
 
 const index = (props) => {
   const navigation = props.navigation;
@@ -46,6 +47,58 @@ const index = (props) => {
 
   // 파트너스회원 email(Unique Key)
   const {mb_email} = useSelector((state) => state.UserInfoReducer);
+
+  const printTypes = ['전체', '패키지', '일반인쇄', '기타인쇄'];
+  const [printType, setPrintType] = React.useState('전체');
+  const [isActiveTogglePrintType, setIsActiveTogglePrintType] = React.useState(
+    false,
+  );
+
+  const [detailTypes, setDetailTypes] = React.useState([]);
+  const packageTypes = [
+    '칼라박스',
+    '골판지박스',
+    '합지골판지박스',
+    '싸바리박스',
+    '식품박스',
+    '쇼핑백',
+  ];
+  const generalTypes = [
+    '카달로그/브로슈어/팜플렛',
+    '책자/서적류',
+    '전단/포스터/안내장',
+    '스티커/라벨',
+    '봉투/명함',
+  ];
+  const etcTypes = ['상품권/티켓', '초대장/카드', '비닐BAG', '감압지', '기타'];
+
+  const togglePrintType = () => {
+    setIsActiveTogglePrintType(!isActiveTogglePrintType);
+    setPrintDetail('세부 카테고리');
+  };
+
+  const getCategoryDetail = (cate1_value) => {
+    Category.getDetail(cate1_value)
+      .then((res) => {
+        console.log('cate1 value : ', res);
+        if (res.data.result === '1' && res.data.count > 0) {
+          setDetailTypes(res.data.item);
+        } else {
+          Alert.alert(res.data.message, '', [
+            {
+              text: '확인',
+            },
+          ]);
+        }
+      })
+      .catch((err) => {
+        Alert.alert(err, '관리자에게 문의하세요.', [
+          {
+            text: '확인',
+          },
+        ]);
+      });
+  };
 
   const getEstimateAllListAPI = () => {
     setIsLoading(true);
@@ -79,39 +132,12 @@ const index = (props) => {
 
   React.useEffect(() => {
     getEstimateAllListAPI();
-  }, [type]);
+  }, [type, cateV, caIdV, search, keyword]);
 
   console.log('list', list);
   console.log('list type is', typeof list);
 
-  const printTypes = ['패키지', '일반인쇄', '기타인쇄'];
-  const [printType, setPrintType] = React.useState('패키지');
-  const [isActiveTogglePrintType, setIsActiveTogglePrintType] = React.useState(
-    false,
-  );
-  const togglePrintType = () => {
-    setIsActiveTogglePrintType(!isActiveTogglePrintType);
-    setPrintDetail('세부 카테고리');
-  };
-
-  const packageTypes = [
-    '칼라박스',
-    '골판지박스',
-    '합지골판지박스',
-    '싸바리박스',
-    '식품박스',
-    '쇼핑백',
-  ];
-  const generalTypes = [
-    '카달로그/브로슈어/팜플렛',
-    '책자/서적류',
-    '전단/포스터/안내장',
-    '스티커/라벨',
-    '봉투/명함',
-  ];
-  const etcTypes = ['상품권/티켓', '초대장/카드', '비닐BAG', '감압지', '기타'];
-
-  const [printDetailType, setPrintDetail] = React.useState(null);
+  const [printDetailType, setPrintDetail] = React.useState(null); // 카테고리 별 세부 카테고리(ca_id)값 담기
   const [isActiveToggleDetail, setIsActiveToggleDetail] = React.useState(false);
   const toggleDetail = () => {
     setIsActiveToggleDetail(!isActiveToggleDetail);
@@ -335,6 +361,7 @@ const index = (props) => {
                 </TouchableOpacity>
               </View>
             </View>
+
             <View style={{width: '59%'}}>
               <View
                 style={{
@@ -347,7 +374,21 @@ const index = (props) => {
                   backgroundColor: '#fff',
                 }}>
                 <TouchableOpacity
-                  onPress={toggleDetail}
+                  onPress={() => {
+                    if (printType !== '전체') {
+                      toggleDetail();
+                    } else {
+                      Alert.alert(
+                        '전체일 경우 세부 카테고리를 지정하실 수 없습니다.',
+                        '카테고리명을 지정하여 이용해 주세요.',
+                        [
+                          {
+                            text: '확인',
+                          },
+                        ],
+                      );
+                    }
+                  }}
                   activeOpacity={0.8}
                   style={{
                     flexDirection: 'row',
@@ -491,7 +532,7 @@ const index = (props) => {
                 justifyContent: 'center',
                 alignItems: 'center',
                 flex: 1,
-                height: Dimensions.get('window').height - 300,
+                height: Dimensions.get('window').height - 330,
               }}>
               <Text style={{fontFamily: 'SCDream4'}}>
                 등록된 견적 요청사항이 없습니다.
@@ -531,6 +572,16 @@ const index = (props) => {
                   setPrintType(v);
                   setIsActiveTogglePrintType(false);
                   setIsActiveToggleDetail(false);
+                  if (v === '패키지') {
+                    setCateV('1');
+                    getCategoryDetail('1');
+                  } else if (v === '일반인쇄') {
+                    setCateV('0');
+                    getCategoryDetail('0');
+                  } else {
+                    setCateV('2');
+                    getCategoryDetail('2');
+                  }
                 }}>
                 <Text style={{fontFamily: 'SCDream4'}}>{v}</Text>
               </TouchableOpacity>
