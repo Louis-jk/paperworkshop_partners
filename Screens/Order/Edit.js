@@ -12,7 +12,6 @@ import {
   Linking,
   TouchableOpacity,
 } from 'react-native';
-import {Picker} from '@react-native-community/picker';
 import DetailHeader from '../Common/DetailHeader';
 
 const Edit = (props) => {
