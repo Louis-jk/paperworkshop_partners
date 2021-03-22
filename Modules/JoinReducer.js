@@ -16,11 +16,11 @@ const JOIN_BANKACCOUNT = 'JOIN_BANKACCOUNT';
 const JOIN_BANKDEPOSITOR = 'JOIN_BANKDEPOSITOR';
 
 // action method
+export const joinEmail = (payload) => ({type: JOIN_EMAIL, payload});
 export const joinPwd = (payload) => ({type: JOIN_PWD, payload});
 export const joinName = (payload) => ({type: JOIN_NAME, payload});
 export const joinMobile = (payload) => ({type: JOIN_MOBILE, payload});
 export const joinMobileCfm = (payload) => ({type: JOIN_MOBILE_CFM, payload});
-export const joinEmail = (payload) => ({type: JOIN_EMAIL, payload});
 export const joinCompany = (payload) => ({type: JOIN_COMPANY, payload});
 export const joinLicense = (payload) => ({type: JOIN_LICENSE, payload});
 export const joinLocation = (payload) => ({type: JOIN_LOCATION, payload});
