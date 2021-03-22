@@ -15,7 +15,7 @@ import {useDispatch} from 'react-redux';
 
 import {Formik} from 'formik';
 import * as yup from 'yup';
-import DocumentPicker from 'react-native-document-picker';
+import DocumentPicker from 'react-native-document-picker'; // 파일 업로드 패키지
 
 import DetailHeader from '../../Common/DetailHeader';
 import Auth from '../../../src/api/Auth';
@@ -441,6 +441,7 @@ const Register = (props) => {
   const [extension, setExtension] = React.useState(null);
   const [licenseFile, setLicenseFile] = React.useState(null);
 
+  // 파일 업로드 fn
   const filePicker01 = async () => {
     try {
       const res = await DocumentPicker.pick({
@@ -460,6 +461,7 @@ const Register = (props) => {
         type: res.type,
         name: res.name,
       });
+      console.log('test res', res);
     } catch (err) {
       if (DocumentPicker.isCancel(err)) {
         // User cancelled the picker, exit any dialogs or menus and move on
@@ -532,27 +534,6 @@ const Register = (props) => {
     categoryArr.map((c) => cate1NewArr.push(c.cate1));
     categoryArr.map((c) => caIdNewArr.push(c.ca_id));
 
-    // 1차 카테고리만 정리된 배열 값 -> 오브젝트 형식으로 변환 (Form Data 전송 때문)
-    const cate1Obj = Object.entries(cate1NewArr).map(([key, val]) => ({
-      [key]: val,
-    }));
-    // 1차 카테고리 오브젝트 변환 및 배열 선언 값 -> 전체 JSON.stringify로 문자열 처리 (Form Data 전송 때문)
-    const cate1Stringify = JSON.stringify(cate1Obj);
-
-    // 2차 카테고리만 정리된 배열 값 -> 오브젝트 형식으로 변환 (Form Data 전송 때문)
-    const caIdObj = Object.entries(caIdNewArr).map(([key, val]) => ({
-      [key]: val,
-    }));
-    // 2차 카테고리 오브젝트 변환 및 배열 선언 값 -> 전체 JSON.stringify로 문자열 처리 (Form Data 전송 때문)
-    const caIdStringify = JSON.stringify(caIdObj);
-
-    // 지역 다중 선택 배열 값 -> 오브젝트 형식으로 변환 (Form Data 전송 때문)
-    const regionObj = Object.entries(region).map(([key, val]) => ({
-      [key]: val,
-    }));
-    // 지역 오브젝트 변환 및 배열 선언 값 -> 전체 JSON.stringify로 문자열 처리 (Form Data 전송 때문)
-    const regionStringify = JSON.stringify(regionObj);
-
     if (
       licenseFile === null ||
       licenseFile === '' ||
@@ -575,20 +556,36 @@ const Register = (props) => {
       frmData.append('mb_hp', mobile);
       frmData.append('mb_1', mobileCfm);
       frmData.append('mb_2', company);
-      frmData.append('license', licenseFile);
-      frmData.append('location', regionStringify);
-      frmData.append('cate1', cate1Stringify);
-      frmData.append('ca_id', caIdStringify);
+      frmData.append('license[]', licenseFile);
+      frmData.append('location', region.join(','));
+      frmData.append('cate1', cate1NewArr.join(','));
+      frmData.append('ca_id', caIdNewArr.join(','));
       frmData.append('bank_name', bankName);
       frmData.append('bank_account', bankAccount);
       frmData.append('bank_depositor', bankDepositor);
 
       console.log('frmData', frmData);
+      console.log('region', region);
 
       Auth.onSignIn(frmData)
         .then((res) => {
+          console.log(licenseFile);
           console.log('파트너스 회원가입 res', res);
+
           if (res.data.result === '1' && res.data.count > 0) {
+            dispatch(joinEmail(res.data.mb_id));
+            dispatch(joinPwd(password));
+            dispatch(joinName(name));
+            dispatch(joinMobile(mobile));
+            dispatch(joinMobileCfm(mobileCfm));
+            dispatch(joinCompany(company));
+            dispatch(joinLicense(licenseFile));
+            // dispatch(joinLocation(values.register_company));
+            // dispatch(joinCate1(values.register_company));
+            // dispatch(joinCaId(values.register_company));
+            dispatch(joinBankName(bankName));
+            dispatch(joinBankAccount(bankAccount));
+            dispatch(joinBankDepositor(bankDepositor));
             navigation.navigate('Signed');
           } else {
             Alert.alert(res.data.message, '회원가입에 실패하였습니다.', [
@@ -605,56 +602,7 @@ const Register = (props) => {
             },
           ]),
         );
-
-      dispatch(joinEmail(email));
-      dispatch(joinPwd(password));
-      dispatch(joinName(name));
-      dispatch(joinMobile(mobile));
-      dispatch(joinMobileCfm(mobileCfm));
-      dispatch(joinCompany(company));
-
-      dispatch(joinLicense(licenseFile));
-      // dispatch(joinLocation(values.register_company));
-      // dispatch(joinCate1(values.register_company));
-      // dispatch(joinCaId(values.register_company));
-
-      dispatch(joinBankName(bankName));
-      dispatch(joinBankAccount(bankAccount));
-      dispatch(joinBankDepositor(bankDepositor));
     }
-  };
-
-  const test = () => {
-    let cate1NewArr = [];
-    let caIdNewArr = [];
-
-    categoryArr.map((c) => cate1NewArr.push(c.cate1));
-    categoryArr.map((c) => caIdNewArr.push(c.ca_id));
-
-    // const cate1Stringify = JSON.stringify(cate1NewArr);
-    // const caIdStringify = JSON.stringify(caIdNewArr);
-    // const regionStringify = JSON.stringify(region);
-
-    // console.log('regionStringify', regionStringify);
-    // console.log('regionStringify type', typeof regionStringify);
-
-    const cate1Obj = Object.entries(cate1NewArr).map(([key, val]) => ({
-      [key]: val,
-    }));
-    const cate1Stringify = JSON.stringify(cate1Obj);
-    console.log('cate1Stringify', cate1Stringify);
-
-    const caIdObj = Object.entries(caIdNewArr).map(([key, val]) => ({
-      [key]: val,
-    }));
-    const caIdStringify = JSON.stringify(caIdObj);
-    console.log('caIdStringify', caIdStringify);
-
-    const regionObj = Object.entries(region).map(([key, val]) => ({
-      [key]: val,
-    }));
-    const regionStringify = JSON.stringify(regionObj);
-    console.log('regionStringify', regionStringify);
   };
 
   // 유효성 체크
@@ -714,6 +662,7 @@ const Register = (props) => {
       .required('예금주를 입력해주세요.')
       .label('BankDepositor'),
   });
+  0;
 
   return (
     <>
@@ -1898,11 +1847,6 @@ const Register = (props) => {
               </View>
 
               <View style={{paddingHorizontal: 20, marginBottom: 50}}>
-                <TouchableOpacity onPress={() => test()} activeOpacity={0.8}>
-                  <View style={[styles.submitBtn, {marginBottom: 10}]}>
-                    <Text style={styles.submitBtnText}>테스트</Text>
-                  </View>
-                </TouchableOpacity>
                 <TouchableOpacity
                   onPress={() => formikProps.handleSubmit()}
                   activeOpacity={0.8}>
