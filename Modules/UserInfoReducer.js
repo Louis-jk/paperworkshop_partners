@@ -87,10 +87,10 @@ const initialize = {
   bank_name: null,
   bank_account: null,
   bank_depositor: null,
-  estimate_cnt: null,
+  estimate_yn: null,
   notice_yn: null,
   qa_yn: null,
-  estimate_yn: null,
+  estimate_cnt: null,
   portfolioImg: null,
   location: null,
 };
@@ -193,6 +193,11 @@ export default function setJoinInfo(state = initialize, action) {
         ...state,
         bank_depositor: action.payload,
       };
+    case USER_ESTIMATE_YN:
+      return {
+        ...state,
+        estimate_yn: action.payload,
+      };
     case USER_NOTICE_YN:
       return {
         ...state,
@@ -203,12 +208,6 @@ export default function setJoinInfo(state = initialize, action) {
         ...state,
         qa_yn: action.payload,
       };
-    case USER_ESTIMATE_YN:
-      return {
-        ...state,
-        estimate_yn: action.payload,
-      };
-
     case USER_ESTIMATE_CNT:
       return {
         ...state,
