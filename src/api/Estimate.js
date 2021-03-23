@@ -26,15 +26,4 @@ export default {
       }),
     });
   },
-  getEstimateSend(company_id) {
-    return Send({
-      method: 'post',
-      data: qs.stringify({
-        method: 'proc_partner_estimate_list',
-        type: null,
-        step: '5',
-        company_id,
-      }),
-    });
-  },
 };

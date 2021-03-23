@@ -23,19 +23,17 @@ const index = (props) => {
   const navigation = props.navigation;
   const routeName = props.route.name;
 
-  console.log('Main props :', props);
-
-  const [type, setType] = React.useState(null);
-  const [menu, setMenu] = React.useState('All');
   const [isLoading, setIsLoading] = React.useState(false);
-  const [list, setList] = React.useState([]);
+  const [list, setList] = React.useState([]); // 견적 리스트 API 호출 결과값
+  const [type, setType] = React.useState(null); // API 구분 상태값 (일반견적요청, 직접견적요청)
+  const [menu, setMenu] = React.useState('All');
   const [cateV, setCateV] = React.useState(null);
   const [caIdV, setCaIdV] = React.useState(null);
-  // const [searchType, setSearchType] = React.useState(null);
+  const [caName, setCaName] = React.useState(null);
   const [keyword, setKeyword] = React.useState(null);
 
-  const searchTypes = ['제목', '회사'];
-  const [search, setSearch] = React.useState('제목');
+  const searchTypes = ['title', 'company'];
+  const [search, setSearch] = React.useState('title');
 
   const [
     isActiveToggleSearchType,
@@ -55,32 +53,15 @@ const index = (props) => {
   );
 
   const [detailTypes, setDetailTypes] = React.useState([]);
-  const packageTypes = [
-    '칼라박스',
-    '골판지박스',
-    '합지골판지박스',
-    '싸바리박스',
-    '식품박스',
-    '쇼핑백',
-  ];
-  const generalTypes = [
-    '카달로그/브로슈어/팜플렛',
-    '책자/서적류',
-    '전단/포스터/안내장',
-    '스티커/라벨',
-    '봉투/명함',
-  ];
-  const etcTypes = ['상품권/티켓', '초대장/카드', '비닐BAG', '감압지', '기타'];
 
   const togglePrintType = () => {
     setIsActiveTogglePrintType(!isActiveTogglePrintType);
-    setPrintDetail('세부 카테고리');
+    setCaName(null);
   };
 
   const getCategoryDetail = (cate1_value) => {
     Category.getDetail(cate1_value)
       .then((res) => {
-        console.log('cate1 value : ', res);
         if (res.data.result === '1' && res.data.count > 0) {
           setDetailTypes(res.data.item);
         } else {
@@ -100,6 +81,7 @@ const index = (props) => {
       });
   };
 
+  // 리스트 출력 API 호출
   const getEstimateAllListAPI = () => {
     setIsLoading(true);
 
@@ -132,18 +114,13 @@ const index = (props) => {
 
   React.useEffect(() => {
     getEstimateAllListAPI();
-  }, [type, cateV, caIdV, search, keyword]);
+  }, [type, cateV, caIdV, search]);
 
-  console.log('list', list);
-  console.log('list type is', typeof list);
-
-  const [printDetailType, setPrintDetail] = React.useState(null); // 카테고리 별 세부 카테고리(ca_id)값 담기
   const [isActiveToggleDetail, setIsActiveToggleDetail] = React.useState(false);
   const toggleDetail = () => {
     setIsActiveToggleDetail(!isActiveToggleDetail);
   };
 
-  console.log('list', list);
   const renderRow = ({item, idx}) => {
     return (
       <>
@@ -398,13 +375,7 @@ const index = (props) => {
                     paddingHorizontal: 10,
                   }}>
                   <Text style={{fontFamily: 'SCDream4'}}>
-                    {printType === '패키지' && !printDetailType
-                      ? packageTypes[0]
-                      : printType === '일반인쇄' && !printDetailType
-                      ? generalTypes[0]
-                      : printType === '기타인쇄' && !printDetailType
-                      ? etcTypes[0]
-                      : printDetailType}
+                    {caName ? caName : '세부카테고리'}
                   </Text>
                   {isActiveTogglePrintType ? (
                     <Image
@@ -458,7 +429,9 @@ const index = (props) => {
                     height: 50,
                     paddingHorizontal: 10,
                   }}>
-                  <Text style={{fontFamily: 'SCDream4'}}>{search}</Text>
+                  <Text style={{fontFamily: 'SCDream4'}}>
+                    {search === 'title' ? '제목' : '회사'}
+                  </Text>
                   {isActiveToggleSearchType ? (
                     <Image
                       source={require('../../src/assets/arr01_top.png')}
@@ -477,6 +450,7 @@ const index = (props) => {
 
               <View style={{width: 230}}>
                 <TextInput
+                  value={keyword}
                   placeholder="검색어를 입력하세요."
                   style={{
                     fontFamily: 'SCDream4',
@@ -489,10 +463,12 @@ const index = (props) => {
                     marginLeft: 4,
                     marginRight: 4,
                   }}
+                  onChangeText={(text) => setKeyword(text)}
+                  onSubmitEditing={() => getEstimateAllListAPI()}
                 />
               </View>
             </View>
-            <TouchableWithoutFeedback>
+            <TouchableWithoutFeedback onPress={getEstimateAllListAPI}>
               <View
                 style={{
                   justifyContent: 'center',
@@ -572,7 +548,10 @@ const index = (props) => {
                   setPrintType(v);
                   setIsActiveTogglePrintType(false);
                   setIsActiveToggleDetail(false);
-                  if (v === '패키지') {
+                  if (v === '전체') {
+                    setCateV(null);
+                    setCaIdV(null);
+                  } else if (v === '패키지') {
                     setCateV('1');
                     getCategoryDetail('1');
                   } else if (v === '일반인쇄') {
@@ -605,60 +584,24 @@ const index = (props) => {
               borderBottomLeftRadius: 5,
               zIndex: 100,
             }}>
-            {printType === '패키지'
-              ? packageTypes.map((v, idx) => (
-                  <TouchableOpacity
-                    key={idx}
-                    style={{
-                      paddingVertical: 7,
-                      marginBottom: 7,
-                    }}
-                    activeOpacity={0.8}
-                    onPress={() => {
-                      setPrintDetail(v);
-                      setIsActiveToggleDetail(false);
-                      // setIsActiveTogglePrintType(false);
-                    }}>
-                    <Text style={{fontFamily: 'SCDream4'}}>{v}</Text>
-                  </TouchableOpacity>
-                ))
-              : printType === '일반인쇄'
-              ? generalTypes.map((v, idx) => (
-                  <TouchableOpacity
-                    key={idx}
-                    style={{
-                      paddingVertical: 7,
-                      backgroundColor: '#fff',
-                      marginBottom: 7,
-                      zIndex: 100,
-                    }}
-                    activeOpacity={0.8}
-                    onPress={() => {
-                      setPrintDetail(v);
-                      setIsActiveToggleDetail(false);
-                      // setIsActiveTogglePrintType(false);
-                    }}>
-                    <Text style={{fontFamily: 'SCDream4'}}>{v}</Text>
-                  </TouchableOpacity>
-                ))
-              : etcTypes.map((v, idx) => (
-                  <TouchableOpacity
-                    key={idx}
-                    style={{
-                      paddingVertical: 7,
-                      backgroundColor: '#fff',
-                      marginBottom: 7,
-                      zIndex: 100,
-                    }}
-                    activeOpacity={0.8}
-                    onPress={() => {
-                      setPrintDetail(v);
-                      setIsActiveToggleDetail(false);
-                      // setIsActiveTogglePrintType(false);
-                    }}>
-                    <Text style={{fontFamily: 'SCDream4'}}>{v}</Text>
-                  </TouchableOpacity>
-                ))}
+            {detailTypes &&
+              detailTypes.map((detail) => (
+                <TouchableOpacity
+                  key={detail.ca_id}
+                  style={{
+                    paddingVertical: 7,
+                    marginBottom: 7,
+                  }}
+                  activeOpacity={0.8}
+                  onPress={() => {
+                    setCaIdV(detail.ca_id);
+                    setCaName(detail.ca_name);
+                    setIsActiveToggleDetail(false);
+                    // setIsActiveTogglePrintType(false);
+                  }}>
+                  <Text style={{fontFamily: 'SCDream4'}}>{detail.ca_name}</Text>
+                </TouchableOpacity>
+              ))}
           </View>
         )}
 
@@ -693,7 +636,9 @@ const index = (props) => {
                   // setIsActiveTogglePrintType(false);
                   // setIsActiveToggleDetail(false);
                 }}>
-                <Text style={{fontFamily: 'SCDream4'}}>{v}</Text>
+                <Text style={{fontFamily: 'SCDream4'}}>
+                  {v === 'title' ? '제목' : '회사'}
+                </Text>
               </TouchableOpacity>
             ))}
           </View>
@@ -712,7 +657,7 @@ const styles = StyleSheet.create({
     width: 180,
   },
   listWrap: {
-    paddingVertical: 20,
+    paddingVertical: 15,
   },
   listTitle: {
     fontFamily: 'SCDream4',
