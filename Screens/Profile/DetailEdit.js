@@ -11,22 +11,136 @@ import {
   ImageBackground,
   Dimensions,
 } from 'react-native';
+import {useSelector, useDispatch} from 'react-redux';
+import ImagePicker from 'react-native-image-crop-picker';
 
 import Header from '../Common/DetailHeader';
 import Modal from '../Common/PartnersInfoModal';
+import Auth from '../../src/api/Auth';
 
 const DetailEdit = (props) => {
   const navigation = props.navigation;
   const routeName = props.route.name;
 
   const [isModalVisible, setModalVisible] = React.useState(false);
+  const {mb_no, mb_email, mb_1} = useSelector((state) => state.UserInfoReducer);
+
+  const dispatch = useDispatch();
 
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
   };
 
-  const [description, setDescription] = React.useState('');
-  const [used, setUsed] = React.useState('');
+  const [description, setDescription] = React.useState(''); // 업체 소개
+  const [businessTime, setBusinessTime] = React.useState(''); // 영업 시간
+  const [closeDay, setCloseDay] = React.useState(''); // 휴무일
+  const [used, setUsed] = React.useState(''); // 업체 품목
+
+  const [source, setSource] = React.useState([]); // API 탈 때 넘길 format(형식)
+  const [uploadImage, setUploadImage] = React.useState([]); // 현재(local: RN상에서) 표시될 사진 정보
+
+  // 파트너스 정보 수정 API
+  const onEditAPI = () => {
+    console.log(source);
+    const frmData = new FormData();
+    frmData.append('method', 'proc_modify_partner');
+    frmData.append('mb_no', mb_no);
+    frmData.append('mb_id', mb_email);
+    frmData.append('mb_1', mb_1);
+    frmData.append('mb_6', description);
+    frmData.append('mb_7', businessTime);
+    frmData.append('mb_8', closeDay);
+    frmData.append('mb_9', used);
+    frmData.append('bf_file[]', JSON.stringify(source));
+
+    console.log(frmData);
+
+    Auth.onAddEdit(frmData).then((hey) => console.log('hey', hey));
+  };
+
+  // 사진 선택 제한 function
+  const photoCountErr = (payload, num) => {
+    if (payload === 'over') {
+      Alert.alert(
+        '사진은 5장까지 등록 가능합니다.',
+        '사진 갯수를 확인해주세요.',
+        [
+          {
+            text: '확인',
+            onPress: () => {},
+          },
+        ],
+      );
+    } else if (payload === 'dubble') {
+      Alert.alert(
+        `중복되는 사진이 ${num}개 있습니다.`,
+        '사진을 확인해주세요.',
+        [
+          {
+            text: '확인',
+            onPress: () => {},
+          },
+        ],
+      );
+    } else {
+      return false;
+    }
+  };
+
+  // react-native-image-crop-picker 모듈 사용
+  const pickImageHandler = () => {
+    ImagePicker.openPicker({
+      multiple: true,
+      mediaType: 'photo',
+      sortOrder: 'none',
+      compressImageMaxWidth: 500,
+      compressImageMaxHeight: 500,
+      compressImageQuality: 1,
+      compressVideoPreset: 'MediumQuality',
+      includeExif: true,
+      cropperCircleOverlay: true,
+      useFrontCamera: false,
+      // includeBase64: true,
+      cropping: true,
+    })
+      .then((img) => {
+        console.log('img', img);
+        // let imgModi = img.map((i) => i.modificationDate);
+        // let check = imgModi.filter((i) => i === uploadImage.modificationDate);
+
+        if (img.length + uploadImage.length > 5) {
+          photoCountErr('over', '');
+        }
+        // else if (check !== undefined && check.length > 0) {
+        //   photoCountErr('dubble', check.length);
+        // }
+        else {
+          setUploadImage((prev) => prev.concat(img));
+          setSource((prev) =>
+            prev.concat(
+              img.map((i) => {
+                return {
+                  uri: i.path,
+                  type: i.mime,
+                  name: i.path.slice(i.path.lastIndexOf('/')),
+                };
+              }),
+            ),
+          );
+        }
+      })
+      .catch((e) => console.log(e.message ? e.message : e));
+  };
+
+  const removeImg = (payload) => {
+    const result = uploadImage.filter(
+      (select) => select.modificationDate !== payload,
+    );
+    console.log('result', result);
+    setUploadImage(result);
+  };
+
+  console.log('uploadImage', uploadImage);
 
   return (
     <>
@@ -52,13 +166,45 @@ const DetailEdit = (props) => {
                 fontFamily: 'SCDream4',
                 borderRadius: 5,
                 backgroundColor: '#F5F5F5',
-                height: 120,
-                flex: 1,
-                textAlignVertical: 'top',
                 paddingLeft: 10,
                 paddingVertical: 10,
               }}
-              multiline={true}
+            />
+          </View>
+          <View style={styles.profileBox}>
+            <Text style={[styles.profileTitle, {marginBottom: 10}]}>
+              영업시간
+            </Text>
+            <TextInput
+              value={businessTime}
+              placeholder="예: 10:00 ~ 17:00 (점심시간 12:00~13:00)"
+              placeholderTextColor="#A2A2A2"
+              onChangeText={(text) => setBusinessTime(text)}
+              style={{
+                fontFamily: 'SCDream4',
+                borderRadius: 5,
+                backgroundColor: '#F5F5F5',
+                paddingLeft: 10,
+                paddingVertical: 10,
+              }}
+            />
+          </View>
+          <View style={styles.profileBox}>
+            <Text style={[styles.profileTitle, {marginBottom: 10}]}>
+              휴무일
+            </Text>
+            <TextInput
+              value={closeDay}
+              placeholder="예: 토,일,공휴일"
+              placeholderTextColor="#A2A2A2"
+              onChangeText={(text) => setCloseDay(text)}
+              style={{
+                fontFamily: 'SCDream4',
+                borderRadius: 5,
+                backgroundColor: '#F5F5F5',
+                paddingLeft: 10,
+                paddingVertical: 10,
+              }}
             />
           </View>
           <View style={{marginBottom: 20}}>
@@ -68,20 +214,16 @@ const DetailEdit = (props) => {
               </Text>
               <TextInput
                 value={used}
-                placeholder="내용을 적어주세요."
+                placeholder="예: 패키지, 명함, 책자, 스티커, 전단지"
                 placeholderTextColor="#A2A2A2"
                 onChangeText={(text) => setUsed(text)}
                 style={{
                   fontFamily: 'SCDream4',
                   borderRadius: 5,
                   backgroundColor: '#F5F5F5',
-                  height: 120,
-                  flex: 1,
-                  textAlignVertical: 'top',
                   paddingLeft: 10,
                   paddingVertical: 10,
                 }}
-                multiline={true}
               />
             </View>
           </View>
@@ -98,7 +240,7 @@ const DetailEdit = (props) => {
             </Text>
 
             <Text style={[styles.normalText, {color: '#00A170', fontSize: 14}]}>
-              (4/5)
+              ({uploadImage.length}/5)
             </Text>
           </View>
 
@@ -116,158 +258,117 @@ const DetailEdit = (props) => {
                 justifyContent: 'space-between',
                 alignItems: 'center',
               }}>
-              <TouchableOpacity activeOpacity={0.8} style={{flex: 1}}>
-                <ImageBackground
-                  source={require('../../src/images/w02.jpg')}
-                  resizeMode="cover"
-                  borderRadius={4}
-                  style={{
-                    position: 'relative',
-                    width: Dimensions.get('window').width / 5 - 15,
-                    height: Dimensions.get('window').width / 5 - 15,
-                  }}>
-                  <View
+              {uploadImage && uploadImage.length === 1 ? (
+                <TouchableOpacity activeOpacity={0.8} style={{flex: 1}}>
+                  <ImageBackground
+                    source={{uri: `${uploadImage[0].path}`}}
+                    resizeMode="cover"
+                    borderRadius={4}
                     style={{
-                      position: 'absolute',
-                      top: 0,
-                      right: 0,
-                      width: 35,
-                      height: 35,
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                      borderTopRightRadius: 4,
-                      backgroundColor: 'rgba(0,0,0,0.3)',
+                      position: 'relative',
+                      width: Dimensions.get('window').width / 5 - 15,
+                      height: Dimensions.get('window').width / 5 - 15,
                     }}>
-                    <Image
-                      source={require('../../src/assets/icon_close02.png')}
-                      resizeMode="center"
-                      style={{
-                        width: 20,
-                        height: 20,
+                    <TouchableOpacity
+                      onPress={() => {
+                        removeImg(uploadImage[0].modificationDate);
                       }}
-                    />
-                  </View>
-                </ImageBackground>
-              </TouchableOpacity>
-              <TouchableOpacity activeOpacity={0.8} style={{flex: 1}}>
-                <ImageBackground
-                  source={require('../../src/images/w02.jpg')}
-                  resizeMode="cover"
-                  borderRadius={4}
-                  style={{
-                    position: 'relative',
-                    width: Dimensions.get('window').width / 5 - 15,
-                    height: Dimensions.get('window').width / 5 - 15,
-                  }}>
-                  <View
+                      style={{
+                        position: 'absolute',
+                        top: 0,
+                        right: 0,
+                        width: 35,
+                        height: 35,
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        borderTopRightRadius: 4,
+                        backgroundColor: 'rgba(0,0,0,0.3)',
+                      }}>
+                      <Image
+                        source={require('../../src/assets/icon_close02.png')}
+                        resizeMode="center"
+                        style={{
+                          width: 20,
+                          height: 20,
+                        }}
+                      />
+                    </TouchableOpacity>
+                  </ImageBackground>
+                </TouchableOpacity>
+              ) : uploadImage && uploadImage.length > 1 ? (
+                uploadImage.map((uImg, idx) => (
+                  <TouchableOpacity
+                    activeOpacity={0.8}
+                    key={idx}
                     style={{
-                      position: 'absolute',
-                      top: 0,
-                      right: 0,
-                      width: 35,
-                      height: 35,
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                      borderTopRightRadius: 4,
-                      backgroundColor: 'rgba(0,0,0,0.3)',
+                      flex:
+                        uploadImage.length > 3
+                          ? 1
+                          : uploadImage.length <= 3
+                          ? 0
+                          : null,
                     }}>
-                    <Image
-                      source={require('../../src/assets/icon_close02.png')}
-                      resizeMode="center"
+                    <ImageBackground
+                      source={{uri: `${uImg.path}`}}
+                      resizeMode="cover"
+                      borderRadius={4}
                       style={{
-                        width: 20,
-                        height: 20,
-                      }}
-                    />
-                  </View>
-                </ImageBackground>
-              </TouchableOpacity>
-              <TouchableOpacity activeOpacity={0.8} style={{flex: 1}}>
-                <ImageBackground
-                  source={require('../../src/images/w02.jpg')}
-                  resizeMode="cover"
-                  borderRadius={4}
-                  style={{
-                    position: 'relative',
-                    width: Dimensions.get('window').width / 5 - 15,
-                    height: Dimensions.get('window').width / 5 - 15,
-                  }}>
-                  <View
+                        position: 'relative',
+                        width: Dimensions.get('window').width / 5 - 15,
+                        height: Dimensions.get('window').width / 5 - 15,
+                        marginRight: uploadImage.length <= 3 ? 10 : 0,
+                      }}>
+                      <TouchableOpacity
+                        onPress={() => {
+                          removeImg(uImg.modificationDate);
+                        }}
+                        style={{
+                          position: 'absolute',
+                          top: 0,
+                          right: 0,
+                          width: 30,
+                          height: 30,
+                          justifyContent: 'center',
+                          alignItems: 'center',
+                          borderTopRightRadius: 4,
+                          borderBottomLeftRadius: 4,
+                          backgroundColor: 'rgba(0,0,0,0.3)',
+                        }}>
+                        <Image
+                          source={require('../../src/assets/icon_close02.png')}
+                          resizeMode="center"
+                          style={{
+                            width: 20,
+                            height: 20,
+                          }}
+                        />
+                      </TouchableOpacity>
+                    </ImageBackground>
+                  </TouchableOpacity>
+                ))
+              ) : null}
+              {uploadImage && uploadImage.length < 5 && (
+                <TouchableOpacity
+                  activeOpacity={0.8}
+                  onPress={pickImageHandler}
+                  style={{}}>
+                  <Image
+                    source={require('../../src/assets/photo_plus.png')}
+                    resizeMode="cover"
                     style={{
-                      position: 'absolute',
-                      top: 0,
-                      right: 0,
-                      width: 35,
-                      height: 35,
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                      borderTopRightRadius: 4,
-                      backgroundColor: 'rgba(0,0,0,0.3)',
-                    }}>
-                    <Image
-                      source={require('../../src/assets/icon_close02.png')}
-                      resizeMode="center"
-                      style={{
-                        width: 20,
-                        height: 20,
-                      }}
-                    />
-                  </View>
-                </ImageBackground>
-              </TouchableOpacity>
-              <TouchableOpacity activeOpacity={0.8} style={{flex: 1}}>
-                <ImageBackground
-                  source={require('../../src/images/w02.jpg')}
-                  resizeMode="cover"
-                  borderRadius={4}
-                  style={{
-                    position: 'relative',
-                    width: Dimensions.get('window').width / 5 - 15,
-                    height: Dimensions.get('window').width / 5 - 15,
-                  }}>
-                  <View
-                    style={{
-                      position: 'absolute',
-                      top: 0,
-                      right: 0,
-                      width: 35,
-                      height: 35,
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                      borderTopRightRadius: 4,
-                      backgroundColor: 'rgba(0,0,0,0.3)',
-                    }}>
-                    <Image
-                      source={require('../../src/assets/icon_close02.png')}
-                      resizeMode="center"
-                      style={{
-                        width: 20,
-                        height: 20,
-                      }}
-                    />
-                  </View>
-                </ImageBackground>
-              </TouchableOpacity>
-
-              <TouchableOpacity activeOpacity={0.8} style={{flex: 1}}>
-                <Image
-                  source={require('../../src/assets/photo_plus.png')}
-                  resizeMode="cover"
-                  style={{
-                    width: Dimensions.get('window').width / 5 - 15,
-                    height: Dimensions.get('window').width / 5 - 15,
-                  }}
-                />
-              </TouchableOpacity>
+                      width: Dimensions.get('window').width / 5 - 15,
+                      height: Dimensions.get('window').width / 5 - 15,
+                    }}
+                  />
+                </TouchableOpacity>
+              )}
             </View>
           </View>
           {/* // 사진 Area */}
         </View>
 
         <View style={{paddingHorizontal: 20, marginBottom: 50}}>
-          <TouchableOpacity
-            onPress={() => Alert.alert('수정')}
-            activeOpacity={0.8}>
+          <TouchableOpacity onPress={() => onEditAPI()} activeOpacity={0.8}>
             <View style={[styles.submitBtn, {marginBottom: 10}]}>
               <Text style={styles.submitBtnText}>수정</Text>
             </View>
