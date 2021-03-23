@@ -18,7 +18,7 @@ import * as yup from 'yup';
 import DocumentPicker from 'react-native-document-picker'; // 파일 업로드 패키지
 
 import DetailHeader from '../../Common/DetailHeader';
-import Auth from '../../../src/api/Auth';
+import Category from '../../../src/api/Category';
 import Timer from '../../Common/Timer';
 
 import {
@@ -54,7 +54,7 @@ const Register = (props) => {
   const getCategoriesAPI = (cate1) => {
     setIsLoading(true);
     if (cate1) {
-      Auth.getCategory(cate1)
+      Category.getDetail(cate1)
         .then((res) => {
           if (res.data.result === '1' && res.data.count > 0) {
             setCategoryList(res.data.item);
@@ -74,7 +74,7 @@ const Register = (props) => {
           ]);
         });
     } else {
-      Auth.getCategory(cateId)
+      Category.getDetail(cateId)
         .then((res) => {
           if (res.data.result === '1' && res.data.count > 0) {
             setCategoryList(res.data.item);
