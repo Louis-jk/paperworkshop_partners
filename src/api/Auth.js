@@ -53,13 +53,13 @@ export default {
       }),
     });
   },
-  getCategory(cate1) {
+  onAddEdit(frmData) {
     return Send({
       method: 'post',
-      data: qs.stringify({
-        method: 'proc_cate_list',
-        cate1,
-      }),
+      data: frmData,
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
     });
   },
 };
