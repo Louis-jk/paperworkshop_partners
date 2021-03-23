@@ -8,26 +8,85 @@ import {
   Dimensions,
 } from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
+import {useSelector, useDispatch} from 'react-redux';
 
+import {
+  UserEstimateYn,
+  UserNoticeYn,
+  UserQaYn,
+} from '../../../Modules/UserInfoReducer';
 import DetailHeader from '../DetailHeader';
+import Setting from '../../../src/api/Setting';
 
 const index = (props) => {
   const navigation = props.navigation;
   const routeName = props.route.name;
 
-  const [orderActive, setOrderActive] = React.useState(true);
-  const [noticeActive, setNoticeActive] = React.useState(true);
-  const [faqActive, setFaqActive] = React.useState(true);
+  const {mb_email, notice_yn, qa_yn, estimate_yn} = useSelector(
+    (state) => state.UserInfoReducer,
+  );
+  const dispatch = useDispatch();
+
+  const [orderActive, setOrderActive] = React.useState(null);
+  const [noticeActive, setNoticeActive] = React.useState(null);
+  const [faqActive, setFaqActive] = React.useState(null);
 
   const toggleSwich01 = () => {
-    setOrderActive((p) => !p);
+    if (orderActive === 'Y') {
+      setOrderActive('N');
+      dispatch(UserEstimateYn('N'));
+      setAlarm('N', noticeActive, faqActive);
+    } else {
+      setOrderActive('Y');
+      dispatch(UserEstimateYn('Y'));
+      setAlarm('Y', noticeActive, faqActive);
+    }
   };
   const toggleSwich02 = () => {
-    setNoticeActive((p) => !p);
+    if (noticeActive === 'Y') {
+      setNoticeActive('N');
+      dispatch(UserNoticeYn('N'));
+      setAlarm(orderActive, 'N', faqActive);
+    } else {
+      setNoticeActive('Y');
+      dispatch(UserNoticeYn('Y'));
+      setAlarm(orderActive, 'Y', faqActive);
+    }
   };
   const toggleSwich03 = () => {
-    setFaqActive((p) => !p);
+    if (faqActive === 'Y') {
+      setFaqActive('N');
+      dispatch(UserQaYn('N'));
+      setAlarm(orderActive, noticeActive, 'N');
+    } else {
+      setFaqActive('Y');
+      dispatch(UserQaYn('Y'));
+      setAlarm(orderActive, noticeActive, 'Y');
+    }
   };
+
+  React.useEffect(() => {
+    if (orderActive === null && noticeActive === null && faqActive === null) {
+      setOrderActive(estimate_yn);
+      setNoticeActive(notice_yn);
+      setFaqActive(qa_yn);
+    }
+  }, []);
+
+  console.log('orderActive', orderActive);
+  console.log('noticeActive', noticeActive);
+  console.log('faqActive', faqActive);
+
+  const setAlarm = (payload01, payload02, payload03) => {
+    Setting.onAlarm(mb_email, payload01, payload02, payload03).then((res) =>
+      console.log('alarm', res),
+    );
+  };
+
+  console.log('----------');
+  console.log('orderActive', orderActive);
+  console.log('noticeActive', noticeActive);
+  console.log('faqActive', faqActive);
 
   return (
     <>
@@ -56,7 +115,7 @@ const index = (props) => {
           <TouchableOpacity onPress={toggleSwich01} activeOpacity={1}>
             <Image
               source={
-                orderActive
+                orderActive === 'Y'
                   ? require('../../../src/assets/t_on.png')
                   : require('../../../src/assets/t_off.png')
               }
@@ -70,7 +129,7 @@ const index = (props) => {
           <TouchableOpacity onPress={toggleSwich02} activeOpacity={1}>
             <Image
               source={
-                noticeActive
+                noticeActive === 'Y'
                   ? require('../../../src/assets/t_on.png')
                   : require('../../../src/assets/t_off.png')
               }
@@ -84,7 +143,7 @@ const index = (props) => {
           <TouchableOpacity onPress={toggleSwich03} activeOpacity={1}>
             <Image
               source={
-                faqActive
+                faqActive === 'Y'
                   ? require('../../../src/assets/t_on.png')
                   : require('../../../src/assets/t_off.png')
               }
