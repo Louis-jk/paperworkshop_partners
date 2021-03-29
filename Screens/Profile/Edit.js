@@ -17,6 +17,7 @@ import DocumentPicker from 'react-native-document-picker'; // 파일 업로드 �
 import Header from '../Common/Header';
 import Category from '../../src/api/Category';
 import Modal from '../Common/PartnersInfoModal';
+import Auth from '../../src/api/Auth';
 
 const Edit = (props) => {
   const navigation = props.navigation;
@@ -335,6 +336,47 @@ const Edit = (props) => {
   const [isActiveToggleDetail, setIsActiveToggleDetail] = React.useState(false);
   const toggleDetail = () => {
     setIsActiveToggleDetail(!isActiveToggleDetail);
+  };
+
+  // 파트너스 정보 수정 API 추가중
+  const onEditAPI = () => {
+    console.log('source', source);
+    const frmData = new FormData();
+    frmData.append('method', 'proc_modify_partner2');
+    frmData.append('mb_no', mb_no);
+    frmData.append('mb_id', mb_email);
+    frmData.append('mb_password', mb_email);
+    frmData.append('mb_name', mb_email);
+    frmData.append('mb_hp', mb_email);
+    frmData.append('mb_1', mb_email);
+    frmData.append('mb_2', mb_email);
+    frmData.append('mb_2', mb_email);
+    frmData.append('license[]', JSON.stringify(source));
+    frmData.append('mb_img', JSON.stringify(source));
+    frmData.append('mb_5[]', JSON.stringify(source));
+    frmData.append('location', location);
+    frmData.append('cate1', location);
+    frmData.append('ca_id', location);
+    frmData.append('bank_name', location);
+    frmData.append('bank_account', location);
+    frmData.append('bank_depositor', location);
+
+    console.log(frmData);
+
+    Auth.onEdit(frmData).then((res) => {
+      if (res.data.result === '1') {
+        dispatch(UserDescription(descriptionEdit));
+        dispatch(UserBusinessTime(businessTimeEdit));
+        dispatch(UserCloseDay(closeDayEdit));
+        dispatch(UserUsed(usedEdit));
+        Alert.alert(res.data.message, '홈으로 이동합니다.', [
+          {
+            text: '확인',
+            onPress: () => navigation.navigate('Stack'),
+          },
+        ]);
+      }
+    });
   };
 
   return (
