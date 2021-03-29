@@ -11,6 +11,8 @@ import {
   Platform,
 } from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
+import messaging from '@react-native-firebase/messaging';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import {
   UserNo,
@@ -28,6 +30,8 @@ import {
   UserCaId,
   UserCaName,
   UserDescription,
+  UserBusinessTime,
+  UserCloseDay,
   UserUsed,
   UserBankName,
   UserBankAccount,
@@ -40,6 +44,8 @@ import {
   UserLocation,
 } from '../../../Modules/UserInfoReducer';
 
+import {setFcmToken} from '../../../Modules/InfoReducer';
+
 import Auth from '../../../src/api/Auth';
 
 const Login = (props) => {
@@ -48,17 +54,45 @@ const Login = (props) => {
   const dispatch = useDispatch();
   const {fcmToken} = useSelector((state) => state.InfoReducer);
 
+  const loginEmailRef = React.useRef(null);
+  const loginPwdRef = React.useRef(null);
+
+  const [fFcmToken, setFfcmToken] = React.useState(null); // fcmtoken 현재 페이지 저장
   const [checkPlatform, setCheckPlatform] = React.useState(null); // OS 체크
   const [loginEmail, setLoginEmail] = React.useState(null);
   const [loginPwd, setLoginPwd] = React.useState(null);
 
   const [autoLogin, setAutoLogin] = React.useState(false);
   const toggleCheck = () => {
-    setAutoLogin((prev) => !prev);
+    if (loginEmail !== null || loginPwd !== null) {
+      setAutoLogin((prev) => !prev);
+    } else {
+      Alert.alert('아이디 또는 비밀번호를 입력해주세요', '', [
+        {
+          text: '확인',
+        },
+      ]);
+    }
   };
 
-  const loginEmailRef = React.useRef(null);
-  const loginPwdRef = React.useRef(null);
+  const storeData = async () => {
+    try {
+      const jsonValue = JSON.stringify({userId: loginEmail, userPwd: loginPwd});
+      await AsyncStorage.setItem('@paper_info', jsonValue);
+    } catch (e) {
+      Alert.alert(e, '관리자에게 문의하세요', [
+        {
+          text: '확인',
+        },
+      ]);
+    }
+  };
+
+  // 비밀번호 보이기 기능
+  const [pwdEyes, setPwdEyes] = React.useState(true);
+  const togglePwdEyes = () => {
+    setPwdEyes(!pwdEyes);
+  };
 
   React.useEffect(() => {
     if (Platform.OS === 'ios') {
@@ -68,11 +102,27 @@ const Login = (props) => {
     }
   }, []);
 
-  // 비밀번호 보이기 기능
-  const [pwdEyes, setPwdEyes] = React.useState(true);
-  const togglePwdEyes = () => {
-    setPwdEyes(!pwdEyes);
-  };
+  React.useEffect(() => {
+    messaging()
+      .getToken()
+      .then((currentToken) => {
+        setFfcmToken(currentToken);
+        dispatch(setFcmToken(currentToken));
+      })
+      .catch((err) =>
+        Alert.alert('관리자에게 문의하세요', err.messaging(), [
+          {
+            text: '확인',
+          },
+        ]),
+      );
+
+    if (Platform.OS === 'ios') {
+      setCheckPlatform('ios');
+    } else {
+      setCheckPlatform('aos');
+    }
+  }, []);
 
   // 로그인
   const onLogin = () => {
@@ -94,6 +144,8 @@ const Login = (props) => {
           dispatch(UserCaId(res.data.item.ca_id));
           dispatch(UserCaName(res.data.item.ca_name));
           dispatch(UserDescription(res.data.item.description));
+          dispatch(UserBusinessTime(res.data.item.mb_7));
+          dispatch(UserCloseDay(res.data.item.mb_8));
           dispatch(UserUsed(res.data.item.used));
           dispatch(UserBankName(res.data.item.bank_name));
           dispatch(UserBankAccount(res.data.item.bank_account));
@@ -105,7 +157,12 @@ const Login = (props) => {
           dispatch(UserPortfolio(res.data.item.portfolioImg));
           dispatch(UserLocation(res.data.item.location));
 
-          navigation.navigate('Stack');
+          if (autoLogin) {
+            storeData();
+            navigation.navigate('Stack');
+          } else {
+            navigation.navigate('Stack');
+          }
         } else {
           Alert.alert(res.data.message, '다시 확인해주세요.', [
             {
@@ -114,10 +171,9 @@ const Login = (props) => {
             },
           ]);
         }
-        console.log('로그인 res', res);
       })
       .catch((err) => {
-        Alert.alert('관리자에게 문의해주세요.', err, [
+        Alert.alert(err, '관리자에게 문의하세요', [
           {
             text: '확인',
           },
@@ -191,7 +247,6 @@ const Login = (props) => {
                 onChangeText={(text) => setLoginPwd(text)}
                 autoCapitalize="none"
                 secureTextEntry={pwdEyes}
-                onSubmitEditing={() => onLogin()}
               />
               <TouchableOpacity
                 activeOpacity={0.8}
