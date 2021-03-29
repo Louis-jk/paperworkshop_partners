@@ -34,6 +34,7 @@ import Alarm from '../Screens/Common/Alarm';
 import Statistics from '../Screens/Common/Statistics';
 import ReqPopularScreen from '../Screens/Profile/ReqPopular';
 
+import CheckScreen from '../Screens/Profile/Auth/Check';
 import LoginScreen from '../Screens/Profile/Auth/Login';
 import RegisterScreen from '../Screens/Profile/Auth/Register';
 import SignedScreen from '../Screens/Profile/Auth/Signed';
@@ -203,6 +204,7 @@ export const MessageDetailStackNavigator = () => {
 export const LoginStackNavigator = () => {
   return (
     <Stack.Navigator screenOptions={{headerShown: false}}>
+      <Stack.Screen name="Check" component={CheckScreen} />
       <Stack.Screen name="Login" component={LoginScreen} />
     </Stack.Navigator>
   );
