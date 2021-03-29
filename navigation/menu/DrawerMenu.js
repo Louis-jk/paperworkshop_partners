@@ -7,12 +7,14 @@ import {
   Image,
   StyleSheet,
   ScrollView,
+  Alert,
 } from 'react-native';
 
 import {useSelector} from 'react-redux';
 import Carousel, {Pagination} from 'react-native-snap-carousel';
 import Modal from 'react-native-modal';
 import FastImage from 'react-native-fast-image';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const DrawerMenu = (props) => {
   const navigation = props.navigation;
@@ -79,6 +81,21 @@ const DrawerMenu = (props) => {
   const [isPopUpVisible, setIsPopUpVisible] = React.useState(false);
   const PopUp = () => {
     setIsPopUpVisible(!isPopUpVisible);
+  };
+
+  // 로그아웃
+  const logout = async () => {
+    try {
+      await AsyncStorage.removeItem('@paper_info');
+    } catch (e) {
+      console.log('로그아웃 에러', e);
+    }
+    Alert.alert('로그아웃 되었습니다.', '로그인 화면으로 이동합니다.', [
+      {
+        text: '확인',
+        onPress: () => navigation.navigate('Login'),
+      },
+    ]);
   };
 
   return (
@@ -458,6 +475,26 @@ const DrawerMenu = (props) => {
             resizeMode="contain"
             style={{width: 30, height: 30}}
           />
+        </TouchableOpacity>
+
+        <View
+          style={{
+            width: Dimensions.get('window').width,
+            height: 1,
+            backgroundColor: '#F5F5F5',
+          }}
+        />
+
+        <TouchableOpacity
+          activeOpacity={1}
+          onPress={logout}
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            paddingHorizontal: 20,
+          }}>
+          <Text style={styles.categoryTitle}>로그아웃</Text>
         </TouchableOpacity>
 
         <View
