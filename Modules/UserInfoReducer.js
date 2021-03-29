@@ -14,6 +14,8 @@ const USER_CATE1 = 'USER_CATE1';
 const USER_CA_ID = 'USER_CA_ID';
 const USER_CA_NAME = 'USER_CA_NAME';
 const USER_DESCRIPTION = 'USER_DESCRIPTION';
+const USER_BUSINESSTIME = 'USER_BUSINESSTIME';
+const USER_CLOSEDAY = 'USER_CLOSEDAY';
 const USER_USED = 'USER_USED';
 const USER_BANK_NAME = 'USER_BANK_NAME';
 const USER_BANK_ACCOUNT = 'USER_BANK_ACCOUNT';
@@ -45,6 +47,11 @@ export const UserCate1 = (payload) => ({type: USER_CATE1, payload});
 export const UserCaId = (payload) => ({type: USER_CA_ID, payload});
 export const UserCaName = (payload) => ({type: USER_CA_NAME, payload});
 export const UserDescription = (payload) => ({type: USER_DESCRIPTION, payload});
+export const UserBusinessTime = (payload) => ({
+  type: USER_BUSINESSTIME,
+  payload,
+});
+export const UserCloseDay = (payload) => ({type: USER_CLOSEDAY, payload});
 export const UserUsed = (payload) => ({type: USER_USED, payload});
 export const UserBankName = (payload) => ({type: USER_BANK_NAME, payload});
 export const UserBankAccount = (payload) => ({
@@ -82,8 +89,10 @@ const initialize = {
   cate1: null,
   ca_id: null,
   ca_name: null,
-  description: null,
-  used: null,
+  description: null, // 업체소개
+  businessTime: null, // 영업시간
+  closeDay: null, // 휴무일
+  used: null, // 영업품목
   bank_name: null,
   bank_account: null,
   bank_depositor: null,
@@ -172,6 +181,16 @@ export default function setJoinInfo(state = initialize, action) {
       return {
         ...state,
         description: action.payload,
+      };
+    case USER_BUSINESSTIME:
+      return {
+        ...state,
+        businessTime: action.payload,
+      };
+    case USER_CLOSEDAY:
+      return {
+        ...state,
+        closeDay: action.payload,
       };
     case USER_USED:
       return {
