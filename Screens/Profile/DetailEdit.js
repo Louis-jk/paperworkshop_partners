@@ -17,13 +17,28 @@ import ImagePicker from 'react-native-image-crop-picker';
 import Header from '../Common/DetailHeader';
 import Modal from '../Common/PartnersInfoModal';
 import Auth from '../../src/api/Auth';
+import {
+  UserDescription,
+  UserBusinessTime,
+  UserCloseDay,
+  UserUsed,
+} from '../../Modules/UserInfoReducer';
 
 const DetailEdit = (props) => {
   const navigation = props.navigation;
   const routeName = props.route.name;
 
   const [isModalVisible, setModalVisible] = React.useState(false);
-  const {mb_no, mb_email, mb_1} = useSelector((state) => state.UserInfoReducer);
+  const {
+    mb_no,
+    mb_email,
+    description,
+    businessTime,
+    closeDay,
+    used,
+  } = useSelector((state) => state.UserInfoReducer);
+
+  console.log('파트너스 추가정보', used);
 
   const dispatch = useDispatch();
 
@@ -31,32 +46,51 @@ const DetailEdit = (props) => {
     setModalVisible(!isModalVisible);
   };
 
-  const [description, setDescription] = React.useState(''); // 업체 소개
-  const [businessTime, setBusinessTime] = React.useState(''); // 영업 시간
-  const [closeDay, setCloseDay] = React.useState(''); // 휴무일
-  const [used, setUsed] = React.useState(''); // 업체 품목
+  const [descriptionEdit, setDescriptionEdit] = React.useState(''); // 업체 소개
+  const [businessTimeEdit, setBusinessTimeEdit] = React.useState(''); // 영업 시간
+  const [closeDayEdit, setCloseDayEdit] = React.useState(''); // 휴무일
+  const [usedEdit, setUsedEdit] = React.useState(''); // 업체 품목
 
   const [source, setSource] = React.useState([]); // API 탈 때 넘길 format(형식)
   const [uploadImage, setUploadImage] = React.useState([]); // 현재(local: RN상에서) 표시될 사진 정보
 
   // 파트너스 정보 수정 API
   const onEditAPI = () => {
-    console.log(source);
+    console.log('source', source);
     const frmData = new FormData();
-    frmData.append('method', 'proc_modify_partner');
+    frmData.append('method', 'proc_modify_partner2');
     frmData.append('mb_no', mb_no);
     frmData.append('mb_id', mb_email);
-    frmData.append('mb_1', mb_1);
-    frmData.append('mb_6', description);
-    frmData.append('mb_7', businessTime);
-    frmData.append('mb_8', closeDay);
-    frmData.append('mb_9', used);
+    frmData.append('mb_6', descriptionEdit);
+    frmData.append('mb_7', businessTimeEdit);
+    frmData.append('mb_8', closeDayEdit);
+    frmData.append('mb_9', usedEdit);
     frmData.append('bf_file[]', JSON.stringify(source));
 
     console.log(frmData);
 
-    Auth.onAddEdit(frmData).then((hey) => console.log('hey', hey));
+    Auth.onAddEdit(frmData).then((res) => {
+      if (res.data.result === '1') {
+        dispatch(UserDescription(descriptionEdit));
+        dispatch(UserBusinessTime(businessTimeEdit));
+        dispatch(UserCloseDay(closeDayEdit));
+        dispatch(UserUsed(usedEdit));
+        Alert.alert(res.data.message, '홈으로 이동합니다.', [
+          {
+            text: '확인',
+            onPress: () => navigation.navigate('Stack'),
+          },
+        ]);
+      }
+    });
   };
+
+  React.useEffect(() => {
+    setDescriptionEdit(description);
+    setBusinessTimeEdit(businessTime);
+    setCloseDayEdit(closeDay);
+    setUsedEdit(used);
+  }, []);
 
   // 사진 선택 제한 function
   const photoCountErr = (payload, num) => {
@@ -158,10 +192,10 @@ const DetailEdit = (props) => {
               업체 소개
             </Text>
             <TextInput
-              value={description}
+              value={descriptionEdit}
               placeholder="내용을 적어주세요."
               placeholderTextColor="#A2A2A2"
-              onChangeText={(text) => setDescription(text)}
+              onChangeText={(text) => setDescriptionEdit(text)}
               style={{
                 fontFamily: 'SCDream4',
                 borderRadius: 5,
@@ -176,10 +210,10 @@ const DetailEdit = (props) => {
               영업시간
             </Text>
             <TextInput
-              value={businessTime}
+              value={businessTimeEdit}
               placeholder="예: 10:00 ~ 17:00 (점심시간 12:00~13:00)"
               placeholderTextColor="#A2A2A2"
-              onChangeText={(text) => setBusinessTime(text)}
+              onChangeText={(text) => setBusinessTimeEdit(text)}
               style={{
                 fontFamily: 'SCDream4',
                 borderRadius: 5,
@@ -194,10 +228,10 @@ const DetailEdit = (props) => {
               휴무일
             </Text>
             <TextInput
-              value={closeDay}
+              value={closeDayEdit}
               placeholder="예: 토,일,공휴일"
               placeholderTextColor="#A2A2A2"
-              onChangeText={(text) => setCloseDay(text)}
+              onChangeText={(text) => setCloseDayEdit(text)}
               style={{
                 fontFamily: 'SCDream4',
                 borderRadius: 5,
@@ -213,10 +247,10 @@ const DetailEdit = (props) => {
                 영업 품목
               </Text>
               <TextInput
-                value={used}
+                value={usedEdit}
                 placeholder="예: 패키지, 명함, 책자, 스티커, 전단지"
                 placeholderTextColor="#A2A2A2"
-                onChangeText={(text) => setUsed(text)}
+                onChangeText={(text) => setUsedEdit(text)}
                 style={{
                   fontFamily: 'SCDream4',
                   borderRadius: 5,
