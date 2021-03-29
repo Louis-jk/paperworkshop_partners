@@ -22,6 +22,7 @@ import {
   UserBusinessTime,
   UserCloseDay,
   UserUsed,
+  UserPortfolio,
 } from '../../Modules/UserInfoReducer';
 
 const DetailEdit = (props) => {
@@ -36,6 +37,7 @@ const DetailEdit = (props) => {
     businessTime,
     closeDay,
     used,
+    portfolioImg,
   } = useSelector((state) => state.UserInfoReducer);
 
   console.log('파트너스 추가정보', used);
@@ -56,7 +58,7 @@ const DetailEdit = (props) => {
 
   // 파트너스 정보 수정 API
   const onEditAPI = () => {
-    console.log('source', source);
+    console.log('source', uploadImage);
     const frmData = new FormData();
     frmData.append('method', 'proc_modify_partner2');
     frmData.append('mb_no', mb_no);
@@ -65,16 +67,17 @@ const DetailEdit = (props) => {
     frmData.append('mb_7', businessTimeEdit);
     frmData.append('mb_8', closeDayEdit);
     frmData.append('mb_9', usedEdit);
-    frmData.append('bf_file[]', JSON.stringify(source));
+    frmData.append('bf_file[]', JSON.stringify(uploadImage));
 
     console.log(frmData);
 
-    Auth.onAddEdit(frmData).then((res) => {
+    Auth.onEdit(frmData).then((res) => {
       if (res.data.result === '1') {
         dispatch(UserDescription(descriptionEdit));
         dispatch(UserBusinessTime(businessTimeEdit));
         dispatch(UserCloseDay(closeDayEdit));
         dispatch(UserUsed(usedEdit));
+        dispatch(UserPortfolio(uploadImage));
         Alert.alert(res.data.message, '홈으로 이동합니다.', [
           {
             text: '확인',
@@ -90,6 +93,18 @@ const DetailEdit = (props) => {
     setBusinessTimeEdit(businessTime);
     setCloseDayEdit(closeDay);
     setUsedEdit(used);
+
+    if (portfolioImg && portfolioImg.length > 0) {
+      setUploadImage(
+        portfolioImg.map((img) => {
+          return {
+            path: img.path,
+            type: img.type,
+            name: img.name,
+          };
+        }),
+      );
+    }
   }, []);
 
   // 사진 선택 제한 function
@@ -134,21 +149,12 @@ const DetailEdit = (props) => {
       includeExif: true,
       cropperCircleOverlay: true,
       useFrontCamera: false,
-      // includeBase64: true,
       cropping: true,
     })
       .then((img) => {
-        console.log('img', img);
-        // let imgModi = img.map((i) => i.modificationDate);
-        // let check = imgModi.filter((i) => i === uploadImage.modificationDate);
-
         if (img.length + uploadImage.length > 5) {
           photoCountErr('over', '');
-        }
-        // else if (check !== undefined && check.length > 0) {
-        //   photoCountErr('dubble', check.length);
-        // }
-        else {
+        } else {
           setUploadImage((prev) => prev.concat(img));
           setSource((prev) =>
             prev.concat(
@@ -167,9 +173,7 @@ const DetailEdit = (props) => {
   };
 
   const removeImg = (payload) => {
-    const result = uploadImage.filter(
-      (select) => select.modificationDate !== payload,
-    );
+    const result = uploadImage.filter((select) => select.path !== payload);
     console.log('result', result);
     setUploadImage(result);
   };
@@ -305,7 +309,7 @@ const DetailEdit = (props) => {
                     }}>
                     <TouchableOpacity
                       onPress={() => {
-                        removeImg(uploadImage[0].modificationDate);
+                        removeImg(uploadImage[0].path);
                       }}
                       style={{
                         position: 'absolute',
@@ -354,7 +358,7 @@ const DetailEdit = (props) => {
                       }}>
                       <TouchableOpacity
                         onPress={() => {
-                          removeImg(uImg.modificationDate);
+                          removeImg(uImg.path);
                         }}
                         style={{
                           position: 'absolute',
@@ -381,6 +385,114 @@ const DetailEdit = (props) => {
                   </TouchableOpacity>
                 ))
               ) : null}
+
+              {/* 기존 업로드 된 이미지 */}
+              {/* {portfolioImg && portfolioImg.length === 1 ? (
+                <TouchableOpacity activeOpacity={0.8} style={{flex: 1}}>
+                  <ImageBackground
+                    source={{uri: `${portfolioImg}`}}
+                    resizeMode="cover"
+                    borderRadius={4}
+                    style={{
+                      position: 'relative',
+                      width: Dimensions.get('window').width / 5 - 15,
+                      height: Dimensions.get('window').width / 5 - 15,
+                    }}>
+                    <TouchableOpacity
+                      onPress={() => {
+                        removeImg(portfolioImg);
+                      }}
+                      style={{
+                        position: 'absolute',
+                        top: 0,
+                        right: 0,
+                        width: 35,
+                        height: 35,
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        borderTopRightRadius: 4,
+                        backgroundColor: 'rgba(0,0,0,0.3)',
+                      }}>
+                      <Image
+                        source={require('../../src/assets/icon_close02.png')}
+                        resizeMode="center"
+                        style={{
+                          width: 20,
+                          height: 20,
+                        }}
+                      />
+                    </TouchableOpacity>
+                  </ImageBackground>
+                </TouchableOpacity>
+              ) : portfolioImg && portfolioImg.length > 1 ? (
+                portfolioImg.map((uImg, idx) => (
+                  <TouchableOpacity
+                    activeOpacity={0.8}
+                    key={idx}
+                    style={{
+                      flex:
+                        portfolioImg.length > 3
+                          ? 1
+                          : portfolioImg.length <= 3
+                          ? 0
+                          : null,
+                    }}>
+                    <ImageBackground
+                      source={{uri: `${uImg}`}}
+                      resizeMode="cover"
+                      borderRadius={4}
+                      style={{
+                        position: 'relative',
+                        width: Dimensions.get('window').width / 5 - 15,
+                        height: Dimensions.get('window').width / 5 - 15,
+                        marginRight: portfolioImg.length <= 3 ? 10 : 0,
+                      }}>
+                      <TouchableOpacity
+                        onPress={() => {
+                          removeImg(uImg);
+                        }}
+                        style={{
+                          position: 'absolute',
+                          top: 0,
+                          right: 0,
+                          width: 30,
+                          height: 30,
+                          justifyContent: 'center',
+                          alignItems: 'center',
+                          borderTopRightRadius: 4,
+                          borderBottomLeftRadius: 4,
+                          backgroundColor: 'rgba(0,0,0,0.3)',
+                        }}>
+                        <Image
+                          source={require('../../src/assets/icon_close02.png')}
+                          resizeMode="center"
+                          style={{
+                            width: 20,
+                            height: 20,
+                          }}
+                        />
+                      </TouchableOpacity>
+                    </ImageBackground>
+                  </TouchableOpacity>
+                ))
+              ) : null}
+              {portfolioImg && portfolioImg.length < 5 && (
+                <TouchableOpacity
+                  activeOpacity={0.8}
+                  onPress={pickImageHandler}
+                  style={{}}>
+                  <Image
+                    source={require('../../src/assets/photo_plus.png')}
+                    resizeMode="cover"
+                    style={{
+                      width: Dimensions.get('window').width / 5 - 15,
+                      height: Dimensions.get('window').width / 5 - 15,
+                    }}
+                  />
+                </TouchableOpacity>
+              )} */}
+              {/* // 기존 업로드 된 이미지 */}
+
               {uploadImage && uploadImage.length < 5 && (
                 <TouchableOpacity
                   activeOpacity={0.8}
