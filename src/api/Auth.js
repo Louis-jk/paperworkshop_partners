@@ -53,7 +53,8 @@ export default {
       }),
     });
   },
-  onAddEdit(frmData) {
+  // 파트너스 정보 수정
+  onEdit(frmData) {
     return Send({
       method: 'post',
       data: frmData,
