@@ -12,6 +12,7 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import {useSelector} from 'react-redux';
+import RNFetchBlob from 'rn-fetch-blob'; // 파일 다운로드 패키지
 
 import DetailHeader from '../Common/DetailHeader';
 import Estimate from '../../src/api/Estimate';
@@ -32,27 +33,27 @@ const index = (props) => {
   const togglePayPer = () => {
     setIsActiveTogglePayPer(!isActiveTogglePayPer);
   };
-  const [isLoading, setIsLoading] = React.useState(false);
+  const [isLoading, setLoading] = React.useState(false);
   const [detail, setDetail] = React.useState([]);
 
   const getEstimateDetailAPI = () => {
-    setIsLoading(true);
+    setLoading(true);
     Estimate.getDetail(pe_id, mb_email)
       .then((res) => {
         if (res.data.result === '1' && res.data.count > 0) {
           console.log(res);
           setDetail(res.data.item[0]);
-          setIsLoading(false);
+          setLoading(false);
         } else if (res.data.result === '1' && res.data.count == 0) {
           setList(res.data.item);
-          setIsLoading(false);
+          setLoading(false);
         } else {
           Alert.alert(res.data.message, '', [
             {
               text: '확인',
             },
           ]);
-          setIsLoading(false);
+          setLoading(false);
         }
       })
       .catch((err) => {
@@ -61,13 +62,51 @@ const index = (props) => {
             text: '확인',
           },
         ]);
-        setIsLoading(false);
+        setLoading(false);
       });
   };
 
   React.useEffect(() => {
     getEstimateDetailAPI();
   }, []);
+
+  // 파일 다운로드 핸들러
+  const fileDownloadHandler = (filePath, fileName) => {
+    Alert.alert('파일을 다운로드 하시겠습니까?', '', [
+      {
+        text: '다운드로',
+        // onPress: () => console.log(filePath, fileName),
+        onPress: () => downloader(filePath, fileName),
+      },
+      {
+        text: '취소',
+      },
+    ]);
+  };
+
+  // 파일 다운로드 메소드
+  const downloader = async (filePath, fileName) => {
+    await RNFetchBlob.config({
+      fileCache: true,
+      addAndroidDownloads: {
+        useDownloadManager: true,
+        notification: true,
+        trusty: false,
+        path: `${RNFetchBlob.fs.dirs.DownloadDir}/${fileName}`,
+      },
+    })
+      .fetch('GET', filePath, {
+        'Content-Type': 'multipart/form-data',
+      })
+      .then((res) => {
+        Alert.alert('다운로드 되었습니다.', '내파일에서 확인해주세요.', [
+          {
+            text: '확인',
+          },
+        ]);
+        console.log('The file saved to ', res.path());
+      });
+  };
 
   console.log('detail', detail);
 
@@ -155,14 +194,20 @@ const index = (props) => {
               </TouchableOpacity> */}
               <TouchableOpacity
                 activeOpacity={0.8}
-                onPress={() => navigation.navigate('OrderDetail2')}
+                onPress={() =>
+                  navigation.navigate('OrderDetail2', {
+                    screen: 'OrderDetail2',
+                    params: {pe_id: pe_id, cate1: detail.cate1},
+                  })
+                }
+                hitSlop={{top: 10, right: 10, bottom: 10, left: 10}}
                 style={{alignSelf: 'flex-end'}}>
                 <Text
                   style={{
                     fontFamily: 'SCDream4',
                     fontSize: 12,
                     textDecorationLine: 'underline',
-                    color: '#A2A2A2',
+                    color: '#00A170',
                   }}>
                   세부 내용 보기
                 </Text>
@@ -187,55 +232,91 @@ const index = (props) => {
         />
         {/* // 경계 라인 */}
         <View style={styles.wrap}>
-          <Text style={styles.orderInfoTitle}>견적 작성</Text>
+          <Text style={styles.orderInfoTitle}>
+            견적{' '}
+            {detail.status === '0' || detail.status === '1' ? '작성' : '내용'}
+          </Text>
           <View style={[styles.flexRow, styles.mgB30]}>
             <View style={styles.wd50per}>
               <Text style={styles.orderInfoDesc}>견적 금액(원)</Text>
-              <TextInput
-                value={detail.total_price.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                placeholder="금액을 입력하세요."
-                style={styles.textInput}
-                editable={detail.status === '5' ? false : true}
-              />
+              {detail.status === '0' || detail.status === '1' ? (
+                <TextInput
+                  placeholder="금액을 입력하세요."
+                  style={styles.textInput}
+                />
+              ) : (
+                <View
+                  style={{
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    borderWidth: 1,
+                    borderColor: '#E3E3E3',
+                    borderRadius: 4,
+                    height: 50,
+                    marginRight: 5,
+                  }}>
+                  <Text style={{fontFamily: 'SCDream4', fontSize: 15}}>
+                    {detail.total_price &&
+                      detail.total_price.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                  </Text>
+                </View>
+              )}
             </View>
             <View style={styles.wd50per}>
               <Text style={styles.orderInfoDesc}>계약금(선금) 비율</Text>
-              <View
-                style={{
-                  borderWidth: 1,
-                  borderColor: '#E3E3E3',
-                  borderTopRightRadius: 4,
-                  borderTopLeftRadius: 4,
-                  borderBottomLeftRadius: isActiveTogglePayPer ? 0 : 4,
-                  borderBottomRightRadius: isActiveTogglePayPer ? 0 : 4,
-                  backgroundColor: '#fff',
-                }}>
-                <TouchableOpacity
-                  onPress={togglePayPer}
-                  activeOpacity={0.8}
+              {detail.status === '0' || detail.status === '1' ? (
+                <View
                   style={{
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    height: 50,
-                    paddingHorizontal: 10,
+                    borderWidth: 1,
+                    borderColor: '#E3E3E3',
+                    borderTopRightRadius: 4,
+                    borderTopLeftRadius: 4,
+                    borderBottomLeftRadius: isActiveTogglePayPer ? 0 : 4,
+                    borderBottomRightRadius: isActiveTogglePayPer ? 0 : 4,
+                    backgroundColor: '#fff',
                   }}>
-                  <Text style={{fontFamily: 'SCDream4'}}>{payPer}</Text>
-                  {isActiveTogglePayPer ? (
-                    <Image
-                      source={require('../../src/assets/arr01_top.png')}
-                      resizeMode="contain"
-                      style={{width: 20, height: 20}}
-                    />
-                  ) : (
-                    <Image
-                      source={require('../../src/assets/arr01.png')}
-                      resizeMode="contain"
-                      style={{width: 20, height: 20}}
-                    />
-                  )}
-                </TouchableOpacity>
-              </View>
+                  <TouchableOpacity
+                    onPress={togglePayPer}
+                    activeOpacity={0.8}
+                    style={{
+                      flexDirection: 'row',
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
+                      height: 50,
+                      paddingHorizontal: 10,
+                    }}>
+                    <Text style={{fontFamily: 'SCDream4'}}>{payPer}</Text>
+                    {isActiveTogglePayPer ? (
+                      <Image
+                        source={require('../../src/assets/arr01_top.png')}
+                        resizeMode="contain"
+                        style={{width: 20, height: 20}}
+                      />
+                    ) : (
+                      <Image
+                        source={require('../../src/assets/arr01.png')}
+                        resizeMode="contain"
+                        style={{width: 20, height: 20}}
+                      />
+                    )}
+                  </TouchableOpacity>
+                </View>
+              ) : (
+                <View
+                  style={{
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    borderWidth: 1,
+                    borderColor: '#E3E3E3',
+                    borderRadius: 4,
+                    height: 50,
+                  }}>
+                  <Text style={{fontFamily: 'SCDream4', fontSize: 15}}>
+                    {detail.deposit_rate}%
+                  </Text>
+                </View>
+              )}
+
               {isActiveTogglePayPer && (
                 <View
                   style={{
@@ -277,21 +358,38 @@ const index = (props) => {
             </Text>
           </View>
           <View style={styles.mgB30}>
-            <TextInput
-              placeholder="견적 상세 설명을 입력해주세요."
-              placeholderTextColor="#A2A2A2"
-              style={{
-                fontFamily: 'SCDream4',
-                borderRadius: 5,
-                backgroundColor: '#F5F5F5',
-                height: 120,
-                flex: 1,
-                textAlignVertical: 'top',
-                paddingLeft: 10,
-                paddingVertical: 10,
-              }}
-              multiline={true}
-            />
+            {detail.status === '0' || detail.status === '1' ? (
+              <TextInput
+                placeholder="견적 상세 설명을 입력해주세요."
+                placeholderTextColor="#A2A2A2"
+                style={{
+                  fontFamily: 'SCDream4',
+                  borderRadius: 5,
+                  backgroundColor: '#F5F5F5',
+                  height: 120,
+                  flex: 1,
+                  textAlignVertical: 'top',
+                  paddingLeft: 10,
+                  paddingVertical: 10,
+                }}
+                multiline={true}
+              />
+            ) : (
+              <View
+                style={{
+                  borderRadius: 5,
+                  backgroundColor: '#F5F5F5',
+                  height: 120,
+                  flex: 1,
+                  textAlignVertical: 'top',
+                  paddingLeft: 10,
+                  paddingVertical: 10,
+                }}>
+                <Text style={{fontFamily: 'SCDream4', fontSize: 14}}>
+                  {detail.estimate_content}
+                </Text>
+              </View>
+            )}
           </View>
 
           {/* 견적서 파일 */}
@@ -299,89 +397,180 @@ const index = (props) => {
             <Text style={[styles.orderInfoContentTitle, {marginBottom: 10}]}>
               견적서 파일
             </Text>
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'flex-start',
-                alignItems: 'center',
-                marginBottom: 5,
-              }}>
-              <TextInput
-                value="견적서파일.pdf"
-                placeholder="견적서파일을 첨부해주세요."
-                placeholderTextColor="#A2A2A2"
+
+            {detail.status === '0' || detail.status === '1' ? (
+              <View
                 style={{
-                  flex: 1,
-                  borderWidth: 1,
-                  borderColor: '#E3E3E3',
-                  borderRadius: 4,
-                  paddingHorizontal: 10,
-                  marginRight: 10,
-                  fontFamily: 'SCDream4',
-                }}
-                editable={false}
-              />
+                  flexDirection: 'row',
+                  justifyContent: 'flex-start',
+                  alignItems: 'center',
+                  marginBottom: 5,
+                }}>
+                <TextInput
+                  placeholder="견적서파일을 첨부해주세요."
+                  placeholderTextColor="#A2A2A2"
+                  style={{
+                    flex: 1,
+                    borderWidth: 1,
+                    borderColor: '#E3E3E3',
+                    borderRadius: 4,
+                    paddingHorizontal: 10,
+                    marginRight: 10,
+                    fontFamily: 'SCDream4',
+                  }}
+                  editable={false}
+                />
+                <TouchableOpacity
+                  activeOpacity={0.8}
+                  style={{
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    backgroundColor: '#00A170',
+                    borderRadius: 4,
+                    height: 50,
+                    paddingHorizontal: 20,
+                  }}>
+                  <Text
+                    style={{
+                      fontFamily: 'SCDream4',
+                      color: '#fff',
+                      textAlign: 'center',
+                    }}>
+                    파일 선택
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            ) : (
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'flex-start',
+                  alignItems: 'center',
+                  marginBottom: 5,
+                }}>
+                <TextInput
+                  value={
+                    detail.bf_file_source
+                      ? detail.bf_file_source
+                      : '첨부된 파일이 없습니다.'
+                  }
+                  placeholder="견적서파일을 첨부해주세요."
+                  placeholderTextColor="#A2A2A2"
+                  style={{
+                    flex: 1,
+                    borderWidth: 1,
+                    borderColor: '#E3E3E3',
+                    borderRadius: 4,
+                    paddingHorizontal: 10,
+                    marginRight: 10,
+                    fontFamily: 'SCDream4',
+                  }}
+                  editable={false}
+                />
+                <TouchableOpacity
+                  activeOpacity={1}
+                  style={{
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    backgroundColor: '#F5F5F5',
+                    borderRadius: 4,
+                    height: 50,
+                    paddingHorizontal: 20,
+                  }}
+                  disabled={true}>
+                  <Text
+                    style={{
+                      fontFamily: 'SCDream4',
+                      color: '#fff',
+                      textAlign: 'center',
+                      color: '#ccc',
+                    }}>
+                    파일 선택
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            )}
+
+            {detail.bf_file ? (
               <TouchableOpacity
                 activeOpacity={0.8}
-                style={{
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  backgroundColor: '#00A170',
-                  borderRadius: 4,
-                  height: 50,
-                  paddingHorizontal: 20,
-                }}>
-                <Text
+                onPress={() =>
+                  fileDownloadHandler(detail.bf_file, detail.bf_file_source)
+                }
+                style={{width: '80%'}}>
+                <View
                   style={{
-                    fontFamily: 'SCDream4',
-                    color: '#fff',
-                    textAlign: 'center',
+                    flexDirection: 'row',
+                    justifyContent: 'flex-start',
+                    alignItems: 'flex-start',
+                    marginTop: 10,
+                    marginBottom: 5,
                   }}>
-                  파일 선택
-                </Text>
+                  <Image
+                    source={require('../../src/assets/icon_down.png')}
+                    resizeMode="contain"
+                    style={{width: 20, height: 20, marginRight: 5}}
+                  />
+                  <Text style={styles.normalText}>{detail.bf_file}</Text>
+                </View>
               </TouchableOpacity>
-            </View>
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'flex-start',
-                alignItems: 'flex-start',
-              }}>
-              <Text
-                style={[
-                  styles.normalText,
-                  {
-                    color: '#00A170',
-                    fontSize: 12,
-                    lineHeight: 20,
-                    marginRight: 5,
-                  },
-                ]}>
-                *
-              </Text>
-              <View>
+            ) : null}
+            {detail.status === '0' || detail.status === '1' ? (
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'flex-start',
+                  alignItems: 'flex-start',
+                }}>
                 <Text
                   style={[
                     styles.normalText,
-                    {color: '#00A170', fontSize: 12, lineHeight: 20},
+                    {
+                      color: '#00A170',
+                      fontSize: 12,
+                      lineHeight: 20,
+                      marginRight: 5,
+                    },
                   ]}>
-                  문서파일(doc, hwp, xls, xlsx) 또는 이미지파일(jpg,png,gif)
+                  *
                 </Text>
-                <Text
-                  style={[styles.normalText, {color: '#00A170', fontSize: 12}]}>
-                  첨부 가능합니다.
-                </Text>
+                <View>
+                  <Text
+                    style={[
+                      styles.normalText,
+                      {color: '#00A170', fontSize: 12, lineHeight: 20},
+                    ]}>
+                    문서파일(doc, hwp, xls, xlsx) 또는 이미지파일(jpg,png,gif)
+                  </Text>
+                  <Text
+                    style={[
+                      styles.normalText,
+                      {color: '#00A170', fontSize: 12},
+                    ]}>
+                    첨부 가능합니다.
+                  </Text>
+                </View>
               </View>
-            </View>
+            ) : null}
           </View>
           {/* // 견적서 파일 */}
-          <TouchableOpacity
-            onPress={() => Alert.alert('제출')}
-            activeOpacity={0.8}>
-            <View style={styles.submitBtn}>
-              <Text style={styles.submitBtnText}>견적 제출</Text>
-            </View>
-          </TouchableOpacity>
+          {detail.status === '5' ? (
+            <TouchableOpacity
+              onPress={() => Alert.alert('납품')}
+              activeOpacity={0.8}>
+              <View style={styles.submitBtn}>
+                <Text style={styles.submitBtnText}>납품 완료</Text>
+              </View>
+            </TouchableOpacity>
+          ) : (
+            <TouchableOpacity
+              onPress={() => Alert.alert('제출')}
+              activeOpacity={0.8}>
+              <View style={styles.submitBtn}>
+                <Text style={styles.submitBtnText}>견적 제출</Text>
+              </View>
+            </TouchableOpacity>
+          )}
         </View>
       </ScrollView>
     </>

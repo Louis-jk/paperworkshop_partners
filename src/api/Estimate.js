@@ -27,4 +27,13 @@ export default {
       }),
     });
   },
+  getMoreDetail(method, pe_id) {
+    return Send({
+      method: 'post',
+      data: qs.stringify({
+        method,
+        pe_id,
+      }),
+    });
+  },
 };
