@@ -94,7 +94,7 @@ const index = (props) => {
           setList(res.data.item);
           setIsLoading(false);
         } else if (res.data.result === '1' && res.data.count == 0) {
-          setList(res.data.item);
+          setList();
           setIsLoading(false);
         } else {
           Alert.alert(res.data.message, '', [
@@ -125,6 +125,8 @@ const index = (props) => {
     setIsActiveToggleDetail(!isActiveToggleDetail);
   };
 
+  console.log('list', list);
+
   const renderRow = ({item, idx}) => {
     return (
       <>
@@ -145,35 +147,63 @@ const index = (props) => {
                 alignItems: 'center',
               }}>
               <View style={styles.listWrap}>
-                {item.dstatus === 'Y' ? (
-                  <View style={styles.listStep02Badge}>
-                    <Text style={styles.listStep02BadgeText}>
-                      직접 견적요청
-                    </Text>
-                  </View>
-                ) : item.status === '0' ? (
-                  <View style={styles.listStep03Badge}>
-                    <Text style={styles.listStep03BadgeText}>
-                      비교 견적요청
-                    </Text>
-                  </View>
-                ) : item.status === '1' ? (
-                  <View style={styles.listStep02Badge}>
-                    <Text style={styles.listStep02BadgeText}>견적발송</Text>
-                  </View>
-                ) : item.status === '2' ? (
-                  <View style={styles.listStep02Badge}>
-                    <Text style={styles.listStep02BadgeText}>
-                      계약금 입금 대기
-                    </Text>
-                  </View>
-                ) : item.status === '3' ? (
-                  <View style={styles.listStep03Badge}>
-                    <Text style={styles.listStep03BadgeText}>
-                      계약금 입금 완료
-                    </Text>
-                  </View>
-                ) : null}
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    justifyContent: 'flex-start',
+                    alignItems: 'center',
+                  }}>
+                  {item.status === '0' ? (
+                    <View style={styles.listStep03Badge}>
+                      <Text style={styles.listStep03BadgeText}>
+                        비교 견적요청
+                      </Text>
+                    </View>
+                  ) : item.status === '1' ? (
+                    <View style={styles.listStep02Badge}>
+                      <Text style={styles.listStep02BadgeText}>견적발송</Text>
+                    </View>
+                  ) : item.status === '2' ? (
+                    <View style={styles.listStep02Badge}>
+                      <Text style={styles.listStep02BadgeText}>
+                        견적 확정 대기
+                      </Text>
+                    </View>
+                  ) : item.status === '3' ? (
+                    <View style={styles.listStep03Badge}>
+                      <Text style={styles.listStep03BadgeText}>
+                        계약금 입금 대기
+                      </Text>
+                    </View>
+                  ) : item.status === '4' ? (
+                    <View style={styles.listStep03Badge}>
+                      <Text style={styles.listStep03BadgeText}>
+                        계약금 입금 완료
+                      </Text>
+                    </View>
+                  ) : item.status === '5' ? (
+                    <View style={styles.listStep03Badge}>
+                      <Text style={styles.listStep03BadgeText}>
+                        인쇄 제작요청
+                      </Text>
+                    </View>
+                  ) : item.status === '6' ? (
+                    <View style={styles.listStep03Badge}>
+                      <Text style={styles.listStep03BadgeText}>납품완료</Text>
+                    </View>
+                  ) : item.status === '7' ? (
+                    <View style={styles.listStep03Badge}>
+                      <Text style={styles.listStep03BadgeText}>수령완료</Text>
+                    </View>
+                  ) : null}
+                  {item.dstatus === 'Y' && (
+                    <View style={[styles.listStep02Badge, {marginLeft: 5}]}>
+                      <Text style={styles.listStep02BadgeText}>
+                        직접 견적요청
+                      </Text>
+                    </View>
+                  )}
+                </View>
                 <Text style={styles.listTitle}>{item.title}</Text>
                 <Text
                   style={
