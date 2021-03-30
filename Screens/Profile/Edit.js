@@ -65,7 +65,7 @@ const Edit = (props) => {
     location,
   } = useSelector((state) => state.UserInfoReducer);
 
-  const [isLoading, setIsLoading] = React.useState(false); // 로딩 유무
+  const [isLoading, setLoading] = React.useState(false); // 로딩 유무
   const [regionError, setRegionError] = React.useState(false); // 지역 지정 유효성 체크
   const [categoryError, setCategoryError] = React.useState(false); // 카테고리 지정 유효성 체크
   const [isModalVisible, setModalVisible] = React.useState(false);
@@ -77,7 +77,7 @@ const Edit = (props) => {
   const [categoryList, setCategoryList] = React.useState([]); // 제작물 카테고리 각 카테고리별 세부 종목 리스트
 
   const getCategoriesAPI = (cate1) => {
-    setIsLoading(true);
+    setLoading(true);
     if (cate1) {
       Category.getDetail(cate1)
         .then((res) => {

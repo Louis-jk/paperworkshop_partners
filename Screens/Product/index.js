@@ -24,7 +24,7 @@ const index = (props) => {
   const navigation = props.navigation;
   const routeName = props.route.name;
 
-  const [isLoading, setIsLoading] = React.useState(false);
+  const [isLoading, setLoading] = React.useState(false);
   const [list, setList] = React.useState([]); // 견적 리스트 API 호출 결과값
   const [type, setType] = React.useState(null); // API 구분 상태값 (일반견적요청, 직접견적요청)
   const [menu, setMenu] = React.useState('All');
@@ -86,23 +86,23 @@ const index = (props) => {
 
   // 리스트 출력 API 호출
   const getEstimateAllListAPI = () => {
-    setIsLoading(true);
+    setLoading(true);
 
     Estimate.getList(type, '4', mb_email, cateV, caIdV, search, keyword)
       .then((res) => {
         if (res.data.result === '1' && res.data.count > 0) {
           setList(res.data.item);
-          setIsLoading(false);
+          setLoading(false);
         } else if (res.data.result === '1' && res.data.count == 0) {
           setList();
-          setIsLoading(false);
+          setLoading(false);
         } else {
           Alert.alert(res.data.message, '', [
             {
               text: '확인',
             },
           ]);
-          setIsLoading(false);
+          setLoading(false);
         }
       })
       .catch((err) => {
@@ -111,7 +111,7 @@ const index = (props) => {
             text: '확인',
           },
         ]);
-        setIsLoading(false);
+        setLoading(false);
       });
   };
 
