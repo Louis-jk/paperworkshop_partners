@@ -11,6 +11,7 @@ import {
   TouchableOpacity,
   ActivityIndicator,
 } from 'react-native';
+import {useSelector} from 'react-redux';
 
 import DetailHeader from '../Common/DetailHeader';
 import Estimate from '../../src/api/Estimate';
@@ -19,6 +20,8 @@ const index = (props) => {
   const navigation = props.navigation;
   const routeName = props.route.name;
   const pe_id = props.route.params.pe_id;
+
+  const {mb_email} = useSelector((state) => state.UserInfoReducer);
 
   console.log('detail props', props);
   console.log('detail pe_id', pe_id);
@@ -34,7 +37,7 @@ const index = (props) => {
 
   const getEstimateDetailAPI = () => {
     setIsLoading(true);
-    Estimate.getDetail(pe_id)
+    Estimate.getDetail(pe_id, mb_email)
       .then((res) => {
         if (res.data.result === '1' && res.data.count > 0) {
           console.log(res);
@@ -65,6 +68,8 @@ const index = (props) => {
   React.useEffect(() => {
     getEstimateDetailAPI();
   }, []);
+
+  console.log('detail', detail);
 
   return (
     <>
@@ -187,9 +192,10 @@ const index = (props) => {
             <View style={styles.wd50per}>
               <Text style={styles.orderInfoDesc}>견적 금액(원)</Text>
               <TextInput
-                value="200,000"
+                value={detail.total_price.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
                 placeholder="금액을 입력하세요."
                 style={styles.textInput}
+                editable={detail.status === '5' ? false : true}
               />
             </View>
             <View style={styles.wd50per}>
