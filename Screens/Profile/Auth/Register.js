@@ -650,7 +650,6 @@ const Register = (props) => {
       .required('예금주를 입력해주세요.')
       .label('BankDepositor'),
   });
-  0;
 
   return (
     <>
@@ -1459,11 +1458,12 @@ const Register = (props) => {
                         getCategoriesAPI('1');
                       }}
                       style={{
-                        marginRight: 20,
+                        width: 100,
+                        justifyContent: 'center',
+                        alignItems: 'center',
                         backgroundColor:
                           cateId === '1' ? '#f6f6f6' : 'transparent',
                         borderWidth: cateId === '1' ? 1 : 0,
-                        paddingHorizontal: cateId === '1' ? 20 : 0,
                         borderTopRightRadius: cateId === '1' ? 5 : null,
                         borderTopLeftRadius: cateId === '1' ? 5 : null,
                         borderColor: cateId === '1' ? '#f6f6f6' : null,
@@ -1485,11 +1485,12 @@ const Register = (props) => {
                         getCategoriesAPI('0');
                       }}
                       style={{
-                        marginRight: 20,
+                        width: 100,
+                        justifyContent: 'center',
+                        alignItems: 'center',
                         backgroundColor:
                           cateId === '0' ? '#f6f6f6' : 'transparent',
                         borderWidth: cateId === '0' ? 1 : 0,
-                        paddingHorizontal: cateId === '0' ? 20 : 0,
                         borderTopRightRadius: cateId === '0' ? 5 : null,
                         borderTopLeftRadius: cateId === '0' ? 5 : null,
                         borderColor: cateId === '0' ? '#f6f6f6' : null,
@@ -1511,11 +1512,12 @@ const Register = (props) => {
                         getCategoriesAPI('2');
                       }}
                       style={{
-                        marginRight: 20,
+                        width: 100,
+                        justifyContent: 'center',
+                        alignItems: 'center',
                         backgroundColor:
                           cateId === '2' ? '#f6f6f6' : 'transparent',
                         borderWidth: cateId === '2' ? 1 : 0,
-                        paddingHorizontal: cateId === '2' ? 20 : 0,
                         borderTopRightRadius: cateId === '2' ? 5 : null,
                         borderTopLeftRadius: cateId === '2' ? 5 : null,
                         borderColor: cateId === '2' ? '#f6f6f6' : null,
