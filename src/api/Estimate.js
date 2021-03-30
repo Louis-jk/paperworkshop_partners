@@ -17,12 +17,13 @@ export default {
       }),
     });
   },
-  getDetail(pe_id) {
+  getDetail(pe_id, company_id) {
     return Send({
       method: 'post',
       data: qs.stringify({
         method: 'proc_partner_estimate_detail',
         pe_id,
+        company_id,
       }),
     });
   },
