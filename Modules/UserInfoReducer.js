@@ -10,6 +10,8 @@ const USER_PROFILE = 'USER_PROFILE';
 const USER_PTYPE = 'USER_PTYPE';
 const USER_LICENSE = 'USER_LICENSE';
 const USER_LICENSE_SOURCE = 'USER_LICENSE_SOURCE';
+const USER_COMPANY_FILE = 'USER_COMPANY_FILE';
+const USER_COMPANY_FILE_NAME = 'USER_COMPANY_FILE_NAME';
 const USER_CATE1 = 'USER_CATE1';
 const USER_CA_ID = 'USER_CA_ID';
 const USER_CA_NAME = 'USER_CA_NAME';
@@ -42,7 +44,14 @@ export const UserLicenseSource = (payload) => ({
   type: USER_LICENSE_SOURCE,
   payload,
 });
-
+export const UserCompanyFile = (payload) => ({
+  type: USER_COMPANY_FILE,
+  payload,
+});
+export const UserCompanyFileName = (payload) => ({
+  type: USER_COMPANY_FILE_NAME,
+  payload,
+});
 export const UserCate1 = (payload) => ({type: USER_CATE1, payload});
 export const UserCaId = (payload) => ({type: USER_CA_ID, payload});
 export const UserCaName = (payload) => ({type: USER_CA_NAME, payload});
@@ -84,8 +93,10 @@ const initialize = {
   mb_level: null, // 파트너스회원('4) / 사용자회원('2')
   mb_profile_img: null,
   ptype: null,
-  license: null,
-  license_source: null,
+  license: null, // 사업자 등록증
+  license_source: null, // 사업자 등록증 파일명
+  company_file: null, // 회사소개서
+  company_file_name: null, // 회사소개서 파일명
   cate1: null,
   ca_id: null,
   ca_name: null,
@@ -161,6 +172,16 @@ export default function setJoinInfo(state = initialize, action) {
       return {
         ...state,
         license_source: action.payload,
+      };
+    case USER_COMPANY_FILE:
+      return {
+        ...state,
+        company_file: action.payload,
+      };
+    case USER_COMPANY_FILE_NAME:
+      return {
+        ...state,
+        company_file_name: action.payload,
       };
     case USER_CATE1:
       return {
