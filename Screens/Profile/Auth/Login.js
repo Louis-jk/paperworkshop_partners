@@ -26,6 +26,8 @@ import {
   UserPtype,
   UserLicense,
   UserLicenseSource,
+  UserCompanyFile,
+  UserCompanyFileName,
   UserCate1,
   UserCaId,
   UserCaName,
@@ -140,6 +142,8 @@ const Login = (props) => {
           dispatch(UserPtype(res.data.item.ptype));
           dispatch(UserLicense(res.data.item.license));
           dispatch(UserLicenseSource(res.data.item.license_source));
+          dispatch(UserCompanyFile(res.data.item.mb_5));
+          dispatch(UserCompanyFileName(res.data.item.mb_10));
           dispatch(UserCate1(res.data.item.cate1));
           dispatch(UserCaId(res.data.item.ca_id));
           dispatch(UserCaName(res.data.item.ca_name));
