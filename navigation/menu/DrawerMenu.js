@@ -505,6 +505,42 @@ const DrawerMenu = (props) => {
           }}
         />
 
+        <TouchableOpacity
+          activeOpacity={1}
+          onPress={() => navigation.navigate('Steps')}
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            paddingHorizontal: 20,
+          }}>
+          <Text style={styles.categoryTitle}>견적발송및채택-테스트</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          activeOpacity={1}
+          onPress={() => navigation.navigate('Product')}
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            paddingHorizontal: 20,
+          }}>
+          <Text style={styles.categoryTitle}>제작납품-테스트</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          activeOpacity={1}
+          onPress={() => navigation.navigate('Message')}
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            paddingHorizontal: 20,
+          }}>
+          <Text style={styles.categoryTitle}>메세지-테스트</Text>
+        </TouchableOpacity>
+
         <View style={{height: 80}} />
 
         {/* 배너 광고 section */}
