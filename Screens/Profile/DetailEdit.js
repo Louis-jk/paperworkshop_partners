@@ -56,38 +56,6 @@ const DetailEdit = (props) => {
   const [source, setSource] = React.useState([]); // API 탈 때 넘길 format(형식)
   const [uploadImage, setUploadImage] = React.useState([]); // 현재(local: RN상에서) 표시될 사진 정보
 
-  // 파트너스 정보 수정 API
-  const onEditAPI = () => {
-    console.log('source', uploadImage);
-    const frmData = new FormData();
-    frmData.append('method', 'proc_modify_partner2');
-    frmData.append('mb_no', mb_no);
-    frmData.append('mb_id', mb_email);
-    frmData.append('mb_6', descriptionEdit);
-    frmData.append('mb_7', businessTimeEdit);
-    frmData.append('mb_8', closeDayEdit);
-    frmData.append('mb_9', usedEdit);
-    frmData.append('bf_file[]', JSON.stringify(uploadImage));
-
-    console.log(frmData);
-
-    Auth.onEdit(frmData).then((res) => {
-      if (res.data.result === '1') {
-        dispatch(UserDescription(descriptionEdit));
-        dispatch(UserBusinessTime(businessTimeEdit));
-        dispatch(UserCloseDay(closeDayEdit));
-        dispatch(UserUsed(usedEdit));
-        dispatch(UserPortfolio(uploadImage));
-        Alert.alert(res.data.message, '홈으로 이동합니다.', [
-          {
-            text: '확인',
-            onPress: () => navigation.navigate('Stack'),
-          },
-        ]);
-      }
-    });
-  };
-
   React.useEffect(() => {
     setDescriptionEdit(description);
     setBusinessTimeEdit(businessTime);
@@ -98,7 +66,7 @@ const DetailEdit = (props) => {
       setUploadImage(
         portfolioImg.map((img) => {
           return {
-            path: img.path,
+            uri: img.uri,
             type: img.type,
             name: img.name,
           };
@@ -155,8 +123,8 @@ const DetailEdit = (props) => {
         if (img.length + uploadImage.length > 5) {
           photoCountErr('over', '');
         } else {
-          setUploadImage((prev) => prev.concat(img));
-          setSource((prev) =>
+          // setUploadImage((prev) => prev.concat(img));
+          setUploadImage((prev) =>
             prev.concat(
               img.map((i) => {
                 return {
@@ -173,9 +141,44 @@ const DetailEdit = (props) => {
   };
 
   const removeImg = (payload) => {
-    const result = uploadImage.filter((select) => select.path !== payload);
+    const result = uploadImage.filter((select) => select.uri !== payload);
     console.log('result', result);
     setUploadImage(result);
+  };
+
+  // 파트너스 정보 수정 API
+  const onEditAPI = () => {
+    console.log('uploadImage', uploadImage);
+    const frmData = new FormData();
+    frmData.append('method', 'proc_modify_partner2');
+    frmData.append('mb_no', mb_no);
+    frmData.append('mb_id', mb_email);
+    frmData.append('mb_6', descriptionEdit);
+    frmData.append('mb_7', businessTimeEdit);
+    frmData.append('mb_8', closeDayEdit);
+    frmData.append('mb_9', usedEdit);
+    uploadImage.map((img) => {
+      frmData.append('bf_file[]', JSON.stringify(img));
+    });
+
+    console.log(frmData);
+
+    Auth.onEdit(frmData).then((res) => {
+      console.log('edit?', res);
+      if (res.data.result === '1') {
+        dispatch(UserDescription(descriptionEdit));
+        dispatch(UserBusinessTime(businessTimeEdit));
+        dispatch(UserCloseDay(closeDayEdit));
+        dispatch(UserUsed(usedEdit));
+        dispatch(UserPortfolio(uploadImage));
+        Alert.alert(res.data.message, '홈으로 이동합니다.', [
+          {
+            text: '확인',
+            onPress: () => navigation.navigate('Stack'),
+          },
+        ]);
+      }
+    });
   };
 
   console.log('uploadImage', uploadImage);
@@ -299,7 +302,7 @@ const DetailEdit = (props) => {
               {uploadImage && uploadImage.length === 1 ? (
                 <TouchableOpacity activeOpacity={0.8} style={{flex: 1}}>
                   <ImageBackground
-                    source={{uri: `${uploadImage[0].path}`}}
+                    source={{uri: `${uploadImage[0].uri}`}}
                     resizeMode="cover"
                     borderRadius={4}
                     style={{
@@ -309,7 +312,7 @@ const DetailEdit = (props) => {
                     }}>
                     <TouchableOpacity
                       onPress={() => {
-                        removeImg(uploadImage[0].path);
+                        removeImg(uploadImage[0].uri);
                       }}
                       style={{
                         position: 'absolute',
@@ -347,7 +350,7 @@ const DetailEdit = (props) => {
                           : null,
                     }}>
                     <ImageBackground
-                      source={{uri: `${uImg.path}`}}
+                      source={{uri: `${uImg.uri}`}}
                       resizeMode="cover"
                       borderRadius={4}
                       style={{
@@ -358,7 +361,7 @@ const DetailEdit = (props) => {
                       }}>
                       <TouchableOpacity
                         onPress={() => {
-                          removeImg(uImg.path);
+                          removeImg(uImg.uri);
                         }}
                         style={{
                           position: 'absolute',
