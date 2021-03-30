@@ -10,20 +10,43 @@ import {
   Alert,
 } from 'react-native';
 
-import {useSelector} from 'react-redux';
+import {useSelector, useDispatch} from 'react-redux';
 import RNFetchBlob from 'rn-fetch-blob'; // 파일 다운로드 패키지
 import DocumentPicker from 'react-native-document-picker'; // 파일 업로드 패키지
+import ImagePicker from 'react-native-image-crop-picker';
+import FastImage from 'react-native-fast-image';
 
 import Header from '../Common/Header';
 import Category from '../../src/api/Category';
 import Modal from '../Common/PartnersInfoModal';
 import Auth from '../../src/api/Auth';
+import {
+  UserName,
+  UserProfile,
+  UserMobile,
+  UserMobileCfm,
+  UserCompany,
+  UserLicense,
+  UserLicenseSource,
+  UserCompanyFile,
+  UserCompanyFileName,
+  UserCate1,
+  UserCaId,
+  UserBankName,
+  UserBankAccount,
+  UserBankDepositor,
+  UserLocation,
+} from '../../Modules/UserInfoReducer';
+import Timer from '../Common/Timer';
 
 const Edit = (props) => {
   const navigation = props.navigation;
   const routeName = props.route.name;
 
+  const dispatch = useDispatch();
+
   const {
+    mb_no,
     mb_profile_img,
     ptype,
     mb_2,
@@ -32,6 +55,8 @@ const Edit = (props) => {
     mb_hp,
     license,
     license_source,
+    company_file,
+    company_file_name,
     cate1,
     ca_id,
     bank_name,
@@ -100,6 +125,34 @@ const Edit = (props) => {
     getCategoriesAPI();
   }, []);
 
+  // 프로필 사진 설정
+  const [source, setSource] = React.useState(null);
+
+  const pickImageHandler = () => {
+    ImagePicker.openPicker({
+      mediaType: 'photo',
+      sortOrder: 'none',
+      compressImageMaxWidth: 500,
+      compressImageMaxHeight: 500,
+      compressImageQuality: 1,
+      compressVideoPreset: 'MediumQuality',
+      includeExif: true,
+      cropperCircleOverlay: true,
+      useFrontCamera: false,
+      // includeBase64: true,
+      cropping: true,
+    })
+      .then((img) => {
+        dispatch(UserProfile(img.path));
+        setSource({
+          uri: img.path,
+          type: img.mime,
+          name: img.path.slice(img.path.lastIndexOf('/')),
+        });
+      })
+      .catch((e) => console.log(e));
+  };
+
   // 지역 값
   const regionCount = [
     'seoul',
@@ -143,6 +196,7 @@ const Edit = (props) => {
   };
 
   //  카테고리 선택 (최대 5개 까지)
+
   const [categoryArr, setCategoryArr] = React.useState([]); // 제작물 카테고리 대분류 id 세부 종목 id 한묶음씩 배열로 담기
   const [countCategory, setCountCategory] = React.useState(0);
 
@@ -182,15 +236,30 @@ const Edit = (props) => {
     if (mb_profile_img) {
       extSplitFn(mb_profile_img);
     }
+
     if (location) {
       const locationArr = location.split(',');
       setRegion(locationArr);
+      setCountRegion(locationArr.length);
     }
+
+    if (cate1 !== null && ca_id !== null) {
+      let cate1Arr = cate1.split(',');
+      let caIdArr = ca_id.split(',');
+
+      cate1Arr.map((ca, key) => {
+        setCategoryArr((prev) => [...prev, {cate1: ca, ca_id: caIdArr[key]}]);
+        setCountCategory((prev) => prev + 1);
+      });
+    }
+
     return () => extSplitFn();
   }, [mb_profile_img]);
 
   console.log('locationCur', locationCur);
   console.log('region', region);
+  console.log('categoryArr', categoryArr);
+  console.log('countCategory', countCategory);
 
   // 파일 다운로드 핸들러
   const fileDownloadHandler = (filePath, fileName) => {
@@ -234,32 +303,67 @@ const Edit = (props) => {
     setModalVisible(!isModalVisible);
   };
 
+  const mobileRef = React.useRef(null);
+  const mobileCfmRef = React.useRef(null);
+
   const [name, setName] = React.useState(null);
+  const [password, setPassword] = React.useState('');
+  const [passwordRe, setPasswordRe] = React.useState(null);
   const [businessName, setBusinessName] = React.useState(null);
-  const [mobileNo, setMobileNo] = React.useState(null);
   const [mobileCert, setMobileCert] = React.useState(null);
   const [bank, setBank] = React.useState(null);
   const [bankAccount, setBankAccount] = React.useState(null);
   const [depositor, setDepositor] = React.useState(null);
+
+  // 비밀번호 보이기 기능
+  const [pwdEyes, setPwdEyes] = React.useState(true);
+  const togglePwdEyes = () => {
+    setPwdEyes(!pwdEyes);
+  };
+
+  const [pwdReEyes, setPwdReEyes] = React.useState(true);
+  const togglePwdReEyes = () => {
+    setPwdReEyes(!pwdReEyes);
+  };
+
+  // 사업자 등록증 상태관리
   const [licenseFileNameCur, setLicenseFileNameCur] = React.useState(null);
   const [licenseFilePathCur, setLicenseFilePathCur] = React.useState(null);
+  const [licenseFile, setLicenseFile] = React.useState('');
 
-  const [fileUrlCurrent, setFileUrlCurrent] = React.useState(null);
-  const [fileTypeCurrent, setFileTypeCurrent] = React.useState(null);
-  const [fileSizeCurrent, setFileSizeCurrent] = React.useState(null);
-  const [licenseFile, setLicenseFile] = React.useState(null);
-
-  // 파일 업로드 fn
+  // 사업자 등록증 파일 업로드 fn
   const filePicker01 = async () => {
     try {
       const res = await DocumentPicker.pick({
         type: [DocumentPicker.types.images],
       });
-      setFileUrlCurrent(res.uri);
-      setFileTypeCurrent(res.type);
       setLicenseFileNameCur(res.name);
-      setFileSizeCurrent(res.size);
       setLicenseFile({
+        uri: res.uri,
+        type: res.type,
+        name: res.name,
+      });
+    } catch (err) {
+      if (DocumentPicker.isCancel(err)) {
+        // User cancelled the picker, exit any dialogs or menus and move on
+      } else {
+        throw err;
+      }
+    }
+  };
+
+  // 회사 소개서
+  const [companyFileNameCur, setCompanyFileNameCur] = React.useState(null); // 회사 소개서 파일명(확장자 포함)
+  const [companyFileCur, setCompanyFileCur] = React.useState(null); // 회사 소개서 path
+  const [companyInfoFile, setComponyInfoFile] = React.useState('');
+
+  const selectFileCompany = async () => {
+    try {
+      const res = await DocumentPicker.pick({
+        type: [DocumentPicker.types.images],
+      });
+      setCompanyFileNameCur(res.name);
+      setComponyInfoFile({
         uri: res.uri,
         type: res.type,
         name: res.name,
@@ -282,6 +386,8 @@ const Edit = (props) => {
     setDepositor(bank_depositor);
     setLicenseFileNameCur(license_source);
     setLicenseFilePathCur(license);
+    setCompanyFileNameCur(company_file_name);
+    setCompanyFileCur(company_file);
 
     return () => {
       setName();
@@ -292,6 +398,8 @@ const Edit = (props) => {
       setDepositor();
       setLicenseFileNameCur();
       setLicenseFilePathCur();
+      setCompanyFileNameCur();
+      setCompanyFileCur();
     };
   }, [
     mb_name,
@@ -303,72 +411,226 @@ const Edit = (props) => {
     bank_depositor,
     license_source,
     license,
+    company_file_name,
+    company_file,
   ]);
 
-  const printTypes = ['패키지', '일반인쇄', '기타인쇄'];
-  const [printType, setPrintType] = React.useState('패키지');
-  const [isActiveTogglePrintType, setIsActiveTogglePrintType] = React.useState(
-    false,
-  );
-  const togglePrintType = () => {
-    setIsActiveTogglePrintType(!isActiveTogglePrintType);
-    setPrintDetail('세부 카테고리');
+  // 모바일 번호 임시 저장
+  const [mobileNo, setMobileNo] = React.useState(null);
+
+  // 모바일 인증 아이디 저장 및 버튼 색상 변화 상태
+  const [mobileConfirmId, setMobileConfirmId] = React.useState(null);
+  const [isMobileConfimed, setMobileConfimed] = React.useState(false);
+
+  console.log('입력된 인증번호', mobileConfirmId);
+
+  // 본인 인증 시간 초과의 경우 상태관리
+  const [reSend, setReSend] = React.useState(false);
+  const [reSendStatus, setReSendStatus] = React.useState('n');
+  const onFailConfirm = () => {
+    setIsSend(false);
+    setReSend(true);
+    setReSendStatus('y');
   };
 
-  const packageTypes = [
-    '칼라박스',
-    '골판지박스',
-    '합지골판지박스',
-    '싸바리박스',
-    '식품박스',
-    '쇼핑백',
-  ];
-  const generalTypes = [
-    '카달로그/브로슈어/팜플렛',
-    '책자/서적류',
-    '전단/포스터/안내장',
-    '스티커/라벨',
-    '봉투/명함',
-  ];
-  const etcTypes = ['상품권/티켓', '초대장/카드', '비닐BAG', '감압지', '기타'];
+  // 인증시 카운터
+  const [minutes, setMinutes] = React.useState(0);
+  const [seconds, setSeconds] = React.useState(0);
+  const [isCounter, setIsCounter] = React.useState(false);
+  const confirmCount = (num) => {
+    setIsCounter(true);
+    setMinutes(num);
+    // setSeconds(num);
+  };
 
-  const [printDetailType, setPrintDetail] = React.useState(null);
-  const [isActiveToggleDetail, setIsActiveToggleDetail] = React.useState(false);
-  const toggleDetail = () => {
-    setIsActiveToggleDetail(!isActiveToggleDetail);
+  const confirmClearCount = (num) => {
+    setIsCounter(false);
+    setMinutes(num);
+    // setSeconds(num);
+  };
+
+  // 본인인증(휴대전화번호) 문자발송 버튼
+  const [isSend, setIsSend] = React.useState(false);
+  const authenticateSMS = (register_mobile) => {
+    if (register_mobile.length > 11) {
+      Alert.alert('휴대전화번호가 올바르지 않습니다.');
+      return false;
+    }
+
+    if (register_mobile === '') {
+      Alert.alert('휴대전화번호를 입력해주세요.');
+    } else {
+      confirmCount(3);
+      Alert.alert(
+        `${register_mobile}로 인증번호가 발송되었습니다.`,
+        '인증번호 확인 후 입력해주세요.',
+        [
+          {
+            text: '확인',
+            onPress: () => {
+              setIsSend(true);
+              mobileCfmRef.current.focus();
+            },
+          },
+        ],
+      );
+      Auth.onMobileConfirm(register_mobile)
+        .then((res) => {
+          if (res.data.result == '1') {
+            setMobileConfimed(false);
+          } else {
+            Alert.alert(res.data.message, '', [
+              {
+                text: '확인',
+              },
+            ]);
+          }
+          console.log('휴대폰 인증 response', res);
+        })
+        .catch((err) => console.log(err));
+    }
+  };
+
+  // 본인인증(휴대전화번호) 인증번호 입력 시간 초과로 재전송일 경우 로직
+  const reAuthenticateSMS = (register_mobile) => {
+    if (register_mobile.length > 11) {
+      Alert.alert('휴대전화번호가 올바르지 않습니다.');
+      return false;
+    }
+
+    if (register_mobile === '') {
+      Alert.alert('휴대전화번호를 입력해주세요.');
+    } else {
+      confirmCount(3);
+      Alert.alert(
+        `${register_mobile}로 인증번호가 발송되었습니다.`,
+        '인증번호 확인 후 입력해주세요.',
+        [
+          {
+            text: '확인',
+            onPress: () => {
+              setIsSend(true);
+              mobileCfmRef.current.focus();
+            },
+          },
+        ],
+      );
+
+      Auth.onMobileConfirmNo(mobileNo, null, 'Y')
+        .then((res) => {
+          if (res.data.result == '1') {
+            setMobileConfimed(false);
+            confirmClearCount(0);
+          } else {
+            Alert.alert(
+              '휴대전화번호를 올바르게 입력해주세요.',
+              res.data.message,
+              [
+                {
+                  text: '확인',
+                },
+              ],
+            );
+          }
+          console.log('휴대폰 인증 response', res);
+        })
+        .catch((err) => console.log(err));
+    }
+  };
+
+  // 본인인증(휴대전화번호) 인증번호 확인 버튼
+  const confirmMobile = (register_confirmMobile) => {
+    if (register_confirmMobile === '') {
+      Alert.alert('인증번호를 입력해주세요.');
+      return false;
+    } else if (isSend === false) {
+      Alert.alert(
+        '정확한 번호로 문자발송해주세요.',
+        '문자발송을 완료해주세요.',
+        [
+          {
+            text: '확인',
+            onPress: () => {},
+          },
+        ],
+      );
+      return false;
+    } else {
+      Auth.onMobileConfirmNo(mobileNo, mobileConfirmId, 'N')
+        .then((res) => {
+          console.log('본인 인증 response 11', res);
+          if (res.data.result == '1') {
+            Alert.alert('본인 인증되었습니다.', res.data.message, [
+              {
+                text: '확인',
+                onPress: () => {
+                  setMobileConfimed(true);
+                  confirmClearCount(0);
+                },
+              },
+            ]);
+          } else {
+            Alert.alert('인증에 실패하였습니다.', res.data.message, [
+              {
+                text: '확인',
+              },
+            ]);
+          }
+        })
+        .catch((err) => console.log(err));
+    }
   };
 
   // 파트너스 정보 수정 API 추가중
   const onEditAPI = () => {
-    console.log('source', source);
+    console.log('source 프로필 이미지', source);
+
+    // 카테고리 선택(1차, 2차 카테고리 오브젝트 배열 묶음을 각각 다른 배열로 넣기 위한 초기 값
+    let cate1NewArr = [];
+    let caIdNewArr = [];
+
+    // 카테고리 선택(1차, 2차 카테고리 API 전송 전 각각 다른 배열에 담기)
+    categoryArr.map((c) => cate1NewArr.push(c.cate1));
+    categoryArr.map((c) => caIdNewArr.push(c.ca_id));
+
     const frmData = new FormData();
-    frmData.append('method', 'proc_modify_partner2');
+    frmData.append('method', 'proc_modify_partner');
     frmData.append('mb_no', mb_no);
     frmData.append('mb_id', mb_email);
-    frmData.append('mb_password', mb_email);
-    frmData.append('mb_name', mb_email);
-    frmData.append('mb_hp', mb_email);
-    frmData.append('mb_1', mb_email);
-    frmData.append('mb_2', mb_email);
-    frmData.append('mb_2', mb_email);
-    frmData.append('license[]', JSON.stringify(source));
-    frmData.append('mb_img', JSON.stringify(source));
-    frmData.append('mb_5[]', JSON.stringify(source));
-    frmData.append('location', location);
-    frmData.append('cate1', location);
-    frmData.append('ca_id', location);
-    frmData.append('bank_name', location);
-    frmData.append('bank_account', location);
-    frmData.append('bank_depositor', location);
+    frmData.append('mb_password', password);
+    frmData.append('mb_name', name);
+    frmData.append('mb_hp', mb_hp);
+    frmData.append('mb_1', 'Y');
+    frmData.append('mb_2', businessName);
+    frmData.append('license[]', licenseFile);
+    frmData.append('mb_img', source);
+    frmData.append('mb_5[]', companyInfoFile);
+    frmData.append('location', region.join(','));
+    frmData.append('cate1', cate1NewArr.join(','));
+    frmData.append('ca_id', caIdNewArr.join(','));
+    frmData.append('bank_name', bank);
+    frmData.append('bank_account', bankAccount);
+    frmData.append('bank_depositor', depositor);
 
     console.log(frmData);
 
     Auth.onEdit(frmData).then((res) => {
+      console.log('기본 정보 수정', res);
       if (res.data.result === '1') {
-        dispatch(UserDescription(descriptionEdit));
-        dispatch(UserBusinessTime(businessTimeEdit));
-        dispatch(UserCloseDay(closeDayEdit));
-        dispatch(UserUsed(usedEdit));
+        console.log('성공시 정보 수정 결과', res);
+        dispatch(UserMobile(mobileNo));
+        dispatch(UserMobileCfm('Y'));
+        dispatch(UserCompany(businessName));
+        dispatch(UserLocation(region.join(',')));
+        dispatch(UserLicense(licenseFile.uri));
+        dispatch(UserLicenseSource(licenseFile.name));
+        dispatch(UserCompanyFile(companyInfoFile.uri));
+        dispatch(UserCompanyFileName(companyInfoFile.name));
+        dispatch(UserCate1(cate1NewArr.join(',')));
+        dispatch(UserCaId(caIdNewArr.join(',')));
+        dispatch(UserBankName(bank));
+        dispatch(UserBankAccount(bankAccount));
+        dispatch(UserBankDepositor(depositor));
         Alert.alert(res.data.message, '홈으로 이동합니다.', [
           {
             text: '확인',
@@ -395,6 +657,7 @@ const Edit = (props) => {
             }}>
             <TouchableOpacity
               activeOpacity={0.8}
+              onPress={pickImageHandler}
               style={{
                 borderWidth: 1,
                 borderColor: '#E3E3E3',
@@ -461,6 +724,27 @@ const Edit = (props) => {
             <Text style={styles.profileTitle}>이메일</Text>
             <Text style={styles.profileDesc}>{mb_email}</Text>
           </View>
+          {/* 성함 변경 */}
+          <View style={{marginBottom: 20}}>
+            <Text style={[styles.profileTitle, {marginBottom: 10}]}>성함</Text>
+            <Text style={styles.profileDesc}>{mb_name}</Text>
+            {/* <TextInput
+              value={name}
+              placeholder="성함을 입력해주세요."
+              placeholderTextColor="#A2A2A2"
+              onChangeText={(text) => setName(text)}
+              style={{
+                fontFamily: 'SCDream4',
+                borderWidth: 1,
+                borderColor: '#E3E3E3',
+                borderRadius: 4,
+                paddingHorizontal: 10,
+              }}
+              autoCapitalize="none"
+              editable={false}
+            /> */}
+          </View>
+          {/* // 성함 변경 */}
           <View style={{marginBottom: 20}}>
             <Text style={[styles.profileTitle, {marginBottom: 10}]}>
               회원등급
@@ -523,61 +807,6 @@ const Edit = (props) => {
             </TouchableOpacity>
           </View>
 
-          {/* 비밀번호 변경 */}
-          <View style={{marginBottom: 20}}>
-            <Text style={[styles.profileTitle, {marginBottom: 10}]}>
-              비밀번호 변경
-            </Text>
-            <TextInput
-              placeholder="비밀번호를 입력해주세요."
-              placeholderTextColor="#A2A2A2"
-              style={{
-                fontFamily: 'SCDream4',
-                borderWidth: 1,
-                borderColor: '#E3E3E3',
-                borderRadius: 4,
-                paddingHorizontal: 10,
-                marginBottom: 5,
-              }}
-              autoCapitalize="none"
-              secureTextEntry
-            />
-            <TextInput
-              placeholder="비밀번호를 재입력해주세요."
-              placeholderTextColor="#A2A2A2"
-              style={{
-                fontFamily: 'SCDream4',
-                borderWidth: 1,
-                borderColor: '#E3E3E3',
-                borderRadius: 4,
-                paddingHorizontal: 10,
-              }}
-              autoCapitalize="none"
-              secureTextEntry
-            />
-          </View>
-          {/* // 비밀번호 변경 */}
-
-          {/* 성함 변경 */}
-          <View style={{marginBottom: 20}}>
-            <Text style={[styles.profileTitle, {marginBottom: 10}]}>성함</Text>
-            <TextInput
-              value={name}
-              placeholder="성함을 입력해주세요."
-              placeholderTextColor="#A2A2A2"
-              onChangeText={(text) => setName(text)}
-              style={{
-                fontFamily: 'SCDream4',
-                borderWidth: 1,
-                borderColor: '#E3E3E3',
-                borderRadius: 4,
-                paddingHorizontal: 10,
-              }}
-              autoCapitalize="none"
-            />
-          </View>
-          {/* // 성함 변경 */}
-
           {/* 상호명 변경 */}
           <View style={{marginBottom: 20}}>
             <Text style={[styles.profileTitle, {marginBottom: 10}]}>
@@ -600,8 +829,105 @@ const Edit = (props) => {
           </View>
           {/* // 상호명 변경 */}
 
-          {/* 휴대폰 번호 변경 */}
+          {/* 비밀번호 변경 */}
           <View style={{marginBottom: 20}}>
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'flex-start',
+                alignItems: 'baseline',
+              }}>
+              <Text
+                style={[
+                  styles.profileTitle,
+                  {marginBottom: 10, marginRight: 5},
+                ]}>
+                비밀번호
+              </Text>
+              <Text
+                style={{
+                  fontFamily: 'SCDream4',
+                  fontSize: 12,
+                  color: '#00A170',
+                }}>
+                (비밀번호를 변경하고 싶으시면 입력해주세요.)
+              </Text>
+            </View>
+
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                paddingHorizontal: 10,
+                borderWidth: 1,
+                borderColor: '#E3E3E3',
+                borderRadius: 4,
+                marginBottom: 5,
+                height: 50,
+              }}>
+              <TextInput
+                placeholder="비밀번호를 입력해주세요."
+                placeholderTextColor="#A2A2A2"
+                style={[styles.normalText, {width: '90%'}]}
+                onChangeText={(text) => setPassword(text)}
+                autoCapitalize="none"
+                secureTextEntry={pwdEyes}
+              />
+              <TouchableOpacity activeOpacity={0.8} onPress={togglePwdEyes}>
+                <Image
+                  source={
+                    pwdEyes
+                      ? require('../../src/assets/icon_eye.png')
+                      : require('../../src/assets/icon_eye_on.png')
+                  }
+                  resizeMode="center"
+                  style={{width: 35, height: 20}}
+                />
+              </TouchableOpacity>
+            </View>
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                paddingHorizontal: 10,
+                borderWidth: 1,
+                borderColor: '#E3E3E3',
+                borderRadius: 4,
+                marginBottom:
+                  formikProps.touched.register_confirmPw &&
+                  formikProps.errors.register_confirmPw
+                    ? 5
+                    : 0,
+                height: 50,
+              }}>
+              <TextInput
+                ref={passwordCfmRef}
+                placeholder="비밀번호를 재입력해주세요."
+                placeholderTextColor="#A2A2A2"
+                style={[styles.normalText, {width: '90%'}]}
+                onChangeText={(text) => setPasswordRe(text)}
+                autoCapitalize="none"
+                secureTextEntry={pwdReEyes}
+              />
+              <TouchableOpacity activeOpacity={0.8} onPress={togglePwdReEyes}>
+                <Image
+                  source={
+                    pwdReEyes
+                      ? require('../../src/assets/icon_eye.png')
+                      : require('../../src/assets/icon_eye_on.png')
+                  }
+                  resizeMode="center"
+                  style={{width: 35, height: 20}}
+                />
+              </TouchableOpacity>
+            </View>
+          </View>
+          {/* // 비밀번호 변경 */}
+
+          {/* 휴대폰 번호 변경 */}
+          {/* <View style={{marginBottom: 20}}>
             <Text style={[styles.profileTitle, {marginBottom: 10}]}>
               휴대폰 번호
             </Text>
@@ -693,8 +1019,215 @@ const Edit = (props) => {
                 </Text>
               </TouchableOpacity>
             </View>
-          </View>
+          </View> */}
           {/* // 휴대폰 번호 변경 */}
+
+          {/* 휴대폰 번호  */}
+          <View style={{marginBottom: 20}}>
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'flex-start',
+                alignItems: 'baseline',
+              }}>
+              <Text
+                style={[
+                  styles.profileTitle,
+                  {marginBottom: 10, marginRight: 5},
+                ]}>
+                휴대폰 번호
+              </Text>
+              <Text
+                style={{
+                  fontFamily: 'SCDream4',
+                  fontSize: 12,
+                  color: '#00A170',
+                }}>
+                (휴대폰 번호가 바꼈을 때만 입력해주세요.)
+              </Text>
+            </View>
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'flex-start',
+                alignItems: 'center',
+                marginBottom: 5,
+              }}>
+              <TextInput
+                ref={mobileRef}
+                placeholder="휴대전화번호를 - 빼고 입력해주세요."
+                placeholderTextColor="#A2A2A2"
+                onChangeText={(text) => setMobileNo(text)}
+                style={[
+                  styles.normalText,
+                  {
+                    flex: 1,
+                    borderWidth: 1,
+                    borderColor: '#E3E3E3',
+                    borderRadius: 4,
+                    paddingHorizontal: 10,
+                    marginRight: 10,
+                  },
+                ]}
+                value={mobileNo}
+                onChangeText={(text) => {
+                  setIsSend(false);
+                  setMobileNo(text);
+                }}
+                editable={!isSend ? true : false}
+                keyboardType="number-pad"
+                autoCapitalize="none"
+                onSubmitEditing={() => {
+                  authenticateSMS(mobileNo);
+                  setMobileNo(mobileNo);
+                }}
+              />
+              {!reSend ? (
+                <TouchableOpacity
+                  activeOpacity={0.8}
+                  onPress={() => {
+                    authenticateSMS(mobileNo);
+                    setMobileNo(mobileNo);
+                  }}
+                  style={{
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    backgroundColor: isSend ? '#ccc' : '#00A170',
+                    borderRadius: 4,
+                    height: 50,
+                    paddingHorizontal: 20,
+                  }}
+                  disabled={isSend ? true : false}>
+                  <Text
+                    style={[
+                      styles.normalText,
+                      {color: '#fff', textAlign: 'center'},
+                    ]}>
+                    인증번호 전송
+                  </Text>
+                </TouchableOpacity>
+              ) : (
+                <TouchableOpacity
+                  activeOpacity={0.8}
+                  onPress={() => {
+                    reAuthenticateSMS(mobileNo);
+                    setMobileNo(mobileNo);
+                  }}
+                  style={{
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    backgroundColor: isSend ? '#ccc' : '#00A170',
+                    borderRadius: 4,
+                    height: 50,
+                    paddingHorizontal: 20,
+                  }}
+                  disabled={isSend ? true : false}>
+                  <Text
+                    style={[
+                      styles.normalText,
+                      {color: '#fff', textAlign: 'center'},
+                    ]}>
+                    인증번호 재전송
+                  </Text>
+                </TouchableOpacity>
+              )}
+            </View>
+            {isCounter ? (
+              <Timer
+                minutes={minutes}
+                setMinutes={setMinutes}
+                seconds={seconds}
+                setSeconds={setSeconds}
+                onFailConfirm={onFailConfirm}
+              />
+            ) : null}
+            {/* {formikProps.touched.register_mobile &&
+              formikProps.errors.register_mobile &&
+              !formikProps.values.register_mobile && (
+                <Text
+                  style={{
+                    width: '100%',
+                    fontFamily: 'SCDream4',
+                    fontSize: 12,
+                    lineHeight: 18,
+                    color: '#00A170',
+                    marginBottom: 15,
+                  }}>
+                  {formikProps.touched.register_mobile &&
+                    formikProps.errors.register_mobile}
+                </Text>
+              )} */}
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'flex-start',
+                alignItems: 'center',
+              }}>
+              <TextInput
+                ref={mobileCfmRef}
+                placeholder="인증번호를 입력해주세요."
+                placeholderTextColor="#A2A2A2"
+                style={[
+                  styles.normalText,
+                  {
+                    flex: 1,
+                    borderWidth: 1,
+                    borderColor: '#E3E3E3',
+                    borderRadius: 4,
+                    paddingHorizontal: 10,
+                    marginRight: 10,
+                    height: 50,
+                  },
+                ]}
+                value={mobileConfirmId}
+                onChangeText={(text) => {
+                  setMobileConfimed(false);
+                  setMobileConfirmId(text);
+                }}
+                keyboardType="number-pad"
+                autoCapitalize="none"
+                editable={isMobileConfimed ? false : true}
+                onSubmitEditing={() => confirmMobile(mobileConfirmId)}
+              />
+              <TouchableOpacity
+                activeOpacity={0.8}
+                onPress={() => confirmMobile(mobileConfirmId)}
+                style={{
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  backgroundColor: isMobileConfimed ? '#ccc' : '#00A170',
+                  borderRadius: 4,
+                  height: 50,
+                  paddingHorizontal: 20,
+                }}
+                disabled={isMobileConfimed ? true : false}>
+                <Text
+                  style={[
+                    styles.normalText,
+                    {color: '#fff', textAlign: 'center'},
+                  ]}>
+                  {isMobileConfimed ? '인증처리 완료' : '인증번호 확인'}
+                </Text>
+              </TouchableOpacity>
+            </View>
+            {/* {formikProps.touched.register_confirmMobile &&
+            formikProps.errors.register_confirmMobile &&
+            !isMobileConfimed ? (
+              <Text
+                style={{
+                  width: '100%',
+                  fontFamily: 'SCDream4',
+                  fontSize: 12,
+                  lineHeight: 18,
+                  color: '#00A170',
+                  marginBottom: 15,
+                }}>
+                {formikProps.touched.register_confirmMobile &&
+                  formikProps.errors.register_confirmMobile}
+              </Text>
+            ) : null} */}
+          </View>
+          {/* // 휴대폰 번호  */}
 
           {/* 사업자 등록증 변경 */}
           <View style={{marginBottom: 20}}>
@@ -960,6 +1493,89 @@ const Edit = (props) => {
                 </Text>
               </TouchableOpacity>
             </View>
+
+            {/* 세부종목 */}
+
+            {categoryList !== null && (
+              <View
+                style={{
+                  flexDirection: 'row',
+                  flexWrap: 'wrap',
+                  justifyContent: 'flex-start',
+                  padding: 20,
+                  backgroundColor: '#f6f6f6',
+                  borderWidth: 1,
+                  borderColor: '#f6f6f6',
+                  borderBottomLeftRadius: 5,
+                  borderBottomRightRadius: 5,
+                  borderTopRightRadius: 5,
+                  borderTopLeftRadius:
+                    cateId === '0' ? 5 : cateId === '2' ? 5 : 0,
+                  marginBottom: 15,
+                }}>
+                {categoryList.map((category) => (
+                  <TouchableOpacity
+                    activeOpacity={1}
+                    onPress={() => {
+                      setCategoryArrFuc(cateId, category.ca_id);
+                      setCategoryError(false);
+                    }}
+                    key={category.ca_id}
+                    style={{
+                      flexDirection: 'row',
+                      justifyContent: 'flex-start',
+                      alignItems: 'center',
+                    }}>
+                    <Image
+                      source={
+                        categoryArr.find(
+                          (x) =>
+                            x.cate1 === cateId && x.ca_id === category.ca_id,
+                        )
+                          ? require('../../src/assets/radio_on.png')
+                          : require('../../src/assets/radio_off.png')
+                      }
+                      resizeMode="contain"
+                      style={{
+                        width: 20,
+                        height: 20,
+                        borderRadius: 20,
+                        marginRight: 5,
+                      }}
+                    />
+                    <Text
+                      style={{
+                        fontFamily: 'SCDream4',
+                        fontSize: 13,
+                        marginRight: 15,
+                        marginVertical: 7,
+                      }}>
+                      {category.ca_name}
+                    </Text>
+                  </TouchableOpacity>
+                ))}
+              </View>
+            )}
+
+            {categoryError ? (
+              <Text
+                style={{
+                  width: '100%',
+                  fontFamily: 'SCDream4',
+                  fontSize: 12,
+                  lineHeight: 18,
+                  color: '#00A170',
+                  marginBottom: 5,
+                }}>
+                카테고리를 지정해주세요.
+              </Text>
+            ) : (
+              <Text
+                style={[styles.normalText, {color: '#B5B5B5', fontSize: 12}]}>
+                * 카테고리는 최대 5개(대분류포함)까지 등록하실 수 있습니다.
+              </Text>
+            )}
+            {/* // 세부종목 */}
           </View>
           {/* // 제작물 카테고리 변경 */}
 
@@ -1014,7 +1630,8 @@ const Edit = (props) => {
           {/* // 계좌정보 변경 */}
 
           {/* 회사 소개서 변경 */}
-          <View style={{marginBottom: 20}}>
+
+          <View style={{marginBottom: 25}}>
             <Text style={[styles.profileTitle, {marginBottom: 10}]}>
               회사 소개서
             </Text>
@@ -1023,9 +1640,10 @@ const Edit = (props) => {
                 flexDirection: 'row',
                 justifyContent: 'flex-start',
                 alignItems: 'center',
+                marginBottom: 5,
               }}>
               <TextInput
-                value="회사소개서.jpg"
+                value={companyFileNameCur}
                 placeholder="회사 소개서를 첨부해주세요."
                 placeholderTextColor="#A2A2A2"
                 style={{
@@ -1040,6 +1658,7 @@ const Edit = (props) => {
                 editable={false}
               />
               <TouchableOpacity
+                onPress={selectFileCompany}
                 activeOpacity={0.8}
                 style={{
                   justifyContent: 'center',
@@ -1059,32 +1678,66 @@ const Edit = (props) => {
                 </Text>
               </TouchableOpacity>
             </View>
+
             <TouchableOpacity
               activeOpacity={0.8}
-              onPress={() => Alert.alert('다운로드')}>
+              onPress={() =>
+                fileDownloadHandler(companyFileCur, companyFileNameCur)
+              }
+              style={{width: '80%'}}>
               <View
                 style={{
                   flexDirection: 'row',
                   justifyContent: 'flex-start',
-                  alignItems: 'baseline',
+                  alignItems: 'flex-start',
                   marginTop: 10,
+                  marginBottom: 5,
                 }}>
                 <Image
                   source={require('../../src/assets/icon_down.png')}
                   resizeMode="contain"
                   style={{width: 20, height: 20, marginRight: 5}}
                 />
-                <Text style={styles.normalText}>회사소개서.jpg</Text>
+                <Text style={styles.normalText}>{companyFileNameCur}</Text>
               </View>
             </TouchableOpacity>
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'flex-start',
+                alignItems: 'flex-start',
+              }}>
+              <Text
+                style={[
+                  styles.normalText,
+                  {
+                    color: '#B5B5B5',
+                    fontSize: 12,
+                    lineHeight: 20,
+                    marginRight: 5,
+                  },
+                ]}>
+                *
+              </Text>
+              <View>
+                <Text
+                  style={[
+                    styles.normalText,
+                    {color: '#B5B5B5', fontSize: 12, lineHeight: 20},
+                  ]}>
+                  문서파일(doc, hwp, xls, xlsx) 또는 이미지파일(jpg,png,gif)
+                </Text>
+                <Text
+                  style={[styles.normalText, {color: '#B5B5B5', fontSize: 12}]}>
+                  첨부 가능합니다.
+                </Text>
+              </View>
+            </View>
           </View>
-
           {/* // 회사 소개서 변경 */}
 
           <View style={{marginVertical: 50}}>
-            <TouchableOpacity
-              onPress={() => Alert.alert('수정 완료')}
-              activeOpacity={0.8}>
+            <TouchableOpacity onPress={() => onEditAPI()} activeOpacity={0.8}>
               <View style={[styles.submitBtn, {marginBottom: 10}]}>
                 <Text style={styles.submitBtnText}>수정 완료</Text>
               </View>
