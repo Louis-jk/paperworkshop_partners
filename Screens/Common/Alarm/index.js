@@ -73,20 +73,11 @@ const index = (props) => {
     }
   }, []);
 
-  console.log('orderActive', orderActive);
-  console.log('noticeActive', noticeActive);
-  console.log('faqActive', faqActive);
-
   const setAlarm = (payload01, payload02, payload03) => {
     Setting.onAlarm(mb_email, payload01, payload02, payload03).then((res) =>
       console.log('alarm', res),
     );
   };
-
-  console.log('----------');
-  console.log('orderActive', orderActive);
-  console.log('noticeActive', noticeActive);
-  console.log('faqActive', faqActive);
 
   return (
     <>
@@ -119,6 +110,7 @@ const index = (props) => {
                   ? require('../../../src/assets/t_on.png')
                   : require('../../../src/assets/t_off.png')
               }
+              fadeDuration={0}
               resizeMode="contain"
               style={{width: 80, height: 36}}
             />
@@ -133,6 +125,7 @@ const index = (props) => {
                   ? require('../../../src/assets/t_on.png')
                   : require('../../../src/assets/t_off.png')
               }
+              fadeDuration={0}
               resizeMode="contain"
               style={{width: 80, height: 36}}
             />
@@ -147,6 +140,7 @@ const index = (props) => {
                   ? require('../../../src/assets/t_on.png')
                   : require('../../../src/assets/t_off.png')
               }
+              fadeDuration={0}
               resizeMode="contain"
               style={{width: 80, height: 36}}
             />
