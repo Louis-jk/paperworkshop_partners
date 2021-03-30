@@ -305,10 +305,11 @@ const Edit = (props) => {
 
   const mobileRef = React.useRef(null);
   const mobileCfmRef = React.useRef(null);
+  const pwdReRef = React.useRef(null);
 
   const [name, setName] = React.useState(null);
   const [password, setPassword] = React.useState('');
-  const [passwordRe, setPasswordRe] = React.useState(null);
+  const [passwordRe, setPasswordRe] = React.useState('');
   const [businessName, setBusinessName] = React.useState(null);
   const [mobileCert, setMobileCert] = React.useState(null);
   const [bank, setBank] = React.useState(null);
@@ -579,6 +580,12 @@ const Edit = (props) => {
         })
         .catch((err) => console.log(err));
     }
+  };
+
+  // 비밀번호 재입력 부분 확인
+  const [pwdError, setPwdError] = React.useState(false);
+  const checkPasswordEach = () => {
+    if (password !== passwordRe) setPwdError(true);
   };
 
   // 파트너스 정보 수정 API 추가중
@@ -867,12 +874,14 @@ const Edit = (props) => {
                 height: 50,
               }}>
               <TextInput
+                value={password}
                 placeholder="비밀번호를 입력해주세요."
                 placeholderTextColor="#A2A2A2"
                 style={[styles.normalText, {width: '90%'}]}
                 onChangeText={(text) => setPassword(text)}
                 autoCapitalize="none"
                 secureTextEntry={pwdEyes}
+                onSubmitEditing={() => pwdReRef.current.focus()}
               />
               <TouchableOpacity activeOpacity={0.8} onPress={togglePwdEyes}>
                 <Image
@@ -895,21 +904,22 @@ const Edit = (props) => {
                 borderWidth: 1,
                 borderColor: '#E3E3E3',
                 borderRadius: 4,
-                marginBottom:
-                  formikProps.touched.register_confirmPw &&
-                  formikProps.errors.register_confirmPw
-                    ? 5
-                    : 0,
+                marginBottom: 5,
                 height: 50,
               }}>
               <TextInput
-                ref={passwordCfmRef}
+                ref={pwdReRef}
+                value={passwordRe}
                 placeholder="비밀번호를 재입력해주세요."
                 placeholderTextColor="#A2A2A2"
                 style={[styles.normalText, {width: '90%'}]}
-                onChangeText={(text) => setPasswordRe(text)}
+                onChangeText={(text) => {
+                  setPwdError(false);
+                  setPasswordRe(text);
+                }}
                 autoCapitalize="none"
                 secureTextEntry={pwdReEyes}
+                onSubmitEditing={checkPasswordEach}
               />
               <TouchableOpacity activeOpacity={0.8} onPress={togglePwdReEyes}>
                 <Image
@@ -923,6 +933,18 @@ const Edit = (props) => {
                 />
               </TouchableOpacity>
             </View>
+            {pwdError && (
+              <View>
+                <Text
+                  style={{
+                    fontFamily: 'SCDream4',
+                    fontSize: 12,
+                    color: 'red',
+                  }}>
+                  비밀번호가 일치하지 않습니다.
+                </Text>
+              </View>
+            )}
           </View>
           {/* // 비밀번호 변경 */}
 
@@ -1424,10 +1446,11 @@ const Edit = (props) => {
                   getCategoriesAPI('1');
                 }}
                 style={{
-                  marginRight: 20,
+                  width: 100,
+                  justifyContent: 'center',
+                  alignItems: 'center',
                   backgroundColor: cateId === '1' ? '#f6f6f6' : 'transparent',
                   borderWidth: cateId === '1' ? 1 : 0,
-                  paddingHorizontal: cateId === '1' ? 20 : 0,
                   borderTopRightRadius: cateId === '1' ? 5 : null,
                   borderTopLeftRadius: cateId === '1' ? 5 : null,
                   borderColor: cateId === '1' ? '#f6f6f6' : null,
@@ -1449,10 +1472,11 @@ const Edit = (props) => {
                   getCategoriesAPI('0');
                 }}
                 style={{
-                  marginRight: 20,
+                  width: 100,
+                  justifyContent: 'center',
+                  alignItems: 'center',
                   backgroundColor: cateId === '0' ? '#f6f6f6' : 'transparent',
                   borderWidth: cateId === '0' ? 1 : 0,
-                  paddingHorizontal: cateId === '0' ? 20 : 0,
                   borderTopRightRadius: cateId === '0' ? 5 : null,
                   borderTopLeftRadius: cateId === '0' ? 5 : null,
                   borderColor: cateId === '0' ? '#f6f6f6' : null,
@@ -1474,10 +1498,11 @@ const Edit = (props) => {
                   getCategoriesAPI('2');
                 }}
                 style={{
-                  marginRight: 20,
+                  width: 100,
+                  justifyContent: 'center',
+                  alignItems: 'center',
                   backgroundColor: cateId === '2' ? '#f6f6f6' : 'transparent',
                   borderWidth: cateId === '2' ? 1 : 0,
-                  paddingHorizontal: cateId === '2' ? 20 : 0,
                   borderTopRightRadius: cateId === '2' ? 5 : null,
                   borderTopLeftRadius: cateId === '2' ? 5 : null,
                   borderColor: cateId === '2' ? '#f6f6f6' : null,
