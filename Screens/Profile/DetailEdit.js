@@ -149,6 +149,7 @@ const DetailEdit = (props) => {
   // 파트너스 정보 수정 API
   const onEditAPI = () => {
     console.log('uploadImage', uploadImage);
+
     const frmData = new FormData();
     frmData.append('method', 'proc_modify_partner2');
     frmData.append('mb_no', mb_no);
@@ -158,10 +159,10 @@ const DetailEdit = (props) => {
     frmData.append('mb_8', closeDayEdit);
     frmData.append('mb_9', usedEdit);
     uploadImage.map((img) => {
-      frmData.append('bf_file[]', JSON.stringify(img));
+      frmData.append('bf_file[]', img);
     });
 
-    console.log(frmData);
+    console.log('frmData', frmData);
 
     Auth.onEdit(frmData).then((res) => {
       console.log('edit?', res);
