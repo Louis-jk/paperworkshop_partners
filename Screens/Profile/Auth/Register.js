@@ -1619,12 +1619,6 @@ const Register = (props) => {
                     </Text>
                   )}
                   {/* // 세부종목 */}
-
-                  {/* <RegCates
-                    categories={categories}
-                    setCategories_item={setCategories_item}
-                    categories_item={categories_item}
-                  /> */}
                 </View>
 
                 {/* // 제작물 카테고리  */}
