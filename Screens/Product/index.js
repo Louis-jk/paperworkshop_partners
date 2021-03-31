@@ -118,6 +118,14 @@ const index = (props) => {
     getEstimateAllListAPI();
   }, [type, cateV, caIdV, search]);
 
+  React.useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      getEstimateAllListAPI();
+    });
+
+    return unsubscribe;
+  }, [navigation]);
+
   const [printDetailType, setPrintDetail] = React.useState(null); // 카테고리 별 세부 카테고리(ca_id)값 담기
   const [isActiveToggleDetail, setIsActiveToggleDetail] = React.useState(false);
   const toggleDetail = () => {
