@@ -44,6 +44,10 @@ const index = (props) => {
   const [totalPrice, setTotalPrice] = React.useState('0'); // 총 견적 금액
   const [estimateText, setEstimateText] = React.useState(''); // 견적 상세 설명
 
+  const [estimateFileNameCur, setEstimateFileNameCur] = React.useState(null); // 견적서 파일명
+  const [estimateFilePathCur, setEstimateFilePathCur] = React.useState(null); // 견적서 파일 경로
+  const [estimateFile, setEstimateFile] = React.useState(''); // 견적서 파일 uri, type, name 전체 담기
+
   const priceHandler = () => {
     console.log('productPrice', productPrice);
     console.log('productPrice Type', typeof productPrice);
@@ -55,13 +59,11 @@ const index = (props) => {
 
     let total = productPriceInt + designPriceInt + deliveryPriceInt;
     let totalStr = total.toString();
-    let totalPriceFormat = totalStr.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-    setTotalPrice(totalPriceFormat);
+    setTotalPrice(totalStr);
 
     let deposit = total * (depositRatioInt / 100);
     let depositStr = deposit.toString();
-    let depositPriceFormat = depositStr.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-    setDepositPrice(depositPriceFormat);
+    setDepositPrice(depositStr);
   };
 
   const depositHandler = (value) => {
@@ -80,7 +82,18 @@ const index = (props) => {
     Estimate.getDetail(pe_id, mb_email)
       .then((res) => {
         if (res.data.result === '1' && res.data.count > 0) {
-          console.log(res);
+          // console.log('레스레스', res);
+          if (res.data.item[0].status === '1') {
+            setProductPrice(res.data.item[0].production_price);
+            setDesignPrice(res.data.item[0].design_price);
+            setDeliveryPrice(res.data.item[0].reduce_price);
+            setDepositRatio(res.data.item[0].deposit_rate);
+            setDepositPrice(res.data.item[0].deposit);
+            setTotalPrice(res.data.item[0].total_price);
+            setEstimateText(res.data.item[0].estimate_content);
+            setEstimateFileNameCur(res.data.item[0].bf_file_source);
+            setEstimateFilePathCur(res.data.item[0].bf_file);
+          }
           setDetail(res.data.item[0]);
           setLoading(false);
         } else if (res.data.result === '1' && res.data.count == 0) {
@@ -121,6 +134,28 @@ const index = (props) => {
         text: '취소',
       },
     ]);
+  };
+
+  // 견적서 파일 업로드 fn
+  const filePicker01 = async () => {
+    try {
+      const res = await DocumentPicker.pick({
+        type: [DocumentPicker.types.images],
+      });
+      setEstimateFileNameCur(res.name);
+      setEstimateFilePathCur(res.uri);
+      setEstimateFile({
+        uri: res.uri,
+        type: res.type,
+        name: res.name,
+      });
+    } catch (err) {
+      if (DocumentPicker.isCancel(err)) {
+        // User cancelled the picker, exit any dialogs or menus and move on
+      } else {
+        throw err;
+      }
+    }
   };
 
   // 파일 다운로드 메소드
@@ -164,6 +199,99 @@ const index = (props) => {
 
   console.log('기본 상세 detail', detail);
   console.log('기본 상세 totalPrice', totalPrice);
+
+  const productPriceRef = React.useRef(); // 제작비
+  const deliveryPriceRef = React.useRef(); // 물류비
+
+  //  납품 완료
+  const sendDeliveryAPI = () => {
+    Estimate.sendDelivery(detail.pdr_id)
+      .then((res) => {
+        console.log('납품 어찌됐노', res);
+        if (res.data.result === '1') {
+          Alert.alert(
+            res.data.message,
+            '견적발송 및 채택 페이지에서 확인하실 수 있습니다.',
+            [
+              {
+                text: '확인',
+                onPress: () => navigation.navigate('Steps'),
+              },
+            ],
+          );
+        }
+      })
+      .catch((err) => {
+        Alert.alert(err, '관리자에게 문의하세요.', [
+          {
+            text: '확인',
+          },
+        ]);
+      });
+  };
+
+  // 견적 발송 및 견적 수정
+  const sendEstimateAPI = (method) => {
+    if (productPrice === '0' || productPrice === '' || productPrice === null) {
+      Alert.alert('제작비를 입력해주세요.', '', [
+        {
+          text: '확인',
+          onPress: () => productPriceRef.current.focus(),
+        },
+      ]);
+    }
+    if (
+      deliveryPrice === '0' ||
+      deliveryPrice === '' ||
+      deliveryPrice === null
+    ) {
+      Alert.alert('물류비를 입력해주세요.', '', [
+        {
+          text: '확인',
+          onPress: () => deliveryPriceRef.current.focus(),
+        },
+      ]);
+    }
+
+    const frmData = new FormData();
+    frmData.append('method', method);
+    frmData.append('company_id', mb_email);
+    if (detail.status === '0') frmData.append('pe_id', pe_id);
+    if (detail.status === '1') frmData.append('pd_id', detail.pdr_id);
+    frmData.append('mb_id', detail.mb_id);
+    frmData.append('total_price', totalPrice);
+    frmData.append('production_price', productPrice);
+    frmData.append('design_price', designPrice);
+    frmData.append('reduce_price', deliveryPrice);
+    frmData.append('deposit_rate', depositRatio);
+    frmData.append('deposit', depositPrice);
+    frmData.append('estimate_content', estimateText);
+    frmData.append('bf_file[]', estimateFile);
+
+    Estimate.sendEstimate(frmData)
+      .then((res) => {
+        console.log('어찌됐노', res);
+        if (res.data.result === '1') {
+          Alert.alert(
+            res.data.message,
+            '견적발송 및 채택 페이지에서 확인하실 수 있습니다.',
+            [
+              {
+                text: '확인',
+                onPress: () => navigation.navigate('Steps'),
+              },
+            ],
+          );
+        }
+      })
+      .catch((err) => {
+        Alert.alert(err, '관리자에게 문의하세요.', [
+          {
+            text: '확인',
+          },
+        ]);
+      });
+  };
 
   return (
     <>
@@ -282,15 +410,31 @@ const index = (props) => {
         />
         {/* // 경계 라인 */}
         <View style={styles.wrap}>
-          <Text style={styles.orderInfoTitle}>
-            견적{' '}
-            {detail.status === '0' || detail.status === '1' ? '작성' : '내용'}
+          <Text
+            style={
+              detail.status === '1'
+                ? styles.orderInfoTitle02
+                : styles.orderInfoTitle
+            }>
+            견적 {detail.status === '0' ? '작성' : '내용'}
           </Text>
+          {detail.status === '1' && (
+            <Text
+              style={{
+                fontFamily: 'SCDream4',
+                fontSize: 12,
+                color: '#00A170',
+                marginBottom: 25,
+              }}>
+              입찰중인 상태에서는 견적내용을 수정하실 수 있습니다.
+            </Text>
+          )}
           <View style={[styles.flexRow, styles.mgB30]}>
             <View style={styles.wd50per}>
               <Text style={styles.orderInfoDesc}>제작비(원)</Text>
               {detail.status === '0' || detail.status === '1' ? (
                 <TextInput
+                  ref={productPriceRef}
                   value={productPrice}
                   placeholder="금액을 입력하세요."
                   style={styles.textInput}
@@ -356,6 +500,7 @@ const index = (props) => {
               <Text style={styles.orderInfoDesc}>물류비(원)</Text>
               {detail.status === '0' || detail.status === '1' ? (
                 <TextInput
+                  ref={deliveryPriceRef}
                   value={deliveryPrice}
                   placeholder="금액을 입력하세요."
                   style={styles.textInput}
@@ -508,7 +653,8 @@ const index = (props) => {
                         fontFamily: 'SCDream4',
                         fontSize: 14,
                       }}>
-                      {depositPrice ? depositPrice : '0'}
+                      {depositPrice &&
+                        depositPrice.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
                     </Text>
                   </View>
                 </TouchableOpacity>
@@ -564,7 +710,8 @@ const index = (props) => {
                         fontSize: 15,
                         color: '#00A170',
                       }}>
-                      {totalPrice ? totalPrice : '0'}
+                      {totalPrice &&
+                        totalPrice.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
                     </Text>
                   </View>
                 </TouchableOpacity>
@@ -613,6 +760,7 @@ const index = (props) => {
                   borderRadius: 5,
                   backgroundColor: '#F5F5F5',
                   height: 120,
+                  lineHeight: 22,
                   flex: 1,
                   textAlignVertical: 'top',
                   paddingLeft: 10,
@@ -627,12 +775,18 @@ const index = (props) => {
                   borderRadius: 5,
                   backgroundColor: '#F5F5F5',
                   height: 120,
+
                   flex: 1,
                   textAlignVertical: 'top',
                   paddingLeft: 10,
                   paddingVertical: 10,
                 }}>
-                <Text style={{fontFamily: 'SCDream4', fontSize: 14}}>
+                <Text
+                  style={{
+                    fontFamily: 'SCDream4',
+                    fontSize: 14,
+                    lineHeight: 22,
+                  }}>
                   {detail.estimate_content}
                 </Text>
               </View>
@@ -654,6 +808,7 @@ const index = (props) => {
                   marginBottom: 5,
                 }}>
                 <TextInput
+                  value={estimateFileNameCur}
                   placeholder="견적서파일을 첨부해주세요."
                   placeholderTextColor="#A2A2A2"
                   style={{
@@ -668,7 +823,8 @@ const index = (props) => {
                   editable={false}
                 />
                 <TouchableOpacity
-                  activeOpacity={0.8}
+                  activeOpacity={1}
+                  onPress={() => filePicker01()}
                   style={{
                     justifyContent: 'center',
                     alignItems: 'center',
@@ -728,7 +884,6 @@ const index = (props) => {
                   <Text
                     style={{
                       fontFamily: 'SCDream4',
-                      color: '#fff',
                       textAlign: 'center',
                       color: '#ccc',
                     }}>
@@ -762,7 +917,7 @@ const index = (props) => {
                 </View>
               </TouchableOpacity>
             ) : null}
-            {detail.status === '0' || detail.status === '1' ? (
+            {detail.status === '0' ? (
               <View
                 style={{
                   flexDirection: 'row',
@@ -801,17 +956,53 @@ const index = (props) => {
             ) : null}
           </View>
           {/* // 견적서 파일 */}
-          {detail.status === '5' ? (
+          {detail.status === '1' ? (
             <TouchableOpacity
-              onPress={() => Alert.alert('납품')}
+              onPress={() => sendEstimateAPI('proc_partner_estimate_modify')}
+              activeOpacity={0.8}>
+              <View style={styles.submitBtn}>
+                <Text style={styles.submitBtnText}>견적 수정</Text>
+              </View>
+            </TouchableOpacity>
+          ) : detail.status === '2' ? (
+            <TouchableOpacity
+              onPress={() => sendEstimateAPI('proc_partner_estimate_modify')}
+              activeOpacity={0.8}>
+              <View style={styles.submitBtn}>
+                <Text style={styles.submitBtnText}>견적 확정</Text>
+              </View>
+            </TouchableOpacity>
+          ) : detail.status === '3' ? (
+            <TouchableOpacity
+              onPress={() => sendEstimateAPI('proc_partner_estimate_modify')}
+              activeOpacity={0.8}>
+              <View style={styles.submitBtn}>
+                <Text style={styles.submitBtnText}>계약금 입금 확인</Text>
+              </View>
+            </TouchableOpacity>
+          ) : detail.status === '4' ? (
+            <View style={styles.submitedBtn}>
+              <Text style={styles.submitedBtnText}>계약금 입금 완료</Text>
+            </View>
+          ) : detail.status === '5' ? (
+            <TouchableOpacity
+              onPress={() => sendDeliveryAPI()}
               activeOpacity={0.8}>
               <View style={styles.submitBtn}>
                 <Text style={styles.submitBtnText}>납품 완료</Text>
               </View>
             </TouchableOpacity>
+          ) : detail.status === '6' ? (
+            <View style={styles.submitedBtn}>
+              <Text style={styles.submitedBtnText}>납품 완료</Text>
+            </View>
+          ) : detail.status === '7' ? (
+            <View style={styles.submitedBtn}>
+              <Text style={styles.submitedBtnText}>수령 완료</Text>
+            </View>
           ) : (
             <TouchableOpacity
-              onPress={() => Alert.alert('제출')}
+              onPress={() => sendEstimateAPI('proc_partner_estimate_add')}
               activeOpacity={0.8}>
               <View style={styles.submitBtn}>
                 <Text style={styles.submitBtnText}>견적 제출</Text>
@@ -891,6 +1082,13 @@ const styles = StyleSheet.create({
     marginTop: 20,
     marginBottom: 25,
   },
+  orderInfoTitle02: {
+    fontFamily: 'SCDream4',
+    fontSize: 18,
+    color: '#00A170',
+    marginTop: 20,
+    marginBottom: 5,
+  },
   orderInfoDesc: {
     fontFamily: 'SCDream4',
     fontSize: 15,
@@ -942,10 +1140,22 @@ const styles = StyleSheet.create({
     width: '100%',
     paddingVertical: 15,
   },
+  submitedBtn: {
+    borderRadius: 4,
+    backgroundColor: '#F5F5F5',
+    width: '100%',
+    paddingVertical: 15,
+  },
   submitBtnText: {
     fontFamily: 'SCDream4',
     fontSize: 16,
     color: '#FFFFFF',
+    textAlign: 'center',
+  },
+  submitedBtnText: {
+    fontFamily: 'SCDream4',
+    fontSize: 16,
+    color: '#ccc',
     textAlign: 'center',
   },
   normalText: {
