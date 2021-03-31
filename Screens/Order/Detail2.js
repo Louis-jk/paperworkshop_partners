@@ -164,12 +164,11 @@ const Detail = (props) => {
             </View>
             <View style={styles.details}>
               <Text style={styles.detailsTitle}>첨부파일</Text>
-              {/* {(detail.basic.pe_file === null ||
-                detail.basic.pe_file === '') && (
+              {detail.basic.pe_file === null || detail.basic.pe_file === '' ? (
                 <Text style={styles.detailsDesc}>첨부파일이 없습니다.</Text>
-              )} */}
+              ) : null}
             </View>
-            {detail.basic.pe_file && (
+            {detail.basic.pe_file ? (
               <View
                 style={{
                   flexDirection: 'row',
@@ -207,7 +206,7 @@ const Detail = (props) => {
                   }}
                 />
               </View>
-            )}
+            ) : null}
           </View>
 
           {/* 경계 라인 */}
@@ -239,52 +238,154 @@ const Detail = (props) => {
             </Text>
             <View style={[styles.infoBox, {marginBottom: 10}]}>
               <View style={styles.details}>
-                <Text style={styles.detailsTitle}>박스타입</Text>
-                <Text style={styles.detailsDesc}>B형 십자</Text>
+                <Text style={styles.detailsTitle}>타입</Text>
+                <Text style={styles.detailsDesc}>
+                  {detail.basic.ca_type_name}
+                </Text>
               </View>
               <View style={styles.details}>
-                <Text style={styles.detailsTitle}>규격(사이즈)입력</Text>
-                <Text style={styles.detailsDesc}>10/10/10</Text>
+                <Text style={styles.detailsTitle}>규격(가로/세로/높이)</Text>
+                <Text style={styles.detailsDesc}>
+                  {detail.basic2.pwidth}/{detail.basic2.plength}/
+                  {detail.basic2.pheight}
+                </Text>
               </View>
               <View style={styles.details}>
                 <Text style={styles.detailsTitle}>수량</Text>
-                <Text style={styles.detailsDesc}>500</Text>
+                <Text style={styles.detailsDesc}>
+                  {detail.basic2.cnt
+                    ? detail.basic2.cnt
+                    : detail.basic2.cnt_etc
+                    ? detail.basic2.cnt_etc
+                    : '없음'}
+                </Text>
               </View>
               <View style={styles.details}>
                 <Text style={styles.detailsTitle}>목형</Text>
-                <Text style={styles.detailsDesc}>있음</Text>
+                <Text style={styles.detailsDesc}>
+                  {detail.basic2.wood_pattern}
+                </Text>
               </View>
-              <View style={styles.details}>
-                <Text style={styles.detailsTitle}>인쇄용지</Text>
-                <Text style={styles.detailsDesc}>일반(백판지,마닐라류)</Text>
-              </View>
+              {detail.basic.ca_id === '12' ? (
+                <>
+                  <View style={styles.details}>
+                    <Text style={styles.detailsTitle}>싸바리형태</Text>
+                    <Text style={styles.detailsDesc}>
+                      {detail.basic2.stype ? detail.basic2.stype : '없음'}
+                    </Text>
+                  </View>
+
+                  <View style={styles.details}>
+                    <Text style={styles.detailsTitle}>속지 판지두께</Text>
+                    <Text style={styles.detailsDesc}>
+                      {detail.basic2.board_tk ? detail.basic2.board_tk : '없음'}
+                    </Text>
+                  </View>
+                </>
+              ) : null}
               <View style={styles.details}>
                 <Text style={styles.detailsTitle}>인쇄도수</Text>
-                <Text style={styles.detailsDesc}>(전면) 1도</Text>
+                <Text style={styles.detailsDesc}>
+                  {detail.print.print_frequency
+                    ? detail.print.print_frequency
+                    : '없음'}
+                </Text>
               </View>
               <View style={styles.details}>
                 <Text style={styles.detailsTitle}>인쇄교정</Text>
-                <Text style={styles.detailsDesc}>있음</Text>
+                <Text style={styles.detailsDesc}>
+                  {detail.print.proof_printing
+                    ? detail.print.proof_printing
+                    : '없음'}
+                </Text>
               </View>
               <View style={styles.details}>
                 <Text style={styles.detailsTitle}>인쇄감리</Text>
-                <Text style={styles.detailsDesc}>있음</Text>
+                <Text style={styles.detailsDesc}>
+                  {detail.print.print_supervision
+                    ? detail.print.print_supervision
+                    : '없음'}
+                </Text>
+              </View>
+              <View style={styles.details}>
+                <Text style={styles.detailsTitle}>지류명</Text>
+                <Text style={styles.detailsDesc}>
+                  {detail.feeder.feeder_name}
+                </Text>
+              </View>
+              <View style={styles.details}>
+                <Text style={styles.detailsTitle}>지종</Text>
+                <Text style={styles.detailsDesc}>
+                  {detail.feeder.paper_name}
+                </Text>
+              </View>
+              <View style={styles.details}>
+                <Text style={styles.detailsTitle}>지종상세</Text>
+                <Text style={styles.detailsDesc}>
+                  {detail.feeder.paper_name2
+                    ? detail.feeder.paper_name2
+                    : '없음'}
+                </Text>
+              </View>
+              {detail.basic.ca_id !== '10' ? (
+                <View style={styles.details}>
+                  <Text style={styles.detailsTitle}>평량</Text>
+                  <Text style={styles.detailsDesc}>
+                    {detail.feeder.paper_weight
+                      ? detail.feeder.paper_weight
+                      : detail.feeder.paper_weight_etc
+                      ? detail.feeder.paper_weight_etc
+                      : '없음'}
+                  </Text>
+                </View>
+              ) : null}
+              {detail.basic.ca_id === '10' || detail.basic.ca_id === '11' ? (
+                <View style={styles.details}>
+                  <Text style={styles.detailsTitle}>골</Text>
+                  <Text style={styles.detailsDesc}>
+                    {detail.feeder.paper_goal
+                      ? detail.feeder.paper_goal
+                      : detail.feeder.paper_goal_etc
+                      ? detail.feeder.paper_goal_etc
+                      : '없음'}
+                  </Text>
+                </View>
+              ) : null}
+              <View style={styles.details}>
+                <Text style={styles.detailsTitle}>색상</Text>
+                <Text style={styles.detailsDesc}>
+                  {detail.feeder.paper_color
+                    ? detail.feeder.paper_color
+                    : detail.feeder.paper_color_etc
+                    ? detail.feeder.paper_color_etc
+                    : '없음'}
+                </Text>
               </View>
               <View style={styles.details}>
                 <Text style={styles.detailsTitle}>박가공</Text>
-                <Text style={styles.detailsDesc}>있음</Text>
+                <Text style={styles.detailsDesc}>
+                  {detail.end.park_processing
+                    ? detail.end.park_processing
+                    : '없음'}
+                </Text>
               </View>
               <View style={styles.details}>
                 <Text style={styles.detailsTitle}>형압</Text>
-                <Text style={styles.detailsDesc}>있음</Text>
+                <Text style={styles.detailsDesc}>
+                  {detail.end.press_design ? detail.end.press_design : '없음'}
+                </Text>
               </View>
               <View style={styles.details}>
                 <Text style={styles.detailsTitle}>부분 실크</Text>
-                <Text style={styles.detailsDesc}>있음</Text>
+                <Text style={styles.detailsDesc}>
+                  {detail.end.partial_silk ? detail.end.partial_silk : '없음'}
+                </Text>
               </View>
               <View style={styles.details}>
                 <Text style={styles.detailsTitle}>코팅</Text>
-                <Text style={styles.detailsDesc}>코팅 없음</Text>
+                <Text style={styles.detailsDesc}>
+                  {detail.end.coating ? detail.end.coating : '없음'}
+                </Text>
               </View>
             </View>
             {/* <TouchableOpacity
@@ -342,7 +443,7 @@ const styles = StyleSheet.create({
   },
   detailsTitle: {
     fontFamily: 'SCDream4',
-    width: 120,
+    width: 145,
     fontSize: 14,
     marginRight: 10,
     color: '#A2A2A2',
