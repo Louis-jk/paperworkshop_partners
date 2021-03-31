@@ -116,6 +116,14 @@ const index = (props) => {
     getEstimateAllListAPI();
   }, [type, cateV, caIdV, search]);
 
+  React.useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      getEstimateAllListAPI();
+    });
+
+    return unsubscribe;
+  }, [navigation]);
+
   const [isActiveToggleDetail, setIsActiveToggleDetail] = React.useState(false);
   const toggleDetail = () => {
     setIsActiveToggleDetail(!isActiveToggleDetail);
