@@ -9,7 +9,9 @@ import {
   Dimensions,
   Image,
   TouchableOpacity,
+  TouchableWithoutFeedback,
   ActivityIndicator,
+  Linking,
 } from 'react-native';
 import {useSelector} from 'react-redux';
 import RNFetchBlob from 'rn-fetch-blob'; // 파일 다운로드 패키지
@@ -48,6 +50,8 @@ const index = (props) => {
   const [estimateFilePathCur, setEstimateFilePathCur] = React.useState(null); // 견적서 파일 경로
   const [estimateFile, setEstimateFile] = React.useState(''); // 견적서 파일 uri, type, name 전체 담기
 
+  const [estimateUser, setEstimateUser] = React.useState(null); // 견적낸 유저 정보 (status 0, 1 이상일 경우만)
+
   const priceHandler = () => {
     console.log('productPrice', productPrice);
     console.log('productPrice Type', typeof productPrice);
@@ -77,6 +81,35 @@ const index = (props) => {
     setDepositPrice(depositPriceFormat);
   };
 
+  // 견적낸 사용자 정보 가져오기 (견적 채택 이상 단계)
+  const getEstimateUserInfoAPI = (mb_id) => {
+    setLoading(true);
+    Estimate.getEstimateUserInfo(mb_id)
+      .then((res) => {
+        console.log('사용자 정보', res);
+        if (res.data.result === '1') {
+          setEstimateUser(res.data.item[0]);
+          setLoading(false);
+        } else {
+          Alert.alert(res.data.message, '', [
+            {
+              text: '확인',
+            },
+          ]);
+          setLoading(false);
+        }
+      })
+      .catch((err) => {
+        Alert.alert('문제가 있습니다.', err, [
+          {
+            text: '확인',
+          },
+        ]);
+        setLoading(false);
+      });
+  };
+
+  // 견적 상세보기(간단)
   const getEstimateDetailAPI = () => {
     setLoading(true);
     Estimate.getDetail(pe_id, mb_email)
@@ -94,6 +127,14 @@ const index = (props) => {
             setEstimateFileNameCur(res.data.item[0].bf_file_source);
             setEstimateFilePathCur(res.data.item[0].bf_file);
           }
+
+          if (
+            res.data.item[0].status !== '0' ||
+            res.data.item[0].status !== '1'
+          ) {
+            getEstimateUserInfoAPI(res.data.item[0].mb_id);
+          }
+
           setDetail(res.data.item[0]);
           setLoading(false);
         } else if (res.data.result === '1' && res.data.count == 0) {
@@ -121,6 +162,8 @@ const index = (props) => {
   React.useEffect(() => {
     getEstimateDetailAPI();
   }, []);
+
+  console.log('사용자 정보 estimateUser', estimateUser);
 
   // 파일 다운로드 핸들러
   const fileDownloadHandler = (filePath, fileName) => {
@@ -194,6 +237,7 @@ const index = (props) => {
         params: {pe_id: pe_id, cate1: detail.cate1},
       });
     } else {
+      // 기타
     }
   };
 
@@ -203,11 +247,10 @@ const index = (props) => {
   const productPriceRef = React.useRef(); // 제작비
   const deliveryPriceRef = React.useRef(); // 물류비
 
-  //  납품 완료
-  const sendDeliveryAPI = () => {
-    Estimate.sendDelivery(detail.pdr_id)
+  //  견적확정
+  const sendEstimateCfmAPI = () => {
+    Estimate.sendEstimateCfm(detail.pdr_id)
       .then((res) => {
-        console.log('납품 어찌됐노', res);
         if (res.data.result === '1') {
           Alert.alert(
             res.data.message,
@@ -216,6 +259,58 @@ const index = (props) => {
               {
                 text: '확인',
                 onPress: () => navigation.navigate('Steps'),
+              },
+            ],
+          );
+        }
+      })
+      .catch((err) => {
+        Alert.alert(err, '관리자에게 문의하세요.', [
+          {
+            text: '확인',
+          },
+        ]);
+      });
+  };
+
+  //  계약금 입금확인
+  const sendPaymentCfmAPI = () => {
+    Estimate.sendPaymentCfm(detail.pdr_id)
+      .then((res) => {
+        if (res.data.result === '1') {
+          Alert.alert(
+            res.data.message,
+            '견적발송 및 채택 페이지에서 확인하실 수 있습니다.',
+            [
+              {
+                text: '확인',
+                onPress: () => navigation.navigate('Steps'),
+              },
+            ],
+          );
+        }
+      })
+      .catch((err) => {
+        Alert.alert(err, '관리자에게 문의하세요.', [
+          {
+            text: '확인',
+          },
+        ]);
+      });
+  };
+
+  //  납품 완료
+  const sendDeliveryAPI = () => {
+    Estimate.sendDelivery(detail.pdr_id)
+      .then((res) => {
+        if (res.data.result === '1') {
+          Alert.alert(
+            res.data.message,
+            '제작/납품 페이지에서 확인하실 수 있습니다.',
+            [
+              {
+                text: '확인',
+                onPress: () => navigation.navigate('Product'),
               },
             ],
           );
@@ -319,7 +414,9 @@ const index = (props) => {
         <View style={styles.wrap}>
           <View style={styles.infoBox}>
             <Text style={styles.infoStepDesc}>
-              {detail.status === '1'
+              {detail.status === '0'
+                ? '비교 견적요청'
+                : detail.status === '1'
                 ? '입찰중'
                 : detail.status === '2'
                 ? '파트너스최종선정(견적확정대기)'
@@ -409,6 +506,179 @@ const index = (props) => {
           }}
         />
         {/* // 경계 라인 */}
+
+        {/* 전화하기, 메세지보내기 */}
+        {detail !== null &&
+        estimateUser !== null &&
+        detail.status !== '0' &&
+        detail !== null &&
+        estimateUser !== null &&
+        detail.status !== '1' ? (
+          <View style={{paddingHorizontal: 20, paddingVertical: 20}}>
+            <View>
+              <Text
+                style={{
+                  fontFamily: 'SCDream4',
+                  fontSize: 16,
+                  color: '#00A170',
+                  marginBottom: 15,
+                }}>
+                견적의뢰자 정보
+              </Text>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'flex-start',
+                  alignItems: 'center',
+                  marginBottom: 15,
+                }}>
+                <Image
+                  source={{uri: `${estimateUser.mb_profile}`}}
+                  style={{
+                    width: 50,
+                    height: 50,
+                    borderRadius: 50,
+                    borderWidth: 0.5,
+                    borderColor: '#E3E3E3',
+                    marginRight: 20,
+                  }}
+                  resizeMode="cover"
+                />
+                <Text
+                  style={{
+                    fontFamily: 'SCDream4',
+                    fontSize: 14,
+                    marginRight: 20,
+                  }}>
+                  견적자명 : {estimateUser.mb_name}
+                </Text>
+                {estimateUser.mb_2 ? (
+                  <>
+                    <View
+                      style={{
+                        height: 16,
+                        backgroundColor: '#00A170',
+                        width: 1,
+                        marginRight: 20,
+                      }}
+                    />
+                    <Text
+                      style={{
+                        fontFamily: 'SCDream4',
+                        fontSize: 14,
+                      }}>
+                      회사명 : {estimateUser.mb_2}
+                    </Text>
+                  </>
+                ) : null}
+              </View>
+            </View>
+            <View>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  borderWidth: 1,
+                  borderColor: '#E3E3E3',
+                  borderRadius: 5,
+                  backgroundColor: '#fff',
+                }}>
+                <TouchableWithoutFeedback
+                  onPress={() => Linking.openURL(`tel:${estimateUser.mb_hp}`)}>
+                  <View
+                    style={{
+                      flex: 1,
+                      flexDirection: 'row',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      paddingVertical: 12,
+                    }}>
+                    <Image
+                      source={require('../../src/assets/icon_call01.png')}
+                      resizeMode="cover"
+                      style={{width: 24, height: 24}}
+                    />
+                    <Text
+                      style={[
+                        styles.normalText,
+                        {
+                          fontSize: 14,
+                          letterSpacing: -1,
+                          marginLeft: 5,
+                        },
+                      ]}>
+                      전화하기
+                    </Text>
+                  </View>
+                </TouchableWithoutFeedback>
+                <View
+                  style={{
+                    borderWidth: 0.5,
+                    height: '100%',
+                    borderColor: '#E3E3E3',
+                  }}
+                />
+                <TouchableWithoutFeedback
+                  onPress={() => navigation.navigate('MessageDetail')}>
+                  <View
+                    style={{
+                      flex: 1,
+                      flexDirection: 'row',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      paddingVertical: 12,
+                    }}>
+                    <Image
+                      source={require('../../src/assets/icon_msm01.png')}
+                      resizeMode="cover"
+                      style={{width: 24, height: 24}}
+                    />
+                    <Text
+                      style={[
+                        styles.normalText,
+                        {
+                          fontSize: 14,
+                          letterSpacing: -1,
+                          marginLeft: 5,
+                        },
+                      ]}>
+                      메세지보내기
+                    </Text>
+                  </View>
+                </TouchableWithoutFeedback>
+              </View>
+            </View>
+          </View>
+        ) : null}
+        {/* // 전화하기, 메세지보내기  */}
+
+        {/* 경계 라인 */}
+        {detail !== null &&
+        estimateUser !== null &&
+        detail.status !== '0' &&
+        detail !== null &&
+        estimateUser !== null &&
+        detail.status !== '1' ? (
+          <>
+            <View
+              style={{
+                height: 1,
+                backgroundColor: '#E3E3E3',
+                width: Dimensions.get('window').width,
+              }}
+            />
+            <View
+              style={{
+                height: 6,
+                backgroundColor: '#F5F5F5',
+                width: Dimensions.get('window').width,
+              }}
+            />
+          </>
+        ) : null}
+        {/* // 경계 라인 */}
+
         <View style={styles.wrap}>
           <Text
             style={
@@ -956,7 +1226,8 @@ const index = (props) => {
             ) : null}
           </View>
           {/* // 견적서 파일 */}
-          {detail.status === '1' ? (
+          {detail.status === '1' &&
+          (detail.pdr_id !== null || detail.pdr_id !== '') ? (
             <TouchableOpacity
               onPress={() => sendEstimateAPI('proc_partner_estimate_modify')}
               activeOpacity={0.8}>
@@ -964,9 +1235,18 @@ const index = (props) => {
                 <Text style={styles.submitBtnText}>견적 수정</Text>
               </View>
             </TouchableOpacity>
+          ) : detail.status === '1' &&
+            (detail.pdr_id === null || detail.pdr_id === '') ? (
+            <TouchableOpacity
+              onPress={() => sendEstimateAPI('proc_partner_estimate_add')}
+              activeOpacity={0.8}>
+              <View style={styles.submitBtn}>
+                <Text style={styles.submitBtnText}>견적 발송</Text>
+              </View>
+            </TouchableOpacity>
           ) : detail.status === '2' ? (
             <TouchableOpacity
-              onPress={() => sendEstimateAPI('proc_partner_estimate_modify')}
+              onPress={() => sendEstimateCfmAPI()}
               activeOpacity={0.8}>
               <View style={styles.submitBtn}>
                 <Text style={styles.submitBtnText}>견적 확정</Text>
@@ -974,7 +1254,7 @@ const index = (props) => {
             </TouchableOpacity>
           ) : detail.status === '3' ? (
             <TouchableOpacity
-              onPress={() => sendEstimateAPI('proc_partner_estimate_modify')}
+              onPress={() => sendPaymentCfmAPI()}
               activeOpacity={0.8}>
               <View style={styles.submitBtn}>
                 <Text style={styles.submitBtnText}>계약금 입금 확인</Text>
@@ -1005,7 +1285,7 @@ const index = (props) => {
               onPress={() => sendEstimateAPI('proc_partner_estimate_add')}
               activeOpacity={0.8}>
               <View style={styles.submitBtn}>
-                <Text style={styles.submitBtnText}>견적 제출</Text>
+                <Text style={styles.submitBtnText}>견적 발송</Text>
               </View>
             </TouchableOpacity>
           )}
@@ -1077,21 +1357,21 @@ const styles = StyleSheet.create({
   },
   orderInfoTitle: {
     fontFamily: 'SCDream4',
-    fontSize: 18,
+    fontSize: 16,
     color: '#00A170',
     marginTop: 20,
     marginBottom: 25,
   },
   orderInfoTitle02: {
     fontFamily: 'SCDream4',
-    fontSize: 18,
+    fontSize: 16,
     color: '#00A170',
     marginTop: 20,
     marginBottom: 5,
   },
   orderInfoDesc: {
     fontFamily: 'SCDream4',
-    fontSize: 15,
+    fontSize: 14,
     color: '#000',
     marginBottom: 10,
   },
