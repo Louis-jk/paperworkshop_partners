@@ -108,7 +108,18 @@ const index = (props) => {
       });
   };
 
-  console.log('detail', detail);
+  const goMoreDetail = (checkId) => {
+    if (checkId === '1') {
+      navigation.navigate('OrderDetailPackage', {
+        screen: 'OrderDetailPackage',
+        params: {pe_id: pe_id, cate1: detail.cate1},
+      });
+    } else if (checkId === '0') {
+    } else {
+    }
+  };
+
+  console.log('기본 상세 detail', detail);
 
   return (
     <>
@@ -195,8 +206,8 @@ const index = (props) => {
               <TouchableOpacity
                 activeOpacity={0.8}
                 onPress={() =>
-                  navigation.navigate('OrderDetail2', {
-                    screen: 'OrderDetail2',
+                  navigation.navigate('OrderDetailPackage', {
+                    screen: 'OrderDetailPackage',
                     params: {pe_id: pe_id, cate1: detail.cate1},
                   })
                 }

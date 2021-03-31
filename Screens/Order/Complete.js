@@ -44,7 +44,7 @@ const Complete = (props) => {
               </View>
               <TouchableOpacity
                 activeOpacity={0.8}
-                onPress={() => navigation.navigate('OrderDetail2')}
+                onPress={() => navigation.navigate('OrderDetailPackage')}
                 style={{alignSelf: 'flex-end'}}>
                 <Text
                   style={{

@@ -7,7 +7,7 @@ import OrderScreen from '../Screens/Order';
 import OrderEditScreen from '../Screens/Order/Edit';
 import OrderCompleteScreen from '../Screens/Order/Complete';
 import OrderDetailScreen from '../Screens/Order/Detail';
-import OrderDetail2Screen from '../Screens/Order/Detail2';
+import OrderDetailPackageScreen from '../Screens/Order/Detail2';
 import OrderDetailPropsScreen from '../Screens/Order/DetailProps';
 import StepsScreen from '../Screens/Steps';
 import ProductScreen from '../Screens/Product';
@@ -103,10 +103,13 @@ export const OrderDetailStackNavigator = () => {
   );
 };
 
-export const OrderDetail2StackNavigator = () => {
+export const OrderMoreDetailStackNavigator = () => {
   return (
     <Stack.Navigator screenOptions={{headerShown: false}}>
-      <Stack.Screen name="OrderDetail2" component={OrderDetail2Screen} />
+      <Stack.Screen
+        name="OrderDetailPackage"
+        component={OrderDetailPackageScreen}
+      />
     </Stack.Navigator>
   );
 };

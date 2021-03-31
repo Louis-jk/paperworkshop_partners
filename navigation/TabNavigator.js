@@ -13,7 +13,7 @@ import {
   OrderEditStackNavigator,
   OrderCompleteStackNavigator,
   OrderDetailStackNavigator,
-  OrderDetail2StackNavigator,
+  OrderMoreDetailStackNavigator,
   OrderDetailPropsStackNavigator,
   PartnersInfoStackNavigator,
   AlarmStackNavigator,
@@ -123,8 +123,8 @@ const TabNavigator = () => {
       />
       <Stack.Screen name="OrderDetail" component={OrderDetailStackNavigator} />
       <Stack.Screen
-        name="OrderDetail2"
-        component={OrderDetail2StackNavigator}
+        name="OrderDetailPackage"
+        component={OrderMoreDetailStackNavigator}
       />
       <Stack.Screen
         name="OrderDetailProps"

@@ -35,7 +35,7 @@ const DetailHeader = (props) => {
       case 'OrderDetail':
         setTitle('견적의뢰 세부내용');
         break;
-      case 'OrderDetail2':
+      case 'OrderDetailPackage':
         setTitle('견적의뢰 세부내용');
         break;
       case 'OrderDetailProps':
