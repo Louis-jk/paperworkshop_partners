@@ -2,7 +2,6 @@ import * as React from 'react';
 import {
   View,
   Text,
-  ScrollView,
   StyleSheet,
   TouchableWithoutFeedback,
   Dimensions,
