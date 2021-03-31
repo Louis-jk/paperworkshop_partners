@@ -49,6 +49,26 @@ export default {
       },
     });
   },
+  // 견적확정
+  sendEstimateCfm(pd_id) {
+    return Send({
+      method: 'post',
+      data: qs.stringify({
+        method: 'proc_partner_estimate_decide',
+        pd_id,
+      }),
+    });
+  },
+  // 계약금 입금확인
+  sendPaymentCfm(pd_id) {
+    return Send({
+      method: 'post',
+      data: qs.stringify({
+        method: 'proc_partner_estimate_status',
+        pd_id,
+      }),
+    });
+  },
   // 납품완료
   sendDelivery(pd_id) {
     return Send({
@@ -56,6 +76,16 @@ export default {
       data: qs.stringify({
         method: 'proc_partner_estimate_status2',
         pd_id,
+      }),
+    });
+  },
+  // 사용자 회원 정보 가져오기
+  getEstimateUserInfo(mb_id) {
+    return Send({
+      method: 'post',
+      data: qs.stringify({
+        method: 'proc_member_detail',
+        mb_id,
       }),
     });
   },
