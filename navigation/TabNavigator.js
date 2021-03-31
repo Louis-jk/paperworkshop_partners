@@ -127,6 +127,10 @@ const TabNavigator = () => {
         component={OrderMoreDetailStackNavigator}
       />
       <Stack.Screen
+        name="OrderDetailGeneral"
+        component={OrderMoreDetailStackNavigator}
+      />
+      <Stack.Screen
         name="OrderDetailProps"
         component={OrderDetailPropsStackNavigator}
       />
