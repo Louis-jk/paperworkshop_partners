@@ -13,6 +13,7 @@ import {
 } from 'react-native';
 import {useSelector} from 'react-redux';
 import RNFetchBlob from 'rn-fetch-blob'; // 파일 다운로드 패키지
+import DocumentPicker from 'react-native-document-picker'; // 파일 업로드 패키지
 
 import DetailHeader from '../Common/DetailHeader';
 import Estimate from '../../src/api/Estimate';
@@ -27,14 +28,52 @@ const index = (props) => {
   console.log('detail props', props);
   console.log('detail pe_id', pe_id);
 
-  const payPerType = ['10%', '20%', '30%', '40%', '50%'];
-  const [payPer, setPayPer] = React.useState(payPerType[0]);
+  const payPerType = ['10', '20', '30', '40', '50'];
   const [isActiveTogglePayPer, setIsActiveTogglePayPer] = React.useState(false);
   const togglePayPer = () => {
     setIsActiveTogglePayPer(!isActiveTogglePayPer);
   };
   const [isLoading, setLoading] = React.useState(false);
   const [detail, setDetail] = React.useState([]);
+
+  const [productPrice, setProductPrice] = React.useState('0'); // 제작비
+  const [designPrice, setDesignPrice] = React.useState('0'); // 디자인비
+  const [deliveryPrice, setDeliveryPrice] = React.useState('0'); // 물류비
+  const [depositRatio, setDepositRatio] = React.useState('10'); // 계약금 비율
+  const [depositPrice, setDepositPrice] = React.useState('0'); // 계약금
+  const [totalPrice, setTotalPrice] = React.useState('0'); // 총 견적 금액
+  const [estimateText, setEstimateText] = React.useState(''); // 견적 상세 설명
+
+  const priceHandler = () => {
+    console.log('productPrice', productPrice);
+    console.log('productPrice Type', typeof productPrice);
+
+    let productPriceInt = parseInt(productPrice);
+    let designPriceInt = parseInt(designPrice);
+    let deliveryPriceInt = parseInt(deliveryPrice);
+    let depositRatioInt = parseInt(depositRatio);
+
+    let total = productPriceInt + designPriceInt + deliveryPriceInt;
+    let totalStr = total.toString();
+    let totalPriceFormat = totalStr.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    setTotalPrice(totalPriceFormat);
+
+    let deposit = total * (depositRatioInt / 100);
+    let depositStr = deposit.toString();
+    let depositPriceFormat = depositStr.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    setDepositPrice(depositPriceFormat);
+  };
+
+  const depositHandler = (value) => {
+    let totalStrFormat = totalPrice.replace(',', '');
+    let total = parseInt(totalStrFormat);
+    let depositRatioInt = parseInt(value);
+
+    let deposit = total * (depositRatioInt / 100);
+    let depositStr = deposit.toString();
+    let depositPriceFormat = depositStr.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    setDepositPrice(depositPriceFormat);
+  };
 
   const getEstimateDetailAPI = () => {
     setLoading(true);
@@ -115,11 +154,16 @@ const index = (props) => {
         params: {pe_id: pe_id, cate1: detail.cate1},
       });
     } else if (checkId === '0') {
+      navigation.navigate('OrderDetailGeneral', {
+        screen: 'OrderDetailGeneral',
+        params: {pe_id: pe_id, cate1: detail.cate1},
+      });
     } else {
     }
   };
 
   console.log('기본 상세 detail', detail);
+  console.log('기본 상세 totalPrice', totalPrice);
 
   return (
     <>
@@ -205,12 +249,7 @@ const index = (props) => {
               </TouchableOpacity> */}
               <TouchableOpacity
                 activeOpacity={0.8}
-                onPress={() =>
-                  navigation.navigate('OrderDetailPackage', {
-                    screen: 'OrderDetailPackage',
-                    params: {pe_id: pe_id, cate1: detail.cate1},
-                  })
-                }
+                onPress={() => goMoreDetail(detail.cate1)}
                 hitSlop={{top: 10, right: 10, bottom: 10, left: 10}}
                 style={{alignSelf: 'flex-end'}}>
                 <Text
@@ -249,26 +288,96 @@ const index = (props) => {
           </Text>
           <View style={[styles.flexRow, styles.mgB30]}>
             <View style={styles.wd50per}>
-              <Text style={styles.orderInfoDesc}>견적 금액(원)</Text>
+              <Text style={styles.orderInfoDesc}>제작비(원)</Text>
               {detail.status === '0' || detail.status === '1' ? (
                 <TextInput
+                  value={productPrice}
                   placeholder="금액을 입력하세요."
                   style={styles.textInput}
+                  onChangeText={(text) => setProductPrice(text)}
+                  onEndEditing={() => priceHandler()}
+                  keyboardType="numeric"
                 />
               ) : (
                 <View
                   style={{
                     justifyContent: 'center',
-                    alignItems: 'center',
+                    alignItems: 'flex-start',
                     borderWidth: 1,
                     borderColor: '#E3E3E3',
                     borderRadius: 4,
                     height: 50,
+                    paddingHorizontal: 10,
                     marginRight: 5,
                   }}>
                   <Text style={{fontFamily: 'SCDream4', fontSize: 15}}>
-                    {detail.total_price &&
-                      detail.total_price.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                    {detail.production_price &&
+                      detail.production_price.replace(
+                        /\B(?=(\d{3})+(?!\d))/g,
+                        ',',
+                      )}
+                  </Text>
+                </View>
+              )}
+            </View>
+            <View style={styles.wd50per}>
+              <Text style={styles.orderInfoDesc}>디자인비(원)</Text>
+              {detail.status === '0' || detail.status === '1' ? (
+                <TextInput
+                  value={designPrice}
+                  placeholder="금액을 입력하세요."
+                  style={styles.textInput}
+                  onChangeText={(text) => setDesignPrice(text)}
+                  onEndEditing={() => priceHandler()}
+                  keyboardType="numeric"
+                />
+              ) : (
+                <View
+                  style={{
+                    justifyContent: 'center',
+                    alignItems: 'flex-start',
+                    borderWidth: 1,
+                    borderColor: '#E3E3E3',
+                    borderRadius: 4,
+                    paddingHorizontal: 10,
+                    height: 50,
+                    marginRight: 5,
+                  }}>
+                  <Text style={{fontFamily: 'SCDream4', fontSize: 15}}>
+                    {detail.design_price &&
+                      detail.design_price.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                  </Text>
+                </View>
+              )}
+            </View>
+          </View>
+          <View style={[styles.flexRow, styles.mgB30]}>
+            <View style={styles.wd50per}>
+              <Text style={styles.orderInfoDesc}>물류비(원)</Text>
+              {detail.status === '0' || detail.status === '1' ? (
+                <TextInput
+                  value={deliveryPrice}
+                  placeholder="금액을 입력하세요."
+                  style={styles.textInput}
+                  onChangeText={(text) => setDeliveryPrice(text)}
+                  onEndEditing={() => priceHandler()}
+                  keyboardType="numeric"
+                />
+              ) : (
+                <View
+                  style={{
+                    justifyContent: 'center',
+                    alignItems: 'flex-start',
+                    borderWidth: 1,
+                    borderColor: '#E3E3E3',
+                    borderRadius: 4,
+                    height: 50,
+                    paddingHorizontal: 10,
+                    marginRight: 5,
+                  }}>
+                  <Text style={{fontFamily: 'SCDream4', fontSize: 15}}>
+                    {detail.reduce_price &&
+                      detail.reduce_price.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
                   </Text>
                 </View>
               )}
@@ -296,7 +405,9 @@ const index = (props) => {
                       height: 50,
                       paddingHorizontal: 10,
                     }}>
-                    <Text style={{fontFamily: 'SCDream4'}}>{payPer}</Text>
+                    <Text style={{fontFamily: 'SCDream4'}}>
+                      {depositRatio}%
+                    </Text>
                     {isActiveTogglePayPer ? (
                       <Image
                         source={require('../../src/assets/arr01_top.png')}
@@ -316,11 +427,13 @@ const index = (props) => {
                 <View
                   style={{
                     justifyContent: 'center',
-                    alignItems: 'center',
+                    alignItems: 'flex-start',
                     borderWidth: 1,
                     borderColor: '#E3E3E3',
                     borderRadius: 4,
                     height: 50,
+                    paddingHorizontal: 10,
+                    marginRight: 5,
                   }}>
                   <Text style={{fontFamily: 'SCDream4', fontSize: 15}}>
                     {detail.deposit_rate}%
@@ -350,16 +463,137 @@ const index = (props) => {
                       style={{paddingVertical: 7, marginBottom: 7}}
                       activeOpacity={0.8}
                       onPress={() => {
-                        setPayPer(v);
+                        setDepositRatio(v);
                         setIsActiveTogglePayPer(false);
+                        depositHandler(v);
                       }}>
-                      <Text style={{fontFamily: 'SCDream4'}}>{v}</Text>
+                      <Text style={{fontFamily: 'SCDream4'}}>{v}%</Text>
                     </TouchableOpacity>
                   ))}
                 </View>
               )}
             </View>
           </View>
+
+          <View style={[styles.flexRow, styles.mgB30]}>
+            <View style={styles.wd50per}>
+              <Text style={styles.orderInfoDesc}>계약금(원)</Text>
+              {detail.status === '0' || detail.status === '1' ? (
+                <TouchableOpacity
+                  activeOpacity={1}
+                  onPress={() => {
+                    Alert.alert(
+                      '계약금은 직접 수정하실 수 없습니다.',
+                      '계약금 비율을 선택해주세요.',
+                      [
+                        {
+                          text: '확인',
+                        },
+                      ],
+                    );
+                  }}>
+                  <View
+                    style={{
+                      justifyContent: 'center',
+                      alignItems: 'flex-start',
+                      borderWidth: 1,
+                      borderColor: '#E3E3E3',
+                      borderRadius: 4,
+                      height: 50,
+                      paddingHorizontal: 10,
+                      marginRight: 5,
+                    }}>
+                    <Text
+                      style={{
+                        fontFamily: 'SCDream4',
+                        fontSize: 14,
+                      }}>
+                      {depositPrice ? depositPrice : '0'}
+                    </Text>
+                  </View>
+                </TouchableOpacity>
+              ) : (
+                <View
+                  style={{
+                    justifyContent: 'center',
+                    alignItems: 'flex-start',
+                    borderWidth: 1,
+                    borderColor: '#E3E3E3',
+                    borderRadius: 4,
+                    height: 50,
+                    paddingHorizontal: 10,
+                    marginRight: 5,
+                  }}>
+                  <Text style={{fontFamily: 'SCDream4', fontSize: 15}}>
+                    {detail.deposit &&
+                      detail.deposit.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                  </Text>
+                </View>
+              )}
+            </View>
+            <View style={styles.wd50per}>
+              <Text style={styles.orderInfoDesc}>총 견적 금액(원)</Text>
+              {detail.status === '0' || detail.status === '1' ? (
+                <TouchableOpacity
+                  activeOpacity={1}
+                  onPress={() => {
+                    Alert.alert(
+                      '총 견적금액은 수정하실 수 없습니다.',
+                      '전체 금액을 확인해주세요.',
+                      [
+                        {
+                          text: '확인',
+                        },
+                      ],
+                    );
+                  }}>
+                  <View
+                    style={{
+                      justifyContent: 'center',
+                      alignItems: 'flex-start',
+                      borderWidth: 1,
+                      borderColor: '#00A170',
+                      borderRadius: 4,
+                      height: 50,
+                      paddingHorizontal: 10,
+                      marginRight: 5,
+                    }}>
+                    <Text
+                      style={{
+                        fontFamily: 'SCDream4',
+                        fontSize: 15,
+                        color: '#00A170',
+                      }}>
+                      {totalPrice ? totalPrice : '0'}
+                    </Text>
+                  </View>
+                </TouchableOpacity>
+              ) : (
+                <View
+                  style={{
+                    justifyContent: 'center',
+                    alignItems: 'flex-start',
+                    borderWidth: 1,
+                    borderColor: '#00A170',
+                    borderRadius: 4,
+                    height: 50,
+                    paddingHorizontal: 10,
+                    marginRight: 5,
+                  }}>
+                  <Text
+                    style={{
+                      fontFamily: 'SCDream4',
+                      fontSize: 15,
+                      color: '#00A170',
+                    }}>
+                    {detail.total_price &&
+                      detail.total_price.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                  </Text>
+                </View>
+              )}
+            </View>
+          </View>
+
           <View style={[styles.orderInfoContentRow, styles.mgB10]}>
             <Text style={[styles.orderInfoContentTitle, {marginRight: 5}]}>
               견적 상세 설명
@@ -371,6 +605,7 @@ const index = (props) => {
           <View style={styles.mgB30}>
             {detail.status === '0' || detail.status === '1' ? (
               <TextInput
+                value={estimateText}
                 placeholder="견적 상세 설명을 입력해주세요."
                 placeholderTextColor="#A2A2A2"
                 style={{
@@ -383,6 +618,7 @@ const index = (props) => {
                   paddingLeft: 10,
                   paddingVertical: 10,
                 }}
+                onChangeText={(text) => setEstimateText(text)}
                 multiline={true}
               />
             ) : (
