@@ -15,6 +15,7 @@ import {
 } from 'react-native';
 import moment from 'moment';
 import 'moment/locale/ko';
+import DateTimePicker from '@react-native-community/datetimepicker';
 import Collapsible from 'react-native-collapsible';
 import {useSelector} from 'react-redux';
 import RNFetchBlob from 'rn-fetch-blob'; // 파일 다운로드 패키지
@@ -56,6 +57,52 @@ const index = (props) => {
 
   const [estimateUser, setEstimateUser] = React.useState(null); // 견적낸 유저 정보 (status 0, 1 이상일 경우만)
 
+  // 납품일자 변경시 사용될 상태
+  const [date, setDate] = React.useState(new Date());
+  const [mode01, setMode01] = React.useState('date');
+  const [show01, setShow01] = React.useState(false);
+  const [deliveryDateCheck, setDeliveryDateCheck] = React.useState('y'); // 납품 희망일 조정여부
+  const [deliveryDate, setDeliveryDate] = React.useState(new Date()); // 납품 희망 변경 값
+
+  // 조정필요시 radio 버튼
+  const [typeCheck, setTypeCheck] = React.useState('y'); // 타입 조정여부
+  const [quantityCheck, setQuantityCheck] = React.useState('y'); // 수량 조정여부
+  const [sizeCheck, setSizeCheck] = React.useState('y'); // 규격 조정여부
+  const [printCheck, setPrintCheck] = React.useState('y'); // 인쇄도수 조정여부
+  const [paperCheck, setPaperCheck] = React.useState('y'); // 종이재질(지종) 조정여부
+  const [postProcessCheck, setPostProcessCheck] = React.useState('y'); // 후가공 조정여부 - 경우에 따라 후가공(표지)가 될 수 있음
+  const [postProcess02Check, setPostProcess02Check] = React.useState('y'); // 후가공(내지) 조정여부
+
+  // 조정했을 시 담을 값
+  const [editedType, setEditedType] = React.useState(''); // 타입 변경 값
+  const [editedSize, setEditedSize] = React.useState(''); // 규격 변경 값
+  const [editedQuantity, setEditedQuantity] = React.useState(''); // 수량 변경 값
+  const [editedPrint, setEditedPrint] = React.useState(''); // 인쇄도수 변경 값
+  const [editedPaper, setEditedPaper] = React.useState(''); // 종이재질(지종) 변경 값
+  const [editedWeight, setEditedWeight] = React.useState(''); // 평량 변경 값
+  const [editedColor, setEditedColor] = React.useState(''); // 색상 변경 값
+  const [editedPattern, setEditedPattern] = React.useState(''); // 무늬 변경 값
+  const [editedFoil, setEditedFoil] = React.useState('Y'); // 박가공 변경 값
+  const [editedPress, setEditedPress] = React.useState('Y'); // 형압 변경 값
+  const [editedSilk, setEditedSilk] = React.useState('Y'); // 부분실크 변경 값
+  const [editedLaminate, setEditedLaminate] = React.useState(''); // 코팅 변경 값
+
+  // 후가공 (표지, 내지 있을 경우) 내지 부분
+  const [editedFoil02, setEditedFoil02] = React.useState('Y'); // 박가공 변경 값
+  const [editedPress02, setEditedPress02] = React.useState('Y'); // 형압 변경 값
+  const [editedSilk02, setEditedSilk02] = React.useState('Y'); // 부분실크 변경 값
+  const [editedLaminate02, setEditedLaminate02] = React.useState(''); // 코팅 변경 값
+
+  // 각 TextInput Ref값
+  const editedTypeRef = React.useRef(null);
+  const editedSizeRef = React.useRef(null);
+  const editedQuantityRef = React.useRef(null);
+  const editedPrintRef = React.useRef(null);
+  const editedPaperRef = React.useRef(null);
+  const editedWeightRef = React.useRef(null);
+  const editedColorRef = React.useRef(null);
+  const editedPatternRef = React.useRef(null);
+
   // 각 메뉴 아코디언 형식 설정(collapse)
   const [collapseArrow01, setCollapseArrow01] = React.useState(true);
   const [collapseArrow02, setCollapseArrow02] = React.useState(true);
@@ -80,13 +127,44 @@ const index = (props) => {
   };
 
   // 날짜 지정
+  // const onChange01 = (event, selectedDate) => {
+  //   const currentDate = selectedDate || date;
+  //   setShow01(Platform.OS === 'ios');
+
+  //   const nowDate = new Date();
+  //   let weekAgo = nowDate.setDate(nowDate.getDate() + 7);
+
+  //   if (selectedDate < date) {
+  //     Alert.alert(
+  //       '오늘 이전 날짜는 선택이 불가능 합니다.',
+  //       '날짜를 다시 선택해주세요.',
+  //       [
+  //         {
+  //           text: '확인',
+  //         },
+  //       ],
+  //     );
+  //     setdDayDate(date);
+  //   } else if (selectedDate < weekAgo) {
+  //     Alert.alert(
+  //       '납품 희망일은 현재일 기준 7일 이후부터 선택 가능합니다.',
+  //       '날짜를 다시 선택해주세요.',
+  //       [
+  //         {
+  //           text: '확인',
+  //         },
+  //       ],
+  //     );
+  //     setdDayDate(date);
+  //   } else {
+  //     setArriveDate(currentDate);
+  //   }
+  // };
+
   const onChange01 = (event, selectedDate) => {
     const currentDate = selectedDate || date;
     setShow01(Platform.OS === 'ios');
 
-    const nowDate = new Date();
-    let weekAgo = nowDate.setDate(nowDate.getDate() + 7);
-
     if (selectedDate < date) {
       Alert.alert(
         '오늘 이전 날짜는 선택이 불가능 합니다.',
@@ -97,40 +175,9 @@ const index = (props) => {
           },
         ],
       );
-      setdDayDate(date);
-    } else if (selectedDate < weekAgo) {
-      Alert.alert(
-        '납품 희망일은 현재일 기준 7일 이후부터 선택 가능합니다.',
-        '날짜를 다시 선택해주세요.',
-        [
-          {
-            text: '확인',
-          },
-        ],
-      );
-      setdDayDate(date);
+      setDeliveryDate(date);
     } else {
-      setArriveDate(currentDate);
-    }
-  };
-
-  const onChange02 = (event, selectedDate) => {
-    const currentDate = selectedDate || date;
-    setShow02(Platform.OS === 'ios');
-
-    if (selectedDate < date) {
-      Alert.alert(
-        '오늘 이전 날짜는 선택이 불가능 합니다.',
-        '날짜를 다시 선택해주세요.',
-        [
-          {
-            text: '확인',
-          },
-        ],
-      );
-      setdDayDate(date);
-    } else {
-      setdDayDate(currentDate);
+      setDeliveryDate(currentDate);
     }
   };
 
@@ -139,21 +186,8 @@ const index = (props) => {
     setMode01(currentMode);
   };
 
-  const showMode02 = (currentMode) => {
-    setShow02(true);
-    setMode02(currentMode);
-  };
-
   const showDatepicker01 = () => {
     showMode01('date');
-  };
-
-  const showDatepicker02 = () => {
-    showMode02('date');
-  };
-
-  const showTimepicker = () => {
-    showMode('time');
   };
 
   // 견적 자동 계산
@@ -967,6 +1001,122 @@ const index = (props) => {
                     </View>
                   ) : null}
                 </View>
+                <View style={{marginBottom: 20}}>
+                  <Text
+                    style={{
+                      fontFamily: 'SCDream5',
+                      fontSize: 14,
+                      marginBottom: 10,
+                    }}>
+                    납품 희망일 조정여부
+                  </Text>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      justifyContent: 'flex-start',
+                      alignItems: 'center',
+                      marginBottom: 10,
+                    }}>
+                    <TouchableOpacity
+                      style={{
+                        flexDirection: 'row',
+                        justifyContent: 'flex-start',
+                        alignItems: 'center',
+                        marginRight: 20,
+                      }}
+                      onPress={() => setDeliveryDateCheck('y')}>
+                      <Image
+                        source={
+                          deliveryDateCheck === 'y'
+                            ? require('../../src/assets/radio_on.png')
+                            : require('../../src/assets/radio_off.png')
+                        }
+                        resizeMode="contain"
+                        style={{width: 20, height: 20, marginRight: 5}}
+                      />
+                      <Text style={{fontSize: 14, fontFamily: 'SCDream4'}}>
+                        가능
+                      </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      style={{
+                        flexDirection: 'row',
+                        justifyContent: 'flex-start',
+                        alignItems: 'center',
+                      }}
+                      onPress={() => setDeliveryDateCheck('n')}>
+                      <Image
+                        source={
+                          deliveryDateCheck === 'n'
+                            ? require('../../src/assets/radio_on.png')
+                            : require('../../src/assets/radio_off.png')
+                        }
+                        resizeMode="contain"
+                        style={{width: 20, height: 20, marginRight: 5}}
+                      />
+
+                      <Text style={{fontSize: 14, fontFamily: 'SCDream4'}}>
+                        조정필요
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+                  {deliveryDateCheck === 'n' && (
+                    <View style={{marginTop: 10}}>
+                      <Text
+                        style={{
+                          fontSize: 13,
+                          fontFamily: 'SCDream4',
+                          marginBottom: 10,
+                          color: '#00A170',
+                        }}>
+                        납품 가능한 날짜를 선택해주세요.
+                      </Text>
+                      <TouchableOpacity
+                        activeOpacity={1}
+                        onPress={showDatepicker01}
+                        style={{
+                          flexDirection: 'row',
+                          justifyContent: 'space-between',
+                          alignItems: 'center',
+                          borderWidth: 1,
+                          borderColor: '#E3E3E3',
+                          borderRadius: 4,
+                          marginBottom: 5,
+                        }}>
+                        <TextInput
+                          value={moment(deliveryDate).format('YY-MM-DD')}
+                          placeholder="00-00-00"
+                          placeholderTextColor="#A2A2A2"
+                          style={[
+                            styles.normalText,
+                            {
+                              paddingHorizontal: 10,
+                              width: '70%',
+                              color: deliveryDate ? '#111' : '#A2A2A2',
+                            },
+                          ]}
+                          autoCapitalize="none"
+                          editable={false}
+                        />
+                        <Image
+                          source={require('../../src/assets/icon03.png')}
+                          resizeMode="contain"
+                          style={{width: 30, height: 30, marginRight: 10}}
+                        />
+                      </TouchableOpacity>
+                    </View>
+                  )}
+                  {show01 && (
+                    <DateTimePicker
+                      testID="dateTimePicker01"
+                      value={deliveryDate}
+                      mode={mode01}
+                      is24Hour={true}
+                      display="default"
+                      onChange={onChange01}
+                    />
+                  )}
+                </View>
               </Collapsible>
             </View>
 
@@ -1020,260 +1170,616 @@ const index = (props) => {
 
               <Collapsible collapsed={collapseArrow02}>
                 {detail.basic.cate1 === '1' ? (
-                  <>
-                    <View style={[styles.infoBox, {marginBottom: 10}]}>
-                      <View style={styles.details}>
-                        <Text style={styles.detailsTitle}>타입</Text>
-                        <Text style={styles.detailsDesc}>
-                          {detail.basic.ca_type_name}
-                        </Text>
-                      </View>
-                      <View style={styles.details}>
-                        <Text style={styles.detailsTitle}>
-                          규격(가로/세로/높이)
-                        </Text>
-                        <Text style={styles.detailsDesc}>
-                          {detail.basic2.pwidth}/{detail.basic2.plength}/
-                          {detail.basic2.pheight}
-                        </Text>
-                      </View>
-                      <View style={styles.details}>
-                        <Text style={styles.detailsTitle}>수량</Text>
-                        <Text style={styles.detailsDesc}>
-                          {detail.basic2.cnt
-                            ? detail.basic2.cnt
-                            : detail.basic2.cnt_etc
-                            ? detail.basic2.cnt_etc
-                            : '없음'}
-                        </Text>
-                      </View>
-                      <View style={styles.details}>
-                        <Text style={styles.detailsTitle}>목형</Text>
-                        <Text style={styles.detailsDesc}>
-                          {detail.basic2.wood_pattern}
-                        </Text>
-                      </View>
-                      {detail.basic.ca_id === '12' ? (
-                        <>
-                          <View style={styles.details}>
-                            <Text style={styles.detailsTitle}>싸바리형태</Text>
-                            <Text style={styles.detailsDesc}>
-                              {detail.basic2.stype
-                                ? detail.basic2.stype
-                                : '없음'}
-                            </Text>
-                          </View>
-
-                          <View style={styles.details}>
-                            <Text style={styles.detailsTitle}>
-                              속지 판지두께
-                            </Text>
-                            <Text style={styles.detailsDesc}>
-                              {detail.basic2.board_tk
-                                ? detail.basic2.board_tk
-                                : '없음'}
-                            </Text>
-                          </View>
-                        </>
-                      ) : null}
-                      <View style={styles.details}>
-                        <Text style={styles.detailsTitle}>인쇄도수</Text>
-                        <Text style={styles.detailsDesc}>
-                          {detail.print.print_frequency
-                            ? detail.print.print_frequency
-                            : '없음'}
-                        </Text>
-                      </View>
-                      <View style={styles.details}>
-                        <Text style={styles.detailsTitle}>인쇄교정</Text>
-                        <Text style={styles.detailsDesc}>
-                          {detail.print.proof_printing
-                            ? detail.print.proof_printing
-                            : '없음'}
-                        </Text>
-                      </View>
-                      <View style={styles.details}>
-                        <Text style={styles.detailsTitle}>인쇄감리</Text>
-                        <Text style={styles.detailsDesc}>
-                          {detail.print.print_supervision
-                            ? detail.print.print_supervision
-                            : '없음'}
-                        </Text>
-                      </View>
+                  <View style={[styles.infoBox, {marginBottom: 20}]}>
+                    <View style={styles.details}>
+                      <Text style={styles.detailsTitle}>타입</Text>
+                      <Text style={styles.detailsDesc}>
+                        {detail.basic.ca_type_name}
+                      </Text>
                     </View>
-                  </>
-                ) : detail.basic.cate1 === '0' ? (
-                  <>
-                    <View style={[styles.infoBox, {marginBottom: 10}]}>
-                      <View style={styles.details}>
-                        <Text style={styles.detailsTitle}>타입</Text>
-                        <Text style={styles.detailsDesc}>
-                          {detail.basic.ca_type_name}
-                        </Text>
-                      </View>
-
-                      <View style={styles.details}>
-                        <Text style={styles.detailsTitle}>수량</Text>
-                        <Text style={styles.detailsDesc}>
-                          {detail.basic2.cnt
-                            ? detail.basic2.cnt
-                            : detail.basic2.cnt_etc
-                            ? detail.basic2.cnt_etc
-                            : '없음'}
-                        </Text>
-                      </View>
-                      <View style={styles.details}>
-                        <Text style={styles.detailsTitle}>목형</Text>
-                        <Text style={styles.detailsDesc}>
-                          {detail.basic2.wood_pattern}
-                        </Text>
-                      </View>
-                      <View style={styles.details}>
-                        <Text style={styles.detailsTitle}>편집방법</Text>
-                        <Text style={styles.detailsDesc}>
-                          {detail.basic2.way_edit}
-                        </Text>
-                      </View>
-                      {detail.basic.ca_id === '1' && (
+                    <View style={styles.details}>
+                      <Text style={styles.detailsTitle}>
+                        규격(가로/세로/높이)
+                      </Text>
+                      <Text style={styles.detailsDesc}>
+                        {detail.basic2.pwidth}/{detail.basic2.plength}/
+                        {detail.basic2.pheight}
+                      </Text>
+                    </View>
+                    <View style={styles.details}>
+                      <Text style={styles.detailsTitle}>수량</Text>
+                      <Text style={styles.detailsDesc}>
+                        {detail.basic2.cnt
+                          ? detail.basic2.cnt
+                          : detail.basic2.cnt_etc
+                          ? detail.basic2.cnt_etc
+                          : '없음'}
+                      </Text>
+                    </View>
+                    <View style={styles.details}>
+                      <Text style={styles.detailsTitle}>목형</Text>
+                      <Text style={styles.detailsDesc}>
+                        {detail.basic2.wood_pattern}
+                      </Text>
+                    </View>
+                    {detail.basic.ca_id === '12' ? (
+                      <>
                         <View style={styles.details}>
-                          <Text style={styles.detailsTitle}>접지방법</Text>
+                          <Text style={styles.detailsTitle}>싸바리형태</Text>
                           <Text style={styles.detailsDesc}>
-                            {detail.basic2.ground_method}
+                            {detail.basic2.stype ? detail.basic2.stype : '없음'}
                           </Text>
                         </View>
-                      )}
-                      <View style={styles.details}>
-                        <Text style={styles.detailsTitle}>제본방식</Text>
-                        <Text style={styles.detailsDesc}>
-                          {detail.basic2.bind_type}
-                        </Text>
-                      </View>
-                      <View style={styles.details}>
-                        <Text style={styles.detailsTitle}>페이지수(표지)</Text>
-                        <Text style={styles.detailsDesc}>
-                          {detail.basic2.page_cnt}
-                        </Text>
-                      </View>
-                      <View style={styles.details}>
-                        <Text style={styles.detailsTitle}>페이지수(내지)</Text>
-                        <Text style={styles.detailsDesc}>
-                          {detail.basic2.page_cnt2}
-                        </Text>
-                      </View>
-                      <View style={styles.details}>
-                        <Text style={styles.detailsTitle}>규격</Text>
-                        <Text style={styles.detailsDesc}>
-                          {detail.basic2.standard}
-                        </Text>
-                      </View>
-                      {detail.basic.ca_id === '6' && (
-                        <>
-                          <View style={styles.details}>
-                            <Text style={styles.detailsTitle}>후면반칼형</Text>
-                            <Text style={styles.detailsDesc}>
-                              {detail.basic2.back_side}
-                            </Text>
-                          </View>
-                          <View style={styles.details}>
-                            <Text style={styles.detailsTitle}>지관</Text>
-                            <Text style={styles.detailsDesc}>
-                              {detail.basic2.geomancer}
-                            </Text>
-                          </View>
-                          <View style={styles.details}>
-                            <Text style={styles.detailsTitle}>톰슨모양</Text>
-                            <Text style={styles.detailsDesc}>
-                              {detail.basic2.thomson_type}
-                            </Text>
-                          </View>
-                        </>
-                      )}
-                      {detail.basic.ca_id === '4' && (
-                        <>
-                          <View style={styles.details}>
-                            <Text style={styles.detailsTitle}>
-                              표지간지색상
-                            </Text>
-                            <Text style={styles.detailsDesc}>
-                              {detail.basic2.cover_color}
-                            </Text>
-                          </View>
-                          <View style={styles.details}>
-                            <Text style={styles.detailsTitle}>
-                              섹션간지색상
-                            </Text>
-                            <Text style={styles.detailsDesc}>
-                              {detail.basic2.section_color}
-                            </Text>
-                          </View>
-                          <View style={styles.details}>
-                            <Text style={styles.detailsTitle}>간지</Text>
-                            <Text style={styles.detailsDesc}>
-                              {detail.basic2.writeing_paper}
-                            </Text>
-                          </View>
-                        </>
-                      )}
 
-                      <View style={styles.details}>
-                        <Text style={styles.detailsTitle}>인쇄도수</Text>
-                        <Text style={styles.detailsDesc}>
-                          {detail.print.print_frequency}
-                        </Text>
-                      </View>
-
-                      {detail.basic.ca_id === '1' ||
-                        (detail.basic.ca_id === '4' && (
-                          <View style={styles.details}>
-                            <Text style={styles.detailsTitle}>
-                              인쇄도수(내지)
-                            </Text>
-                            <Text style={styles.detailsDesc}>
-                              {detail.print.print_frequency2}
-                            </Text>
-                          </View>
-                        ))}
-
-                      <View style={styles.details}>
-                        <Text style={styles.detailsTitle}>인쇄교정</Text>
-                        <Text style={styles.detailsDesc}>
-                          {detail.print.proof_printing}
-                        </Text>
-                      </View>
-
-                      {detail.basic.ca_id === '1' ||
-                        (detail.basic.ca_id === '4' && (
-                          <View style={styles.details}>
-                            <Text style={styles.detailsTitle}>
-                              인쇄교정(내지)
-                            </Text>
-                            <Text style={styles.detailsDesc}>
-                              {detail.print.proof_printing2}
-                            </Text>
-                          </View>
-                        ))}
-
-                      <View style={styles.details}>
-                        <Text style={styles.detailsTitle}>인쇄감리</Text>
-                        <Text style={styles.detailsDesc}>
-                          {detail.print.print_supervision}
-                        </Text>
-                      </View>
-
-                      {detail.basic.ca_id === '1' ||
-                        (detail.basic.ca_id === '4' && (
-                          <View style={styles.details}>
-                            <Text style={styles.detailsTitle}>
-                              인쇄감리(내지)
-                            </Text>
-                            <Text style={styles.detailsDesc}>
-                              {detail.print.print_supervision2}
-                            </Text>
-                          </View>
-                        ))}
+                        <View style={styles.details}>
+                          <Text style={styles.detailsTitle}>속지 판지두께</Text>
+                          <Text style={styles.detailsDesc}>
+                            {detail.basic2.board_tk
+                              ? detail.basic2.board_tk
+                              : '없음'}
+                          </Text>
+                        </View>
+                      </>
+                    ) : null}
+                    <View style={styles.details}>
+                      <Text style={styles.detailsTitle}>인쇄도수</Text>
+                      <Text style={styles.detailsDesc}>
+                        {detail.print.print_frequency
+                          ? detail.print.print_frequency
+                          : '없음'}
+                      </Text>
                     </View>
-                  </>
+                    <View style={styles.details}>
+                      <Text style={styles.detailsTitle}>인쇄교정</Text>
+                      <Text style={styles.detailsDesc}>
+                        {detail.print.proof_printing
+                          ? detail.print.proof_printing
+                          : '없음'}
+                      </Text>
+                    </View>
+                    <View style={styles.details}>
+                      <Text style={styles.detailsTitle}>인쇄감리</Text>
+                      <Text style={styles.detailsDesc}>
+                        {detail.print.print_supervision
+                          ? detail.print.print_supervision
+                          : '없음'}
+                      </Text>
+                    </View>
+                  </View>
+                ) : detail.basic.cate1 === '0' ? (
+                  <View style={[styles.infoBox, {marginBottom: 20}]}>
+                    <View style={styles.details}>
+                      <Text style={styles.detailsTitle}>타입</Text>
+                      <Text style={styles.detailsDesc}>
+                        {detail.basic.ca_type_name}
+                      </Text>
+                    </View>
+
+                    <View style={styles.details}>
+                      <Text style={styles.detailsTitle}>수량</Text>
+                      <Text style={styles.detailsDesc}>
+                        {detail.basic2.cnt
+                          ? detail.basic2.cnt
+                          : detail.basic2.cnt_etc
+                          ? detail.basic2.cnt_etc
+                          : '없음'}
+                      </Text>
+                    </View>
+                    <View style={styles.details}>
+                      <Text style={styles.detailsTitle}>목형</Text>
+                      <Text style={styles.detailsDesc}>
+                        {detail.basic2.wood_pattern}
+                      </Text>
+                    </View>
+                    <View style={styles.details}>
+                      <Text style={styles.detailsTitle}>편집방법</Text>
+                      <Text style={styles.detailsDesc}>
+                        {detail.basic2.way_edit}
+                      </Text>
+                    </View>
+                    {detail.basic.ca_id === '1' && (
+                      <View style={styles.details}>
+                        <Text style={styles.detailsTitle}>접지방법</Text>
+                        <Text style={styles.detailsDesc}>
+                          {detail.basic2.ground_method}
+                        </Text>
+                      </View>
+                    )}
+                    <View style={styles.details}>
+                      <Text style={styles.detailsTitle}>제본방식</Text>
+                      <Text style={styles.detailsDesc}>
+                        {detail.basic2.bind_type}
+                      </Text>
+                    </View>
+                    <View style={styles.details}>
+                      <Text style={styles.detailsTitle}>페이지수(표지)</Text>
+                      <Text style={styles.detailsDesc}>
+                        {detail.basic2.page_cnt}
+                      </Text>
+                    </View>
+                    <View style={styles.details}>
+                      <Text style={styles.detailsTitle}>페이지수(내지)</Text>
+                      <Text style={styles.detailsDesc}>
+                        {detail.basic2.page_cnt2}
+                      </Text>
+                    </View>
+                    <View style={styles.details}>
+                      <Text style={styles.detailsTitle}>규격</Text>
+                      <Text style={styles.detailsDesc}>
+                        {detail.basic2.standard}
+                      </Text>
+                    </View>
+                    {detail.basic.ca_id === '6' && (
+                      <>
+                        <View style={styles.details}>
+                          <Text style={styles.detailsTitle}>후면반칼형</Text>
+                          <Text style={styles.detailsDesc}>
+                            {detail.basic2.back_side}
+                          </Text>
+                        </View>
+                        <View style={styles.details}>
+                          <Text style={styles.detailsTitle}>지관</Text>
+                          <Text style={styles.detailsDesc}>
+                            {detail.basic2.geomancer}
+                          </Text>
+                        </View>
+                        <View style={styles.details}>
+                          <Text style={styles.detailsTitle}>톰슨모양</Text>
+                          <Text style={styles.detailsDesc}>
+                            {detail.basic2.thomson_type}
+                          </Text>
+                        </View>
+                      </>
+                    )}
+                    {detail.basic.ca_id === '4' && (
+                      <>
+                        <View style={styles.details}>
+                          <Text style={styles.detailsTitle}>표지간지색상</Text>
+                          <Text style={styles.detailsDesc}>
+                            {detail.basic2.cover_color}
+                          </Text>
+                        </View>
+                        <View style={styles.details}>
+                          <Text style={styles.detailsTitle}>섹션간지색상</Text>
+                          <Text style={styles.detailsDesc}>
+                            {detail.basic2.section_color}
+                          </Text>
+                        </View>
+                        <View style={styles.details}>
+                          <Text style={styles.detailsTitle}>간지</Text>
+                          <Text style={styles.detailsDesc}>
+                            {detail.basic2.writeing_paper}
+                          </Text>
+                        </View>
+                      </>
+                    )}
+
+                    <View style={styles.details}>
+                      <Text style={styles.detailsTitle}>인쇄도수</Text>
+                      <Text style={styles.detailsDesc}>
+                        {detail.print.print_frequency}
+                      </Text>
+                    </View>
+
+                    {detail.basic.ca_id === '1' ||
+                      (detail.basic.ca_id === '4' && (
+                        <View style={styles.details}>
+                          <Text style={styles.detailsTitle}>
+                            인쇄도수(내지)
+                          </Text>
+                          <Text style={styles.detailsDesc}>
+                            {detail.print.print_frequency2}
+                          </Text>
+                        </View>
+                      ))}
+
+                    <View style={styles.details}>
+                      <Text style={styles.detailsTitle}>인쇄교정</Text>
+                      <Text style={styles.detailsDesc}>
+                        {detail.print.proof_printing}
+                      </Text>
+                    </View>
+
+                    {detail.basic.ca_id === '1' ||
+                      (detail.basic.ca_id === '4' && (
+                        <View style={styles.details}>
+                          <Text style={styles.detailsTitle}>
+                            인쇄교정(내지)
+                          </Text>
+                          <Text style={styles.detailsDesc}>
+                            {detail.print.proof_printing2}
+                          </Text>
+                        </View>
+                      ))}
+
+                    <View style={styles.details}>
+                      <Text style={styles.detailsTitle}>인쇄감리</Text>
+                      <Text style={styles.detailsDesc}>
+                        {detail.print.print_supervision}
+                      </Text>
+                    </View>
+
+                    {detail.basic.ca_id === '1' ||
+                      (detail.basic.ca_id === '4' && (
+                        <View style={styles.details}>
+                          <Text style={styles.detailsTitle}>
+                            인쇄감리(내지)
+                          </Text>
+                          <Text style={styles.detailsDesc}>
+                            {detail.print.print_supervision2}
+                          </Text>
+                        </View>
+                      ))}
+                  </View>
                 ) : null}
+
+                {/* 타입 조정여부 */}
+                <View style={{marginBottom: 20}}>
+                  <Text
+                    style={{
+                      fontFamily: 'SCDream5',
+                      fontSize: 14,
+                      marginBottom: 10,
+                    }}>
+                    타입 (조정여부)
+                  </Text>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      justifyContent: 'flex-start',
+                      alignItems: 'center',
+                    }}>
+                    <TouchableOpacity
+                      style={{
+                        flexDirection: 'row',
+                        justifyContent: 'flex-start',
+                        alignItems: 'center',
+                        marginRight: 20,
+                      }}
+                      onPress={() => setTypeCheck('y')}>
+                      <Image
+                        source={
+                          typeCheck === 'y'
+                            ? require('../../src/assets/radio_on.png')
+                            : require('../../src/assets/radio_off.png')
+                        }
+                        resizeMode="contain"
+                        style={{width: 20, height: 20, marginRight: 5}}
+                      />
+                      <Text style={{fontSize: 14, fontFamily: 'SCDream4'}}>
+                        가능
+                      </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      style={{
+                        flexDirection: 'row',
+                        justifyContent: 'flex-start',
+                        alignItems: 'center',
+                      }}
+                      onPress={() => setTypeCheck('n')}>
+                      <Image
+                        source={
+                          typeCheck === 'n'
+                            ? require('../../src/assets/radio_on.png')
+                            : require('../../src/assets/radio_off.png')
+                        }
+                        resizeMode="contain"
+                        style={{width: 20, height: 20, marginRight: 5}}
+                      />
+
+                      <Text style={{fontSize: 14, fontFamily: 'SCDream4'}}>
+                        조정필요
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+                  {typeCheck === 'n' && (
+                    <View style={{marginTop: 10}}>
+                      <Text
+                        style={{
+                          fontSize: 13,
+                          fontFamily: 'SCDream4',
+                          marginBottom: 5,
+                          color: '#00A170',
+                        }}>
+                        변경할 타입을 입력해주세요.
+                      </Text>
+                      <TextInput
+                        ref={editedTypeRef}
+                        value={editedType}
+                        placeholder="타입을 입력해주세요."
+                        placeholderTextColor="#BEBEBE"
+                        autoFocus={false}
+                        style={[
+                          styles.normalText,
+                          {
+                            borderWidth: 1,
+                            borderColor: '#DEDEDE',
+                            borderRadius: 5,
+                            paddingHorizontal: 10,
+                          },
+                        ]}
+                        onChangeText={(text) => setEditedType(text)}
+                      />
+                    </View>
+                  )}
+                </View>
+                {/* // 타입 조정여부 */}
+
+                {/* 규격 조정여부 */}
+                <View style={{marginBottom: 20}}>
+                  <Text
+                    style={{
+                      fontFamily: 'SCDream5',
+                      fontSize: 14,
+                      marginBottom: 10,
+                    }}>
+                    규격 (조정여부)
+                  </Text>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      justifyContent: 'flex-start',
+                      alignItems: 'center',
+                    }}>
+                    <TouchableOpacity
+                      style={{
+                        flexDirection: 'row',
+                        justifyContent: 'flex-start',
+                        alignItems: 'center',
+                        marginRight: 20,
+                      }}
+                      onPress={() => setSizeCheck('y')}>
+                      <Image
+                        source={
+                          sizeCheck === 'y'
+                            ? require('../../src/assets/radio_on.png')
+                            : require('../../src/assets/radio_off.png')
+                        }
+                        resizeMode="contain"
+                        style={{width: 20, height: 20, marginRight: 5}}
+                      />
+                      <Text style={{fontSize: 14, fontFamily: 'SCDream4'}}>
+                        가능
+                      </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      style={{
+                        flexDirection: 'row',
+                        justifyContent: 'flex-start',
+                        alignItems: 'center',
+                      }}
+                      onPress={() => setSizeCheck('n')}>
+                      <Image
+                        source={
+                          sizeCheck === 'n'
+                            ? require('../../src/assets/radio_on.png')
+                            : require('../../src/assets/radio_off.png')
+                        }
+                        resizeMode="contain"
+                        style={{width: 20, height: 20, marginRight: 5}}
+                      />
+
+                      <Text style={{fontSize: 14, fontFamily: 'SCDream4'}}>
+                        조정필요
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+                  {sizeCheck === 'n' && (
+                    <View style={{marginTop: 10}}>
+                      <Text
+                        style={{
+                          fontSize: 13,
+                          fontFamily: 'SCDream4',
+                          marginBottom: 5,
+                          color: '#00A170',
+                        }}>
+                        변경할 규격을 입력해주세요.
+                      </Text>
+                      <TextInput
+                        ref={editedSizeRef}
+                        value={editedSize}
+                        placeholder="규격을 입력해주세요."
+                        placeholderTextColor="#BEBEBE"
+                        autoFocus={false}
+                        style={[
+                          styles.normalText,
+                          {
+                            borderWidth: 1,
+                            borderColor: '#DEDEDE',
+                            borderRadius: 5,
+                            paddingHorizontal: 10,
+                          },
+                        ]}
+                        onChangeText={(text) => setEditedSize(text)}
+                      />
+                    </View>
+                  )}
+                </View>
+                {/* // 규격 조정여부 */}
+
+                {/* 수량 조정여부 */}
+                <View style={{marginBottom: 20}}>
+                  <Text
+                    style={{
+                      fontFamily: 'SCDream5',
+                      fontSize: 14,
+                      marginBottom: 10,
+                    }}>
+                    수량 (조정여부)
+                  </Text>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      justifyContent: 'flex-start',
+                      alignItems: 'center',
+                    }}>
+                    <TouchableOpacity
+                      style={{
+                        flexDirection: 'row',
+                        justifyContent: 'flex-start',
+                        alignItems: 'center',
+                        marginRight: 20,
+                      }}
+                      onPress={() => setQuantityCheck('y')}>
+                      <Image
+                        source={
+                          quantityCheck === 'y'
+                            ? require('../../src/assets/radio_on.png')
+                            : require('../../src/assets/radio_off.png')
+                        }
+                        resizeMode="contain"
+                        style={{width: 20, height: 20, marginRight: 5}}
+                      />
+                      <Text style={{fontSize: 14, fontFamily: 'SCDream4'}}>
+                        가능
+                      </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      style={{
+                        flexDirection: 'row',
+                        justifyContent: 'flex-start',
+                        alignItems: 'center',
+                      }}
+                      onPress={() => setQuantityCheck('n')}>
+                      <Image
+                        source={
+                          quantityCheck === 'n'
+                            ? require('../../src/assets/radio_on.png')
+                            : require('../../src/assets/radio_off.png')
+                        }
+                        resizeMode="contain"
+                        style={{width: 20, height: 20, marginRight: 5}}
+                      />
+
+                      <Text style={{fontSize: 14, fontFamily: 'SCDream4'}}>
+                        조정필요
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+                  {quantityCheck === 'n' && (
+                    <View style={{marginTop: 10}}>
+                      <Text
+                        style={{
+                          fontSize: 13,
+                          fontFamily: 'SCDream4',
+                          marginBottom: 5,
+                          color: '#00A170',
+                        }}>
+                        변경할 수량을 입력해주세요.
+                      </Text>
+                      <TextInput
+                        ref={editedQuantityRef}
+                        value={editedQuantity}
+                        placeholder="수량을 입력해주세요."
+                        placeholderTextColor="#BEBEBE"
+                        autoFocus={false}
+                        style={[
+                          styles.normalText,
+                          {
+                            borderWidth: 1,
+                            borderColor: '#DEDEDE',
+                            borderRadius: 5,
+                            paddingHorizontal: 10,
+                          },
+                        ]}
+                        onChangeText={() => setEditedQuantity(text)}
+                      />
+                    </View>
+                  )}
+                </View>
+                {/* // 수량 조정여부 */}
+
+                {/* 인쇄도수 조정여부 */}
+                <View style={{marginBottom: 20}}>
+                  <Text
+                    style={{
+                      fontFamily: 'SCDream5',
+                      fontSize: 14,
+                      marginBottom: 10,
+                    }}>
+                    인쇄도수 (조정여부)
+                  </Text>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      justifyContent: 'flex-start',
+                      alignItems: 'center',
+                    }}>
+                    <TouchableOpacity
+                      style={{
+                        flexDirection: 'row',
+                        justifyContent: 'flex-start',
+                        alignItems: 'center',
+                        marginRight: 20,
+                      }}
+                      onPress={() => setPrintCheck('y')}>
+                      <Image
+                        source={
+                          printCheck === 'y'
+                            ? require('../../src/assets/radio_on.png')
+                            : require('../../src/assets/radio_off.png')
+                        }
+                        resizeMode="contain"
+                        style={{width: 20, height: 20, marginRight: 5}}
+                      />
+                      <Text style={{fontSize: 14, fontFamily: 'SCDream4'}}>
+                        가능
+                      </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      style={{
+                        flexDirection: 'row',
+                        justifyContent: 'flex-start',
+                        alignItems: 'center',
+                      }}
+                      onPress={() => setPrintCheck('n')}>
+                      <Image
+                        source={
+                          printCheck === 'n'
+                            ? require('../../src/assets/radio_on.png')
+                            : require('../../src/assets/radio_off.png')
+                        }
+                        resizeMode="contain"
+                        style={{width: 20, height: 20, marginRight: 5}}
+                      />
+
+                      <Text style={{fontSize: 14, fontFamily: 'SCDream4'}}>
+                        조정필요
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+                  {printCheck === 'n' && (
+                    <View style={{marginTop: 10}}>
+                      <Text
+                        style={{
+                          fontSize: 13,
+                          fontFamily: 'SCDream4',
+                          marginBottom: 5,
+                          color: '#00A170',
+                        }}>
+                        변경할 인쇄도수를 입력해주세요.
+                      </Text>
+                      <TextInput
+                        ref={editedPrintRef}
+                        value={editedPrint}
+                        placeholder="인쇄도수를 입력해주세요."
+                        placeholderTextColor="#BEBEBE"
+                        autoFocus={false}
+                        style={[
+                          styles.normalText,
+                          {
+                            borderWidth: 1,
+                            borderColor: '#DEDEDE',
+                            borderRadius: 5,
+                            paddingHorizontal: 10,
+                          },
+                        ]}
+                        onChangeText={(text) => setEditedPrint(text)}
+                      />
+                    </View>
+                  )}
+                </View>
+                {/* // 인쇄도수 조정여부 */}
               </Collapsible>
             </View>
 
@@ -1327,97 +1833,95 @@ const index = (props) => {
 
               <Collapsible collapsed={collapseArrow03}>
                 {detail.basic.cate1 === '1' ? (
-                  <>
-                    <View style={[styles.infoBox, {marginBottom: 10}]}>
-                      <View style={styles.details}>
-                        <Text style={styles.detailsTitle}>지류명</Text>
-                        <Text style={styles.detailsDesc}>
-                          {detail.feeder.feeder_name}
-                        </Text>
-                      </View>
-                      <View style={styles.details}>
-                        <Text style={styles.detailsTitle}>지종</Text>
-                        <Text style={styles.detailsDesc}>
-                          {detail.feeder.paper_name}
-                        </Text>
-                      </View>
-                      <View style={styles.details}>
-                        <Text style={styles.detailsTitle}>지종상세</Text>
-                        <Text style={styles.detailsDesc}>
-                          {detail.feeder.paper_name2
-                            ? detail.feeder.paper_name2
-                            : '없음'}
-                        </Text>
-                      </View>
-                      {detail.basic.ca_id !== '10' ? (
-                        <View style={styles.details}>
-                          <Text style={styles.detailsTitle}>평량</Text>
-                          <Text style={styles.detailsDesc}>
-                            {detail.feeder.paper_weight
-                              ? detail.feeder.paper_weight
-                              : detail.feeder.paper_weight_etc
-                              ? detail.feeder.paper_weight_etc
-                              : '없음'}
-                          </Text>
-                        </View>
-                      ) : null}
-                      {detail.basic.ca_id === '10' ||
-                      detail.basic.ca_id === '11' ? (
-                        <View style={styles.details}>
-                          <Text style={styles.detailsTitle}>골</Text>
-                          <Text style={styles.detailsDesc}>
-                            {detail.feeder.paper_goal
-                              ? detail.feeder.paper_goal
-                              : detail.feeder.paper_goal_etc
-                              ? detail.feeder.paper_goal_etc
-                              : '없음'}
-                          </Text>
-                        </View>
-                      ) : null}
-                      <View style={styles.details}>
-                        <Text style={styles.detailsTitle}>색상</Text>
-                        <Text style={styles.detailsDesc}>
-                          {detail.feeder.paper_color
-                            ? detail.feeder.paper_color
-                            : detail.feeder.paper_color_etc
-                            ? detail.feeder.paper_color_etc
-                            : '없음'}
-                        </Text>
-                      </View>
-                      <View style={styles.details}>
-                        <Text style={styles.detailsTitle}>박가공</Text>
-                        <Text style={styles.detailsDesc}>
-                          {detail.end.park_processing
-                            ? detail.end.park_processing
-                            : '없음'}
-                        </Text>
-                      </View>
-                      <View style={styles.details}>
-                        <Text style={styles.detailsTitle}>형압</Text>
-                        <Text style={styles.detailsDesc}>
-                          {detail.end.press_design
-                            ? detail.end.press_design
-                            : '없음'}
-                        </Text>
-                      </View>
-                      <View style={styles.details}>
-                        <Text style={styles.detailsTitle}>부분 실크</Text>
-                        <Text style={styles.detailsDesc}>
-                          {detail.end.partial_silk
-                            ? detail.end.partial_silk
-                            : '없음'}
-                        </Text>
-                      </View>
-                      <View style={styles.details}>
-                        <Text style={styles.detailsTitle}>코팅</Text>
-                        <Text style={styles.detailsDesc}>
-                          {detail.end.coating ? detail.end.coating : '없음'}
-                        </Text>
-                      </View>
+                  <View style={[styles.infoBox, {marginBottom: 20}]}>
+                    <View style={styles.details}>
+                      <Text style={styles.detailsTitle}>지류명</Text>
+                      <Text style={styles.detailsDesc}>
+                        {detail.feeder.feeder_name}
+                      </Text>
                     </View>
-                  </>
+                    <View style={styles.details}>
+                      <Text style={styles.detailsTitle}>지종</Text>
+                      <Text style={styles.detailsDesc}>
+                        {detail.feeder.paper_name}
+                      </Text>
+                    </View>
+                    <View style={styles.details}>
+                      <Text style={styles.detailsTitle}>지종상세</Text>
+                      <Text style={styles.detailsDesc}>
+                        {detail.feeder.paper_name2
+                          ? detail.feeder.paper_name2
+                          : '없음'}
+                      </Text>
+                    </View>
+                    {detail.basic.ca_id !== '10' ? (
+                      <View style={styles.details}>
+                        <Text style={styles.detailsTitle}>평량</Text>
+                        <Text style={styles.detailsDesc}>
+                          {detail.feeder.paper_weight
+                            ? detail.feeder.paper_weight
+                            : detail.feeder.paper_weight_etc
+                            ? detail.feeder.paper_weight_etc
+                            : '없음'}
+                        </Text>
+                      </View>
+                    ) : null}
+                    {detail.basic.ca_id === '10' ||
+                    detail.basic.ca_id === '11' ? (
+                      <View style={styles.details}>
+                        <Text style={styles.detailsTitle}>골</Text>
+                        <Text style={styles.detailsDesc}>
+                          {detail.feeder.paper_goal
+                            ? detail.feeder.paper_goal
+                            : detail.feeder.paper_goal_etc
+                            ? detail.feeder.paper_goal_etc
+                            : '없음'}
+                        </Text>
+                      </View>
+                    ) : null}
+                    <View style={styles.details}>
+                      <Text style={styles.detailsTitle}>색상</Text>
+                      <Text style={styles.detailsDesc}>
+                        {detail.feeder.paper_color
+                          ? detail.feeder.paper_color
+                          : detail.feeder.paper_color_etc
+                          ? detail.feeder.paper_color_etc
+                          : '없음'}
+                      </Text>
+                    </View>
+                    <View style={styles.details}>
+                      <Text style={styles.detailsTitle}>박가공</Text>
+                      <Text style={styles.detailsDesc}>
+                        {detail.end.park_processing
+                          ? detail.end.park_processing
+                          : '없음'}
+                      </Text>
+                    </View>
+                    <View style={styles.details}>
+                      <Text style={styles.detailsTitle}>형압</Text>
+                      <Text style={styles.detailsDesc}>
+                        {detail.end.press_design
+                          ? detail.end.press_design
+                          : '없음'}
+                      </Text>
+                    </View>
+                    <View style={styles.details}>
+                      <Text style={styles.detailsTitle}>부분 실크</Text>
+                      <Text style={styles.detailsDesc}>
+                        {detail.end.partial_silk
+                          ? detail.end.partial_silk
+                          : '없음'}
+                      </Text>
+                    </View>
+                    <View style={styles.details}>
+                      <Text style={styles.detailsTitle}>코팅</Text>
+                      <Text style={styles.detailsDesc}>
+                        {detail.end.coating ? detail.end.coating : '없음'}
+                      </Text>
+                    </View>
+                  </View>
                 ) : detail.basic.cate1 === '0' ? (
-                  <View style={[styles.infoBox, {marginBottom: 10}]}>
+                  <View style={[styles.infoBox, {marginBottom: 20}]}>
                     <View style={styles.details}>
                       <Text style={styles.detailsTitle}>지류명</Text>
                       <Text style={styles.detailsDesc}>
@@ -1440,7 +1944,13 @@ const index = (props) => {
                     </View>
 
                     <View style={styles.details}>
-                      <Text style={styles.detailsTitle}>평량</Text>
+                      <Text style={styles.detailsTitle}>
+                        평량
+                        {detail.basic.ca_id === '1' ||
+                        detail.basic.ca_id === '4'
+                          ? '(표지)'
+                          : null}
+                      </Text>
                       <Text style={styles.detailsDesc}>
                         {detail.feeder.paper_weight
                           ? detail.feeder.paper_weight
@@ -1459,7 +1969,13 @@ const index = (props) => {
                       </View>
                     ) : null}
                     <View style={styles.details}>
-                      <Text style={styles.detailsTitle}>색상</Text>
+                      <Text style={styles.detailsTitle}>
+                        색상
+                        {detail.basic.ca_id === '1' ||
+                        detail.basic.ca_id === '4'
+                          ? '(표지)'
+                          : null}
+                      </Text>
                       <Text style={styles.detailsDesc}>
                         {detail.feeder.paper_color
                           ? detail.feeder.paper_color
@@ -1488,6 +2004,202 @@ const index = (props) => {
                     </View>
                   </View>
                 ) : null}
+
+                {/* 종이재질 조정여부 */}
+                <View style={{marginBottom: 20}}>
+                  <Text
+                    style={{
+                      fontFamily: 'SCDream5',
+                      fontSize: 14,
+                      marginBottom: 10,
+                    }}>
+                    지종 (조정여부)
+                  </Text>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      justifyContent: 'flex-start',
+                      alignItems: 'center',
+                      marginBottom: 10,
+                    }}>
+                    <TouchableOpacity
+                      style={{
+                        flexDirection: 'row',
+                        justifyContent: 'flex-start',
+                        alignItems: 'center',
+                        marginRight: 20,
+                      }}
+                      onPress={() => setPaperCheck('y')}>
+                      <Image
+                        source={
+                          paperCheck === 'y'
+                            ? require('../../src/assets/radio_on.png')
+                            : require('../../src/assets/radio_off.png')
+                        }
+                        resizeMode="contain"
+                        style={{width: 20, height: 20, marginRight: 5}}
+                      />
+                      <Text style={{fontSize: 14, fontFamily: 'SCDream4'}}>
+                        가능
+                      </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      style={{
+                        flexDirection: 'row',
+                        justifyContent: 'flex-start',
+                        alignItems: 'center',
+                      }}
+                      onPress={() => setPaperCheck('n')}>
+                      <Image
+                        source={
+                          paperCheck === 'n'
+                            ? require('../../src/assets/radio_on.png')
+                            : require('../../src/assets/radio_off.png')
+                        }
+                        resizeMode="contain"
+                        style={{width: 20, height: 20, marginRight: 5}}
+                      />
+
+                      <Text style={{fontSize: 14, fontFamily: 'SCDream4'}}>
+                        조정필요
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+                  {paperCheck === 'n' && (
+                    <View style={{marginTop: 10}}>
+                      <View style={{marginBottom: 15}}>
+                        <Text
+                          style={{
+                            fontSize: 13,
+                            fontFamily: 'SCDream4',
+                            marginBottom: 5,
+                            color: '#00A170',
+                          }}>
+                          변경할 지종을 입력해주세요.
+                        </Text>
+                        <TextInput
+                          ref={editedPaperRef}
+                          value={editedPaper}
+                          placeholder="지종을 입력해주세요."
+                          placeholderTextColor="#BEBEBE"
+                          autoFocus={false}
+                          style={[
+                            styles.normalText,
+                            {
+                              borderWidth: 1,
+                              borderColor: '#DEDEDE',
+                              borderRadius: 5,
+                              paddingHorizontal: 10,
+                            },
+                          ]}
+                          onChangeText={(text) => setEditedPaper(text)}
+                          onSubmitEditing={() =>
+                            editedWeightRef.current.focus()
+                          }
+                        />
+                      </View>
+                      <View style={{marginBottom: 15}}>
+                        <Text
+                          style={{
+                            fontSize: 13,
+                            fontFamily: 'SCDream4',
+                            marginBottom: 5,
+                            color: '#00A170',
+                          }}>
+                          변경할 평량을 입력해주세요.
+                        </Text>
+                        <TextInput
+                          ref={editedWeightRef}
+                          value={editedWeight}
+                          placeholder="평량을 입력해주세요."
+                          placeholderTextColor="#BEBEBE"
+                          autoFocus={false}
+                          style={[
+                            styles.normalText,
+                            {
+                              borderWidth: 1,
+                              borderColor: '#DEDEDE',
+                              borderRadius: 5,
+                              paddingHorizontal: 10,
+                            },
+                          ]}
+                          onChangeText={(text) => setEditedWeight(text)}
+                          onSubmitEditing={() => editedColorRef.current.focus()}
+                        />
+                      </View>
+                      <View style={{marginBottom: 15}}>
+                        <Text
+                          style={{
+                            fontSize: 13,
+                            fontFamily: 'SCDream4',
+                            marginBottom: 5,
+                            color: '#00A170',
+                          }}>
+                          변경할 색상을 입력해주세요.
+                        </Text>
+                        <TextInput
+                          ref={editedColorRef}
+                          value={editedColor}
+                          placeholder="색상을 입력해주세요."
+                          placeholderTextColor="#BEBEBE"
+                          autoFocus={false}
+                          style={[
+                            styles.normalText,
+                            {
+                              borderWidth: 1,
+                              borderColor: '#DEDEDE',
+                              borderRadius: 5,
+                              paddingHorizontal: 10,
+                            },
+                          ]}
+                          onChangeText={(text) => setEditedColor(text)}
+                          onSubmitEditing={() =>
+                            editedPatternRef.current.focus()
+                          }
+                        />
+                      </View>
+                      <View>
+                        <Text
+                          style={{
+                            fontSize: 13,
+                            fontFamily: 'SCDream4',
+                            marginBottom: 5,
+                            color: '#00A170',
+                          }}>
+                          변경할 무늬를 입력해주세요.
+                        </Text>
+                        <TextInput
+                          ref={editedPatternRef}
+                          value={editedPattern}
+                          placeholder="무늬를 입력해주세요."
+                          placeholderTextColor="#BEBEBE"
+                          autoFocus={false}
+                          style={[
+                            styles.normalText,
+                            {
+                              borderWidth: 1,
+                              borderColor: '#DEDEDE',
+                              borderRadius: 5,
+                              paddingHorizontal: 10,
+                              marginBottom: 5,
+                            },
+                          ]}
+                          onChangeText={(text) => setEditedPattern(text)}
+                        />
+                        <Text
+                          style={{
+                            fontSize: 12,
+                            fontFamily: 'SCDream4',
+                            marginBottom: 10,
+                            color: '#BEBEBE',
+                          }}>
+                          ※ 무늬는 해당되는 상품일 경우에만 입력해주세요.
+                        </Text>
+                      </View>
+                    </View>
+                  )}
+                </View>
+                {/* // 종이재질 조정여부 */}
               </Collapsible>
             </View>
 
@@ -1541,7 +2253,7 @@ const index = (props) => {
 
               <Collapsible collapsed={collapseArrow04}>
                 {detail.basic.cate1 === '1' ? (
-                  <View style={[styles.infoBox, {marginBottom: 10}]}>
+                  <View style={[styles.infoBox, {marginBottom: 20}]}>
                     <View style={styles.details}>
                       <Text style={styles.detailsTitle}>박가공</Text>
                       <Text style={styles.detailsDesc}>
@@ -1574,9 +2286,15 @@ const index = (props) => {
                     </View>
                   </View>
                 ) : detail.basic.cate1 === '0' ? (
-                  <View style={[styles.infoBox, {marginBottom: 10}]}>
+                  <View style={[styles.infoBox, {marginBottom: 20}]}>
                     <View style={styles.details}>
-                      <Text style={styles.detailsTitle}>박가공</Text>
+                      <Text style={styles.detailsTitle}>
+                        박가공
+                        {detail.basic.ca_id === '1' ||
+                        detail.basic.ca_id === '4'
+                          ? '(표지)'
+                          : null}
+                      </Text>
                       <Text style={styles.detailsDesc}>
                         {detail.end.park_processing === 'Y' ? '있음' : '없음'}
                       </Text>
@@ -1593,7 +2311,13 @@ const index = (props) => {
                       </View>
                     ) : null}
                     <View style={styles.details}>
-                      <Text style={styles.detailsTitle}>형압</Text>
+                      <Text style={styles.detailsTitle}>
+                        형압{' '}
+                        {detail.basic.ca_id === '1' ||
+                        detail.basic.ca_id === '4'
+                          ? '(표지)'
+                          : null}
+                      </Text>
                       <Text style={styles.detailsDesc}>
                         {detail.end.press_design === 'Y' ? '있음' : '없음'}
                       </Text>
@@ -1608,7 +2332,13 @@ const index = (props) => {
                       </View>
                     ) : null}
                     <View style={styles.details}>
-                      <Text style={styles.detailsTitle}>부분 실크</Text>
+                      <Text style={styles.detailsTitle}>
+                        부분 실크
+                        {detail.basic.ca_id === '1' ||
+                        detail.basic.ca_id === '4'
+                          ? '(표지)'
+                          : null}
+                      </Text>
                       <Text style={styles.detailsDesc}>
                         {detail.end.partial_silk === 'Y' ? '있음' : '없음'}
                       </Text>
@@ -1623,7 +2353,13 @@ const index = (props) => {
                       </View>
                     ) : null}
                     <View style={styles.details}>
-                      <Text style={styles.detailsTitle}>코팅</Text>
+                      <Text style={styles.detailsTitle}>
+                        코팅
+                        {detail.basic.ca_id === '1' ||
+                        detail.basic.ca_id === '4'
+                          ? '(표지)'
+                          : null}
+                      </Text>
                       <Text style={styles.detailsDesc}>
                         {detail.end.coating}
                       </Text>
@@ -1674,6 +2410,770 @@ const index = (props) => {
                     ) : null}
                   </View>
                 ) : null}
+
+                {/* 후가공 조정여부  - 카테고리에 따라 표지가 될 수 있음*/}
+                <View
+                  style={{
+                    marginBottom:
+                      (detail.basic.ca_id === '1' ||
+                        detail.basic.ca_id === '4') &&
+                      (postProcessCheck === 'n' || postProcess02Check === 'n')
+                        ? 30
+                        : 20,
+                  }}>
+                  <Text
+                    style={{
+                      fontFamily: 'SCDream5',
+                      fontSize: 14,
+                      marginBottom: 10,
+                    }}>
+                    {detail.basic.ca_id === '1' || detail.basic.ca_id === '4'
+                      ? '후가공(표지) (조정여부)'
+                      : '후가공 (조정여부)'}
+                  </Text>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      justifyContent: 'flex-start',
+                      alignItems: 'center',
+                    }}>
+                    <TouchableOpacity
+                      style={{
+                        flexDirection: 'row',
+                        justifyContent: 'flex-start',
+                        alignItems: 'center',
+                        marginRight: 20,
+                      }}
+                      onPress={() => setPostProcessCheck('y')}>
+                      <Image
+                        source={
+                          postProcessCheck === 'y'
+                            ? require('../../src/assets/radio_on.png')
+                            : require('../../src/assets/radio_off.png')
+                        }
+                        resizeMode="contain"
+                        style={{width: 20, height: 20, marginRight: 5}}
+                      />
+                      <Text style={{fontSize: 14, fontFamily: 'SCDream4'}}>
+                        가능
+                      </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      style={{
+                        flexDirection: 'row',
+                        justifyContent: 'flex-start',
+                        alignItems: 'center',
+                      }}
+                      onPress={() => setPostProcessCheck('n')}>
+                      <Image
+                        source={
+                          postProcessCheck === 'n'
+                            ? require('../../src/assets/radio_on.png')
+                            : require('../../src/assets/radio_off.png')
+                        }
+                        resizeMode="contain"
+                        style={{width: 20, height: 20, marginRight: 5}}
+                      />
+
+                      <Text style={{fontSize: 14, fontFamily: 'SCDream4'}}>
+                        조정필요
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+                  {postProcessCheck === 'n' && (
+                    <View style={{marginTop: 20}}>
+                      {/* 박가공 변경 */}
+                      <View
+                        style={{
+                          flexDirection: 'row',
+                          justifyContent: 'flex-start',
+                          alignItems: 'center',
+                          marginBottom: 15,
+                        }}>
+                        <View style={{marginRight: 20}}>
+                          <Text
+                            style={{
+                              fontSize: 14,
+                              fontFamily: 'SCDream4',
+                              color: '#000',
+                            }}>
+                            박가공
+                          </Text>
+                        </View>
+                        <View
+                          style={{
+                            flexDirection: 'row',
+                            justifyContent: 'flex-start',
+                            alignItems: 'center',
+                          }}>
+                          <TouchableOpacity
+                            activeOpacity={1}
+                            style={{
+                              flexDirection: 'row',
+                              justifyContent: 'flex-start',
+                              alignItems: 'center',
+                              marginRight: 20,
+                            }}
+                            onPress={() => setEditedFoil('Y')}>
+                            <Image
+                              source={
+                                editedFoil === 'Y'
+                                  ? require('../../src/assets/radio_on.png')
+                                  : require('../../src/assets/radio_off.png')
+                              }
+                              resizeMode="contain"
+                              style={{width: 20, height: 20, marginRight: 5}}
+                            />
+
+                            <Text
+                              style={{
+                                fontSize: 14,
+                                fontFamily: 'SCDream4',
+                                color: editedFoil === 'Y' ? '#00A170' : '#000',
+                              }}>
+                              있음
+                            </Text>
+                          </TouchableOpacity>
+                          <TouchableOpacity
+                            activeOpacity={1}
+                            style={{
+                              flexDirection: 'row',
+                              justifyContent: 'flex-start',
+                              alignItems: 'center',
+                            }}
+                            onPress={() => setEditedFoil('N')}>
+                            <Image
+                              source={
+                                editedFoil === 'N'
+                                  ? require('../../src/assets/radio_on.png')
+                                  : require('../../src/assets/radio_off.png')
+                              }
+                              resizeMode="contain"
+                              style={{width: 20, height: 20, marginRight: 5}}
+                            />
+
+                            <Text
+                              style={{
+                                fontSize: 14,
+                                fontFamily: 'SCDream4',
+                                color: editedFoil === 'N' ? '#00A170' : '#000',
+                              }}>
+                              없음
+                            </Text>
+                          </TouchableOpacity>
+                        </View>
+                      </View>
+                      {/* // 박가공 변경 */}
+
+                      {/* 형압 변경 */}
+                      <View
+                        style={{
+                          flexDirection: 'row',
+                          justifyContent: 'flex-start',
+                          alignItems: 'center',
+                          marginBottom: 15,
+                        }}>
+                        <View style={{marginRight: 20}}>
+                          <Text
+                            style={{
+                              fontSize: 14,
+                              fontFamily: 'SCDream4',
+                              color: '#000',
+                            }}>
+                            형압
+                          </Text>
+                        </View>
+                        <View
+                          style={{
+                            flexDirection: 'row',
+                            justifyContent: 'flex-start',
+                            alignItems: 'center',
+                          }}>
+                          <TouchableOpacity
+                            activeOpacity={1}
+                            style={{
+                              flexDirection: 'row',
+                              justifyContent: 'flex-start',
+                              alignItems: 'center',
+                              marginRight: 20,
+                            }}
+                            onPress={() => setEditedPress('Y')}>
+                            <Image
+                              source={
+                                editedPress === 'Y'
+                                  ? require('../../src/assets/radio_on.png')
+                                  : require('../../src/assets/radio_off.png')
+                              }
+                              resizeMode="contain"
+                              style={{width: 20, height: 20, marginRight: 5}}
+                            />
+
+                            <Text
+                              style={{
+                                fontSize: 14,
+                                fontFamily: 'SCDream4',
+                                color: editedPress === 'Y' ? '#00A170' : '#000',
+                              }}>
+                              있음
+                            </Text>
+                          </TouchableOpacity>
+                          <TouchableOpacity
+                            activeOpacity={1}
+                            style={{
+                              flexDirection: 'row',
+                              justifyContent: 'flex-start',
+                              alignItems: 'center',
+                            }}
+                            onPress={() => setEditedPress('N')}>
+                            <Image
+                              source={
+                                editedPress === 'N'
+                                  ? require('../../src/assets/radio_on.png')
+                                  : require('../../src/assets/radio_off.png')
+                              }
+                              resizeMode="contain"
+                              style={{width: 20, height: 20, marginRight: 5}}
+                            />
+
+                            <Text
+                              style={{
+                                fontSize: 14,
+                                fontFamily: 'SCDream4',
+                                color: editedPress === 'N' ? '#00A170' : '#000',
+                              }}>
+                              없음
+                            </Text>
+                          </TouchableOpacity>
+                        </View>
+                      </View>
+                      {/* // 형압 변경 */}
+
+                      {/* 부분실크 변경 */}
+                      <View
+                        style={{
+                          flexDirection: 'row',
+                          justifyContent: 'flex-start',
+                          alignItems: 'center',
+                          marginBottom: 15,
+                        }}>
+                        <View style={{marginRight: 20}}>
+                          <Text
+                            style={{
+                              fontSize: 14,
+                              fontFamily: 'SCDream4',
+                              color: '#000',
+                            }}>
+                            부분실크
+                          </Text>
+                        </View>
+                        <View
+                          style={{
+                            flexDirection: 'row',
+                            justifyContent: 'flex-start',
+                            alignItems: 'center',
+                          }}>
+                          <TouchableOpacity
+                            activeOpacity={1}
+                            style={{
+                              flexDirection: 'row',
+                              justifyContent: 'flex-start',
+                              alignItems: 'center',
+                              marginRight: 20,
+                            }}
+                            onPress={() => setEditedSilk('Y')}>
+                            <Image
+                              source={
+                                editedSilk === 'Y'
+                                  ? require('../../src/assets/radio_on.png')
+                                  : require('../../src/assets/radio_off.png')
+                              }
+                              resizeMode="contain"
+                              style={{width: 20, height: 20, marginRight: 5}}
+                            />
+
+                            <Text
+                              style={{
+                                fontSize: 14,
+                                fontFamily: 'SCDream4',
+                                color: editedSilk === 'Y' ? '#00A170' : '#000',
+                              }}>
+                              있음
+                            </Text>
+                          </TouchableOpacity>
+                          <TouchableOpacity
+                            activeOpacity={1}
+                            style={{
+                              flexDirection: 'row',
+                              justifyContent: 'flex-start',
+                              alignItems: 'center',
+                            }}
+                            onPress={() => setEditedSilk('N')}>
+                            <Image
+                              source={
+                                editedSilk === 'N'
+                                  ? require('../../src/assets/radio_on.png')
+                                  : require('../../src/assets/radio_off.png')
+                              }
+                              resizeMode="contain"
+                              style={{width: 20, height: 20, marginRight: 5}}
+                            />
+
+                            <Text
+                              style={{
+                                fontSize: 14,
+                                fontFamily: 'SCDream4',
+                                color: editedSilk === 'N' ? '#00A170' : '#000',
+                              }}>
+                              없음
+                            </Text>
+                          </TouchableOpacity>
+                        </View>
+                      </View>
+                      {/* // 부분실크 변경 */}
+
+                      {/* 코팅 종류 변경 */}
+                      <View>
+                        <View
+                          style={{
+                            flexDirection: 'row',
+                            justifyContent: 'flex-start',
+                            alignItems: 'center',
+                            marginBottom: 10,
+                          }}>
+                          <Text
+                            style={{
+                              fontSize: 14,
+                              fontFamily: 'SCDream4',
+                              color: '#000',
+                              marginRight: 10,
+                            }}>
+                            코팅 :
+                          </Text>
+                          <Text
+                            style={{
+                              fontSize: 14,
+                              fontFamily: 'SCDream4',
+
+                              color: '#00A170',
+                            }}>
+                            코팅 종류를 입력해주세요.
+                          </Text>
+                        </View>
+                        <TextInput
+                          value={editedLaminate}
+                          placeholder="코팅 종류를 입력해주세요."
+                          placeholderTextColor="#BEBEBE"
+                          autoFocus={false}
+                          style={[
+                            styles.normalText,
+                            {
+                              borderWidth: 1,
+                              borderColor: '#DEDEDE',
+                              borderRadius: 5,
+                              paddingHorizontal: 10,
+                            },
+                          ]}
+                          onChangeText={(text) => setEditedLaminate(text)}
+                        />
+                      </View>
+                      {/* // 코팅 종류 변경 */}
+                    </View>
+                  )}
+                </View>
+                {/* // 후가공 조정여부 - 카테고리에 따라 표지가 될 수 있음 */}
+
+                {/* 후가공(내지) 조정여부 */}
+                {detail.basic.ca_id === '1' || detail.basic.ca_id === '4' ? (
+                  <View style={{marginBottom: 20}}>
+                    <Text
+                      style={{
+                        fontFamily: 'SCDream5',
+                        fontSize: 14,
+                        marginBottom: 10,
+                      }}>
+                      후가공(내지) (조정여부)
+                    </Text>
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        justifyContent: 'flex-start',
+                        alignItems: 'center',
+                      }}>
+                      <TouchableOpacity
+                        style={{
+                          flexDirection: 'row',
+                          justifyContent: 'flex-start',
+                          alignItems: 'center',
+                          marginRight: 20,
+                        }}
+                        onPress={() => setPostProcess02Check('y')}>
+                        <Image
+                          source={
+                            postProcess02Check === 'y'
+                              ? require('../../src/assets/radio_on.png')
+                              : require('../../src/assets/radio_off.png')
+                          }
+                          resizeMode="contain"
+                          style={{width: 20, height: 20, marginRight: 5}}
+                        />
+                        <Text style={{fontSize: 14, fontFamily: 'SCDream4'}}>
+                          가능
+                        </Text>
+                      </TouchableOpacity>
+                      <TouchableOpacity
+                        style={{
+                          flexDirection: 'row',
+                          justifyContent: 'flex-start',
+                          alignItems: 'center',
+                        }}
+                        onPress={() => setPostProcess02Check('n')}>
+                        <Image
+                          source={
+                            postProcess02Check === 'n'
+                              ? require('../../src/assets/radio_on.png')
+                              : require('../../src/assets/radio_off.png')
+                          }
+                          resizeMode="contain"
+                          style={{width: 20, height: 20, marginRight: 5}}
+                        />
+
+                        <Text style={{fontSize: 14, fontFamily: 'SCDream4'}}>
+                          조정필요
+                        </Text>
+                      </TouchableOpacity>
+                    </View>
+                    {postProcess02Check === 'n' && (
+                      <View style={{marginTop: 20}}>
+                        {/* 박가공 변경 */}
+                        <View
+                          style={{
+                            flexDirection: 'row',
+                            justifyContent: 'flex-start',
+                            alignItems: 'center',
+                            marginBottom: 15,
+                          }}>
+                          <View style={{marginRight: 20}}>
+                            <Text
+                              style={{
+                                fontSize: 14,
+                                fontFamily: 'SCDream4',
+                                color: '#000',
+                              }}>
+                              박가공
+                            </Text>
+                          </View>
+                          <View
+                            style={{
+                              flexDirection: 'row',
+                              justifyContent: 'flex-start',
+                              alignItems: 'center',
+                            }}>
+                            <TouchableOpacity
+                              activeOpacity={1}
+                              style={{
+                                flexDirection: 'row',
+                                justifyContent: 'flex-start',
+                                alignItems: 'center',
+                                marginRight: 20,
+                              }}
+                              onPress={() => setEditedFoil02('Y')}>
+                              <Image
+                                source={
+                                  editedFoil02 === 'Y'
+                                    ? require('../../src/assets/radio_on.png')
+                                    : require('../../src/assets/radio_off.png')
+                                }
+                                resizeMode="contain"
+                                style={{
+                                  width: 20,
+                                  height: 20,
+                                  marginRight: 5,
+                                }}
+                              />
+
+                              <Text
+                                style={{
+                                  fontSize: 14,
+                                  fontFamily: 'SCDream4',
+                                  color:
+                                    editedFoil02 === 'Y' ? '#00A170' : '#000',
+                                }}>
+                                있음
+                              </Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                              activeOpacity={1}
+                              style={{
+                                flexDirection: 'row',
+                                justifyContent: 'flex-start',
+                                alignItems: 'center',
+                              }}
+                              onPress={() => setEditedFoil02('N')}>
+                              <Image
+                                source={
+                                  editedFoil02 === 'N'
+                                    ? require('../../src/assets/radio_on.png')
+                                    : require('../../src/assets/radio_off.png')
+                                }
+                                resizeMode="contain"
+                                style={{
+                                  width: 20,
+                                  height: 20,
+                                  marginRight: 5,
+                                }}
+                              />
+
+                              <Text
+                                style={{
+                                  fontSize: 14,
+                                  fontFamily: 'SCDream4',
+                                  color:
+                                    editedFoil === 'N' ? '#00A170' : '#000',
+                                }}>
+                                없음
+                              </Text>
+                            </TouchableOpacity>
+                          </View>
+                        </View>
+                        {/* // 박가공 변경 */}
+
+                        {/* 형압 변경 */}
+                        <View
+                          style={{
+                            flexDirection: 'row',
+                            justifyContent: 'flex-start',
+                            alignItems: 'center',
+                            marginBottom: 15,
+                          }}>
+                          <View style={{marginRight: 20}}>
+                            <Text
+                              style={{
+                                fontSize: 14,
+                                fontFamily: 'SCDream4',
+                                color: '#000',
+                              }}>
+                              형압
+                            </Text>
+                          </View>
+                          <View
+                            style={{
+                              flexDirection: 'row',
+                              justifyContent: 'flex-start',
+                              alignItems: 'center',
+                            }}>
+                            <TouchableOpacity
+                              activeOpacity={1}
+                              style={{
+                                flexDirection: 'row',
+                                justifyContent: 'flex-start',
+                                alignItems: 'center',
+                                marginRight: 20,
+                              }}
+                              onPress={() => setEditedPress02('Y')}>
+                              <Image
+                                source={
+                                  editedPress02 === 'Y'
+                                    ? require('../../src/assets/radio_on.png')
+                                    : require('../../src/assets/radio_off.png')
+                                }
+                                resizeMode="contain"
+                                style={{
+                                  width: 20,
+                                  height: 20,
+                                  marginRight: 5,
+                                }}
+                              />
+
+                              <Text
+                                style={{
+                                  fontSize: 14,
+                                  fontFamily: 'SCDream4',
+                                  color:
+                                    editedPress02 === 'Y' ? '#00A170' : '#000',
+                                }}>
+                                있음
+                              </Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                              activeOpacity={1}
+                              style={{
+                                flexDirection: 'row',
+                                justifyContent: 'flex-start',
+                                alignItems: 'center',
+                              }}
+                              onPress={() => setEditedPress02('N')}>
+                              <Image
+                                source={
+                                  editedPress02 === 'N'
+                                    ? require('../../src/assets/radio_on.png')
+                                    : require('../../src/assets/radio_off.png')
+                                }
+                                resizeMode="contain"
+                                style={{
+                                  width: 20,
+                                  height: 20,
+                                  marginRight: 5,
+                                }}
+                              />
+
+                              <Text
+                                style={{
+                                  fontSize: 14,
+                                  fontFamily: 'SCDream4',
+                                  color:
+                                    editedPress === 'N' ? '#00A170' : '#000',
+                                }}>
+                                없음
+                              </Text>
+                            </TouchableOpacity>
+                          </View>
+                        </View>
+                        {/* // 형압 변경 */}
+
+                        {/* 부분실크 변경 */}
+                        <View
+                          style={{
+                            flexDirection: 'row',
+                            justifyContent: 'flex-start',
+                            alignItems: 'center',
+                            marginBottom: 15,
+                          }}>
+                          <View style={{marginRight: 20}}>
+                            <Text
+                              style={{
+                                fontSize: 14,
+                                fontFamily: 'SCDream4',
+                                color: '#000',
+                              }}>
+                              부분실크
+                            </Text>
+                          </View>
+                          <View
+                            style={{
+                              flexDirection: 'row',
+                              justifyContent: 'flex-start',
+                              alignItems: 'center',
+                            }}>
+                            <TouchableOpacity
+                              activeOpacity={1}
+                              style={{
+                                flexDirection: 'row',
+                                justifyContent: 'flex-start',
+                                alignItems: 'center',
+                                marginRight: 20,
+                              }}
+                              onPress={() => setEditedSilk02('Y')}>
+                              <Image
+                                source={
+                                  editedSilk02 === 'Y'
+                                    ? require('../../src/assets/radio_on.png')
+                                    : require('../../src/assets/radio_off.png')
+                                }
+                                resizeMode="contain"
+                                style={{
+                                  width: 20,
+                                  height: 20,
+                                  marginRight: 5,
+                                }}
+                              />
+
+                              <Text
+                                style={{
+                                  fontSize: 14,
+                                  fontFamily: 'SCDream4',
+                                  color:
+                                    editedSilk02 === 'Y' ? '#00A170' : '#000',
+                                }}>
+                                있음
+                              </Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                              activeOpacity={1}
+                              style={{
+                                flexDirection: 'row',
+                                justifyContent: 'flex-start',
+                                alignItems: 'center',
+                              }}
+                              onPress={() => setEditedSilk02('N')}>
+                              <Image
+                                source={
+                                  editedSilk02 === 'N'
+                                    ? require('../../src/assets/radio_on.png')
+                                    : require('../../src/assets/radio_off.png')
+                                }
+                                resizeMode="contain"
+                                style={{
+                                  width: 20,
+                                  height: 20,
+                                  marginRight: 5,
+                                }}
+                              />
+
+                              <Text
+                                style={{
+                                  fontSize: 14,
+                                  fontFamily: 'SCDream4',
+                                  color:
+                                    editedSilk === 'N' ? '#00A170' : '#000',
+                                }}>
+                                없음
+                              </Text>
+                            </TouchableOpacity>
+                          </View>
+                        </View>
+                        {/* // 부분실크 변경 */}
+
+                        {/* 코팅 종류 변경 */}
+                        <View>
+                          <View
+                            style={{
+                              flexDirection: 'row',
+                              justifyContent: 'flex-start',
+                              alignItems: 'center',
+                              marginBottom: 10,
+                            }}>
+                            <Text
+                              style={{
+                                fontSize: 14,
+                                fontFamily: 'SCDream4',
+                                color: '#000',
+                                marginRight: 10,
+                              }}>
+                              코팅 :
+                            </Text>
+                            <Text
+                              style={{
+                                fontSize: 14,
+                                fontFamily: 'SCDream4',
+
+                                color: '#00A170',
+                              }}>
+                              코팅 종류를 입력해주세요.
+                            </Text>
+                          </View>
+                          <TextInput
+                            value={editedLaminate02}
+                            placeholder="코팅 종류를 입력해주세요."
+                            placeholderTextColor="#BEBEBE"
+                            autoFocus={false}
+                            style={[
+                              styles.normalText,
+                              {
+                                borderWidth: 1,
+                                borderColor: '#DEDEDE',
+                                borderRadius: 5,
+                                paddingHorizontal: 10,
+                              },
+                            ]}
+                            onChangeText={(text) => setEditedLaminate02(text)}
+                          />
+                        </View>
+                        {/* // 코팅 종류 변경 */}
+                      </View>
+                    )}
+                  </View>
+                ) : null}
+                {/* // 후가공(내지) 조정여부 */}
               </Collapsible>
             </View>
           </>
