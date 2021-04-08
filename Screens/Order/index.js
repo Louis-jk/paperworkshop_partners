@@ -87,11 +87,23 @@ const index = (props) => {
   const [editedSilk, setEditedSilk] = React.useState('Y'); // 부분실크 변경 값
   const [editedLaminate, setEditedLaminate] = React.useState(''); // 코팅 변경 값
 
+  // 견적제안시 조정필요 부분에만 나오는 후가공 부분
+  const [epoxy, setEpoxy] = React.useState('N'); // 에폭시 유무 (필요시)
+  const [oshi, setOshi] = React.useState('N'); // 오시 유무 (필요시)
+  const [mishin, setMishin] = React.useState('N'); // 미싱 유무 (필요시)
+  const [hole, setHole] = React.useState('N'); // 타공 유무 (필요시)
+
   // 후가공 (표지, 내지 있을 경우) 내지 부분
   const [editedFoil02, setEditedFoil02] = React.useState('Y'); // 박가공 변경 값
   const [editedPress02, setEditedPress02] = React.useState('Y'); // 형압 변경 값
   const [editedSilk02, setEditedSilk02] = React.useState('Y'); // 부분실크 변경 값
   const [editedLaminate02, setEditedLaminate02] = React.useState(''); // 코팅 변경 값
+
+  // 견적제안시 조정필요 부분에만 나오는 후가공 부분 (내지)
+  const [epoxy02, setEpoxy02] = React.useState('N'); // 에폭시 유무 (필요시)
+  const [oshi02, setOshi02] = React.useState('N'); // 오시 유무 (필요시)
+  const [mishin02, setMishin02] = React.useState('N'); // 미싱 유무 (필요시)
+  const [hole02, setHole02] = React.useState('N'); // 타공 유무 (필요시)
 
   // 각 TextInput Ref값
   const editedTypeRef = React.useRef(null);
@@ -127,40 +139,6 @@ const index = (props) => {
   };
 
   // 날짜 지정
-  // const onChange01 = (event, selectedDate) => {
-  //   const currentDate = selectedDate || date;
-  //   setShow01(Platform.OS === 'ios');
-
-  //   const nowDate = new Date();
-  //   let weekAgo = nowDate.setDate(nowDate.getDate() + 7);
-
-  //   if (selectedDate < date) {
-  //     Alert.alert(
-  //       '오늘 이전 날짜는 선택이 불가능 합니다.',
-  //       '날짜를 다시 선택해주세요.',
-  //       [
-  //         {
-  //           text: '확인',
-  //         },
-  //       ],
-  //     );
-  //     setdDayDate(date);
-  //   } else if (selectedDate < weekAgo) {
-  //     Alert.alert(
-  //       '납품 희망일은 현재일 기준 7일 이후부터 선택 가능합니다.',
-  //       '날짜를 다시 선택해주세요.',
-  //       [
-  //         {
-  //           text: '확인',
-  //         },
-  //       ],
-  //     );
-  //     setdDayDate(date);
-  //   } else {
-  //     setArriveDate(currentDate);
-  //   }
-  // };
-
   const onChange01 = (event, selectedDate) => {
     const currentDate = selectedDate || date;
     setShow01(Platform.OS === 'ios');
@@ -2732,7 +2710,7 @@ const index = (props) => {
                       {/* // 부분실크 변경 */}
 
                       {/* 코팅 종류 변경 */}
-                      <View>
+                      <View style={{marginBottom: 20}}>
                         <View
                           style={{
                             flexDirection: 'row',
@@ -2777,6 +2755,338 @@ const index = (props) => {
                         />
                       </View>
                       {/* // 코팅 종류 변경 */}
+
+                      {/* 에폭시 유무 */}
+                      <View
+                        style={{
+                          flexDirection: 'row',
+                          justifyContent: 'flex-start',
+                          alignItems: 'center',
+                          marginBottom: 15,
+                        }}>
+                        <View style={{marginRight: 20}}>
+                          <Text
+                            style={{
+                              fontSize: 14,
+                              fontFamily: 'SCDream4',
+                              color: '#000',
+                            }}>
+                            에폭시
+                          </Text>
+                        </View>
+                        <View
+                          style={{
+                            flexDirection: 'row',
+                            justifyContent: 'flex-start',
+                            alignItems: 'center',
+                          }}>
+                          <TouchableOpacity
+                            activeOpacity={1}
+                            style={{
+                              flexDirection: 'row',
+                              justifyContent: 'flex-start',
+                              alignItems: 'center',
+                              marginRight: 20,
+                            }}
+                            onPress={() => setEpoxy('Y')}>
+                            <Image
+                              source={
+                                epoxy === 'Y'
+                                  ? require('../../src/assets/radio_on.png')
+                                  : require('../../src/assets/radio_off.png')
+                              }
+                              resizeMode="contain"
+                              style={{width: 20, height: 20, marginRight: 5}}
+                            />
+
+                            <Text
+                              style={{
+                                fontSize: 14,
+                                fontFamily: 'SCDream4',
+                                color: epoxy === 'Y' ? '#00A170' : '#000',
+                              }}>
+                              있음
+                            </Text>
+                          </TouchableOpacity>
+                          <TouchableOpacity
+                            activeOpacity={1}
+                            style={{
+                              flexDirection: 'row',
+                              justifyContent: 'flex-start',
+                              alignItems: 'center',
+                            }}
+                            onPress={() => setEpoxy('N')}>
+                            <Image
+                              source={
+                                epoxy === 'N'
+                                  ? require('../../src/assets/radio_on.png')
+                                  : require('../../src/assets/radio_off.png')
+                              }
+                              resizeMode="contain"
+                              style={{width: 20, height: 20, marginRight: 5}}
+                            />
+
+                            <Text
+                              style={{
+                                fontSize: 14,
+                                fontFamily: 'SCDream4',
+                                color: epoxy === 'N' ? '#00A170' : '#000',
+                              }}>
+                              없음
+                            </Text>
+                          </TouchableOpacity>
+                        </View>
+                      </View>
+                      {/* // 에폭시 유무 */}
+
+                      {/* 오시 유무 */}
+                      <View
+                        style={{
+                          flexDirection: 'row',
+                          justifyContent: 'flex-start',
+                          alignItems: 'center',
+                          marginBottom: 15,
+                        }}>
+                        <View style={{marginRight: 20}}>
+                          <Text
+                            style={{
+                              fontSize: 14,
+                              fontFamily: 'SCDream4',
+                              color: '#000',
+                            }}>
+                            오시
+                          </Text>
+                        </View>
+                        <View
+                          style={{
+                            flexDirection: 'row',
+                            justifyContent: 'flex-start',
+                            alignItems: 'center',
+                          }}>
+                          <TouchableOpacity
+                            activeOpacity={1}
+                            style={{
+                              flexDirection: 'row',
+                              justifyContent: 'flex-start',
+                              alignItems: 'center',
+                              marginRight: 20,
+                            }}
+                            onPress={() => setOshi('Y')}>
+                            <Image
+                              source={
+                                oshi === 'Y'
+                                  ? require('../../src/assets/radio_on.png')
+                                  : require('../../src/assets/radio_off.png')
+                              }
+                              resizeMode="contain"
+                              style={{width: 20, height: 20, marginRight: 5}}
+                            />
+
+                            <Text
+                              style={{
+                                fontSize: 14,
+                                fontFamily: 'SCDream4',
+                                color: oshi === 'Y' ? '#00A170' : '#000',
+                              }}>
+                              있음
+                            </Text>
+                          </TouchableOpacity>
+                          <TouchableOpacity
+                            activeOpacity={1}
+                            style={{
+                              flexDirection: 'row',
+                              justifyContent: 'flex-start',
+                              alignItems: 'center',
+                            }}
+                            onPress={() => setOshi('N')}>
+                            <Image
+                              source={
+                                oshi === 'N'
+                                  ? require('../../src/assets/radio_on.png')
+                                  : require('../../src/assets/radio_off.png')
+                              }
+                              resizeMode="contain"
+                              style={{width: 20, height: 20, marginRight: 5}}
+                            />
+
+                            <Text
+                              style={{
+                                fontSize: 14,
+                                fontFamily: 'SCDream4',
+                                color: oshi === 'N' ? '#00A170' : '#000',
+                              }}>
+                              없음
+                            </Text>
+                          </TouchableOpacity>
+                        </View>
+                      </View>
+                      {/* // 오시 유무 */}
+
+                      {/* 미싱 유무 */}
+                      <View
+                        style={{
+                          flexDirection: 'row',
+                          justifyContent: 'flex-start',
+                          alignItems: 'center',
+                          marginBottom: 15,
+                        }}>
+                        <View style={{marginRight: 20}}>
+                          <Text
+                            style={{
+                              fontSize: 14,
+                              fontFamily: 'SCDream4',
+                              color: '#000',
+                            }}>
+                            미싱
+                          </Text>
+                        </View>
+                        <View
+                          style={{
+                            flexDirection: 'row',
+                            justifyContent: 'flex-start',
+                            alignItems: 'center',
+                          }}>
+                          <TouchableOpacity
+                            activeOpacity={1}
+                            style={{
+                              flexDirection: 'row',
+                              justifyContent: 'flex-start',
+                              alignItems: 'center',
+                              marginRight: 20,
+                            }}
+                            onPress={() => setMishin('Y')}>
+                            <Image
+                              source={
+                                mishin === 'Y'
+                                  ? require('../../src/assets/radio_on.png')
+                                  : require('../../src/assets/radio_off.png')
+                              }
+                              resizeMode="contain"
+                              style={{width: 20, height: 20, marginRight: 5}}
+                            />
+
+                            <Text
+                              style={{
+                                fontSize: 14,
+                                fontFamily: 'SCDream4',
+                                color: mishin === 'Y' ? '#00A170' : '#000',
+                              }}>
+                              있음
+                            </Text>
+                          </TouchableOpacity>
+                          <TouchableOpacity
+                            activeOpacity={1}
+                            style={{
+                              flexDirection: 'row',
+                              justifyContent: 'flex-start',
+                              alignItems: 'center',
+                            }}
+                            onPress={() => setMishin('N')}>
+                            <Image
+                              source={
+                                mishin === 'N'
+                                  ? require('../../src/assets/radio_on.png')
+                                  : require('../../src/assets/radio_off.png')
+                              }
+                              resizeMode="contain"
+                              style={{width: 20, height: 20, marginRight: 5}}
+                            />
+
+                            <Text
+                              style={{
+                                fontSize: 14,
+                                fontFamily: 'SCDream4',
+                                color: mishin === 'N' ? '#00A170' : '#000',
+                              }}>
+                              없음
+                            </Text>
+                          </TouchableOpacity>
+                        </View>
+                      </View>
+                      {/* // 미싱 유무 */}
+
+                      {/* 타공 유무 */}
+                      <View
+                        style={{
+                          flexDirection: 'row',
+                          justifyContent: 'flex-start',
+                          alignItems: 'center',
+                          marginBottom: 15,
+                        }}>
+                        <View style={{marginRight: 20}}>
+                          <Text
+                            style={{
+                              fontSize: 14,
+                              fontFamily: 'SCDream4',
+                              color: '#000',
+                            }}>
+                            타공
+                          </Text>
+                        </View>
+                        <View
+                          style={{
+                            flexDirection: 'row',
+                            justifyContent: 'flex-start',
+                            alignItems: 'center',
+                          }}>
+                          <TouchableOpacity
+                            activeOpacity={1}
+                            style={{
+                              flexDirection: 'row',
+                              justifyContent: 'flex-start',
+                              alignItems: 'center',
+                              marginRight: 20,
+                            }}
+                            onPress={() => setHole('Y')}>
+                            <Image
+                              source={
+                                hole === 'Y'
+                                  ? require('../../src/assets/radio_on.png')
+                                  : require('../../src/assets/radio_off.png')
+                              }
+                              resizeMode="contain"
+                              style={{width: 20, height: 20, marginRight: 5}}
+                            />
+
+                            <Text
+                              style={{
+                                fontSize: 14,
+                                fontFamily: 'SCDream4',
+                                color: hole === 'Y' ? '#00A170' : '#000',
+                              }}>
+                              있음
+                            </Text>
+                          </TouchableOpacity>
+                          <TouchableOpacity
+                            activeOpacity={1}
+                            style={{
+                              flexDirection: 'row',
+                              justifyContent: 'flex-start',
+                              alignItems: 'center',
+                            }}
+                            onPress={() => setHole('N')}>
+                            <Image
+                              source={
+                                hole === 'N'
+                                  ? require('../../src/assets/radio_on.png')
+                                  : require('../../src/assets/radio_off.png')
+                              }
+                              resizeMode="contain"
+                              style={{width: 20, height: 20, marginRight: 5}}
+                            />
+
+                            <Text
+                              style={{
+                                fontSize: 14,
+                                fontFamily: 'SCDream4',
+                                color: hole === 'N' ? '#00A170' : '#000',
+                              }}>
+                              없음
+                            </Text>
+                          </TouchableOpacity>
+                        </View>
+                      </View>
+                      {/* // 타공 유무 */}
                     </View>
                   )}
                 </View>
@@ -3124,7 +3434,7 @@ const index = (props) => {
                         {/* // 부분실크 변경 */}
 
                         {/* 코팅 종류 변경 */}
-                        <View>
+                        <View style={{marginBottom: 20}}>
                           <View
                             style={{
                               flexDirection: 'row',
@@ -3169,6 +3479,370 @@ const index = (props) => {
                           />
                         </View>
                         {/* // 코팅 종류 변경 */}
+
+                        {/* 에폭시 유무 */}
+                        <View
+                          style={{
+                            flexDirection: 'row',
+                            justifyContent: 'flex-start',
+                            alignItems: 'center',
+                            marginBottom: 15,
+                          }}>
+                          <View style={{marginRight: 20}}>
+                            <Text
+                              style={{
+                                fontSize: 14,
+                                fontFamily: 'SCDream4',
+                                color: '#000',
+                              }}>
+                              에폭시
+                            </Text>
+                          </View>
+                          <View
+                            style={{
+                              flexDirection: 'row',
+                              justifyContent: 'flex-start',
+                              alignItems: 'center',
+                            }}>
+                            <TouchableOpacity
+                              activeOpacity={1}
+                              style={{
+                                flexDirection: 'row',
+                                justifyContent: 'flex-start',
+                                alignItems: 'center',
+                                marginRight: 20,
+                              }}
+                              onPress={() => setEpoxy02('Y')}>
+                              <Image
+                                source={
+                                  epoxy02 === 'Y'
+                                    ? require('../../src/assets/radio_on.png')
+                                    : require('../../src/assets/radio_off.png')
+                                }
+                                resizeMode="contain"
+                                style={{
+                                  width: 20,
+                                  height: 20,
+                                  marginRight: 5,
+                                }}
+                              />
+
+                              <Text
+                                style={{
+                                  fontSize: 14,
+                                  fontFamily: 'SCDream4',
+                                  color: epoxy02 === 'Y' ? '#00A170' : '#000',
+                                }}>
+                                있음
+                              </Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                              activeOpacity={1}
+                              style={{
+                                flexDirection: 'row',
+                                justifyContent: 'flex-start',
+                                alignItems: 'center',
+                              }}
+                              onPress={() => setEpoxy02('N')}>
+                              <Image
+                                source={
+                                  epoxy02 === 'N'
+                                    ? require('../../src/assets/radio_on.png')
+                                    : require('../../src/assets/radio_off.png')
+                                }
+                                resizeMode="contain"
+                                style={{
+                                  width: 20,
+                                  height: 20,
+                                  marginRight: 5,
+                                }}
+                              />
+
+                              <Text
+                                style={{
+                                  fontSize: 14,
+                                  fontFamily: 'SCDream4',
+                                  color: epoxy02 === 'N' ? '#00A170' : '#000',
+                                }}>
+                                없음
+                              </Text>
+                            </TouchableOpacity>
+                          </View>
+                        </View>
+                        {/* // 에폭시 유무 */}
+
+                        {/* 오시 유무 */}
+                        <View
+                          style={{
+                            flexDirection: 'row',
+                            justifyContent: 'flex-start',
+                            alignItems: 'center',
+                            marginBottom: 15,
+                          }}>
+                          <View style={{marginRight: 20}}>
+                            <Text
+                              style={{
+                                fontSize: 14,
+                                fontFamily: 'SCDream4',
+                                color: '#000',
+                              }}>
+                              오시
+                            </Text>
+                          </View>
+                          <View
+                            style={{
+                              flexDirection: 'row',
+                              justifyContent: 'flex-start',
+                              alignItems: 'center',
+                            }}>
+                            <TouchableOpacity
+                              activeOpacity={1}
+                              style={{
+                                flexDirection: 'row',
+                                justifyContent: 'flex-start',
+                                alignItems: 'center',
+                                marginRight: 20,
+                              }}
+                              onPress={() => setOshi02('Y')}>
+                              <Image
+                                source={
+                                  oshi02 === 'Y'
+                                    ? require('../../src/assets/radio_on.png')
+                                    : require('../../src/assets/radio_off.png')
+                                }
+                                resizeMode="contain"
+                                style={{
+                                  width: 20,
+                                  height: 20,
+                                  marginRight: 5,
+                                }}
+                              />
+
+                              <Text
+                                style={{
+                                  fontSize: 14,
+                                  fontFamily: 'SCDream4',
+                                  color: oshi02 === 'Y' ? '#00A170' : '#000',
+                                }}>
+                                있음
+                              </Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                              activeOpacity={1}
+                              style={{
+                                flexDirection: 'row',
+                                justifyContent: 'flex-start',
+                                alignItems: 'center',
+                              }}
+                              onPress={() => setOshi02('N')}>
+                              <Image
+                                source={
+                                  oshi02 === 'N'
+                                    ? require('../../src/assets/radio_on.png')
+                                    : require('../../src/assets/radio_off.png')
+                                }
+                                resizeMode="contain"
+                                style={{
+                                  width: 20,
+                                  height: 20,
+                                  marginRight: 5,
+                                }}
+                              />
+
+                              <Text
+                                style={{
+                                  fontSize: 14,
+                                  fontFamily: 'SCDream4',
+                                  color: oshi02 === 'N' ? '#00A170' : '#000',
+                                }}>
+                                없음
+                              </Text>
+                            </TouchableOpacity>
+                          </View>
+                        </View>
+                        {/* // 오시 유무 */}
+
+                        {/* 미싱 유무 */}
+                        <View
+                          style={{
+                            flexDirection: 'row',
+                            justifyContent: 'flex-start',
+                            alignItems: 'center',
+                            marginBottom: 15,
+                          }}>
+                          <View style={{marginRight: 20}}>
+                            <Text
+                              style={{
+                                fontSize: 14,
+                                fontFamily: 'SCDream4',
+                                color: '#000',
+                              }}>
+                              미싱
+                            </Text>
+                          </View>
+                          <View
+                            style={{
+                              flexDirection: 'row',
+                              justifyContent: 'flex-start',
+                              alignItems: 'center',
+                            }}>
+                            <TouchableOpacity
+                              activeOpacity={1}
+                              style={{
+                                flexDirection: 'row',
+                                justifyContent: 'flex-start',
+                                alignItems: 'center',
+                                marginRight: 20,
+                              }}
+                              onPress={() => setMishin02('Y')}>
+                              <Image
+                                source={
+                                  mishin02 === 'Y'
+                                    ? require('../../src/assets/radio_on.png')
+                                    : require('../../src/assets/radio_off.png')
+                                }
+                                resizeMode="contain"
+                                style={{
+                                  width: 20,
+                                  height: 20,
+                                  marginRight: 5,
+                                }}
+                              />
+
+                              <Text
+                                style={{
+                                  fontSize: 14,
+                                  fontFamily: 'SCDream4',
+                                  color: mishin02 === 'Y' ? '#00A170' : '#000',
+                                }}>
+                                있음
+                              </Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                              activeOpacity={1}
+                              style={{
+                                flexDirection: 'row',
+                                justifyContent: 'flex-start',
+                                alignItems: 'center',
+                              }}
+                              onPress={() => setMishin02('N')}>
+                              <Image
+                                source={
+                                  mishin02 === 'N'
+                                    ? require('../../src/assets/radio_on.png')
+                                    : require('../../src/assets/radio_off.png')
+                                }
+                                resizeMode="contain"
+                                style={{
+                                  width: 20,
+                                  height: 20,
+                                  marginRight: 5,
+                                }}
+                              />
+
+                              <Text
+                                style={{
+                                  fontSize: 14,
+                                  fontFamily: 'SCDream4',
+                                  color: mishin02 === 'N' ? '#00A170' : '#000',
+                                }}>
+                                없음
+                              </Text>
+                            </TouchableOpacity>
+                          </View>
+                        </View>
+                        {/* // 미싱 유무 */}
+
+                        {/* 타공 유무 */}
+                        <View
+                          style={{
+                            flexDirection: 'row',
+                            justifyContent: 'flex-start',
+                            alignItems: 'center',
+                            marginBottom: 15,
+                          }}>
+                          <View style={{marginRight: 20}}>
+                            <Text
+                              style={{
+                                fontSize: 14,
+                                fontFamily: 'SCDream4',
+                                color: '#000',
+                              }}>
+                              타공
+                            </Text>
+                          </View>
+                          <View
+                            style={{
+                              flexDirection: 'row',
+                              justifyContent: 'flex-start',
+                              alignItems: 'center',
+                            }}>
+                            <TouchableOpacity
+                              activeOpacity={1}
+                              style={{
+                                flexDirection: 'row',
+                                justifyContent: 'flex-start',
+                                alignItems: 'center',
+                                marginRight: 20,
+                              }}
+                              onPress={() => setHole02('Y')}>
+                              <Image
+                                source={
+                                  hole === 'Y'
+                                    ? require('../../src/assets/radio_on.png')
+                                    : require('../../src/assets/radio_off.png')
+                                }
+                                resizeMode="contain"
+                                style={{
+                                  width: 20,
+                                  height: 20,
+                                  marginRight: 5,
+                                }}
+                              />
+
+                              <Text
+                                style={{
+                                  fontSize: 14,
+                                  fontFamily: 'SCDream4',
+                                  color: hole === 'Y' ? '#00A170' : '#000',
+                                }}>
+                                있음
+                              </Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                              activeOpacity={1}
+                              style={{
+                                flexDirection: 'row',
+                                justifyContent: 'flex-start',
+                                alignItems: 'center',
+                              }}
+                              onPress={() => setHole02('N')}>
+                              <Image
+                                source={
+                                  hole === 'N'
+                                    ? require('../../src/assets/radio_on.png')
+                                    : require('../../src/assets/radio_off.png')
+                                }
+                                resizeMode="contain"
+                                style={{
+                                  width: 20,
+                                  height: 20,
+                                  marginRight: 5,
+                                }}
+                              />
+
+                              <Text
+                                style={{
+                                  fontSize: 14,
+                                  fontFamily: 'SCDream4',
+                                  color: hole === 'N' ? '#00A170' : '#000',
+                                }}>
+                                없음
+                              </Text>
+                            </TouchableOpacity>
+                          </View>
+                        </View>
+                        {/* // 타공 유무 */}
                       </View>
                     )}
                   </View>
