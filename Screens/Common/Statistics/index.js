@@ -6,16 +6,27 @@ import {
   StyleSheet,
   Dimensions,
   Image,
+  Alert,
 } from 'react-native';
-import {Picker} from '@react-native-community/picker';
-import DropDownPicker from 'react-native-dropdown-picker';
 
+import {useSelector} from 'react-redux';
 import DetailHeader from '../DetailHeader';
 import {TouchableOpacity} from 'react-native-gesture-handler';
+import StatisticsAPI from '../../../src/api/Statistics';
 
 const index = (props) => {
   const navigation = props.navigation;
   const routeName = props.route.name;
+
+  const {mb_email} = useSelector((state) => state.UserInfoReducer);
+
+  const [info, setInfo] = React.useState(null); // 통계 정보
+  const [accumulatePrice, setAccumulatePrice] = React.useState(null); // 누적 금액
+  const [deliveryPrice, setDeliveryPrice] = React.useState(null); // 납품 실적 금액
+
+  const yearformat = new Date();
+  let curYear = yearformat.getFullYear();
+  console.log('curYear', curYear);
 
   const yearCount = [2017, 2018, 2019, 2020, 2021];
   const [year, setYear] = React.useState('2021');
@@ -52,49 +63,96 @@ const index = (props) => {
     setIsActiveToggleRegion(!isActiveToggleRegion);
   };
 
+  const getStatisticsAPI = () => {
+    StatisticsAPI.getStatistics(mb_email)
+      .then((res) => {
+        if (res.data.result === '1') {
+          setInfo(res.data.item[0]);
+          setAccumulatePrice(res.data.item[0].accumulate_price);
+          let dvPrice = res.data.item[0].delivery_price.toString();
+          setDeliveryPrice(dvPrice);
+        }
+      })
+      .catch((err) => {
+        Alert.alert(err, '관리자에게 문의하세요.', [
+          {
+            text: '확인',
+          },
+        ]);
+      });
+  };
+
+  React.useEffect(() => {
+    getStatisticsAPI();
+  }, []);
+
+  console.log('info', info);
+  console.log('accumulatePrice', accumulatePrice);
+  console.log('accumulatePrice type', typeof accumulatePrice);
+  console.log('deliveryPrice', deliveryPrice);
+  console.log('deliveryPrice type', typeof deliveryPrice);
+
   return (
     <>
       <DetailHeader title={routeName} navigation={navigation} />
       <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
-        <View
-          style={{
-            paddingHorizontal: 20,
-            paddingVertical: 20,
-            backgroundColor: 'rgba(0, 161, 112, 0.07)',
-          }}>
+        {info !== null && accumulatePrice !== null && (
           <View
             style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              marginVertical: 5,
+              paddingHorizontal: 20,
+              paddingVertical: 20,
+              backgroundColor: 'rgba(0, 161, 112, 0.07)',
             }}>
-            <Text
-              style={{fontFamily: 'SCDream4', fontSize: 15, color: '#000000'}}>
-              누적건수
-            </Text>
-            <Text
-              style={{fontFamily: 'SCDream4', fontSize: 15, color: '#00A170'}}>
-              99,999건
-            </Text>
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                marginVertical: 5,
+              }}>
+              <Text
+                style={{
+                  fontFamily: 'SCDream4',
+                  fontSize: 15,
+                  color: '#000000',
+                }}>
+                누적건수
+              </Text>
+              <Text
+                style={{
+                  fontFamily: 'SCDream4',
+                  fontSize: 15,
+                  color: '#00A170',
+                }}>
+                {info.accumulate_cnt}건
+              </Text>
+            </View>
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                marginVertical: 5,
+              }}>
+              <Text
+                style={{
+                  fontFamily: 'SCDream4',
+                  fontSize: 15,
+                  color: '#000000',
+                }}>
+                누적 견적 금액
+              </Text>
+              <Text
+                style={{
+                  fontFamily: 'SCDream4',
+                  fontSize: 15,
+                  color: '#00A170',
+                }}>
+                {accumulatePrice.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}원
+              </Text>
+            </View>
           </View>
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              marginVertical: 5,
-            }}>
-            <Text
-              style={{fontFamily: 'SCDream4', fontSize: 15, color: '#000000'}}>
-              누적 견적 금액
-            </Text>
-            <Text
-              style={{fontFamily: 'SCDream4', fontSize: 15, color: '#00A170'}}>
-              999,999,000원
-            </Text>
-          </View>
-        </View>
+        )}
         {/* 날짜 선택 Area */}
         <View
           style={{
@@ -319,56 +377,73 @@ const index = (props) => {
           }}
         />
         {/* // 경계 라인 */}
-
-        <View
-          style={{
-            height: 500,
-            // height: Dimensions.get('window').height - 500,
-            backgroundColor: '#fff',
-            paddingHorizontal: 20,
-          }}>
+        {info !== null && deliveryPrice !== null && (
           <View
             style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              marginTop: 5,
-              marginBottom: 10,
+              height: 500,
+              // height: Dimensions.get('window').height - 500,
+              backgroundColor: '#fff',
+              paddingHorizontal: 20,
             }}>
-            <Text
-              style={{fontFamily: 'SCDream4', fontSize: 15, color: '#111111'}}>
-              낙찰 건 수
-            </Text>
-            <Text
-              style={{fontFamily: 'SCDream4', fontSize: 15, color: '#00A170'}}>
-              50건
-            </Text>
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                marginTop: 5,
+                marginBottom: 10,
+              }}>
+              <Text
+                style={{
+                  fontFamily: 'SCDream4',
+                  fontSize: 15,
+                  color: '#111111',
+                }}>
+                낙찰 건 수
+              </Text>
+              <Text
+                style={{
+                  fontFamily: 'SCDream4',
+                  fontSize: 15,
+                  color: '#00A170',
+                }}>
+                {info.bid_cnt}건
+              </Text>
+            </View>
+            <View
+              style={{
+                height: 1,
+                backgroundColor: '#F5F5F5',
+                width: Dimensions.get('window').width,
+              }}
+            />
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                marginTop: 10,
+                marginBottom: 5,
+              }}>
+              <Text
+                style={{
+                  fontFamily: 'SCDream4',
+                  fontSize: 15,
+                  color: '#111111',
+                }}>
+                납품 실적 금액
+              </Text>
+              <Text
+                style={{
+                  fontFamily: 'SCDream4',
+                  fontSize: 15,
+                  color: '#00A170',
+                }}>
+                {deliveryPrice.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}원
+              </Text>
+            </View>
           </View>
-          <View
-            style={{
-              height: 1,
-              backgroundColor: '#F5F5F5',
-              width: Dimensions.get('window').width,
-            }}
-          />
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              marginTop: 10,
-              marginBottom: 5,
-            }}>
-            <Text
-              style={{fontFamily: 'SCDream4', fontSize: 15, color: '#111111'}}>
-              납품 실적 금액
-            </Text>
-            <Text
-              style={{fontFamily: 'SCDream4', fontSize: 15, color: '#00A170'}}>
-              99,999,000원
-            </Text>
-          </View>
-        </View>
+        )}
       </ScrollView>
     </>
   );
