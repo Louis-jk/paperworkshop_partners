@@ -88,6 +88,12 @@ const index = (props) => {
   const [editedSilk, setEditedSilk] = React.useState('N'); // 부분실크 변경 값
   const [editedLaminate, setEditedLaminate] = React.useState(''); // 코팅 변경 값
 
+  // 지류 변경 내지
+  const [editedPaper02, setEditedPaper02] = React.useState(''); // 종이재질(지종) 변경 값
+  const [editedWeight02, setEditedWeight02] = React.useState(''); // 평량 변경 값
+  const [editedColor02, setEditedColor02] = React.useState(''); // 색상 변경 값
+  const [editedPattern02, setEditedPattern02] = React.useState(''); // 무늬 변경 값
+
   // 견적제안시 조정필요 부분에만 나오는 후가공 부분
   const [epoxy, setEpoxy] = React.useState('N'); // 에폭시 유무 (필요시)
   const [oshi, setOshi] = React.useState('N'); // 오시 유무 (필요시)
@@ -233,7 +239,7 @@ const index = (props) => {
     Estimate.getMoreDetail(method, pe_id)
       .then((res) => {
         if (res.data.result === '1' && res.data.count > 0) {
-          console.log(res);
+          console.log('setDetail', res);
           setDetail(res.data.item);
           setLoading(false);
         } else {
@@ -261,7 +267,7 @@ const index = (props) => {
     Estimate.getDetail(pe_id, mb_email)
       .then((res) => {
         if (res.data.result === '1' && res.data.count > 0) {
-          // console.log('레스레스', res);
+          console.log('레스레스', res);
           if (res.data.item[0].status === '1') {
             setProductPrice(res.data.item[0].production_price);
             setDesignPrice(res.data.item[0].design_price);
@@ -272,6 +278,71 @@ const index = (props) => {
             setEstimateText(res.data.item[0].estimate_content);
             setEstimateFileNameCur(res.data.item[0].bf_file_source);
             setEstimateFilePathCur(res.data.item[0].bf_file);
+
+            if (res.data.item[0].check_delivery_date === 'Y') {
+              setDeliveryDateCheck(res.data.item[0].check_delivery_date);
+              setDeliveryDate(res.data.item[0].edit_delivery_date);
+            }
+
+            if (res.data.item[0].check_type === 'Y') {
+              setTypeCheck(res.data.item[0].check_type);
+              setEditedType(res.data.item[0].edit_type);
+            }
+
+            if (res.data.item[0].check_cnt === 'Y') {
+              setQuantityCheck(res.data.item[0].check_cnt);
+              setEditedQuantity(res.data.item[0].edit_cnt);
+            }
+
+            if (res.data.item[0].check_size === 'Y') {
+              setSizeCheck(res.data.item[0].check_size);
+              setEditedSize(res.data.item[0].edit_size);
+            }
+
+            if (res.data.item[0].check_print_frequency === 'Y') {
+              setPrintCheck(res.data.item[0].check_print_frequency);
+              setEditedPrint(res.data.item[0].edit_print_frequency);
+            }
+
+            if (res.data.item[0].check_paper === 'Y') {
+              setPaperCheck(res.data.item[0].check_paper);
+              setEditedPaper(res.data.item[0].edit_paper);
+              setEditedWeight(res.data.item[0].edit_weight);
+              setEditedColor(res.data.item[0].edit_color);
+              setEditedPattern(res.data.item[0].edit_pattern);
+            }
+
+            if (res.data.item[0].check_paper02 === 'Y') {
+              setPaperCheck02(res.data.item[0].check_paper02);
+              setEditedPaper02(res.data.item[0].edit_paper02);
+              setEditedWeight02(res.data.item[0].edit_weight02);
+              setEditedColor02(res.data.item[0].edit_color02);
+              setEditedPattern02(res.data.item[0].edit_pattern02);
+            }
+
+            if (res.data.item[0].check_finishing === 'Y') {
+              setPostProcessCheck(res.data.item[0].check_finishing);
+              setEditedFoil(res.data.item[0].edit_foil);
+              setEditedPress(res.data.item[0].edit_press);
+              setEditedSilk(res.data.item[0].edit_silk);
+              setEditedLaminate(res.data.item[0].edit_coting);
+              setEpoxy(res.data.item[0].edit_epoxy);
+              setOshi(res.data.item[0].edit_oshi);
+              setMishin(res.data.item[0].edit_mishin);
+              setHole(res.data.item[0].edit_hole);
+            }
+
+            if (res.data.item[0].check_finishing02 === 'Y') {
+              setPostProcess02Check(res.data.item[0].check_finishing02);
+              setEditedFoil02(res.data.item[0].edit_foil02);
+              setEditedPress02(res.data.item[0].edit_press02);
+              setEditedSilk02(res.data.item[0].edit_silk02);
+              setEditedLaminate02(res.data.item[0].edit_coting02);
+              setEpoxy02(res.data.item[0].edit_epoxy02);
+              setOshi02(res.data.item[0].edit_oshi02);
+              setMishin02(res.data.item[0].edit_mishin02);
+              setHole02(res.data.item[0].edit_hole02);
+            }
           }
 
           if (
@@ -504,6 +575,12 @@ const index = (props) => {
 
     let editDeliveryDate = moment(deliveryDate).format('YY-MM-DD'); // 납품 희망일 조정 입력값 날짜 포맷
 
+    let deformat = depositPrice.replace(',', '');
+    let toIntPrice = parseInt(deformat);
+    console.log('toIntPrice', toIntPrice);
+    console.log('toIntPrice', toIntPrice);
+    console.log('toIntPrice type', typeof toIntPrice);
+
     const frmData = new FormData();
     frmData.append('method', method);
     frmData.append('company_id', mb_email);
@@ -515,7 +592,7 @@ const index = (props) => {
     frmData.append('design_price', designPrice);
     frmData.append('reduce_price', deliveryPrice);
     frmData.append('deposit_rate', depositRatio);
-    frmData.append('deposit', depositPrice);
+    frmData.append('deposit', toIntPrice);
     frmData.append('estimate_content', estimateText);
     frmData.append('bf_file[]', estimateFile);
 
