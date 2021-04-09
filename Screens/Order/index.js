@@ -118,9 +118,13 @@ const index = (props) => {
   const editedQuantityRef = React.useRef(null);
   const editedPrintRef = React.useRef(null);
   const editedPaperRef = React.useRef(null);
+  const editedPaperRef02 = React.useRef(null); // 내지용
   const editedWeightRef = React.useRef(null);
+  const editedWeightRef02 = React.useRef(null); // 내지용
   const editedColorRef = React.useRef(null);
+  const editedColorRef02 = React.useRef(null); // 내지용
   const editedPatternRef = React.useRef(null);
+  const editedPatternRef02 = React.useRef(null); // 내지용
 
   // 각 메뉴 아코디언 형식 설정(collapse)
   const [collapseArrow01, setCollapseArrow01] = React.useState(true);
@@ -618,10 +622,13 @@ const index = (props) => {
     frmData.append('edit_color', paperCheck === 'Y' ? editedColor : '');
     frmData.append('edit_pattern', paperCheck === 'Y' ? editedPattern : '');
     frmData.append('check_paper02', paperCheck02);
-    frmData.append('edit_paper02', '');
-    frmData.append('edit_weight02', '');
-    frmData.append('edit_color02', '');
-    frmData.append('edit_pattern02', '');
+    frmData.append('edit_paper02', paperCheck02 === 'Y' ? editedPaper02 : '');
+    frmData.append('edit_weight02', paperCheck02 === 'Y' ? editedWeight02 : '');
+    frmData.append('edit_color02', paperCheck02 === 'Y' ? editedColor02 : '');
+    frmData.append(
+      'edit_pattern02',
+      paperCheck02 === 'Y' ? editedPattern02 : '',
+    );
     frmData.append('check_finishing', postProcessCheck);
     frmData.append('edit_foil', postProcessCheck === 'Y' ? editedFoil : '');
     frmData.append('edit_press', postProcessCheck === 'Y' ? editedPress : '');
@@ -2014,25 +2021,70 @@ const index = (props) => {
                 ) : detail.basic.cate1 === '0' ? (
                   <View style={[styles.infoBox, {marginBottom: 20}]}>
                     <View style={styles.details}>
-                      <Text style={styles.detailsTitle}>지류명</Text>
+                      <Text style={styles.detailsTitle}>
+                        지류명
+                        {detail.basic.ca_id === '1' ||
+                        detail.basic.ca_id === '4'
+                          ? '(표지)'
+                          : null}
+                      </Text>
                       <Text style={styles.detailsDesc}>
                         {detail.feeder.feeder_name}
                       </Text>
                     </View>
+                    {detail.basic.ca_id === '1' ||
+                    detail.basic.ca_id === '4' ? (
+                      <View style={styles.details}>
+                        <Text style={styles.detailsTitle}>지류명(내지)</Text>
+                        <Text style={styles.detailsDesc}>
+                          {detail.feeder.feeder_name2}
+                        </Text>
+                      </View>
+                    ) : null}
                     <View style={styles.details}>
-                      <Text style={styles.detailsTitle}>지종</Text>
+                      <Text style={styles.detailsTitle}>
+                        지종
+                        {detail.basic.ca_id === '1' ||
+                        detail.basic.ca_id === '4'
+                          ? '(표지)'
+                          : null}
+                      </Text>
                       <Text style={styles.detailsDesc}>
                         {detail.feeder.paper_name}
                       </Text>
                     </View>
+                    {detail.basic.ca_id === '1' ||
+                    detail.basic.ca_id === '4' ? (
+                      <View style={styles.details}>
+                        <Text style={styles.detailsTitle}>지종(내지)</Text>
+                        <Text style={styles.detailsDesc}>
+                          {detail.feeder.paper2_name}
+                        </Text>
+                      </View>
+                    ) : null}
                     <View style={styles.details}>
-                      <Text style={styles.detailsTitle}>지종상세</Text>
+                      <Text style={styles.detailsTitle}>
+                        지종상세
+                        {detail.basic.ca_id === '1' ||
+                        detail.basic.ca_id === '4'
+                          ? '(표지)'
+                          : null}
+                      </Text>
                       <Text style={styles.detailsDesc}>
                         {detail.feeder.paper_name2
                           ? detail.feeder.paper_name2
                           : '없음'}
                       </Text>
                     </View>
+                    {detail.basic.ca_id === '1' ||
+                    detail.basic.ca_id === '4' ? (
+                      <View style={styles.details}>
+                        <Text style={styles.detailsTitle}>지종상세(내지)</Text>
+                        <Text style={styles.detailsDesc}>
+                          {detail.feeder.paper_name22}
+                        </Text>
+                      </View>
+                    ) : null}
 
                     <View style={styles.details}>
                       <Text style={styles.detailsTitle}>
@@ -2056,6 +2108,34 @@ const index = (props) => {
                         <Text style={styles.detailsTitle}>평량(내지)</Text>
                         <Text style={styles.detailsDesc}>
                           {detail.feeder.paper_weight2}
+                        </Text>
+                      </View>
+                    ) : null}
+                    <View style={styles.details}>
+                      <Text style={styles.detailsTitle}>
+                        평량
+                        {detail.basic.ca_id === '1' ||
+                        detail.basic.ca_id === '4'
+                          ? '(표지)'
+                          : null}
+                        (직접입력)
+                      </Text>
+                      <Text style={styles.detailsDesc}>
+                        {detail.feeder.paper_weight_etc
+                          ? detail.feeder.paper_weight_etc
+                          : '없음'}
+                      </Text>
+                    </View>
+                    {detail.basic.ca_id === '1' ||
+                    detail.basic.ca_id === '4' ? (
+                      <View style={styles.details}>
+                        <Text style={styles.detailsTitle}>
+                          평량(내지)(직접입력)
+                        </Text>
+                        <Text style={styles.detailsDesc}>
+                          {detail.feeder.paper_weight_etc2
+                            ? detail.feeder.paper_weight_etc2
+                            : '없음'}
                         </Text>
                       </View>
                     ) : null}
@@ -2086,13 +2166,33 @@ const index = (props) => {
                     ) : null}
 
                     <View style={styles.details}>
-                      <Text style={styles.detailsTitle}>색상(직접입력)</Text>
+                      <Text style={styles.detailsTitle}>
+                        색상
+                        {detail.basic.ca_id === '1' ||
+                        detail.basic.ca_id === '4'
+                          ? '(표지)'
+                          : null}
+                        (직접입력)
+                      </Text>
                       <Text style={styles.detailsDesc}>
                         {detail.feeder.paper_color_etc
                           ? detail.feeder.paper_color_etc
                           : '없음'}
                       </Text>
                     </View>
+                    {detail.basic.ca_id === '1' ||
+                    detail.basic.ca_id === '4' ? (
+                      <View style={styles.details}>
+                        <Text style={styles.detailsTitle}>
+                          색상(내지)(직접입력)
+                        </Text>
+                        <Text style={styles.detailsDesc}>
+                          {detail.feeder.paper_color_etc2
+                            ? detail.feeder.paper_color_etc2
+                            : '없음'}
+                        </Text>
+                      </View>
+                    ) : null}
                   </View>
                 ) : null}
 
@@ -2105,6 +2205,9 @@ const index = (props) => {
                       marginBottom: 10,
                     }}>
                     지종 (조정여부)
+                    {detail.basic.ca_id === '1' || detail.basic.ca_id === '4'
+                      ? '(표지)'
+                      : null}
                   </Text>
                   <View
                     style={{
@@ -2291,6 +2394,204 @@ const index = (props) => {
                   )}
                 </View>
                 {/* // 종이재질 조정여부 */}
+
+                {detail.basic.ca_id === '1' || detail.basic.ca_id === '4' ? (
+                  <View style={{marginBottom: 20}}>
+                    <Text
+                      style={{
+                        fontFamily: 'SCDream5',
+                        fontSize: 14,
+                        marginBottom: 10,
+                      }}>
+                      지종 (조정여부)(내지)
+                    </Text>
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        justifyContent: 'flex-start',
+                        alignItems: 'center',
+                        marginBottom: 10,
+                      }}>
+                      <TouchableOpacity
+                        style={{
+                          flexDirection: 'row',
+                          justifyContent: 'flex-start',
+                          alignItems: 'center',
+                          marginRight: 20,
+                        }}
+                        onPress={() => setPaperCheck02('N')}>
+                        <Image
+                          source={
+                            paperCheck02 === 'N'
+                              ? require('../../src/assets/radio_on.png')
+                              : require('../../src/assets/radio_off.png')
+                          }
+                          resizeMode="contain"
+                          style={{width: 20, height: 20, marginRight: 5}}
+                        />
+                        <Text style={{fontSize: 14, fontFamily: 'SCDream4'}}>
+                          가능
+                        </Text>
+                      </TouchableOpacity>
+                      <TouchableOpacity
+                        style={{
+                          flexDirection: 'row',
+                          justifyContent: 'flex-start',
+                          alignItems: 'center',
+                        }}
+                        onPress={() => setPaperCheck02('Y')}>
+                        <Image
+                          source={
+                            paperCheck02 === 'Y'
+                              ? require('../../src/assets/radio_on.png')
+                              : require('../../src/assets/radio_off.png')
+                          }
+                          resizeMode="contain"
+                          style={{width: 20, height: 20, marginRight: 5}}
+                        />
+
+                        <Text style={{fontSize: 14, fontFamily: 'SCDream4'}}>
+                          조정필요
+                        </Text>
+                      </TouchableOpacity>
+                    </View>
+                    {paperCheck02 === 'Y' && (
+                      <View style={{marginTop: 10}}>
+                        <View style={{marginBottom: 15}}>
+                          <Text
+                            style={{
+                              fontSize: 13,
+                              fontFamily: 'SCDream4',
+                              marginBottom: 5,
+                              color: '#00A170',
+                            }}>
+                            변경할 지종을 입력해주세요.
+                          </Text>
+                          <TextInput
+                            ref={editedPaperRef02}
+                            value={editedPaper02}
+                            placeholder="지종을 입력해주세요."
+                            placeholderTextColor="#BEBEBE"
+                            autoFocus={false}
+                            style={[
+                              styles.normalText,
+                              {
+                                borderWidth: 1,
+                                borderColor: '#DEDEDE',
+                                borderRadius: 5,
+                                paddingHorizontal: 10,
+                              },
+                            ]}
+                            onChangeText={(text) => setEditedPaper02(text)}
+                            onSubmitEditing={() =>
+                              editedWeightRef02.current.focus()
+                            }
+                          />
+                        </View>
+                        <View style={{marginBottom: 15}}>
+                          <Text
+                            style={{
+                              fontSize: 13,
+                              fontFamily: 'SCDream4',
+                              marginBottom: 5,
+                              color: '#00A170',
+                            }}>
+                            변경할 평량을 입력해주세요.
+                          </Text>
+                          <TextInput
+                            ref={editedWeightRef02}
+                            value={editedWeight02}
+                            placeholder="평량을 입력해주세요."
+                            placeholderTextColor="#BEBEBE"
+                            autoFocus={false}
+                            style={[
+                              styles.normalText,
+                              {
+                                borderWidth: 1,
+                                borderColor: '#DEDEDE',
+                                borderRadius: 5,
+                                paddingHorizontal: 10,
+                              },
+                            ]}
+                            onChangeText={(text) => setEditedWeight02(text)}
+                            onSubmitEditing={() =>
+                              editedColorRef02.current.focus()
+                            }
+                          />
+                        </View>
+                        <View style={{marginBottom: 15}}>
+                          <Text
+                            style={{
+                              fontSize: 13,
+                              fontFamily: 'SCDream4',
+                              marginBottom: 5,
+                              color: '#00A170',
+                            }}>
+                            변경할 색상을 입력해주세요.
+                          </Text>
+                          <TextInput
+                            ref={editedColorRef02}
+                            value={editedColor02}
+                            placeholder="색상을 입력해주세요."
+                            placeholderTextColor="#BEBEBE"
+                            autoFocus={false}
+                            style={[
+                              styles.normalText,
+                              {
+                                borderWidth: 1,
+                                borderColor: '#DEDEDE',
+                                borderRadius: 5,
+                                paddingHorizontal: 10,
+                              },
+                            ]}
+                            onChangeText={(text) => setEditedColor02(text)}
+                            onSubmitEditing={() =>
+                              editedPatternRef02.current.focus()
+                            }
+                          />
+                        </View>
+                        <View>
+                          <Text
+                            style={{
+                              fontSize: 13,
+                              fontFamily: 'SCDream4',
+                              marginBottom: 5,
+                              color: '#00A170',
+                            }}>
+                            변경할 무늬를 입력해주세요.
+                          </Text>
+                          <TextInput
+                            ref={editedPatternRef02}
+                            value={editedPattern02}
+                            placeholder="무늬를 입력해주세요."
+                            placeholderTextColor="#BEBEBE"
+                            autoFocus={false}
+                            style={[
+                              styles.normalText,
+                              {
+                                borderWidth: 1,
+                                borderColor: '#DEDEDE',
+                                borderRadius: 5,
+                                paddingHorizontal: 10,
+                                marginBottom: 5,
+                              },
+                            ]}
+                            onChangeText={(text) => setEditedPattern02(text)}
+                          />
+                          <Text
+                            style={{
+                              fontSize: 12,
+                              fontFamily: 'SCDream4',
+                              marginBottom: 10,
+                              color: '#BEBEBE',
+                            }}>
+                            ※ 무늬는 해당되는 상품일 경우에만 입력해주세요.
+                          </Text>
+                        </View>
+                      </View>
+                    )}
+                  </View>
+                ) : null}
               </Collapsible>
             </View>
 
