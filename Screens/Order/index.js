@@ -61,17 +61,18 @@ const index = (props) => {
   const [date, setDate] = React.useState(new Date());
   const [mode01, setMode01] = React.useState('date');
   const [show01, setShow01] = React.useState(false);
-  const [deliveryDateCheck, setDeliveryDateCheck] = React.useState('y'); // 납품 희망일 조정여부
+  const [deliveryDateCheck, setDeliveryDateCheck] = React.useState('N'); // 납품 희망일 조정여부
   const [deliveryDate, setDeliveryDate] = React.useState(new Date()); // 납품 희망 변경 값
 
   // 조정필요시 radio 버튼
-  const [typeCheck, setTypeCheck] = React.useState('y'); // 타입 조정여부
-  const [quantityCheck, setQuantityCheck] = React.useState('y'); // 수량 조정여부
-  const [sizeCheck, setSizeCheck] = React.useState('y'); // 규격 조정여부
-  const [printCheck, setPrintCheck] = React.useState('y'); // 인쇄도수 조정여부
-  const [paperCheck, setPaperCheck] = React.useState('y'); // 종이재질(지종) 조정여부
-  const [postProcessCheck, setPostProcessCheck] = React.useState('y'); // 후가공 조정여부 - 경우에 따라 후가공(표지)가 될 수 있음
-  const [postProcess02Check, setPostProcess02Check] = React.useState('y'); // 후가공(내지) 조정여부
+  const [typeCheck, setTypeCheck] = React.useState('N'); // 타입 조정여부
+  const [quantityCheck, setQuantityCheck] = React.useState('N'); // 수량 조정여부
+  const [sizeCheck, setSizeCheck] = React.useState('N'); // 규격 조정여부
+  const [printCheck, setPrintCheck] = React.useState('N'); // 인쇄도수 조정여부
+  const [paperCheck, setPaperCheck] = React.useState('N'); // 종이재질(지종) 조정여부
+  const [paperCheck02, setPaperCheck02] = React.useState('N'); // 종이재질(지종) 내지 조정여부
+  const [postProcessCheck, setPostProcessCheck] = React.useState('N'); // 후가공 조정여부 - 경우에 따라 후가공(표지)가 될 수 있음
+  const [postProcess02Check, setPostProcess02Check] = React.useState('N'); // 후가공(내지) 조정여부
 
   // 조정했을 시 담을 값
   const [editedType, setEditedType] = React.useState(''); // 타입 변경 값
@@ -82,9 +83,9 @@ const index = (props) => {
   const [editedWeight, setEditedWeight] = React.useState(''); // 평량 변경 값
   const [editedColor, setEditedColor] = React.useState(''); // 색상 변경 값
   const [editedPattern, setEditedPattern] = React.useState(''); // 무늬 변경 값
-  const [editedFoil, setEditedFoil] = React.useState('Y'); // 박가공 변경 값
-  const [editedPress, setEditedPress] = React.useState('Y'); // 형압 변경 값
-  const [editedSilk, setEditedSilk] = React.useState('Y'); // 부분실크 변경 값
+  const [editedFoil, setEditedFoil] = React.useState('N'); // 박가공 변경 값
+  const [editedPress, setEditedPress] = React.useState('N'); // 형압 변경 값
+  const [editedSilk, setEditedSilk] = React.useState('N'); // 부분실크 변경 값
   const [editedLaminate, setEditedLaminate] = React.useState(''); // 코팅 변경 값
 
   // 견적제안시 조정필요 부분에만 나오는 후가공 부분
@@ -94,9 +95,9 @@ const index = (props) => {
   const [hole, setHole] = React.useState('N'); // 타공 유무 (필요시)
 
   // 후가공 (표지, 내지 있을 경우) 내지 부분
-  const [editedFoil02, setEditedFoil02] = React.useState('Y'); // 박가공 변경 값
-  const [editedPress02, setEditedPress02] = React.useState('Y'); // 형압 변경 값
-  const [editedSilk02, setEditedSilk02] = React.useState('Y'); // 부분실크 변경 값
+  const [editedFoil02, setEditedFoil02] = React.useState('N'); // 박가공 변경 값
+  const [editedPress02, setEditedPress02] = React.useState('N'); // 형압 변경 값
+  const [editedSilk02, setEditedSilk02] = React.useState('N'); // 부분실크 변경 값
   const [editedLaminate02, setEditedLaminate02] = React.useState(''); // 코팅 변경 값
 
   // 견적제안시 조정필요 부분에만 나오는 후가공 부분 (내지)
@@ -501,6 +502,8 @@ const index = (props) => {
       ]);
     }
 
+    let editDeliveryDate = moment(deliveryDate).format('YY-MM-DD'); // 납품 희망일 조정 입력값 날짜 포맷
+
     const frmData = new FormData();
     frmData.append('method', method);
     frmData.append('company_id', mb_email);
@@ -515,6 +518,69 @@ const index = (props) => {
     frmData.append('deposit', depositPrice);
     frmData.append('estimate_content', estimateText);
     frmData.append('bf_file[]', estimateFile);
+
+    frmData.append('check_delivery_date', deliveryDateCheck);
+    frmData.append(
+      'edit_delivery_date',
+      deliveryDateCheck === 'Y' ? editDeliveryDate : '',
+    );
+    frmData.append('check_type', typeCheck);
+    frmData.append('edit_type', typeCheck === 'Y' ? editedType : '');
+    frmData.append('check_size', sizeCheck);
+    frmData.append('edit_size', sizeCheck === 'Y' ? editedSize : '');
+    frmData.append('check_cnt', quantityCheck);
+    frmData.append('edit_cnt', quantityCheck === 'Y' ? editedQuantity : '');
+    frmData.append('check_print_frequency', printCheck);
+    frmData.append(
+      'edit_print_frequency',
+      printCheck === 'Y' ? editedPrint : '',
+    );
+    frmData.append('check_paper', paperCheck);
+    frmData.append('edit_paper', paperCheck === 'Y' ? editedPaper : '');
+    frmData.append('edit_weight', paperCheck === 'Y' ? editedWeight : '');
+    frmData.append('edit_color', paperCheck === 'Y' ? editedColor : '');
+    frmData.append('edit_pattern', paperCheck === 'Y' ? editedPattern : '');
+    frmData.append('check_paper02', paperCheck02);
+    frmData.append('edit_paper02', '');
+    frmData.append('edit_weight02', '');
+    frmData.append('edit_color02', '');
+    frmData.append('edit_pattern02', '');
+    frmData.append('check_finishing', postProcessCheck);
+    frmData.append('edit_foil', postProcessCheck === 'Y' ? editedFoil : '');
+    frmData.append('edit_press', postProcessCheck === 'Y' ? editedPress : '');
+    frmData.append('edit_silk', postProcessCheck === 'Y' ? editedSilk : '');
+    frmData.append(
+      'edit_coting',
+      postProcessCheck === 'Y' ? editedLaminate : '',
+    );
+    frmData.append('edit_epoxy', postProcessCheck === 'Y' ? epoxy : '');
+    frmData.append('edit_oshi', postProcessCheck === 'Y' ? oshi : '');
+    frmData.append('edit_mishin', postProcessCheck === 'Y' ? mishin : '');
+    frmData.append('edit_hole', postProcessCheck === 'Y' ? hole : '');
+    frmData.append(
+      'check_finishing02',
+      postProcess02Check === 'Y' ? editedFoil02 : '',
+    );
+    frmData.append(
+      'edit_foil02',
+      postProcess02Check === 'Y' ? editedFoil02 : '',
+    );
+    frmData.append(
+      'edit_press02',
+      postProcess02Check === 'Y' ? editedPress02 : '',
+    );
+    frmData.append(
+      'edit_silk02',
+      postProcess02Check === 'Y' ? editedSilk02 : '',
+    );
+    frmData.append(
+      'edit_coting02',
+      postProcess02Check === 'Y' ? editedLaminate02 : '',
+    );
+    frmData.append('edit_epoxy02', postProcess02Check === 'Y' ? epoxy02 : '');
+    frmData.append('edit_oshi02', postProcess02Check === 'Y' ? oshi02 : '');
+    frmData.append('edit_mishin02', postProcess02Check === 'Y' ? mishin02 : '');
+    frmData.append('edit_hole02', postProcess02Check === 'Y' ? hole02 : '');
 
     Estimate.sendEstimate(frmData)
       .then((res) => {
@@ -1002,10 +1068,10 @@ const index = (props) => {
                         alignItems: 'center',
                         marginRight: 20,
                       }}
-                      onPress={() => setDeliveryDateCheck('y')}>
+                      onPress={() => setDeliveryDateCheck('N')}>
                       <Image
                         source={
-                          deliveryDateCheck === 'y'
+                          deliveryDateCheck === 'N'
                             ? require('../../src/assets/radio_on.png')
                             : require('../../src/assets/radio_off.png')
                         }
@@ -1022,10 +1088,10 @@ const index = (props) => {
                         justifyContent: 'flex-start',
                         alignItems: 'center',
                       }}
-                      onPress={() => setDeliveryDateCheck('n')}>
+                      onPress={() => setDeliveryDateCheck('Y')}>
                       <Image
                         source={
-                          deliveryDateCheck === 'n'
+                          deliveryDateCheck === 'Y'
                             ? require('../../src/assets/radio_on.png')
                             : require('../../src/assets/radio_off.png')
                         }
@@ -1038,7 +1104,7 @@ const index = (props) => {
                       </Text>
                     </TouchableOpacity>
                   </View>
-                  {deliveryDateCheck === 'n' && (
+                  {deliveryDateCheck === 'Y' && (
                     <View style={{marginTop: 10}}>
                       <Text
                         style={{
@@ -1414,10 +1480,10 @@ const index = (props) => {
                         alignItems: 'center',
                         marginRight: 20,
                       }}
-                      onPress={() => setTypeCheck('y')}>
+                      onPress={() => setTypeCheck('N')}>
                       <Image
                         source={
-                          typeCheck === 'y'
+                          typeCheck === 'N'
                             ? require('../../src/assets/radio_on.png')
                             : require('../../src/assets/radio_off.png')
                         }
@@ -1434,10 +1500,10 @@ const index = (props) => {
                         justifyContent: 'flex-start',
                         alignItems: 'center',
                       }}
-                      onPress={() => setTypeCheck('n')}>
+                      onPress={() => setTypeCheck('Y')}>
                       <Image
                         source={
-                          typeCheck === 'n'
+                          typeCheck === 'Y'
                             ? require('../../src/assets/radio_on.png')
                             : require('../../src/assets/radio_off.png')
                         }
@@ -1450,7 +1516,7 @@ const index = (props) => {
                       </Text>
                     </TouchableOpacity>
                   </View>
-                  {typeCheck === 'n' && (
+                  {typeCheck === 'Y' && (
                     <View style={{marginTop: 10}}>
                       <Text
                         style={{
@@ -1506,10 +1572,10 @@ const index = (props) => {
                         alignItems: 'center',
                         marginRight: 20,
                       }}
-                      onPress={() => setSizeCheck('y')}>
+                      onPress={() => setSizeCheck('N')}>
                       <Image
                         source={
-                          sizeCheck === 'y'
+                          sizeCheck === 'N'
                             ? require('../../src/assets/radio_on.png')
                             : require('../../src/assets/radio_off.png')
                         }
@@ -1526,10 +1592,10 @@ const index = (props) => {
                         justifyContent: 'flex-start',
                         alignItems: 'center',
                       }}
-                      onPress={() => setSizeCheck('n')}>
+                      onPress={() => setSizeCheck('Y')}>
                       <Image
                         source={
-                          sizeCheck === 'n'
+                          sizeCheck === 'Y'
                             ? require('../../src/assets/radio_on.png')
                             : require('../../src/assets/radio_off.png')
                         }
@@ -1542,7 +1608,7 @@ const index = (props) => {
                       </Text>
                     </TouchableOpacity>
                   </View>
-                  {sizeCheck === 'n' && (
+                  {sizeCheck === 'Y' && (
                     <View style={{marginTop: 10}}>
                       <Text
                         style={{
@@ -1598,10 +1664,10 @@ const index = (props) => {
                         alignItems: 'center',
                         marginRight: 20,
                       }}
-                      onPress={() => setQuantityCheck('y')}>
+                      onPress={() => setQuantityCheck('N')}>
                       <Image
                         source={
-                          quantityCheck === 'y'
+                          quantityCheck === 'N'
                             ? require('../../src/assets/radio_on.png')
                             : require('../../src/assets/radio_off.png')
                         }
@@ -1618,10 +1684,10 @@ const index = (props) => {
                         justifyContent: 'flex-start',
                         alignItems: 'center',
                       }}
-                      onPress={() => setQuantityCheck('n')}>
+                      onPress={() => setQuantityCheck('Y')}>
                       <Image
                         source={
-                          quantityCheck === 'n'
+                          quantityCheck === 'Y'
                             ? require('../../src/assets/radio_on.png')
                             : require('../../src/assets/radio_off.png')
                         }
@@ -1634,7 +1700,7 @@ const index = (props) => {
                       </Text>
                     </TouchableOpacity>
                   </View>
-                  {quantityCheck === 'n' && (
+                  {quantityCheck === 'Y' && (
                     <View style={{marginTop: 10}}>
                       <Text
                         style={{
@@ -1660,7 +1726,7 @@ const index = (props) => {
                             paddingHorizontal: 10,
                           },
                         ]}
-                        onChangeText={() => setEditedQuantity(text)}
+                        onChangeText={(text) => setEditedQuantity(text)}
                       />
                     </View>
                   )}
@@ -1690,10 +1756,10 @@ const index = (props) => {
                         alignItems: 'center',
                         marginRight: 20,
                       }}
-                      onPress={() => setPrintCheck('y')}>
+                      onPress={() => setPrintCheck('N')}>
                       <Image
                         source={
-                          printCheck === 'y'
+                          printCheck === 'N'
                             ? require('../../src/assets/radio_on.png')
                             : require('../../src/assets/radio_off.png')
                         }
@@ -1710,10 +1776,10 @@ const index = (props) => {
                         justifyContent: 'flex-start',
                         alignItems: 'center',
                       }}
-                      onPress={() => setPrintCheck('n')}>
+                      onPress={() => setPrintCheck('Y')}>
                       <Image
                         source={
-                          printCheck === 'n'
+                          printCheck === 'Y'
                             ? require('../../src/assets/radio_on.png')
                             : require('../../src/assets/radio_off.png')
                         }
@@ -1726,7 +1792,7 @@ const index = (props) => {
                       </Text>
                     </TouchableOpacity>
                   </View>
-                  {printCheck === 'n' && (
+                  {printCheck === 'Y' && (
                     <View style={{marginTop: 10}}>
                       <Text
                         style={{
@@ -1867,36 +1933,6 @@ const index = (props) => {
                           : '없음'}
                       </Text>
                     </View>
-                    <View style={styles.details}>
-                      <Text style={styles.detailsTitle}>박가공</Text>
-                      <Text style={styles.detailsDesc}>
-                        {detail.end.park_processing
-                          ? detail.end.park_processing
-                          : '없음'}
-                      </Text>
-                    </View>
-                    <View style={styles.details}>
-                      <Text style={styles.detailsTitle}>형압</Text>
-                      <Text style={styles.detailsDesc}>
-                        {detail.end.press_design
-                          ? detail.end.press_design
-                          : '없음'}
-                      </Text>
-                    </View>
-                    <View style={styles.details}>
-                      <Text style={styles.detailsTitle}>부분 실크</Text>
-                      <Text style={styles.detailsDesc}>
-                        {detail.end.partial_silk
-                          ? detail.end.partial_silk
-                          : '없음'}
-                      </Text>
-                    </View>
-                    <View style={styles.details}>
-                      <Text style={styles.detailsTitle}>코팅</Text>
-                      <Text style={styles.detailsDesc}>
-                        {detail.end.coating ? detail.end.coating : '없음'}
-                      </Text>
-                    </View>
                   </View>
                 ) : detail.basic.cate1 === '0' ? (
                   <View style={[styles.infoBox, {marginBottom: 20}]}>
@@ -2007,10 +2043,10 @@ const index = (props) => {
                         alignItems: 'center',
                         marginRight: 20,
                       }}
-                      onPress={() => setPaperCheck('y')}>
+                      onPress={() => setPaperCheck('N')}>
                       <Image
                         source={
-                          paperCheck === 'y'
+                          paperCheck === 'N'
                             ? require('../../src/assets/radio_on.png')
                             : require('../../src/assets/radio_off.png')
                         }
@@ -2027,10 +2063,10 @@ const index = (props) => {
                         justifyContent: 'flex-start',
                         alignItems: 'center',
                       }}
-                      onPress={() => setPaperCheck('n')}>
+                      onPress={() => setPaperCheck('Y')}>
                       <Image
                         source={
-                          paperCheck === 'n'
+                          paperCheck === 'Y'
                             ? require('../../src/assets/radio_on.png')
                             : require('../../src/assets/radio_off.png')
                         }
@@ -2043,7 +2079,7 @@ const index = (props) => {
                       </Text>
                     </TouchableOpacity>
                   </View>
-                  {paperCheck === 'n' && (
+                  {paperCheck === 'Y' && (
                     <View style={{marginTop: 10}}>
                       <View style={{marginBottom: 15}}>
                         <Text
@@ -2422,10 +2458,10 @@ const index = (props) => {
                         alignItems: 'center',
                         marginRight: 20,
                       }}
-                      onPress={() => setPostProcessCheck('y')}>
+                      onPress={() => setPostProcessCheck('N')}>
                       <Image
                         source={
-                          postProcessCheck === 'y'
+                          postProcessCheck === 'N'
                             ? require('../../src/assets/radio_on.png')
                             : require('../../src/assets/radio_off.png')
                         }
@@ -2442,10 +2478,10 @@ const index = (props) => {
                         justifyContent: 'flex-start',
                         alignItems: 'center',
                       }}
-                      onPress={() => setPostProcessCheck('n')}>
+                      onPress={() => setPostProcessCheck('Y')}>
                       <Image
                         source={
-                          postProcessCheck === 'n'
+                          postProcessCheck === 'Y'
                             ? require('../../src/assets/radio_on.png')
                             : require('../../src/assets/radio_off.png')
                         }
@@ -2458,7 +2494,7 @@ const index = (props) => {
                       </Text>
                     </TouchableOpacity>
                   </View>
-                  {postProcessCheck === 'n' && (
+                  {postProcessCheck === 'Y' && (
                     <View style={{marginTop: 20}}>
                       {/* 박가공 변경 */}
                       <View
@@ -3116,10 +3152,10 @@ const index = (props) => {
                           alignItems: 'center',
                           marginRight: 20,
                         }}
-                        onPress={() => setPostProcess02Check('y')}>
+                        onPress={() => setPostProcess02Check('N')}>
                         <Image
                           source={
-                            postProcess02Check === 'y'
+                            postProcess02Check === 'N'
                               ? require('../../src/assets/radio_on.png')
                               : require('../../src/assets/radio_off.png')
                           }
@@ -3136,10 +3172,10 @@ const index = (props) => {
                           justifyContent: 'flex-start',
                           alignItems: 'center',
                         }}
-                        onPress={() => setPostProcess02Check('n')}>
+                        onPress={() => setPostProcess02Check('Y')}>
                         <Image
                           source={
-                            postProcess02Check === 'n'
+                            postProcess02Check === 'Y'
                               ? require('../../src/assets/radio_on.png')
                               : require('../../src/assets/radio_off.png')
                           }
@@ -3152,7 +3188,7 @@ const index = (props) => {
                         </Text>
                       </TouchableOpacity>
                     </View>
-                    {postProcess02Check === 'n' && (
+                    {postProcess02Check === 'Y' && (
                       <View style={{marginTop: 20}}>
                         {/* 박가공 변경 */}
                         <View
