@@ -28,44 +28,63 @@ const index = (props) => {
   let curYear = yearformat.getFullYear();
   console.log('curYear', curYear);
 
-  const yearCount = [2017, 2018, 2019, 2020, 2021];
+  const yearCount = ['2017', '2018', '2019', '2020', '2021'];
   const [year, setYear] = React.useState('2021');
   const [isActiveToggleYear, setIsActiveToggleYear] = React.useState(false);
   const toggleYear = () => {
     setIsActiveToggleYear(!isActiveToggleYear);
   };
 
-  const monthCount = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
-  const [month, setMonth] = React.useState(1);
+  const monthCount = [
+    '01',
+    '02',
+    '03',
+    '04',
+    '05',
+    '06',
+    '07',
+    '08',
+    '09',
+    '10',
+    '11',
+    '12',
+  ];
+  const [month, setMonth] = React.useState('01');
   const [isActiveToggleMonth, setIsActiveToggleMonth] = React.useState(false);
   const toggleMonth = () => {
     setIsActiveToggleMonth(!isActiveToggleMonth);
   };
 
   const regionCount = [
-    '서울',
-    '부산',
-    '대구',
-    '인천',
-    '광주',
-    '세종/대전/청주',
-    '울산',
-    '경기',
-    '강원',
-    '충청',
-    '전라',
-    '경상',
-    '제주',
+    'all',
+    'seoul',
+    'busan',
+    'daegu',
+    'incheon',
+    'gwangju',
+    'sejong',
+    'ulsan',
+    'gyeongi',
+    'gangwon',
+    'choongcheong',
+    'jeonra',
+    'gyeongsang',
+    'jeju',
   ];
-  const [region, setRegion] = React.useState('시/도 전체');
+  const [region, setRegion] = React.useState('all');
   const [isActiveToggleRegion, setIsActiveToggleRegion] = React.useState(false);
   const toggleRegion = () => {
     setIsActiveToggleRegion(!isActiveToggleRegion);
   };
 
   const getStatisticsAPI = () => {
-    StatisticsAPI.getStatistics(mb_email)
+    let regionValue = region === 'all' ? '' : region;
+
+    console.log('regionValue', regionValue);
+
+    StatisticsAPI.getStatistics(mb_email, year, month, regionValue)
       .then((res) => {
+        console.log('통계 res', res);
         if (res.data.result === '1') {
           setInfo(res.data.item[0]);
           setAccumulatePrice(res.data.item[0].accumulate_price);
@@ -84,7 +103,10 @@ const index = (props) => {
 
   React.useEffect(() => {
     getStatisticsAPI();
-  }, []);
+  }, [year, month, region]);
+
+  console.log('year, month, region', year, month, region);
+  console.log('mb_email', mb_email);
 
   console.log('info', info);
   console.log('accumulatePrice', accumulatePrice);
@@ -311,7 +333,37 @@ const index = (props) => {
                 height: 50,
                 paddingHorizontal: 10,
               }}>
-              <Text style={{fontFamily: 'SCDream4'}}>{region}</Text>
+              <Text style={{fontFamily: 'SCDream4'}}>
+                {region === 'all'
+                  ? '전체'
+                  : region === 'seoul'
+                  ? '서울'
+                  : region === 'busan'
+                  ? '부산'
+                  : region === 'daegu'
+                  ? '대구'
+                  : region === 'incheon'
+                  ? '인천'
+                  : region === 'gwangju'
+                  ? '광주'
+                  : region === 'sejong'
+                  ? '세종/대전/청주'
+                  : region === 'ulsan'
+                  ? '울산'
+                  : region === 'gyeongi'
+                  ? '경기'
+                  : region === 'gangwon'
+                  ? '강원'
+                  : region === 'choongcheong'
+                  ? '충청'
+                  : region === 'jeonra'
+                  ? '전라'
+                  : region === 'gyeongsang'
+                  ? '경상'
+                  : region === 'jeju'
+                  ? '제주'
+                  : null}
+              </Text>
               {isActiveToggleRegion ? (
                 <Image
                   source={require('../../../src/assets/arr01_top.png')}
@@ -343,16 +395,46 @@ const index = (props) => {
                 borderBottomLeftRadius: 5,
                 zIndex: 100,
               }}>
-              {regionCount.map((v, idx) => (
+              {regionCount.map((r, idx) => (
                 <TouchableOpacity
                   key={idx}
                   style={{paddingVertical: 7, marginBottom: 7}}
                   activeOpacity={0.8}
                   onPress={() => {
-                    setRegion(v);
+                    setRegion(r);
                     setIsActiveToggleRegion(false);
                   }}>
-                  <Text style={{fontFamily: 'SCDream4'}}>{v}</Text>
+                  <Text style={{fontFamily: 'SCDream4'}}>
+                    {r === 'all'
+                      ? '전체'
+                      : r === 'seoul'
+                      ? '서울'
+                      : r === 'busan'
+                      ? '부산'
+                      : r === 'daegu'
+                      ? '대구'
+                      : r === 'incheon'
+                      ? '인천'
+                      : r === 'gwangju'
+                      ? '광주'
+                      : r === 'sejong'
+                      ? '세종/대전/청주'
+                      : r === 'ulsan'
+                      ? '울산'
+                      : r === 'gyeongi'
+                      ? '경기'
+                      : r === 'gangwon'
+                      ? '강원'
+                      : r === 'choongcheong'
+                      ? '충청'
+                      : r === 'jeonra'
+                      ? '전라'
+                      : r === 'gyeongsang'
+                      ? '경상'
+                      : r === 'jeju'
+                      ? '제주'
+                      : null}
+                  </Text>
                 </TouchableOpacity>
               ))}
             </View>
@@ -383,7 +465,7 @@ const index = (props) => {
               height: 500,
               // height: Dimensions.get('window').height - 500,
               backgroundColor: '#fff',
-              paddingHorizontal: 20,
+              // paddingHorizontal: 20,
             }}>
             <View
               style={{
@@ -392,6 +474,7 @@ const index = (props) => {
                 alignItems: 'center',
                 marginTop: 5,
                 marginBottom: 10,
+                paddingHorizontal: 20,
               }}>
               <Text
                 style={{
@@ -422,6 +505,7 @@ const index = (props) => {
                 flexDirection: 'row',
                 justifyContent: 'space-between',
                 alignItems: 'center',
+                paddingHorizontal: 20,
                 marginTop: 10,
                 marginBottom: 5,
               }}>
