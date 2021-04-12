@@ -63,4 +63,27 @@ export default {
       },
     });
   },
+  // 인기파트너스 신청 전 정보(개월수, 금액)
+  requestPopularInfo() {
+    return Send({
+      method: 'post',
+      data: qs.stringify({
+        method: 'proc_partner_hit_price',
+      }),
+    });
+  },
+  // 인기파트너스 신청
+  requestPopular(company_id, content1, content2, price, period) {
+    return Send({
+      method: 'post',
+      data: qs.stringify({
+        method: 'proc_partner_hit_add',
+        company_id,
+        content1,
+        content2,
+        price,
+        period,
+      }),
+    });
+  },
 };
