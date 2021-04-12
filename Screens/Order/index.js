@@ -1394,25 +1394,20 @@ const index = (props) => {
                       </Text>
                     </View>
                     <View style={styles.details}>
-                      <Text style={styles.detailsTitle}>목형</Text>
-                      <Text style={styles.detailsDesc}>
-                        {detail.basic2.wood_pattern}
-                      </Text>
-                    </View>
-                    <View style={styles.details}>
                       <Text style={styles.detailsTitle}>편집방법</Text>
                       <Text style={styles.detailsDesc}>
                         {detail.basic2.way_edit}
                       </Text>
                     </View>
-                    {detail.basic.ca_id === '1' && (
+                    {detail.basic.ca_id === '1' &&
+                    detail.basic2.ground_method ? (
                       <View style={styles.details}>
                         <Text style={styles.detailsTitle}>접지방법</Text>
                         <Text style={styles.detailsDesc}>
                           {detail.basic2.ground_method}
                         </Text>
                       </View>
-                    )}
+                    ) : null}
                     <View style={styles.details}>
                       <Text style={styles.detailsTitle}>제본방식</Text>
                       <Text style={styles.detailsDesc}>
@@ -1504,7 +1499,7 @@ const index = (props) => {
                     <View style={styles.details}>
                       <Text style={styles.detailsTitle}>인쇄교정</Text>
                       <Text style={styles.detailsDesc}>
-                        {detail.print.proof_printing}
+                        {detail.print.proof_printing === 'Y' ? '있음' : '없음'}
                       </Text>
                     </View>
 
@@ -1515,7 +1510,9 @@ const index = (props) => {
                             인쇄교정(내지)
                           </Text>
                           <Text style={styles.detailsDesc}>
-                            {detail.print.proof_printing2}
+                            {detail.print.proof_printing2 === 'Y'
+                              ? '있음'
+                              : '없음'}
                           </Text>
                         </View>
                       ))}
@@ -1523,7 +1520,9 @@ const index = (props) => {
                     <View style={styles.details}>
                       <Text style={styles.detailsTitle}>인쇄감리</Text>
                       <Text style={styles.detailsDesc}>
-                        {detail.print.print_supervision}
+                        {detail.print.print_supervision === 'Y'
+                          ? '있음'
+                          : '없음'}
                       </Text>
                     </View>
 
@@ -1534,7 +1533,9 @@ const index = (props) => {
                             인쇄감리(내지)
                           </Text>
                           <Text style={styles.detailsDesc}>
-                            {detail.print.print_supervision2}
+                            {detail.print.print_supervision2 === 'Y'
+                              ? '있음'
+                              : '없음'}
                           </Text>
                         </View>
                       ))}
@@ -2081,7 +2082,9 @@ const index = (props) => {
                       <View style={styles.details}>
                         <Text style={styles.detailsTitle}>지종상세(내지)</Text>
                         <Text style={styles.detailsDesc}>
-                          {detail.feeder.paper_name22}
+                          {detail.feeder.paper_name22
+                            ? detail.feeder.paper_name22
+                            : '없음'}
                         </Text>
                       </View>
                     ) : null}
