@@ -39,9 +39,7 @@ const index = (props) => {
   const [isLoading, setLoading] = React.useState(false);
   const [base, setBase] = React.useState([]); // 1차 견적 제안 Original페이지 API 호출 시 반화값
   const [detail, setDetail] = React.useState(null); // 2차 견적 제안 세부 상세 API 호출 시 반화값
-
-  console.log('견적 제안 1차 detail', detail);
-  console.log('견적 제안 2차 detail', detail);
+  const [chatId, setChatId] = React.useState(null); // 해당 견적건의 채팅방 아이디
 
   const [productPrice, setProductPrice] = React.useState('0'); // 제작비
   const [designPrice, setDesignPrice] = React.useState('0'); // 디자인비
@@ -272,6 +270,7 @@ const index = (props) => {
       .then((res) => {
         if (res.data.result === '1' && res.data.count > 0) {
           console.log('레스레스', res);
+          setChatId(res.data.item[0].pm_id);
           if (res.data.item[0].status === '1') {
             setProductPrice(res.data.item[0].production_price);
             setDesignPrice(res.data.item[0].design_price);
@@ -762,19 +761,6 @@ const index = (props) => {
                     : null}
                 </Text>
               </View>
-              {/* <TouchableOpacity
-                activeOpacity={0.8}
-                onPress={() => navigation.navigate('OrderDetail')}
-                style={{alignSelf: 'flex-end'}}>
-                <Text
-                  style={{
-                    fontSize: 12,
-                    textDecorationLine: 'underline',
-                    color: '#A2A2A2',
-                  }}>
-                  세부 내용 보기
-                </Text>
-              </TouchableOpacity> */}
               <TouchableOpacity
                 activeOpacity={0.8}
                 onPress={() => goMoreDetail(base.cate1)}
@@ -923,7 +909,12 @@ const index = (props) => {
                   }}
                 />
                 <TouchableWithoutFeedback
-                  onPress={() => navigation.navigate('MessageDetail')}>
+                  onPress={() =>
+                    navigation.navigate('MessageDetail', {
+                      screen: 'MessageDetail',
+                      params: {chatId: chatId},
+                    })
+                  }>
                   <View
                     style={{
                       flex: 1,
