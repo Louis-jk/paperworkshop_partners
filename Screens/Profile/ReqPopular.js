@@ -10,14 +10,110 @@ import {
   Alert,
   TextInput,
 } from 'react-native';
+import {useSelector} from 'react-redux';
 
 import DetailHeader from '../Common/DetailHeader';
+import AuthAPI from '../../src/api/Auth';
+import Auth from '../../src/api/Auth';
 
 const ReqPopular = (props) => {
   const navigation = props.navigation;
   const routeName = props.route.name;
 
-  const [price, setPrice] = React.useState(1);
+  const [price, setPrice] = React.useState(null); // 인기 파트너스 신청시 등록비용 선택값
+  const [period, setPeriod] = React.useState(null); // 인기 파트너스 신청시 등록기간 선택값
+  const [popularInfo, setPopularInfo] = React.useState([]); // 인기 파트너스 개월 수 및 등록 비용 배열 초기값
+  const [infoTxt, setInfoTxt] = React.useState(null); // 인기 파트너스 신청시 업체 소개
+  const [cateTxt, setCateTxt] = React.useState(null); // 인기 파트너스 신청시 업체 품목
+
+  const {mb_email} = useSelector((state) => state.UserInfoReducer);
+
+  const requestPopularInfoAPI = () => {
+    Auth.requestPopularInfo()
+      .then((res) => {
+        console.log('인기파트너스 정보', res);
+        if (res.data.result === '1') {
+          setPopularInfo(res.data.item);
+        }
+      })
+      .catch((err) => {
+        Alert.alert(err, '관리자에게 문의하세요.', [
+          {
+            text: '확인',
+          },
+        ]);
+      });
+  };
+
+  const requestPopularAPI = () => {
+    if (!price) {
+      Alert.alert('인기 파트너스 등록 비용을 선택해주세요.', '', [
+        {
+          text: '확인',
+        },
+      ]);
+    }
+    if (!period) {
+      Alert.alert('인기 파트너스 등록 기간을 선택해주세요.', '', [
+        {
+          text: '확인',
+        },
+      ]);
+    }
+    if (!infoTxt) {
+      Alert.alert('업체 소개를 입력해주세요.', '', [
+        {
+          text: '확인',
+        },
+      ]);
+    }
+    if (!cateTxt) {
+      Alert.alert('업업 품목을 입력해주세요.', '', [
+        {
+          text: '확인',
+        },
+      ]);
+    }
+
+    Auth.requestPopular(mb_email, infoTxt, cateTxt, price, period)
+      .then((res) => {
+        console.log('파트넛 신청 res', res);
+        if (res.data.result === '1') {
+          Alert.alert(res.data.message, '홈으로 이동합니다.', [
+            {
+              text: '확인',
+              onPress: () => navigation.navigate('Stack'),
+            },
+          ]);
+        } else {
+          Alert.alert(res.data.message, '관리자에게 문의하세요.', [
+            {
+              text: '확인',
+              onPress: () => navigation.navigate('Stack'),
+            },
+          ]);
+        }
+      })
+      .catch((err) => {
+        Alert.alert(err, '관리자에게 문의하세요.', [
+          {
+            text: '확인',
+          },
+        ]);
+      });
+  };
+
+  React.useEffect(() => {
+    requestPopularInfoAPI();
+  }, []);
+
+  console.log('mb_email', mb_email);
+  console.log('popularInfo', popularInfo);
+  console.log('infoTxt', infoTxt);
+  console.log('cateTxt', cateTxt);
+  console.log('price', price);
+  console.log('price typeof', typeof price);
+  console.log('period', period);
 
   return (
     <>
@@ -48,102 +144,45 @@ const ReqPopular = (props) => {
               alignItems: 'center',
               flexWrap: 'wrap',
             }}>
-            <TouchableOpacity
-              onPress={() => setPrice(1)}
-              activeOpacity={1}
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'flex-start',
-                alignItems: 'center',
-                width: '50%',
-                marginBottom: 10,
-              }}>
-              <Image
-                source={
-                  price === 1
-                    ? require('../../src/assets/radio_on.png')
-                    : require('../../src/assets/radio_off.png')
-                }
-                resizeMode="contain"
-                style={{width: 20, height: 20, marginRight: 7}}
-              />
-              <Text
-                style={{fontFamily: 'SCDream4', fontSize: 14, color: '#000'}}>
-                1개월 : 50,000원
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => setPrice(2)}
-              activeOpacity={1}
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'flex-start',
-                alignItems: 'center',
-                width: '50%',
-                marginBottom: 10,
-              }}>
-              <Image
-                source={
-                  price === 2
-                    ? require('../../src/assets/radio_on.png')
-                    : require('../../src/assets/radio_off.png')
-                }
-                resizeMode="contain"
-                style={{width: 20, height: 20, marginRight: 7}}
-              />
-              <Text
-                style={{fontFamily: 'SCDream4', fontSize: 14, color: '#000'}}>
-                3개월 : 70,000원
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => setPrice(3)}
-              activeOpacity={1}
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'flex-start',
-                alignItems: 'center',
-                width: '50%',
-                marginBottom: 10,
-              }}>
-              <Image
-                source={
-                  price === 3
-                    ? require('../../src/assets/radio_on.png')
-                    : require('../../src/assets/radio_off.png')
-                }
-                resizeMode="contain"
-                style={{width: 20, height: 20, marginRight: 7}}
-              />
-              <Text
-                style={{fontFamily: 'SCDream4', fontSize: 14, color: '#000'}}>
-                6개월 : 100,000원
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => setPrice(4)}
-              activeOpacity={1}
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'flex-start',
-                alignItems: 'center',
-                width: '50%',
-                marginBottom: 10,
-              }}>
-              <Image
-                source={
-                  price === 4
-                    ? require('../../src/assets/radio_on.png')
-                    : require('../../src/assets/radio_off.png')
-                }
-                resizeMode="contain"
-                style={{width: 20, height: 20, marginRight: 7}}
-              />
-              <Text
-                style={{fontFamily: 'SCDream4', fontSize: 14, color: '#000'}}>
-                12개월 : 130,000원
-              </Text>
-            </TouchableOpacity>
+            {popularInfo && popularInfo.length > 0
+              ? popularInfo.map((info, idx) => (
+                  <TouchableOpacity
+                    key={`${info.pp_price}-${idx}`}
+                    onPress={() => {
+                      setPrice(info.pp_price);
+                      setPeriod(info.pp_month);
+                    }}
+                    activeOpacity={1}
+                    style={{
+                      flexDirection: 'row',
+                      justifyContent: 'flex-start',
+                      alignItems: 'center',
+                      width: '50%',
+                      marginBottom: 10,
+                    }}>
+                    <Image
+                      source={
+                        price === info.pp_price
+                          ? require('../../src/assets/radio_on.png')
+                          : require('../../src/assets/radio_off.png')
+                      }
+                      resizeMode="contain"
+                      style={{width: 20, height: 20, marginRight: 7}}
+                    />
+                    <Text
+                      style={{
+                        fontFamily: 'SCDream4',
+                        fontSize: 14,
+                        color: '#000',
+                      }}>
+                      {`${info.pp_month} : ${info.pp_price.replace(
+                        /\B(?=(\d{3})+(?!\d))/g,
+                        ',',
+                      )}`}
+                    </Text>
+                  </TouchableOpacity>
+                ))
+              : null}
           </View>
         </View>
 
@@ -215,6 +254,7 @@ const ReqPopular = (props) => {
           </Text>
           <View style={styles.mgB20}>
             <TextInput
+              value={infoTxt}
               placeholder="내용을 적어주세요"
               placeholderTextColor="#A2A2A2"
               style={{
@@ -226,7 +266,9 @@ const ReqPopular = (props) => {
                 textAlignVertical: 'top',
                 paddingLeft: 10,
                 paddingVertical: 10,
+                lineHeight: 22,
               }}
+              onChangeText={(text) => setInfoTxt(text)}
               multiline={true}
             />
           </View>
@@ -237,6 +279,7 @@ const ReqPopular = (props) => {
           </Text>
           <View style={styles.mgB40}>
             <TextInput
+              value={cateTxt}
               placeholder="내용을 적어주세요"
               placeholderTextColor="#A2A2A2"
               style={{
@@ -248,7 +291,9 @@ const ReqPopular = (props) => {
                 textAlignVertical: 'top',
                 paddingLeft: 10,
                 paddingVertical: 10,
+                lineHeight: 22,
               }}
+              onChangeText={(text) => setCateTxt(text)}
               multiline={true}
             />
           </View>
@@ -292,7 +337,7 @@ const ReqPopular = (props) => {
         {/* // 내용안내 gray */}
         <View style={{paddingHorizontal: 20, marginBottom: 50}}>
           <TouchableOpacity
-            onPress={() => Alert.alert('등록 신청!')}
+            onPress={() => requestPopularAPI()}
             activeOpacity={0.8}>
             <View style={styles.submitBtn}>
               <Text style={styles.submitBtnText}>등록 신청</Text>
