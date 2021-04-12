@@ -316,6 +316,24 @@ const DrawerMenu = (props) => {
           }}
         />
         <TouchableOpacity
+          activeOpacity={1}
+          onPress={() => navigation.navigate('Message')}
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            paddingHorizontal: 20,
+          }}>
+          <Text style={styles.categoryTitle}>메세지</Text>
+        </TouchableOpacity>
+        <View
+          style={{
+            width: Dimensions.get('window').width,
+            height: 1,
+            backgroundColor: '#F5F5F5',
+          }}
+        />
+        <TouchableOpacity
           activeOpacity={0.8}
           onPress={() =>
             navigation.navigate('ProfileDetailEdit', {
@@ -476,7 +494,6 @@ const DrawerMenu = (props) => {
             style={{width: 30, height: 30}}
           />
         </TouchableOpacity>
-
         <View
           style={{
             width: Dimensions.get('window').width,
@@ -484,7 +501,6 @@ const DrawerMenu = (props) => {
             backgroundColor: '#F5F5F5',
           }}
         />
-
         <TouchableOpacity
           activeOpacity={1}
           onPress={logout}
@@ -496,7 +512,6 @@ const DrawerMenu = (props) => {
           }}>
           <Text style={styles.categoryTitle}>로그아웃</Text>
         </TouchableOpacity>
-
         <View
           style={{
             width: Dimensions.get('window').width,
@@ -504,7 +519,6 @@ const DrawerMenu = (props) => {
             backgroundColor: '#F5F5F5',
           }}
         />
-
         <TouchableOpacity
           activeOpacity={1}
           onPress={() => navigation.navigate('Steps')}
@@ -514,7 +528,9 @@ const DrawerMenu = (props) => {
             alignItems: 'center',
             paddingHorizontal: 20,
           }}>
-          <Text style={styles.categoryTitle}>견적발송및채택-테스트</Text>
+          <Text style={[styles.categoryTitle, {color: '#e5e5e5'}]}>
+            견적발송및채택-테스트
+          </Text>
         </TouchableOpacity>
 
         <TouchableOpacity
@@ -526,19 +542,9 @@ const DrawerMenu = (props) => {
             alignItems: 'center',
             paddingHorizontal: 20,
           }}>
-          <Text style={styles.categoryTitle}>제작납품-테스트</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          activeOpacity={1}
-          onPress={() => navigation.navigate('Message')}
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            paddingHorizontal: 20,
-          }}>
-          <Text style={styles.categoryTitle}>메세지-테스트</Text>
+          <Text style={[styles.categoryTitle, {color: '#e5e5e5'}]}>
+            제작납품-테스트
+          </Text>
         </TouchableOpacity>
 
         <View style={{height: 80}} />
