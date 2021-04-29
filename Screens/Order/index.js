@@ -1000,8 +1000,8 @@ const index = (props) => {
                   <Image
                     source={
                       collapseArrow01
-                        ? require('../../src/assets/collapse_up.png')
-                        : require('../../src/assets/collapse_down.png')
+                        ? require('../../src/assets/collapse_down.png')
+                        : require('../../src/assets/collapse_up.png')
                     }
                     resizeMode="contain"
                     style={{width: 30, height: 20}}
@@ -1278,8 +1278,8 @@ const index = (props) => {
                   <Image
                     source={
                       collapseArrow02
-                        ? require('../../src/assets/collapse_up.png')
-                        : require('../../src/assets/collapse_down.png')
+                        ? require('../../src/assets/collapse_down.png')
+                        : require('../../src/assets/collapse_up.png')
                     }
                     resizeMode="contain"
                     style={{width: 30, height: 20}}
@@ -1942,8 +1942,8 @@ const index = (props) => {
                   <Image
                     source={
                       collapseArrow03
-                        ? require('../../src/assets/collapse_up.png')
-                        : require('../../src/assets/collapse_down.png')
+                        ? require('../../src/assets/collapse_down.png')
+                        : require('../../src/assets/collapse_up.png')
                     }
                     resizeMode="contain"
                     style={{width: 30, height: 20}}
@@ -2628,8 +2628,8 @@ const index = (props) => {
                   <Image
                     source={
                       collapseArrow04
-                        ? require('../../src/assets/collapse_up.png')
-                        : require('../../src/assets/collapse_down.png')
+                        ? require('../../src/assets/collapse_down.png')
+                        : require('../../src/assets/collapse_up.png')
                     }
                     resizeMode="contain"
                     style={{width: 30, height: 20}}
