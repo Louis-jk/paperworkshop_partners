@@ -87,6 +87,7 @@ const index = (props) => {
 
     Estimate.getList(type, '5', mb_email, cateV, caIdV, search, keyword)
       .then((res) => {
+        console.log("헤이헤이", res);
         if (res.data.result === '1' && res.data.count > 0) {
           setList(res.data.item);
           setLoading(false);
@@ -149,35 +150,44 @@ const index = (props) => {
                 alignItems: 'center',
               }}>
               <View style={styles.listWrap}>
-                {item.company_id === mb_email ? (
-                  <View style={styles.listStep02Badge}>
-                    <Text style={styles.listStep02BadgeText}>
-                      직접 견적요청
-                    </Text>
-                  </View>
-                ) : item.status === '0' ? (
-                  <View style={styles.listStep03Badge}>
-                    <Text style={styles.listStep03BadgeText}>
-                      비교 견적요청
-                    </Text>
-                  </View>
-                ) : item.status === '1' ? (
-                  <View style={styles.listStep02Badge}>
-                    <Text style={styles.listStep02BadgeText}>견적발송</Text>
-                  </View>
-                ) : item.status === '2' ? (
-                  <View style={styles.listStep02Badge}>
-                    <Text style={styles.listStep02BadgeText}>
-                      계약금 입금 대기
-                    </Text>
-                  </View>
-                ) : item.status === '3' ? (
-                  <View style={styles.listStep03Badge}>
-                    <Text style={styles.listStep03BadgeText}>
-                      계약금 입금 완료
-                    </Text>
-                  </View>
-                ) : null}
+                <View style={{flexDirection: 'row', justifyContent:'flex-start', alignItems: 'center'}}>
+                    {item.status === '0' ? (
+                      <View style={styles.listStep03Badge}>
+                        <Text style={styles.listStep03BadgeText}>
+                          비교 견적요청
+                        </Text>
+                      </View>
+                    ) : item.status === '1' ? (
+                      <View style={styles.listStep02Badge}>
+                        <Text style={styles.listStep02BadgeText}>견적발송</Text>
+                      </View>
+                    ) : item.status === '2' ? (
+                      <View style={styles.listStep02Badge}>
+                        <Text style={styles.listStep02BadgeText}>
+                          견적채택 - 확정대기
+                        </Text>
+                      </View>
+                    ) : item.status === '3' ? (
+                      <View style={styles.listStep03Badge}>
+                        <Text style={styles.listStep03BadgeText}>
+                          계약금 입금 대기
+                        </Text>
+                      </View>
+                    ) : item.status === '4' ? (
+                      <View style={styles.listStep03Badge}>
+                        <Text style={styles.listStep03BadgeText}>
+                          계약금 입금 완료
+                        </Text>
+                      </View>
+                    ) : null}
+                     {item.company_id === mb_email ? (
+                      <View style={{...styles.listStep02Badge, marginLeft: 5}}>
+                        <Text style={styles.listStep02BadgeText}>
+                          직접 견적요청
+                        </Text>
+                      </View>
+                     ) : null }
+                </View>
                 <Text style={styles.listTitle}>{item.title}</Text>
                 <Text style={styles.listDesc}>{item.ca_name}</Text>
               </View>
@@ -649,13 +659,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 5,
     borderWidth: 1,
-    borderColor: '#B5B5B5',
+    borderColor: '#00A170',
+    backgroundColor: '#00A170',
     borderRadius: 2,
   },
   listStep03BadgeText: {
     fontFamily: 'SCDream4',
     fontSize: 12,
-    color: '#000000',
+    color: '#fff',
     paddingVertical: 2,
     paddingHorizontal: 5,
   },

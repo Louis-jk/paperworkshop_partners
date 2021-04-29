@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import {
   View,
   Text,
@@ -17,7 +17,7 @@ import FastImage from 'react-native-fast-image';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const DrawerMenu = (props) => {
-  const navigation = props.navigation;
+  const navigation = props.navigation;  
 
   const {mb_profile_img, ptype, mb_2, mb_email} = useSelector(
     (state) => state.UserInfoReducer,
@@ -30,6 +30,7 @@ const DrawerMenu = (props) => {
       const sliceImg = mb_profile_img.slice(mb_profile_img.lastIndexOf('.'));
       setImgMime(sliceImg);
     }
+    
   }, [mb_profile_img]);
 
   const bannerCarouselRef = React.useRef(null);

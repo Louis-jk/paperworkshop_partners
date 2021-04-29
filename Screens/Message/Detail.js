@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useFocusEffect } from '@react-navigation/native';
 import {
   View,
   Text,
@@ -37,6 +38,13 @@ const Detail = (props) => {
   const [chatHistory, setChatHistory] = React.useState([]); // 채팅 히스토리
   const [message, setMessage] = React.useState(''); // 메세지 텍스트
   const [msgFile, setMsgFile] = React.useState(''); // 채팅 파일(이미지 또는 엑셀, pdf 등) 값
+  const [chatDateHistory, setChatDateHistory] = React.useState([]); // 채팅 날짜 갱신일
+
+  const messageRoomRef = React.useRef(null);
+
+  const toScrollEnd = () => {
+    messageRoomRef.current.scrollToEnd();
+  };
 
   // 채팅방 글 히스토리 가져오기
   const getChatHistoryAPI = () => {
@@ -46,7 +54,10 @@ const Detail = (props) => {
         console.log('res', res);
         if (res.data.result === '1') {
           setChatHistory(res.data.item);
+          setChatDateHistory((prev) => [...prev, res.data.item[0].chat_date]);
+
           setLoading(false);
+          
         } else {
           Alert.alert(res.data.message, '관리자에게 문의하세요.', [
             {
@@ -66,13 +77,21 @@ const Detail = (props) => {
       });
   };
 
-  React.useEffect(() => {
-    const unsubscribe = navigation.addListener('focus', () => {
-      getChatHistoryAPI();
-    });
 
-    return unsubscribe;
-  }, [navigation]);
+
+  React.useEffect(() => {
+    getChatHistoryAPI();
+  },[chatId]);
+
+  // React.useEffect(() => {
+  //   const unsubscribe = navigation.addListener('focus', () => {
+  //     getChatHistoryAPI();
+  //   });
+
+  //   return unsubscribe;
+  // }, [navigation]);
+
+  
 
   // 이미지 모달창
   const ImageModal = ({toggleModal, isVisible, imgPath}) => {
@@ -307,24 +326,31 @@ const Detail = (props) => {
           <ActivityIndicator size="large" color="#00A170" />
         </View>
       )}
-      <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
+      <ScrollView ref={messageRoomRef} style={styles.container} showsVerticalScrollIndicator={false}>
         <ImageModal
           imgPath={imgPath}
           isVisible={isModalVisible}
           toggleModal={imageModalHandler}
         />
         <View>
-          <View
-            style={{
-              marginVertical: 20,
-              flexDirection: 'row',
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}>
-            <Text style={{marginRight: 10}}>- - - - - - - -</Text>
-            <Text style={styles.normalText}>2021.08.14 (금)</Text>
-            <Text style={{marginLeft: 10}}>- - - - - - - -</Text>
-          </View>
+         {chatHistory && chatHistory.length > 0 && chatDateHistory ? (
+              <View
+                style={{
+                  marginVertical: 20,
+                  flexDirection: 'row',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}>
+                <Text style={{marginRight: 10}}>- - - - - - - -</Text>
+                <Text style={styles.normalText}>
+                  {moment(chatDateHistory[0])
+                    .locale('kr')
+                    .format('YYYY.MM.DD (ddd)')}
+                </Text>
+                {/* <Text style={styles.normalText}>2021.01.28 (목)</Text> */}
+                <Text style={{marginLeft: 10}}>- - - - - - - -</Text>
+              </View>
+            ) : null}
           <View
             style={{
               justifyContent: 'flex-start',
@@ -507,9 +533,9 @@ const Detail = (props) => {
                         flexDirection: 'row',
                         justifyContent: 'flex-start',
                         alignItems: 'flex-start',
-                        paddingVertical: 10,
+                        paddingVertical: 5,
                         width: '70%',
-                        marginBottom: 20,
+                        marginBottom: 10,
                       }}>
                       <Image
                         source={{uri: `${history.mb_profile}`}}

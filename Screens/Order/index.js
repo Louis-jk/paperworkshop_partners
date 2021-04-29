@@ -721,18 +721,20 @@ const index = (props) => {
                 : base.status === '1'
                 ? '입찰중'
                 : base.status === '2'
-                ? '파트너스최종선정(견적확정대기)'
+                ? '파트너스최종선정 (견적확정대기)'
                 : base.status === '3'
-                ? '파트너스최종선정(계약금입금대기)'
+                ? '파트너스최종선정 (계약금입금대기)'
                 : base.status === '4'
-                ? '파트너스최종선정(계약금입금완료)'
+                ? '파트너스최종선정 (계약금입금완료)'
                 : base.status === '5'
-                ? '입금제작요청'
+                ? '인쇄/제작요청 대기'
                 : base.status === '6'
-                ? '납품완료'
+                ? '인쇄/제작요청 중'
                 : base.status === '7'
-                ? '수령완료'
+                ? '납품완료'
                 : base.status === '8'
+                ? '수령완료'
+                : base.status === '9'
                 ? '마감'
                 : null}
             </Text>
@@ -800,161 +802,151 @@ const index = (props) => {
         {base !== null &&
         estimateUser !== null &&
         base.status !== '0' &&
-        base !== null &&
-        estimateUser !== null &&
-        base.status !== '1' ? (
-          <View style={{paddingHorizontal: 20, paddingVertical: 20}}>
-            <View>
-              <Text
-                style={{
-                  fontFamily: 'SCDream5',
-                  fontSize: 16,
-                  color: '#00A170',
-                  marginBottom: 15,
-                }}>
-                견적의뢰자 정보
-              </Text>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  justifyContent: 'flex-start',
-                  alignItems: 'center',
-                  marginBottom: 15,
-                }}>
-                <Image
-                  source={{uri: `${estimateUser.mb_profile}`}}
-                  style={{
-                    width: 50,
-                    height: 50,
-                    borderRadius: 50,
-                    borderWidth: 0.5,
-                    borderColor: '#E3E3E3',
-                    marginRight: 20,
-                  }}
-                  resizeMode="cover"
-                />
-                <Text
-                  style={{
-                    fontFamily: 'SCDream4',
-                    fontSize: 14,
-                    marginRight: 20,
-                  }}>
-                  견적자명 : {estimateUser.mb_name}
-                </Text>
-                {estimateUser.mb_2 ? (
-                  <>
-                    <View
-                      style={{
-                        height: 16,
-                        backgroundColor: '#00A170',
-                        width: 1,
-                        marginRight: 20,
-                      }}
-                    />
-                    <Text
-                      style={{
-                        fontFamily: 'SCDream4',
-                        fontSize: 14,
-                      }}>
-                      회사명 : {estimateUser.mb_2}
-                    </Text>
-                  </>
-                ) : null}
-              </View>
-            </View>
-            <View>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  borderWidth: 1,
-                  borderColor: '#E3E3E3',
-                  borderRadius: 5,
-                  backgroundColor: '#fff',
-                }}>
-                <TouchableWithoutFeedback
-                  onPress={() => Linking.openURL(`tel:${estimateUser.mb_hp}`)}>
-                  <View
-                    style={{
-                      flex: 1,
-                      flexDirection: 'row',
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                      paddingVertical: 12,
-                    }}>
-                    <Image
-                      source={require('../../src/assets/icon_call01.png')}
-                      resizeMode="cover"
-                      style={{width: 24, height: 24}}
-                    />
-                    <Text
-                      style={[
-                        styles.normalText,
-                        {
-                          fontSize: 14,
-                          letterSpacing: -1,
-                          marginLeft: 5,
-                        },
-                      ]}>
-                      전화하기
-                    </Text>
-                  </View>
-                </TouchableWithoutFeedback>
-                <View
-                  style={{
-                    borderWidth: 0.5,
-                    height: '100%',
-                    borderColor: '#E3E3E3',
-                  }}
-                />
-                <TouchableWithoutFeedback
-                  onPress={() =>
-                    navigation.navigate('MessageDetail', {
-                      screen: 'MessageDetail',
-                      params: {chatId: chatId},
-                    })
-                  }>
-                  <View
-                    style={{
-                      flex: 1,
-                      flexDirection: 'row',
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                      paddingVertical: 12,
-                    }}>
-                    <Image
-                      source={require('../../src/assets/icon_msm01.png')}
-                      resizeMode="cover"
-                      style={{width: 24, height: 24}}
-                    />
-                    <Text
-                      style={[
-                        styles.normalText,
-                        {
-                          fontSize: 14,
-                          letterSpacing: -1,
-                          marginLeft: 5,
-                        },
-                      ]}>
-                      메세지보내기
-                    </Text>
-                  </View>
-                </TouchableWithoutFeedback>
-              </View>
-            </View>
-          </View>
-        ) : null}
-        {/* // 전화하기, 메세지보내기  */}
-
-        {/* 경계 라인 */}
-        {base !== null &&
-        estimateUser !== null &&
-        base.status !== '0' &&
-        base !== null &&
-        estimateUser !== null &&
         base.status !== '1' ? (
           <>
+            <View style={{paddingHorizontal: 20, paddingVertical: 20}}>
+              <View>
+                <Text
+                  style={{
+                    fontFamily: 'SCDream5',
+                    fontSize: 16,
+                    color: '#00A170',
+                    marginBottom: 15,
+                  }}>
+                  견적의뢰자 정보
+                </Text>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    justifyContent: 'flex-start',
+                    alignItems: 'center',
+                    marginBottom: 15,
+                  }}>
+                  <Image
+                    source={{uri: `${estimateUser.mb_profile}`}}
+                    style={{
+                      width: 50,
+                      height: 50,
+                      borderRadius: 50,
+                      borderWidth: 0.5,
+                      borderColor: '#E3E3E3',
+                      marginRight: 20,
+                    }}
+                    resizeMode="cover"
+                  />
+                  <Text
+                    style={{
+                      fontFamily: 'SCDream4',
+                      fontSize: 14,
+                      marginRight: 20,
+                    }}>
+                    견적자명 : {estimateUser.mb_name}
+                  </Text>
+                  {estimateUser.mb_2 ? (
+                    <>
+                      <View
+                        style={{
+                          height: 16,
+                          backgroundColor: '#00A170',
+                          width: 1,
+                          marginRight: 20,
+                        }}
+                      />
+                      <Text
+                        style={{
+                          fontFamily: 'SCDream4',
+                          fontSize: 14,
+                        }}>
+                        회사명 : {estimateUser.mb_2}
+                      </Text>
+                    </>
+                  ) : null}
+                </View>
+              </View>
+              <View>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    borderWidth: 1,
+                    borderColor: '#E3E3E3',
+                    borderRadius: 5,
+                    backgroundColor: '#fff',
+                  }}>
+                  <TouchableWithoutFeedback
+                    onPress={() => Linking.openURL(`tel:${estimateUser.mb_hp}`)}>
+                    <View
+                      style={{
+                        flex: 1,
+                        flexDirection: 'row',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        paddingVertical: 12,
+                      }}>
+                      <Image
+                        source={require('../../src/assets/icon_call01.png')}
+                        resizeMode="cover"
+                        style={{width: 24, height: 24}}
+                      />
+                      <Text
+                        style={[
+                          styles.normalText,
+                          {
+                            fontSize: 14,
+                            letterSpacing: -1,
+                            marginLeft: 5,
+                          },
+                        ]}>
+                        전화하기
+                      </Text>
+                    </View>
+                  </TouchableWithoutFeedback>
+                  <View
+                    style={{
+                      borderWidth: 0.5,
+                      height: '100%',
+                      borderColor: '#E3E3E3',
+                    }}
+                  />
+                  <TouchableWithoutFeedback
+                    onPress={() =>
+                      navigation.navigate('MessageDetail', {
+                        screen: 'MessageDetail',
+                        params: {chatId: chatId},
+                      })
+                    }>
+                    <View
+                      style={{
+                        flex: 1,
+                        flexDirection: 'row',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        paddingVertical: 12,
+                      }}>
+                      <Image
+                        source={require('../../src/assets/icon_msm01.png')}
+                        resizeMode="cover"
+                        style={{width: 24, height: 24}}
+                      />
+                      <Text
+                        style={[
+                          styles.normalText,
+                          {
+                            fontSize: 14,
+                            letterSpacing: -1,
+                            marginLeft: 5,
+                          },
+                        ]}>
+                        메세지보내기
+                      </Text>
+                    </View>
+                  </TouchableWithoutFeedback>
+                </View>
+              </View>
+            </View>
+         
+          {/* 경계 라인 */}
             <View
               style={{
                 height: 1,
@@ -969,9 +961,11 @@ const index = (props) => {
                 width: Dimensions.get('window').width,
               }}
             />
+            {/* // 경계 라인 */}
           </>
         ) : null}
-        {/* // 경계 라인 */}
+        {/* // 전화하기, 메세지보내기  */}
+
 
         {/* 정보 */}
         {detail !== null && (
@@ -1137,13 +1131,20 @@ const index = (props) => {
                       marginBottom: 10,
                     }}>
                     <TouchableOpacity
+                      activeOpacity={1}
                       style={{
                         flexDirection: 'row',
                         justifyContent: 'flex-start',
                         alignItems: 'center',
                         marginRight: 20,
                       }}
-                      onPress={() => setDeliveryDateCheck('N')}>
+                      onPress={() => {
+                        if (base.status === '0' || base.status === '1') {
+                          setDeliveryDateCheck('N')
+                        } else {
+                          Alert.alert('견적을 수정할 수 없습니다.')
+                        }                        
+                        }}>
                       <Image
                         source={
                           deliveryDateCheck === 'N'
@@ -1158,12 +1159,19 @@ const index = (props) => {
                       </Text>
                     </TouchableOpacity>
                     <TouchableOpacity
+                      activeOpacity={1}
                       style={{
                         flexDirection: 'row',
                         justifyContent: 'flex-start',
                         alignItems: 'center',
                       }}
-                      onPress={() => setDeliveryDateCheck('Y')}>
+                      onPress={() => {
+                        if (base.status === '0' || base.status === '1') {
+                          setDeliveryDateCheck('Y')
+                        } else {
+                          Alert.alert('견적을 수정할 수 없습니다.')
+                        }                        
+                        }}>
                       <Image
                         source={
                           deliveryDateCheck === 'Y'
@@ -1550,13 +1558,20 @@ const index = (props) => {
                       alignItems: 'center',
                     }}>
                     <TouchableOpacity
+                      activeOpacity={1}
                       style={{
                         flexDirection: 'row',
                         justifyContent: 'flex-start',
                         alignItems: 'center',
                         marginRight: 20,
                       }}
-                      onPress={() => setTypeCheck('N')}>
+                      onPress={() => {
+                        if (base.status === '0' || base.status === '1') {
+                          setTypeCheck('N')
+                        } else {
+                          Alert.alert('견적을 수정할 수 없습니다.')
+                        }                        
+                      }}>
                       <Image
                         source={
                           typeCheck === 'N'
@@ -1571,12 +1586,19 @@ const index = (props) => {
                       </Text>
                     </TouchableOpacity>
                     <TouchableOpacity
+                      activeOpacity={1}
                       style={{
                         flexDirection: 'row',
                         justifyContent: 'flex-start',
                         alignItems: 'center',
-                      }}
-                      onPress={() => setTypeCheck('Y')}>
+                      }}                      
+                      onPress={() => {
+                        if (base.status === '0' || base.status === '1') {
+                          setTypeCheck('Y')
+                        } else {
+                          Alert.alert('견적을 수정할 수 없습니다.')
+                        }                        
+                      }}>                        
                       <Image
                         source={
                           typeCheck === 'Y'
@@ -1642,13 +1664,20 @@ const index = (props) => {
                       alignItems: 'center',
                     }}>
                     <TouchableOpacity
+                      activeOpacity={1}
                       style={{
                         flexDirection: 'row',
                         justifyContent: 'flex-start',
                         alignItems: 'center',
                         marginRight: 20,
                       }}
-                      onPress={() => setSizeCheck('N')}>
+                      onPress={() => {
+                        if (base.status === '0' || base.status === '1') {
+                          setSizeCheck('N')
+                        } else {
+                          Alert.alert('견적을 수정할 수 없습니다.')
+                        }                        
+                      }}>   
                       <Image
                         source={
                           sizeCheck === 'N'
@@ -1663,12 +1692,19 @@ const index = (props) => {
                       </Text>
                     </TouchableOpacity>
                     <TouchableOpacity
+                      activeOpacity={1}
                       style={{
                         flexDirection: 'row',
                         justifyContent: 'flex-start',
                         alignItems: 'center',
                       }}
-                      onPress={() => setSizeCheck('Y')}>
+                      onPress={() => {
+                        if (base.status === '0' || base.status === '1') {
+                          setSizeCheck('Y')
+                        } else {
+                          Alert.alert('견적을 수정할 수 없습니다.')
+                        }                        
+                      }}>  
                       <Image
                         source={
                           sizeCheck === 'Y'
@@ -1734,13 +1770,20 @@ const index = (props) => {
                       alignItems: 'center',
                     }}>
                     <TouchableOpacity
+                      activeOpacity={1}
                       style={{
                         flexDirection: 'row',
                         justifyContent: 'flex-start',
                         alignItems: 'center',
                         marginRight: 20,
                       }}
-                      onPress={() => setQuantityCheck('N')}>
+                      onPress={() => {
+                        if (base.status === '0' || base.status === '1') {
+                          setQuantityCheck('N')
+                        } else {
+                          Alert.alert('견적을 수정할 수 없습니다.')
+                        }                        
+                      }}>  
                       <Image
                         source={
                           quantityCheck === 'N'
@@ -1755,12 +1798,19 @@ const index = (props) => {
                       </Text>
                     </TouchableOpacity>
                     <TouchableOpacity
+                      activeOpacity={1}                    
                       style={{
                         flexDirection: 'row',
                         justifyContent: 'flex-start',
                         alignItems: 'center',
                       }}
-                      onPress={() => setQuantityCheck('Y')}>
+                      onPress={() => {
+                        if (base.status === '0' || base.status === '1') {
+                          setQuantityCheck('Y')
+                        } else {
+                          Alert.alert('견적을 수정할 수 없습니다.')
+                        }                        
+                      }}>  
                       <Image
                         source={
                           quantityCheck === 'Y'
@@ -1770,7 +1820,6 @@ const index = (props) => {
                         resizeMode="contain"
                         style={{width: 20, height: 20, marginRight: 5}}
                       />
-
                       <Text style={{fontSize: 14, fontFamily: 'SCDream4'}}>
                         조정필요
                       </Text>
@@ -1826,13 +1875,20 @@ const index = (props) => {
                       alignItems: 'center',
                     }}>
                     <TouchableOpacity
+                      activeOpacity={1}
                       style={{
                         flexDirection: 'row',
                         justifyContent: 'flex-start',
                         alignItems: 'center',
                         marginRight: 20,
-                      }}
-                      onPress={() => setPrintCheck('N')}>
+                      }}                     
+                      onPress={() => {
+                        if (base.status === '0' || base.status === '1') {
+                          setPrintCheck('N')
+                        } else {
+                          Alert.alert('견적을 수정할 수 없습니다.')
+                        }                        
+                      }}>  
                       <Image
                         source={
                           printCheck === 'N'
@@ -1847,12 +1903,19 @@ const index = (props) => {
                       </Text>
                     </TouchableOpacity>
                     <TouchableOpacity
+                      activeOpacity={1}
                       style={{
                         flexDirection: 'row',
                         justifyContent: 'flex-start',
                         alignItems: 'center',
-                      }}
-                      onPress={() => setPrintCheck('Y')}>
+                      }}                      
+                      onPress={() => {
+                        if (base.status === '0' || base.status === '1') {
+                          setPrintCheck('Y')
+                        } else {
+                          Alert.alert('견적을 수정할 수 없습니다.')
+                        }                        
+                      }}> 
                       <Image
                         source={
                           printCheck === 'Y'
@@ -1862,7 +1925,6 @@ const index = (props) => {
                         resizeMode="contain"
                         style={{width: 20, height: 20, marginRight: 5}}
                       />
-
                       <Text style={{fontSize: 14, fontFamily: 'SCDream4'}}>
                         조정필요
                       </Text>
@@ -2211,13 +2273,20 @@ const index = (props) => {
                       marginBottom: 10,
                     }}>
                     <TouchableOpacity
+                      activeOpacity={1}
                       style={{
                         flexDirection: 'row',
                         justifyContent: 'flex-start',
                         alignItems: 'center',
                         marginRight: 20,
-                      }}
-                      onPress={() => setPaperCheck('N')}>
+                      }}                      
+                      onPress={() => {
+                        if (base.status === '0' || base.status === '1') {
+                          setPaperCheck('N')
+                        } else {
+                          Alert.alert('견적을 수정할 수 없습니다.')
+                        }                        
+                      }}> 
                       <Image
                         source={
                           paperCheck === 'N'
@@ -2232,12 +2301,19 @@ const index = (props) => {
                       </Text>
                     </TouchableOpacity>
                     <TouchableOpacity
+                      activeOpacity={1}
                       style={{
                         flexDirection: 'row',
                         justifyContent: 'flex-start',
                         alignItems: 'center',
-                      }}
-                      onPress={() => setPaperCheck('Y')}>
+                      }}                      
+                      onPress={() => {
+                        if (base.status === '0' || base.status === '1') {
+                          setPaperCheck('Y')
+                        } else {
+                          Alert.alert('견적을 수정할 수 없습니다.')
+                        }                        
+                      }}> 
                       <Image
                         source={
                           paperCheck === 'Y'
@@ -2247,7 +2323,6 @@ const index = (props) => {
                         resizeMode="contain"
                         style={{width: 20, height: 20, marginRight: 5}}
                       />
-
                       <Text style={{fontSize: 14, fontFamily: 'SCDream4'}}>
                         조정필요
                       </Text>
@@ -2407,13 +2482,20 @@ const index = (props) => {
                         marginBottom: 10,
                       }}>
                       <TouchableOpacity
+                        activeOpacity={1}
                         style={{
                           flexDirection: 'row',
                           justifyContent: 'flex-start',
                           alignItems: 'center',
                           marginRight: 20,
                         }}
-                        onPress={() => setPaperCheck02('N')}>
+                        onPress={() => {
+                          if (base.status === '0' || base.status === '1') {
+                            setPaperCheck02('N')
+                          } else {
+                            Alert.alert('견적을 수정할 수 없습니다.')
+                          }                        
+                        }}> 
                         <Image
                           source={
                             paperCheck02 === 'N'
@@ -2428,12 +2510,19 @@ const index = (props) => {
                         </Text>
                       </TouchableOpacity>
                       <TouchableOpacity
+                        activeOpacity={1}
                         style={{
                           flexDirection: 'row',
                           justifyContent: 'flex-start',
                           alignItems: 'center',
                         }}
-                        onPress={() => setPaperCheck02('Y')}>
+                        onPress={() => {
+                          if (base.status === '0' || base.status === '1') {
+                            setPaperCheck02('Y')
+                          } else {
+                            Alert.alert('견적을 수정할 수 없습니다.')
+                          }                        
+                        }}> 
                         <Image
                           source={
                             paperCheck02 === 'Y'
@@ -2824,13 +2913,20 @@ const index = (props) => {
                       alignItems: 'center',
                     }}>
                     <TouchableOpacity
+                      activeOpacity={1}
                       style={{
                         flexDirection: 'row',
                         justifyContent: 'flex-start',
                         alignItems: 'center',
                         marginRight: 20,
                       }}
-                      onPress={() => setPostProcessCheck('N')}>
+                      onPress={() => {
+                        if (base.status === '0' || base.status === '1') {
+                          setPostProcessCheck('N')
+                        } else {
+                          Alert.alert('견적을 수정할 수 없습니다.')
+                        }                        
+                      }}>  
                       <Image
                         source={
                           postProcessCheck === 'N'
@@ -2845,12 +2941,19 @@ const index = (props) => {
                       </Text>
                     </TouchableOpacity>
                     <TouchableOpacity
+                      activeOpacity={1}
                       style={{
                         flexDirection: 'row',
                         justifyContent: 'flex-start',
                         alignItems: 'center',
                       }}
-                      onPress={() => setPostProcessCheck('Y')}>
+                      onPress={() => {
+                        if (base.status === '0' || base.status === '1') {
+                          setPostProcessCheck('Y')
+                        } else {
+                          Alert.alert('견적을 수정할 수 없습니다.')
+                        }                        
+                      }}>  
                       <Image
                         source={
                           postProcessCheck === 'Y'
@@ -3518,13 +3621,20 @@ const index = (props) => {
                         alignItems: 'center',
                       }}>
                       <TouchableOpacity
+                        activeOpacity={1}
                         style={{
                           flexDirection: 'row',
                           justifyContent: 'flex-start',
                           alignItems: 'center',
                           marginRight: 20,
                         }}
-                        onPress={() => setPostProcess02Check('N')}>
+                        onPress={() => {
+                          if (base.status === '0' || base.status === '1') {
+                            setPostProcess02Check('N')
+                          } else {
+                            Alert.alert('견적을 수정할 수 없습니다.')
+                          }                        
+                        }}> 
                         <Image
                           source={
                             postProcess02Check === 'N'
@@ -3539,12 +3649,19 @@ const index = (props) => {
                         </Text>
                       </TouchableOpacity>
                       <TouchableOpacity
+                        activeOpacity={1}
                         style={{
                           flexDirection: 'row',
                           justifyContent: 'flex-start',
                           alignItems: 'center',
                         }}
-                        onPress={() => setPostProcess02Check('Y')}>
+                        onPress={() => {
+                          if (base.status === '0' || base.status === '1') {
+                            setPostProcess02Check('Y')
+                          } else {
+                            Alert.alert('견적을 수정할 수 없습니다.')
+                          }                        
+                        }}> 
                         <Image
                           source={
                             postProcess02Check === 'Y'
@@ -4846,26 +4963,42 @@ const index = (props) => {
               </View>
             </TouchableOpacity>
           ) : base.status === '2' ? (
-            <TouchableOpacity
-              onPress={() => sendEstimateCfmAPI()}
-              activeOpacity={0.8}>
-              <View style={styles.submitBtn}>
-                <Text style={styles.submitBtnText}>견적 확정</Text>
+            <>
+              <View style={{marginBottom:20}}>
+                <Text style={{fontSize:14, fontFamily:'SCDream4', color:'#00A170', lineHeight:20}}>상대방이 귀사의 견적을 채택하였습니다. </Text>
+                <Text style={{fontSize:14, fontFamily:'SCDream4', color:'#00A170', lineHeight:20}}>견적확정 버튼을 누르시면 다음 단계로 진행됩니다.</Text>
               </View>
-            </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => sendEstimateCfmAPI()}
+                activeOpacity={0.8}>
+                <View style={styles.submitBtn}>
+                  <Text style={styles.submitBtnText}>견적 확정</Text>
+                </View>
+              </TouchableOpacity>            
+            </>
           ) : base.status === '3' ? (
-            <TouchableOpacity
-              onPress={() => sendPaymentCfmAPI()}
-              activeOpacity={0.8}>
-              <View style={styles.submitBtn}>
-                <Text style={styles.submitBtnText}>계약금 입금 확인</Text>
-              </View>
-            </TouchableOpacity>
-          ) : base.status === '4' ? (
             <View style={styles.submitedBtn}>
-              <Text style={styles.submitedBtnText}>계약금 입금 완료</Text>
+              <Text style={styles.submitedBtnText}>계약금 입금 대기 중</Text>
             </View>
+          ) : base.status === '4' ? (
+            <>
+              <View style={{marginBottom:20}}>
+                <Text style={{fontSize:14, fontFamily:'SCDream4', color:'#00A170', lineHeight:20}}>상대방이 계약금을 입금하였습니다. </Text>
+                <Text style={{fontSize:14, fontFamily:'SCDream4', color:'#00A170', lineHeight:20}}>입금확인 후 버튼을 누르시면 다음 단계로 진행됩니다.</Text>
+              </View>
+              <TouchableOpacity
+                onPress={() => sendPaymentCfmAPI()}
+                activeOpacity={0.8}>
+                <View style={styles.submitBtn}>
+                  <Text style={styles.submitBtnText}>계약금 입금 확인</Text>
+                </View>
+              </TouchableOpacity>
+            </>
           ) : base.status === '5' ? (
+            <View style={styles.submitedBtn}>
+              <Text style={styles.submitedBtnText}>인쇄/제작 요청 대기중</Text>
+            </View>
+          ) : base.status === '6' ? (           
             <TouchableOpacity
               onPress={() => sendDeliveryAPI()}
               activeOpacity={0.8}>
@@ -4873,13 +5006,13 @@ const index = (props) => {
                 <Text style={styles.submitBtnText}>납품 완료</Text>
               </View>
             </TouchableOpacity>
-          ) : base.status === '6' ? (
-            <View style={styles.submitedBtn}>
-              <Text style={styles.submitedBtnText}>납품 완료</Text>
-            </View>
           ) : base.status === '7' ? (
             <View style={styles.submitedBtn}>
-              <Text style={styles.submitedBtnText}>수령 완료</Text>
+              <Text style={styles.submitedBtnText}>수령 대기중</Text>
+            </View>
+          ) : base.status === '8' ? (
+            <View style={styles.submitedBtn}>
+              <Text style={styles.submitedBtnText}>주문자 수령완료</Text>
             </View>
           ) : (
             <TouchableOpacity

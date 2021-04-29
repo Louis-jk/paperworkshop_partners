@@ -144,9 +144,9 @@ const index = (props) => {
                       source={{uri: `${room.mb_profile}`}}
                       resizeMode="cover"
                       style={{
-                        width: 50,
-                        height: 50,
-                        borderRadius: 50,
+                        width: 70,
+                        height: 70,
+                        borderRadius: 70,
                         marginRight: 20,
                       }}
                     />
@@ -168,6 +168,7 @@ const index = (props) => {
                           </Text>
                         ) : null}
                       </View>
+                      <Text style={styles.msgInfoName} numberOfLines={1}>제목 : {room.title}</Text>
                       {room.msg ? (
                         <View
                           style={{
@@ -196,7 +197,7 @@ const index = (props) => {
                         </Text>
                       )}
                     </View>
-                    <View style={{position: 'relative'}}>
+                    <View style={{position: 'absolute', top: -10, right: -10, width: 30, height: 30}}>
                       <TouchableOpacity
                         activeOpacity={0.8}
                         onPress={() => goOutChatRoomChecking(room.pm_id)}>

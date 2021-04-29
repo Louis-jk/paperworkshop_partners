@@ -411,28 +411,28 @@ const Detail = (props) => {
               <View style={styles.details}>
                 <Text style={styles.detailsTitle}>인쇄교정</Text>
                 <Text style={styles.detailsDesc}>
-                  {detail.print.proof_printing}
+                  {detail.print.proof_printing === 'Y' ? '있음' : '없음'}
                 </Text>
               </View>
               {detail.basic.ca_id === '1' || detail.basic.ca_id === '4' ? (
                 <View style={styles.details}>
                   <Text style={styles.detailsTitle}>인쇄교정(내지)</Text>
                   <Text style={styles.detailsDesc}>
-                    {detail.print.proof_printing2}
+                    {detail.print.proof_printing2 === 'Y' ? '있음' : '없음'}
                   </Text>
                 </View>
               ) : null}
               <View style={styles.details}>
                 <Text style={styles.detailsTitle}>인쇄감리</Text>
                 <Text style={styles.detailsDesc}>
-                  {detail.print.print_supervision}
+                  {detail.print.print_supervision === 'Y' ? '있음' : '없음'}
                 </Text>
               </View>
               {detail.basic.ca_id === '1' || detail.basic.ca_id === '4' ? (
                 <View style={styles.details}>
                   <Text style={styles.detailsTitle}>인쇄감리(내지)</Text>
                   <Text style={styles.detailsDesc}>
-                    {detail.print.print_supervision2}
+                    {detail.print.print_supervision2 === 'Y' ? '있음' : '없음'}
                   </Text>
                 </View>
               ) : null}

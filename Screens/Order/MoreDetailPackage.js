@@ -293,17 +293,13 @@ const Detail = (props) => {
               <View style={styles.details}>
                 <Text style={styles.detailsTitle}>인쇄교정</Text>
                 <Text style={styles.detailsDesc}>
-                  {detail.print.proof_printing
-                    ? detail.print.proof_printing
-                    : '없음'}
+                  {detail.print.proof_printing === 'Y' ? '있음' : '없음'}
                 </Text>
               </View>
               <View style={styles.details}>
                 <Text style={styles.detailsTitle}>인쇄감리</Text>
                 <Text style={styles.detailsDesc}>
-                  {detail.print.print_supervision
-                    ? detail.print.print_supervision
-                    : '없음'}
+                  {detail.print.print_supervision === 'Y' ? '있음' : '없음'}
                 </Text>
               </View>
               <View style={styles.details}>
@@ -371,13 +367,13 @@ const Detail = (props) => {
               <View style={styles.details}>
                 <Text style={styles.detailsTitle}>형압</Text>
                 <Text style={styles.detailsDesc}>
-                  {detail.end.press_design ? detail.end.press_design : '없음'}
+                  {detail.end.press_design  === 'Y' ? '있음' : '없음'}
                 </Text>
               </View>
               <View style={styles.details}>
                 <Text style={styles.detailsTitle}>부분 실크</Text>
                 <Text style={styles.detailsDesc}>
-                  {detail.end.partial_silk ? detail.end.partial_silk : '없음'}
+                  {detail.end.partial_silk === 'Y' ? '있음' : '없음'}
                 </Text>
               </View>
               <View style={styles.details}>

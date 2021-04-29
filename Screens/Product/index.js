@@ -191,14 +191,20 @@ const index = (props) => {
                   ) : item.status === '5' ? (
                     <View style={styles.listStep03Badge}>
                       <Text style={styles.listStep03BadgeText}>
-                        인쇄 제작요청
+                        인쇄/제작요청 대기
                       </Text>
                     </View>
                   ) : item.status === '6' ? (
                     <View style={styles.listStep03Badge}>
-                      <Text style={styles.listStep03BadgeText}>납품완료</Text>
+                      <Text style={styles.listStep03BadgeText}>
+                        인쇄/제작요청
+                      </Text>
                     </View>
                   ) : item.status === '7' ? (
+                    <View style={styles.listStep03Badge}>
+                      <Text style={styles.listStep03BadgeText}>납품완료</Text>
+                    </View>
+                  ) : item.status === '8' ? (
                     <View style={styles.listStep03Badge}>
                       <Text style={styles.listStep03BadgeText}>수령완료</Text>
                     </View>
@@ -210,8 +216,8 @@ const index = (props) => {
                       </Text>
                     </View>
                   )}
-                </View>
-                <Text style={styles.listTitle}>{item.title}</Text>
+                </View>                
+                <Text style={styles.listTitle} numberOfLines={1}>{item.title}</Text>
                 <Text
                   style={
                     styles.listDesc
@@ -222,7 +228,7 @@ const index = (props) => {
                   </Text>
                 </View>
               </View>
-              <View>
+              {/* <View>
                 <Text style={styles.listDday}>
                   {item.status === '5'
                     ? '인쇄제작요청'
@@ -232,7 +238,7 @@ const index = (props) => {
                     ? '수령완료'
                     : '마감'}
                 </Text>
-              </View>
+              </View> */}
             </View>
           </TouchableOpacity>
         </View>
@@ -698,13 +704,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 5,
     borderWidth: 1,
-    borderColor: '#B5B5B5',
+    borderColor: '#00A170',
+    backgroundColor: '#00A170',
     borderRadius: 2,
   },
   listStep03BadgeText: {
     fontFamily: 'SCDream4',
     fontSize: 12,
-    color: '#000000',
+    color: '#fff',
     paddingVertical: 2,
     paddingHorizontal: 5,
   },
