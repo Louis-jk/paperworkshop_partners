@@ -401,7 +401,7 @@ const Detail = (props) => {
                               fontSize: 12,
                               color: '#000000',
                             }}>
-                            14:15
+                            {moment(history.chat_date).format('HH:mm')}
                           </Text>
                         </View>
                       ) : history.bf_file && history.bf_file_ext === 'gif' ? (
@@ -445,7 +445,7 @@ const Detail = (props) => {
                               fontSize: 12,
                               color: '#000000',
                             }}>
-                            14:15
+                            {moment(history.chat_date).format('HH:mm')}
                           </Text>
                         </View>
                       ) : history.bf_file &&
