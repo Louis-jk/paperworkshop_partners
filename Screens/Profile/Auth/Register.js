@@ -20,6 +20,7 @@ import DocumentPicker from 'react-native-document-picker'; // 파일 업로드 �
 import DetailHeader from '../../Common/DetailHeader';
 import Category from '../../../src/api/Category';
 import Timer from '../../Common/Timer';
+import Auth from '../../../src/api/Auth';
 
 import {
   joinEmail,
