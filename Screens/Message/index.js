@@ -25,6 +25,7 @@ const index = (props) => {
   const [category01, setCategory01] = React.useState(null);
   const [value, setValue] = React.useState(null);
 
+  // 채팅방 리스트 가져오기
   const getChatRoomListAPI = () => {
     setLoading(true);
     ChatAPI.getChatRoomList(mb_email)
@@ -175,7 +176,10 @@ const index = (props) => {
                             alignItems: 'center',
                           }}>
                           <Text
-                            style={[styles.msgInfoContent, {color: '#00A170'}]}
+                            style={[
+                              styles.msgInfoContent,
+                              {fontFamily: 'SCDream5', color: '#00A170'},
+                            ]}
                             numberOfLines={1}>
                             최신글 :
                           </Text>
