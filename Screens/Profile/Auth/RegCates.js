@@ -2,7 +2,6 @@ import * as React from 'react';
 import {View, Text, TouchableOpacity, Image} from 'react-native';
 
 const RegCates = (props) => {
-  console.log('props', props);
   const categories = props.categories;
   const {categories_item} = props;
   const {setCategories_item} = props;
@@ -46,10 +45,7 @@ const RegCates = (props) => {
     const filter = categories_item.filter((item, idx) => {
       return idx === key;
     });
-    console.log(filter);
-    console.log(key);
     if (filter.length !== 0) {
-      console.log('여기로 들어오나 ?');
       setCategories_item(
         categories_item.map((element, idx) => {
           if (idx === key) {

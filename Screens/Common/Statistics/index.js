@@ -26,7 +26,6 @@ const index = (props) => {
 
   const yearformat = new Date();
   let curYear = yearformat.getFullYear();
-  console.log('curYear', curYear);
 
   const yearCount = ['2017', '2018', '2019', '2020', '2021'];
   const [year, setYear] = React.useState('2021');
@@ -80,11 +79,9 @@ const index = (props) => {
   const getStatisticsAPI = () => {
     let regionValue = region === 'all' ? '' : region;
 
-    console.log('regionValue', regionValue);
 
     StatisticsAPI.getStatistics(mb_email, year, month, regionValue)
       .then((res) => {
-        console.log('통계 res', res);
         if (res.data.result === '1') {
           setInfo(res.data.item[0]);
           setAccumulatePrice(res.data.item[0].accumulate_price);
@@ -105,14 +102,6 @@ const index = (props) => {
     getStatisticsAPI();
   }, [year, month, region]);
 
-  console.log('year, month, region', year, month, region);
-  console.log('mb_email', mb_email);
-
-  console.log('info', info);
-  console.log('accumulatePrice', accumulatePrice);
-  console.log('accumulatePrice type', typeof accumulatePrice);
-  console.log('deliveryPrice', deliveryPrice);
-  console.log('deliveryPrice type', typeof deliveryPrice);
 
   return (
     <>

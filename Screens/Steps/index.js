@@ -87,7 +87,6 @@ const index = (props) => {
 
     Estimate.getList(type, '5', mb_email, cateV, caIdV, search, keyword)
       .then((res) => {
-        console.log("헤이헤이", res);
         if (res.data.result === '1' && res.data.count > 0) {
           setList(res.data.item);
           setLoading(false);

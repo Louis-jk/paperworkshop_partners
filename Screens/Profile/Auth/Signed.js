@@ -47,7 +47,6 @@ const Signed = (props) => {
   const onLogin = () => {
     Auth.onLogin(mb_email, mb_password, fcmToken, checkPlatform)
       .then((res) => {
-        console.log('Login 시도', res);
         if (res.data.result === '1' && res.data.count > 0) {
           dispatch(UserEmail(res.data.item.mb_email));
           dispatch(UserName(res.data.item.mb_name));
@@ -69,7 +68,6 @@ const Signed = (props) => {
             },
           ]);
         }
-        console.log('로그인 res', res);
       })
       .catch((err) => {
         Alert.alert('관리자에게 문의해주세요.', err, [

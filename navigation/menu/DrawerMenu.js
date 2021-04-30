@@ -570,10 +570,8 @@ const DrawerMenu = (props) => {
               autoplayInterval={5000}
               loop={true}
               onSnapToItem={(index) => {
-                // console.log('C index', index);
                 setActiveSlide(index);
               }}
-              // containerCustomStyle={{ marginHorizontal: 20 }}
             />
             <Pagination
               dotsLength={banners.length}

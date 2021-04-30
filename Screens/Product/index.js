@@ -81,7 +81,6 @@ const index = (props) => {
       });
   };
 
-  console.log('detailTypes', detailTypes);
 
   // 리스트 출력 API 호출
   const getEstimateAllListAPI = () => {
@@ -131,8 +130,6 @@ const index = (props) => {
   const toggleDetail = () => {
     setIsActiveToggleDetail(!isActiveToggleDetail);
   };
-
-  console.log('list', list);
 
   const renderRow = ({item, idx}) => {
     return (

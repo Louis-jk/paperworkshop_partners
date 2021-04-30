@@ -31,7 +31,6 @@ const ReqPopular = (props) => {
   const requestPopularInfoAPI = () => {
     Auth.requestPopularInfo()
       .then((res) => {
-        console.log('인기파트너스 정보', res);
         if (res.data.result === '1') {
           setPopularInfo(res.data.item);
         }
@@ -77,7 +76,6 @@ const ReqPopular = (props) => {
 
     Auth.requestPopular(mb_email, infoTxt, cateTxt, price, period)
       .then((res) => {
-        console.log('파트넛 신청 res', res);
         if (res.data.result === '1') {
           Alert.alert(res.data.message, '홈으로 이동합니다.', [
             {
@@ -107,13 +105,6 @@ const ReqPopular = (props) => {
     requestPopularInfoAPI();
   }, []);
 
-  console.log('mb_email', mb_email);
-  console.log('popularInfo', popularInfo);
-  console.log('infoTxt', infoTxt);
-  console.log('cateTxt', cateTxt);
-  console.log('price', price);
-  console.log('price typeof', typeof price);
-  console.log('period', period);
 
   return (
     <>

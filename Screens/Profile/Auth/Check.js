@@ -89,7 +89,6 @@ const Check = (props) => {
   const login = (id, pwd, fToken, cDevice) => {
     Auth.onLogin(id, pwd, fToken, cDevice)
       .then((res) => {
-        console.log('파트너스 check login', res);
         if (res.data.result === '1') {
           dispatch(UserNo(res.data.item.mb_no));
           dispatch(UserEmail(res.data.item.mb_email));

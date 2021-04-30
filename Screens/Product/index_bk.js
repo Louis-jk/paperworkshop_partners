@@ -18,11 +18,7 @@ const index = (props) => {
   const navigation = props.navigation;
   const routeName = props.route.name;
 
-  console.log('props :', props);
-
   const [category01, setCategory01] = React.useState(null);
-
-  console.log('category01 : ', category01);
 
   return (
     <>

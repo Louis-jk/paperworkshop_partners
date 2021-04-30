@@ -21,13 +21,9 @@ import {TouchableOpacity} from 'react-native-gesture-handler';
 const index = (props) => {
   const navigation = props.navigation;
   const routeName = props.route.name;
-
-  console.log('Steps props :', props);
-
   const [category01, setCategory01] = React.useState(null);
   const [value, setValue] = React.useState(null);
 
-  console.log('category01 : ', category01);
 
   return (
     <>

@@ -101,7 +101,6 @@ const Register = (props) => {
     getCategoriesAPI();
   }, []);
 
-  console.log('categoryList', categoryList);
 
   const emailRef = React.useRef(null);
   const passwordRef = React.useRef(null);
@@ -178,7 +177,6 @@ const Register = (props) => {
   const [mobileConfirmId, setMobileConfirmId] = React.useState(null);
   const [isMobileConfimed, setMobileConfimed] = React.useState(false);
 
-  console.log('입력된 인증번호', mobileConfirmId);
 
   // 본인 인증 시간 초과의 경우 상태관리
   const [reSend, setReSend] = React.useState(false);
@@ -241,7 +239,6 @@ const Register = (props) => {
               },
             ]);
           }
-          console.log('휴대폰 인증 response', res);
         })
         .catch((err) => console.log(err));
     }
@@ -288,7 +285,6 @@ const Register = (props) => {
               ],
             );
           }
-          console.log('휴대폰 인증 response', res);
         })
         .catch((err) => console.log(err));
     }
@@ -314,7 +310,6 @@ const Register = (props) => {
     } else {
       Auth.onMobileConfirmNo(mobileNo, mobileConfirmId, 'N')
         .then((res) => {
-          console.log('본인 인증 response 11', res);
           if (res.data.result == '1') {
             Alert.alert('본인 인증되었습니다.', res.data.message, [
               {
@@ -388,7 +383,6 @@ const Register = (props) => {
 
     if (result) {
       let newArr = categoryArr.filter((x) => x !== result);
-      console.log('newArr', newArr);
       setCategoryArr(newArr);
       setCountCategory((prev) => prev - 1);
     } else if (countCategory < 5) {
@@ -436,7 +430,6 @@ const Register = (props) => {
       const res = await DocumentPicker.pick({
         type: [DocumentPicker.types.images],
       });
-      // console.log('이미지', res);
       const fileName = res.name.split('.');
       const extArray = res.type.split('/');
       setFileUrlCurrent(res.uri);
@@ -450,7 +443,6 @@ const Register = (props) => {
         type: res.type,
         name: res.name,
       });
-      console.log('test res', res);
     } catch (err) {
       if (DocumentPicker.isCancel(err)) {
         // User cancelled the picker, exit any dialogs or menus and move on
@@ -460,7 +452,6 @@ const Register = (props) => {
     }
   };
 
-  console.log('이미지', fileUrlCurrent);
 
   // 회사 소개서
   const [fileUrlCurrent02, setFileUrlCurrent02] = React.useState(null);
@@ -476,7 +467,6 @@ const Register = (props) => {
       const res = await DocumentPicker.pick({
         type: [DocumentPicker.types.images],
       });
-      // console.log('이미지', res);
       const fileName = res.name.split('.');
       const extArray = res.type.split('/');
       setFileUrlCurrent02(res.uri);
@@ -499,8 +489,6 @@ const Register = (props) => {
     }
   };
 
-  console.log('licenseFile', licenseFile);
-  console.log('categoryArr', categoryArr);
 
   // 회원가입
   const beforeSignIn = (
@@ -553,13 +541,9 @@ const Register = (props) => {
       frmData.append('bank_account', bankAccount);
       frmData.append('bank_depositor', bankDepositor);
 
-      console.log('frmData', frmData);
-      console.log('region', region);
 
       Auth.onSignIn(frmData)
         .then((res) => {
-          console.log(licenseFile);
-          console.log('파트너스 회원가입 res', res);
 
           if (res.data.result === '1' && res.data.count > 0) {
             dispatch(joinEmail(res.data.mb_id));

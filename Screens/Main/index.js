@@ -12,6 +12,8 @@ import {
   FlatList,
   Alert,
   ActivityIndicator,
+  Platform,
+  PermissionsAndroid
 } from 'react-native';
 
 import {useSelector} from 'react-redux';
@@ -34,6 +36,27 @@ const index = (props) => {
 
   const searchTypes = ['title', 'company'];
   const [search, setSearch] = React.useState('title');
+
+  // 안드로이드 권한 설정
+  const requestAndroidPermission = async () => {
+    try {
+      const granted = await PermissionsAndroid.requestMultiple(
+        [
+          PermissionsAndroid.PERMISSIONS.CAMERA,
+          PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
+          PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE
+        ]
+      );
+
+      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+        console.log("You can use the camera");
+      } else {
+        console.log("Camera permission denied");
+      }
+    } catch (err) {
+      console.warn(err);
+    }
+  };
 
   const [
     isActiveToggleSearchType,
@@ -113,6 +136,10 @@ const index = (props) => {
   };
 
   React.useEffect(() => {
+    requestAndroidPermission();
+  },[]);
+
+  React.useEffect(() => {    
     getEstimateAllListAPI();
   }, [type, cateV, caIdV, search]);
 

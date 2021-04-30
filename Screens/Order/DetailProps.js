@@ -14,7 +14,6 @@ const DetailProps = (props) => {
   const navigation = props.navigation;
   const routeName = props.route.name;
   const title = props.route.params.title;
-  console.log(props);
 
   return (
     <>
@@ -39,20 +38,7 @@ const DetailProps = (props) => {
               <View style={styles.detailsEnd}>
                 <Text style={styles.detailsTitle}>납품 희망일</Text>
                 <Text style={styles.detailsDesc}>2020.12.01</Text>
-              </View>
-              {/* <TouchableOpacity
-                activeOpacity={0.8}
-                onPress={() => navigation.navigate('OrderDetail')}
-                style={{alignSelf: 'flex-end'}}>
-                <Text
-                  style={{
-                    fontSize: 12,
-                    textDecorationLine: 'underline',
-                    color: '#A2A2A2',
-                  }}>
-                  세부 내용 보기
-                </Text>
-              </TouchableOpacity> */}
+              </View>      
               <TouchableOpacity
                 activeOpacity={0.8}
                 onPress={() => navigation.navigate('OrderDetailPackage')}

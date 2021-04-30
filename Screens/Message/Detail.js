@@ -1,9 +1,7 @@
 import * as React from 'react';
-import { useFocusEffect } from '@react-navigation/native';
 import {
   View,
   Text,
-  ScrollView,
   StyleSheet,
   Image,
   Alert,
@@ -11,6 +9,8 @@ import {
   TextInput,
   TouchableOpacity,
   ActivityIndicator,
+  FlatList,
+  VirtualizedList
 } from 'react-native';
 
 import {useSelector} from 'react-redux';
@@ -33,33 +33,24 @@ const Detail = (props) => {
 
   const {mb_email} = useSelector((state) => state.UserInfoReducer); // 파트너스 회원 아이디(이메일)
 
-  const [isLoading, setLoading] = React.useState(false);
-  const [chatBar, setChatBar] = React.useState(false);
+  const [isLoading, setLoading] = React.useState(false);  
   const [chatHistory, setChatHistory] = React.useState([]); // 채팅 히스토리
   const [message, setMessage] = React.useState(''); // 메세지 텍스트
   const [msgFile, setMsgFile] = React.useState(''); // 채팅 파일(이미지 또는 엑셀, pdf 등) 값
-  const [chatDateHistory, setChatDateHistory] = React.useState([]); // 채팅 날짜 갱신일
 
-  const messageRoomRef = React.useRef(null);
-
-  const toScrollEnd = () => {
-    messageRoomRef.current.scrollToEnd();
-  };
-
+  
   // 채팅방 글 히스토리 가져오기
   const getChatHistoryAPI = () => {
     setLoading(true);
-    ChatAPI.getChatHistory(chatId)
+    ChatAPI.getChatHistory(chatId)      
       .then((res) => {
-        console.log('res', res);
-        if (res.data.result === '1') {
+        console.log("결과", res);
+        if (res && res.data && res.data.result === '1') {
           setChatHistory(res.data.item);
-          setChatDateHistory((prev) => [...prev, res.data.item[0].chat_date]);
-
-          setLoading(false);
-          
+          setLoading(false);          
         } else {
-          Alert.alert(res.data.message, '관리자에게 문의하세요.', [
+          //res.data.message
+          Alert.alert('test', '관리자에게 문의하세요.', [
             {
               text: '확인',
             },
@@ -81,17 +72,16 @@ const Detail = (props) => {
 
   React.useEffect(() => {
     getChatHistoryAPI();
-  },[chatId]);
+  },[]);
 
-  // React.useEffect(() => {
-  //   const unsubscribe = navigation.addListener('focus', () => {
-  //     getChatHistoryAPI();
-  //   });
+  const onEndReached = () => {
+    if (isLoading) {
+      return;
+    } else {
+      getChatHistoryAPI();
+    }
+  };
 
-  //   return unsubscribe;
-  // }, [navigation]);
-
-  
 
   // 이미지 모달창
   const ImageModal = ({toggleModal, isVisible, imgPath}) => {
@@ -191,15 +181,12 @@ const Detail = (props) => {
       });
   };
 
-  console.log('MSG ROON Props', props);
-  console.log('chatHistory', chatHistory);
 
   // 파일 다운로드 핸들러
   const fileDownloadHandler = (filePath, fileName) => {
     Alert.alert('파일을 다운로드 하시겠습니까?', '', [
       {
         text: '다운드로',
-        // onPress: () => console.log(filePath, fileName),
         onPress: () => downloader(filePath, fileName),
       },
       {
@@ -228,7 +215,6 @@ const Detail = (props) => {
             text: '확인',
           },
         ]);
-        console.log('The file saved to ', res.path());
       });
   };
 
@@ -304,6 +290,374 @@ const Detail = (props) => {
     );
   };
 
+  const renderRow = ({item, idx}) => {
+    return (
+      <View key={item.pc_id} style={{paddingHorizontal:20}}>
+        {item.diff === 'Y' ?
+          <View style={{marginTop: 50, marginBottom: 10, flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
+            <Text style={{marginRight: 10}}>- - - - - - - -</Text>
+            <Text style={styles.normalText}>{moment(item.chat_date).locale('kr').format('YYYY.MM.DD (ddd)')}</Text>
+            <Text style={{marginLeft: 10}}>- - - - - - - -</Text>
+          </View>
+        : null}
+        {/* <Text>{item.pc_id}</Text> */}
+        {item.mb_id === mb_email && item.msg ? 
+          <View
+            style={{
+              alignSelf: 'flex-end',
+              flexDirection: 'row-reverse',
+              justifyContent: 'flex-start',
+              alignItems: 'flex-start',
+              paddingVertical: 10,
+              width: '70%',
+            }}>
+            <View style={styles.msgBubbleP}>
+              <Text style={styles.msgTextP}>{item.msg}</Text>
+            </View>
+            <Text
+              style={{
+                fontFamily: 'SCDream4',
+                alignSelf: 'flex-end',
+                fontSize: 12,
+                color: '#000000',
+              }}>
+              {moment(item.chat_date).format('HH:mm')}
+            </Text>
+          </View>
+        : item.mb_id === mb_email && item.bf_file && (item.bf_file_ext === 'jpg' || item.bf_file_ext === 'png') ?
+          <View
+            style={{
+              alignSelf: 'flex-end',
+              flexDirection: 'row-reverse',
+              justifyContent: 'flex-start',
+              alignItems: 'flex-start',
+              paddingVertical: 10,
+              width: '70%',
+            }}>
+            <View
+              style={{
+                backgroundColor: '#fff',
+                padding: 10,
+                borderRadius: 5,
+                marginLeft: 10,
+              }}>
+              <TouchableOpacity
+                activeOpacity={0.8}
+                onPress={() => {
+                  imageModalHandler();
+                  setImgPath(item.bf_file);
+                }}>
+                <Image
+                  source={{uri: `${item.bf_file}`}}
+                  resizeMode="cover"
+                  style={{
+                    width: 120,
+                    height: 120,
+                    borderRadius: 5,
+                  }}
+                />
+              </TouchableOpacity>
+            </View>
+            <Text
+              style={{
+                fontFamily: 'SCDream4',
+                alignSelf: 'flex-end',
+                fontSize: 12,
+                color: '#000000',
+              }}>
+              {moment(item.chat_date).format('HH:mm')}
+            </Text>
+          </View>
+        : item.mb_id === mb_email && item.bf_file && item.bf_file_ext === 'gif' ? 
+          <View
+            style={{
+              alignSelf: 'flex-end',
+              flexDirection: 'row-reverse',
+              justifyContent: 'flex-start',
+              alignItems: 'flex-start',
+              paddingVertical: 10,
+              width: '70%',
+            }}>
+            <View
+              style={{
+                backgroundColor: '#fff',
+                padding: 10,
+                borderRadius: 5,
+                marginLeft: 10,
+              }}>
+              <TouchableOpacity
+                activeOpacity={0.8}
+                onPress={() => {
+                  imageModalHandler();
+                  setImgPath(item.bf_file);
+                }}>
+                <FastImage
+                  source={{uri: `${item.bf_file}`}}
+                  resizeMode={FastImage.resizeMode.cover}
+                  style={{
+                    width: 120,
+                    height: 120,
+                    borderRadius: 5,
+                  }}
+                />
+              </TouchableOpacity>
+            </View>
+            <Text
+              style={{
+                fontFamily: 'SCDream4',
+                alignSelf: 'flex-end',
+                fontSize: 12,
+                color: '#000000',
+              }}>
+              {moment(item.chat_date).format('HH:mm')}
+            </Text>
+          </View>
+          : item.mb_id === mb_email && item.bf_file &&
+          item.bf_file_ext !== 'gif' &&
+          item.bf_file_ext !== 'jpg' &&
+          item.bf_file_ext !== 'png' ? 
+          <TouchableOpacity
+            activeOpacity={0.8}
+            onPress={() =>
+              fileDownloadHandler(
+                item.bf_file,
+                item.bf_file_soure,
+              )
+            }
+            style={{
+              alignSelf: 'flex-end',
+              flexDirection: 'row-reverse',
+              justifyContent: 'flex-start',
+              alignItems: 'flex-start',
+              paddingVertical: 10,
+              width: '70%',
+            }}>
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'flex-start',
+                alignItems: 'center',
+                backgroundColor: '#fff',
+                padding: 10,
+                borderRadius: 5,
+                marginLeft: 10,
+              }}>
+              <Image
+                source={require('../../src/assets/icon_down.png')}
+                resizeMode="cover"
+                style={{width: 30, height: 30, marginRight: 10}}
+              />
+              <Text style={styles.normalText}>
+                {item.bf_file_soure}
+              </Text>
+            </View>
+            <Text
+              style={{
+                fontFamily: 'SCDream4',
+                alignSelf: 'flex-end',
+                fontSize: 12,
+                color: '#000000',
+              }}>
+              {moment(item.chat_date).format('HH:mm')}
+            </Text>
+          </TouchableOpacity>
+        : 
+        item.mb_id !== mb_email && item.msg ?
+          <View
+            style={{
+              alignSelf: 'flex-start',
+              flexDirection: 'row',
+              justifyContent: 'flex-start',
+              alignItems: 'flex-start',
+              paddingVertical: 10,
+              width: '70%',
+            }}>
+            <Image
+              source={{uri: `${item.mb_profile}`}}
+              resizeMode="cover"
+              style={{
+                width: 50,
+                height: 50,
+                borderRadius: 50,
+                marginRight: 10,
+              }}
+            />
+            <View style={styles.msgBubble}>
+              <Text style={styles.msgText}>{item.msg}</Text>
+            </View>
+            <Text
+              style={{
+                fontFamily: 'SCDream4',
+                alignSelf: 'flex-end',
+                fontSize: 12,
+                color: '#000000',
+              }}>
+              {moment(item.chat_date).format('HH:mm')}
+            </Text>
+          </View>
+        : item.mb_id !== mb_email && item.bf_file && (item.bf_file_ext === 'jpg' || item.bf_file_ext === 'png') ?
+          <View
+            style={{
+              alignSelf: 'flex-start',
+              flexDirection: 'row',
+              justifyContent: 'flex-start',
+              alignItems: 'flex-start',
+              paddingVertical: 10,
+              width: '70%',
+            }}>
+            <Image
+              source={{uri: `${item.mb_profile}`}}
+              resizeMode="cover"
+              style={{
+                width: 50,
+                height: 50,
+                borderRadius: 50,
+                marginRight: 10,
+              }}
+            />
+            <View
+              style={{
+                backgroundColor: '#fff',
+                padding: 10,
+                borderRadius: 5,
+                marginRight: 10,
+              }}>
+              <TouchableOpacity
+                activeOpacity={0.8}
+                onPress={() => {
+                  imageModalHandler();
+                  setImgPath(item.bf_file);
+                }}>
+                <Image
+                  source={{uri: `${item.bf_file}`}}
+                  resizeMode="cover"
+                  style={{
+                    width: 120,
+                    height: 120,
+                    borderRadius: 5,
+                  }}
+                />
+              </TouchableOpacity>
+            </View>
+            <Text
+              style={{
+                fontFamily: 'SCDream4',
+                alignSelf: 'flex-end',
+                fontSize: 12,
+                color: '#000000',
+              }}>
+              {moment(item.chat_date).format('HH:mm')}
+            </Text>
+          </View>
+        : item.mb_id !== mb_email && item.bf_file && item.bf_file_ext === 'gif' ? 
+          <View
+            style={{
+              alignSelf: 'flex-start',
+              flexDirection: 'row',
+              justifyContent: 'flex-start',
+              alignItems: 'flex-start',
+              paddingVertical: 10,
+              width: '70%',
+            }}>
+            <View
+              style={{
+                backgroundColor: '#fff',
+                padding: 10,
+                borderRadius: 5,
+                marginRight: 10,
+              }}>
+              <TouchableOpacity
+                activeOpacity={0.8}
+                onPress={() => {
+                  imageModalHandler();
+                  setImgPath(item.bf_file);
+                }}>
+                <FastImage
+                  source={{uri: `${item.bf_file}`}}
+                  resizeMode={FastImage.resizeMode.cover}
+                  style={{
+                    width: 120,
+                    height: 120,
+                    borderRadius: 5,
+                  }}
+                />
+              </TouchableOpacity>
+            </View>
+            <Text
+              style={{
+                fontFamily: 'SCDream4',
+                alignSelf: 'flex-end',
+                fontSize: 12,
+                color: '#000000',
+              }}>
+              {moment(item.chat_date).format('HH:mm')}
+            </Text>
+          </View>
+          : item.mb_id !== mb_email && item.bf_file &&
+          item.bf_file_ext !== 'gif' &&
+          item.bf_file_ext !== 'jpg' &&
+          item.bf_file_ext !== 'png' ? 
+          <TouchableOpacity
+            activeOpacity={0.8}
+            onPress={() =>
+              fileDownloadHandler(
+                item.bf_file,
+                item.bf_file_soure,
+              )
+            }
+            style={{
+              alignSelf: 'flex-start',
+              flexDirection: 'row',
+              justifyContent: 'flex-start',
+              alignItems: 'flex-start',
+              paddingVertical: 10,
+              width: '70%',
+            }}>
+            <Image
+              source={{uri: `${item.mb_profile}`}}
+              resizeMode="cover"
+              style={{
+                width: 50,
+                height: 50,
+                borderRadius: 50,
+                marginRight: 10,
+              }}
+            />
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'flex-start',
+                alignItems: 'center',
+                backgroundColor: '#fff',
+                padding: 10,
+                borderRadius: 5,
+                marginRight: 10,
+              }}>
+              <Image
+                source={require('../../src/assets/icon_down.png')}
+                resizeMode="cover"
+                style={{width: 30, height: 30, marginRight: 10}}
+              />
+              <Text style={styles.normalText}>
+                {item.bf_file_soure}
+              </Text>
+            </View>
+            <Text
+              style={{
+                fontFamily: 'SCDream4',
+                alignSelf: 'flex-end',
+                fontSize: 12,
+                color: '#000000',
+              }}>
+              {moment(item.chat_date).format('HH:mm')}
+            </Text>
+          </TouchableOpacity>
+        : null}
+      </View>
+    )
+  }
+  
+
   return (
     <>
       <DetailHeader title={routeName} navigation={navigation} />
@@ -326,448 +680,62 @@ const Detail = (props) => {
           <ActivityIndicator size="large" color="#00A170" />
         </View>
       )}
-      <ScrollView ref={messageRoomRef} style={styles.container} showsVerticalScrollIndicator={false}>
-        <ImageModal
-          imgPath={imgPath}
-          isVisible={isModalVisible}
-          toggleModal={imageModalHandler}
-        />
-        <View>
-         {chatHistory && chatHistory.length > 0 && chatDateHistory ? (
-              <View
-                style={{
-                  marginVertical: 20,
-                  flexDirection: 'row',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}>
-                <Text style={{marginRight: 10}}>- - - - - - - -</Text>
-                <Text style={styles.normalText}>
-                  {moment(chatDateHistory[0])
-                    .locale('kr')
-                    .format('YYYY.MM.DD (ddd)')}
-                </Text>
-                {/* <Text style={styles.normalText}>2021.01.28 (목)</Text> */}
-                <Text style={{marginLeft: 10}}>- - - - - - - -</Text>
-              </View>
-            ) : null}
+      {/* 채팅 내역 히스토리 */}
+      
+      <FlatList
+        data={chatHistory}
+        initialNumToRender={5}
+        renderItem={renderRow}
+        keyExtractor={(item, index) => index.toString()}
+        // onEndReached={onEndReached}
+        persistentScrollbar={true}
+        showsVerticalScrollIndicator={false}
+        progressViewOffset={true}
+        refreshing={true}
+        ListEmptyComponent={(
           <View
             style={{
-              justifyContent: 'flex-start',
-              paddingHorizontal: 20,
+              justifyContent: 'center',
+              alignItems: 'center',
+              flex: 1,
+              height: Dimensions.get('window').height - 230,
             }}>
-            {chatHistory && chatHistory.length > 0
-              ? chatHistory.map((history, idx) =>
-                  history.mb_id === mb_email ? (
-                    <View key={`p${history.pc_id}${idx}`}>
-                      {history.msg ? (
-                        <View
-                          style={{
-                            alignSelf: 'flex-end',
-                            flexDirection: 'row-reverse',
-                            justifyContent: 'flex-start',
-                            alignItems: 'flex-start',
-                            paddingVertical: 10,
-                            width: '70%',
-                          }}>
-                          <View style={styles.msgBubbleP}>
-                            <Text style={styles.msgTextP}>{history.msg}</Text>
-                          </View>
-                          <Text
-                            style={{
-                              fontFamily: 'SCDream4',
-                              alignSelf: 'flex-end',
-                              fontSize: 12,
-                              color: '#000000',
-                            }}>
-                            {moment(history.chat_date).format('HH:mm')}
-                          </Text>
-                        </View>
-                      ) : null}
-                      {history.bf_file &&
-                      (history.bf_file_ext === 'jpg' ||
-                        history.bf_file_ext === 'png') ? (
-                        <View
-                          style={{
-                            alignSelf: 'flex-end',
-                            flexDirection: 'row-reverse',
-                            justifyContent: 'flex-start',
-                            alignItems: 'flex-start',
-                            paddingVertical: 10,
-                            width: '70%',
-                          }}>
-                          <View
-                            style={{
-                              backgroundColor: '#fff',
-                              padding: 10,
-                              borderRadius: 5,
-                              marginLeft: 10,
-                            }}>
-                            <TouchableOpacity
-                              activeOpacity={0.8}
-                              onPress={() => {
-                                imageModalHandler();
-                                setImgPath(history.bf_file);
-                              }}>
-                              <Image
-                                source={{uri: `${history.bf_file}`}}
-                                resizeMode="cover"
-                                style={{
-                                  width: 120,
-                                  height: 120,
-                                  borderRadius: 5,
-                                }}
-                              />
-                            </TouchableOpacity>
-                          </View>
-                          <Text
-                            style={{
-                              fontFamily: 'SCDream4',
-                              alignSelf: 'flex-end',
-                              fontSize: 12,
-                              color: '#000000',
-                            }}>
-                            {moment(history.chat_date).format('HH:mm')}
-                          </Text>
-                        </View>
-                      ) : history.bf_file && history.bf_file_ext === 'gif' ? (
-                        <View
-                          style={{
-                            alignSelf: 'flex-end',
-                            flexDirection: 'row-reverse',
-                            justifyContent: 'flex-start',
-                            alignItems: 'flex-start',
-                            paddingVertical: 10,
-                            width: '70%',
-                          }}>
-                          <View
-                            style={{
-                              backgroundColor: '#fff',
-                              padding: 10,
-                              borderRadius: 5,
-                              marginLeft: 10,
-                            }}>
-                            <TouchableOpacity
-                              activeOpacity={0.8}
-                              onPress={() => {
-                                imageModalHandler();
-                                setImgPath(history.bf_file);
-                              }}>
-                              <FastImage
-                                source={{uri: `${history.bf_file}`}}
-                                resizeMode={FastImage.resizeMode.cover}
-                                style={{
-                                  width: 120,
-                                  height: 120,
-                                  borderRadius: 5,
-                                }}
-                              />
-                            </TouchableOpacity>
-                          </View>
-                          <Text
-                            style={{
-                              fontFamily: 'SCDream4',
-                              alignSelf: 'flex-end',
-                              fontSize: 12,
-                              color: '#000000',
-                            }}>
-                            {moment(history.chat_date).format('HH:mm')}
-                          </Text>
-                        </View>
-                      ) : history.bf_file &&
-                        history.bf_file_ext !== 'gif' &&
-                        history.bf_file_ext !== 'jpg' &&
-                        history.bf_file_ext !== 'png' ? (
-                        <TouchableOpacity
-                          activeOpacity={0.8}
-                          onPress={() =>
-                            fileDownloadHandler(
-                              history.bf_file,
-                              history.bf_file_soure,
-                            )
-                          }
-                          style={{
-                            alignSelf: 'flex-end',
-                            flexDirection: 'row-reverse',
-                            justifyContent: 'flex-start',
-                            alignItems: 'flex-start',
-                            paddingVertical: 10,
-                            width: '70%',
-                          }}>
-                          <View
-                            style={{
-                              flexDirection: 'row',
-                              justifyContent: 'flex-start',
-                              alignItems: 'center',
-                              backgroundColor: '#fff',
-                              padding: 10,
-                              borderRadius: 5,
-                              marginLeft: 10,
-                            }}>
-                            <Image
-                              source={require('../../src/assets/icon_down.png')}
-                              resizeMode="cover"
-                              style={{width: 30, height: 30, marginRight: 10}}
-                            />
-                            <Text style={styles.normalText}>
-                              {history.bf_file_soure}
-                            </Text>
-                          </View>
-                          <Text
-                            style={{
-                              fontFamily: 'SCDream4',
-                              alignSelf: 'flex-end',
-                              fontSize: 12,
-                              color: '#000000',
-                            }}>
-                            {moment(history.chat_date).format('HH:mm')}
-                          </Text>
-                        </TouchableOpacity>
-                      ) : null}
-                    </View>
-                  ) : history.msg ? (
-                    <View
-                      key={`u${history.pc_id}${idx}`}
-                      style={{
-                        alignSelf: 'flex-start',
-                        flexDirection: 'row',
-                        justifyContent: 'flex-start',
-                        alignItems: 'flex-start',
-                        paddingVertical: 5,
-                        width: '70%',
-                        marginBottom: 10,
-                      }}>
-                      <Image
-                        source={{uri: `${history.mb_profile}`}}
-                        resizeMode="cover"
-                        style={{
-                          width: 50,
-                          height: 50,
-                          borderRadius: 50,
-                          marginRight: 10,
-                        }}
-                      />
-                      <View style={styles.msgBubble}>
-                        <Text style={styles.msgText}>{history.msg}</Text>
-                      </View>
-                      <Text
-                        style={{
-                          fontFamily: 'SCDream4',
-                          alignSelf: 'flex-end',
-                          fontSize: 12,
-                          color: '#000000',
-                        }}>
-                        {moment(history.chat_date).format('HH:mm')}
-                      </Text>
-                    </View>
-                  ) : history.bf_file &&
-                    (history.bf_file_ext === 'jpg' ||
-                      history.bf_file_ext === 'png') ? (
-                    <View
-                      key={`u${history.pc_id}${idx}`}
-                      style={{
-                        alignSelf: 'flex-start',
-                        flexDirection: 'row',
-                        justifyContent: 'flex-start',
-                        alignItems: 'flex-start',
-                        paddingVertical: 10,
-                        width: '70%',
-                      }}>
-                      <Image
-                        source={{uri: `${history.mb_profile}`}}
-                        resizeMode="cover"
-                        style={{
-                          width: 50,
-                          height: 50,
-                          borderRadius: 50,
-                          marginRight: 10,
-                        }}
-                      />
-                      <View
-                        style={{
-                          backgroundColor: '#fff',
-                          padding: 10,
-                          borderRadius: 5,
-                          marginRight: 10,
-                        }}>
-                        <TouchableOpacity
-                          activeOpacity={0.8}
-                          onPress={() => {
-                            imageModalHandler();
-                            setImgPath(history.bf_file);
-                          }}>
-                          <Image
-                            source={{uri: `${history.bf_file}`}}
-                            resizeMode="cover"
-                            style={{
-                              width: 120,
-                              height: 120,
-                              borderRadius: 5,
-                            }}
-                          />
-                        </TouchableOpacity>
-                      </View>
-                      <Text
-                        style={{
-                          fontFamily: 'SCDream4',
-                          alignSelf: 'flex-end',
-                          fontSize: 12,
-                          color: '#000000',
-                        }}>
-                        {moment(history.chat_date).format('HH:mm')}
-                      </Text>
-                    </View>
-                  ) : history.bf_file && history.bf_file_ext === 'gif' ? (
-                    <View
-                      key={`u${history.pc_id}${idx}`}
-                      style={{
-                        alignSelf: 'flex-start',
-                        flexDirection: 'row',
-                        justifyContent: 'flex-start',
-                        alignItems: 'flex-start',
-                        paddingVertical: 10,
-                        width: '70%',
-                      }}>
-                      <Image
-                        source={{uri: `${history.mb_profile}`}}
-                        resizeMode="cover"
-                        style={{
-                          width: 50,
-                          height: 50,
-                          borderRadius: 5,
-                          marginRight: 10,
-                        }}
-                      />
-                      <View
-                        style={{
-                          backgroundColor: '#fff',
-                          padding: 10,
-                          borderRadius: 5,
-                          marginRight: 10,
-                        }}>
-                        <TouchableOpacity
-                          activeOpacity={0.8}
-                          onPress={() => {
-                            imageModalHandler();
-                            setImgPath(history.bf_file);
-                          }}>
-                          <FastImage
-                            source={{uri: `${history.bf_file}`}}
-                            resizeMode={FastImage.resizeMode.cover}
-                            style={{
-                              width: 120,
-                              height: 120,
-                              borderRadius: 5,
-                              marginRight: 10,
-                            }}
-                          />
-                        </TouchableOpacity>
-                      </View>
-                      <Text
-                        style={{
-                          fontFamily: 'SCDream4',
-                          alignSelf: 'flex-end',
-                          fontSize: 12,
-                          color: '#000000',
-                        }}>
-                        {moment(history.chat_date).format('HH:mm')}
-                      </Text>
-                    </View>
-                  ) : history.bf_file &&
-                    history.bf_file_ext !== 'gif' &&
-                    history.bf_file_ext !== 'jpg' &&
-                    history.bf_file_ext !== 'png' ? (
-                    <View
-                      key={`u${history.pc_id}${idx}`}
-                      style={{
-                        alignSelf: 'flex-start',
-                        flexDirection: 'row',
-                        justifyContent: 'flex-start',
-                        alignItems: 'flex-start',
-                        paddingVertical: 10,
-                        width: '70%',
-                      }}>
-                      <Image
-                        source={{uri: `${history.mb_profile}`}}
-                        resizeMode="cover"
-                        style={{
-                          width: 50,
-                          height: 50,
-                          borderRadius: 50,
-                          marginRight: 10,
-                        }}
-                      />
-                      <TouchableOpacity
-                        activeOpacity={0.8}
-                        onPress={() =>
-                          fileDownloadHandler(
-                            history.bf_file,
-                            history.bf_file_soure,
-                          )
-                        }
-                        style={{
-                          flexDirection: 'row',
-                          justifyContent: 'flex-start',
-                          alignItems: 'center',
-                          backgroundColor: '#fff',
-                          padding: 10,
-                          borderRadius: 5,
-                          marginRight: 10,
-                        }}>
-                        <Image
-                          source={require('../../src/assets/icon_down.png')}
-                          resizeMode="cover"
-                          style={{width: 30, height: 30, marginRight: 10}}
-                        />
-                        <Text style={styles.normalText}>
-                          {history.bf_file_soure}
-                        </Text>
-                      </TouchableOpacity>
-                      <Text
-                        style={{
-                          fontFamily: 'SCDream4',
-                          alignSelf: 'flex-end',
-                          fontSize: 12,
-                          color: '#000000',
-                        }}>
-                        {moment(history.chat_date).format('HH:mm')}
-                      </Text>
-                    </View>
-                  ) : null,
-                )
-              : null}
+            <Text style={{fontFamily: 'SCDream4'}}>
+              채팅 내역이 없습니다.
+            </Text>
           </View>
-
+        )}
+      />
+      
+      {/* <View
+        style={{
+          position: 'absolute',
+          bottom: 100,
+          alignSelf: 'center',
+        }}>
+        <TouchableOpacity
+          activeOpacity={0.8}
+          onPress={() => goOutChatRoomChecking(chatId)}>
           <View
             style={{
-              alignSelf: 'center',
-              marginTop: 80,
-              marginBottom: 50,
+              justifyContent: 'center',
+              borderRadius: 50,
+              backgroundColor: 'rgba(68, 68, 68, 0.2)',
             }}>
-            <TouchableOpacity
-              activeOpacity={0.8}
-              onPress={() => goOutChatRoomChecking(chatId)}>
-              <View
-                style={{
-                  justifyContent: 'center',
-                  borderRadius: 50,
-                  backgroundColor: 'rgba(68, 68, 68, 0.2)',
-                }}>
-                <Text
-                  style={{
-                    fontFamily: 'SCDream4',
-                    fontSize: 14,
-                    color: '#000',
-                    paddingHorizontal: 30,
-                    paddingVertical: 10,
-                  }}>
-                  채팅방 나가기
-                </Text>
-              </View>
-            </TouchableOpacity>
+            <Text
+              style={{
+                fontFamily: 'SCDream4',
+                fontSize: 14,
+                color: '#000',
+                paddingHorizontal: 30,
+                paddingVertical: 10,
+              }}>
+              채팅방 나가기
+            </Text>
           </View>
-        </View>
-      </ScrollView>
+        </TouchableOpacity>
+      </View> */}
+      {/* // 채팅 내역 히스토리 */}
       <View
         style={{
           flexDirection: 'row',

@@ -22,8 +22,7 @@ const index = (props) => {
 
   const [isLoading, setLoading] = React.useState(false);
   const [rooms, setRooms] = React.useState([]);
-  const [category01, setCategory01] = React.useState(null);
-  const [value, setValue] = React.useState(null);
+
 
   // 채팅방 리스트 가져오기
   const getChatRoomListAPI = () => {
@@ -53,7 +52,6 @@ const index = (props) => {
     return unsubscribe;
   }, [navigation]);
 
-  console.log('rooms', rooms);
 
   // 채팅방 나가기
   const goOutChatRoomAPI = (payload) => {

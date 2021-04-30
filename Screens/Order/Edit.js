@@ -21,7 +21,6 @@ const Edit = (props) => {
 
   const phoneNumber = '01012345678';
 
-  console.log('오더 디테일', props);
 
   const payPerType = ['10%', '20%', '30%', '40%', '50%'];
   const [payPer, setPayPer] = React.useState(payPerType[0]);

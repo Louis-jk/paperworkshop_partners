@@ -205,7 +205,6 @@ const Edit = (props) => {
 
     if (result) {
       let newArr = categoryArr.filter((x) => x !== result);
-      console.log('newArr', newArr);
       setCategoryArr(newArr);
       setCountCategory((prev) => prev - 1);
     } else if (countCategory < 5) {
@@ -256,17 +255,12 @@ const Edit = (props) => {
     return () => extSplitFn();
   }, [mb_profile_img]);
 
-  console.log('locationCur', locationCur);
-  console.log('region', region);
-  console.log('categoryArr', categoryArr);
-  console.log('countCategory', countCategory);
 
   // 파일 다운로드 핸들러
   const fileDownloadHandler = (filePath, fileName) => {
     Alert.alert('파일을 다운로드 하시겠습니까?', '', [
       {
         text: '다운드로',
-        // onPress: () => console.log(filePath, fileName),
         onPress: () => downloader(filePath, fileName),
       },
       {
@@ -295,7 +289,6 @@ const Edit = (props) => {
             text: '확인',
           },
         ]);
-        console.log('The file saved to ', res.path());
       });
   };
 
@@ -423,7 +416,6 @@ const Edit = (props) => {
   const [mobileConfirmId, setMobileConfirmId] = React.useState(null);
   const [isMobileConfimed, setMobileConfimed] = React.useState(false);
 
-  console.log('입력된 인증번호', mobileConfirmId);
 
   // 본인 인증 시간 초과의 경우 상태관리
   const [reSend, setReSend] = React.useState(false);
@@ -486,7 +478,6 @@ const Edit = (props) => {
               },
             ]);
           }
-          console.log('휴대폰 인증 response', res);
         })
         .catch((err) => console.log(err));
     }
@@ -533,7 +524,6 @@ const Edit = (props) => {
               ],
             );
           }
-          console.log('휴대폰 인증 response', res);
         })
         .catch((err) => console.log(err));
     }
@@ -559,7 +549,6 @@ const Edit = (props) => {
     } else {
       Auth.onMobileConfirmNo(mobileNo, mobileConfirmId, 'N')
         .then((res) => {
-          console.log('본인 인증 response 11', res);
           if (res.data.result == '1') {
             Alert.alert('본인 인증되었습니다.', res.data.message, [
               {
@@ -590,7 +579,6 @@ const Edit = (props) => {
 
   // 파트너스 정보 수정 API 추가중
   const onEditAPI = () => {
-    console.log('source 프로필 이미지', source);
 
     // 카테고리 선택(1차, 2차 카테고리 오브젝트 배열 묶음을 각각 다른 배열로 넣기 위한 초기 값
     let cate1NewArr = [];
@@ -619,12 +607,9 @@ const Edit = (props) => {
     frmData.append('bank_account', bankAccount);
     frmData.append('bank_depositor', depositor);
 
-    console.log(frmData);
 
     Auth.onEdit(frmData).then((res) => {
-      console.log('기본 정보 수정', res);
       if (res.data.result === '1') {
-        console.log('성공시 정보 수정 결과', res);
         dispatch(UserMobile(mobileNo));
         dispatch(UserMobileCfm('Y'));
         dispatch(UserCompany(businessName));

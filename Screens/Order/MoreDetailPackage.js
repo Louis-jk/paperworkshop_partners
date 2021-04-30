@@ -18,7 +18,6 @@ const Detail = (props) => {
   const pe_id = props.route.params.pe_id;
   const cate1 = props.route.params.cate1;
 
-  console.log('MoreDetail props', props);
 
   const [isLoading, setLoading] = React.useState(false);
   const [detail, setDetail] = React.useState(null);
@@ -28,7 +27,6 @@ const Detail = (props) => {
     Estimate.getMoreDetail(method, pe_id)
       .then((res) => {
         if (res.data.result === '1' && res.data.count > 0) {
-          console.log(res);
           setDetail(res.data.item);
           setLoading(false);
         } else {
@@ -51,7 +49,6 @@ const Detail = (props) => {
   };
 
   React.useEffect(() => {
-    console.log('유즈이펙트', cate1);
     if (cate1 === '1') {
       getEstimateMoreDetailAPI('proc_my_real_estimate_detail2');
     } else if (cate1 === '0') {
@@ -61,7 +58,6 @@ const Detail = (props) => {
     }
   }, []);
 
-  console.log('more detail', detail);
 
   return (
     <>
@@ -262,7 +258,7 @@ const Detail = (props) => {
               <View style={styles.details}>
                 <Text style={styles.detailsTitle}>목형</Text>
                 <Text style={styles.detailsDesc}>
-                  {detail.basic2.wood_pattern}
+                  {detail.basic2.wood_pattern === 'Y' ? '있음' : '없음'}
                 </Text>
               </View>
               {detail.basic.ca_id === '12' ? (
@@ -314,14 +310,13 @@ const Detail = (props) => {
                   {detail.feeder.paper_name}
                 </Text>
               </View>
+              {detail.feeder.paper_name2 ?
               <View style={styles.details}>
                 <Text style={styles.detailsTitle}>지종상세</Text>
                 <Text style={styles.detailsDesc}>
-                  {detail.feeder.paper_name2
-                    ? detail.feeder.paper_name2
-                    : '없음'}
+                  {detail.feeder.paper_name2}
                 </Text>
-              </View>
+              </View> : null }
               {detail.basic.ca_id !== '10' ? (
                 <View style={styles.details}>
                   <Text style={styles.detailsTitle}>평량</Text>
@@ -367,7 +362,7 @@ const Detail = (props) => {
               <View style={styles.details}>
                 <Text style={styles.detailsTitle}>형압</Text>
                 <Text style={styles.detailsDesc}>
-                  {detail.end.press_design  === 'Y' ? '있음' : '없음'}
+                  {detail.end.press_design === 'Y' ? '있음' : '없음'}
                 </Text>
               </View>
               <View style={styles.details}>

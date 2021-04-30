@@ -40,7 +40,6 @@ const DetailEdit = (props) => {
     portfolioImg,
   } = useSelector((state) => state.UserInfoReducer);
 
-  console.log('파트너스 추가정보', used);
 
   const dispatch = useDispatch();
 
@@ -142,13 +141,11 @@ const DetailEdit = (props) => {
 
   const removeImg = (payload) => {
     const result = uploadImage.filter((select) => select.uri !== payload);
-    console.log('result', result);
     setUploadImage(result);
   };
 
   // 파트너스 정보 수정 API
   const onEditAPI = () => {
-    console.log('uploadImage', uploadImage);
 
     const frmData = new FormData();
     frmData.append('method', 'proc_modify_partner2');
@@ -162,10 +159,8 @@ const DetailEdit = (props) => {
       frmData.append('bf_file[]', img);
     });
 
-    console.log('frmData', frmData);
 
     Auth.onEdit(frmData).then((res) => {
-      console.log('edit?', res);
       if (res.data.result === '1') {
         dispatch(UserDescription(descriptionEdit));
         dispatch(UserBusinessTime(businessTimeEdit));
@@ -182,7 +177,6 @@ const DetailEdit = (props) => {
     });
   };
 
-  console.log('uploadImage', uploadImage);
 
   return (
     <>

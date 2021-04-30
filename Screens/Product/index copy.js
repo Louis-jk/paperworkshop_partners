@@ -21,11 +21,9 @@ const index = (props) => {
   const navigation = props.navigation;
   const routeName = props.route.name;
 
-  console.log('Main props :', props);
 
   const [category01, setCategory01] = React.useState(null);
 
-  console.log('category01 : ', category01);
 
   const printTypes = ['패키지', '일반인쇄', '기타인쇄'];
   const [printType, setPrintType] = React.useState('패키지');

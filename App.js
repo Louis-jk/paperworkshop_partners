@@ -40,13 +40,7 @@ const App = () => {
         ]),
       );
 
-    // messaging().onMessage(async (remoteMessage) => {
-    //   Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
-    //   console.log(remoteMessage);
-    // });
-
     messaging().onMessage((remoteMessage) => {
-      console.log('remoteMessage', remoteMessage);
       Toast.showWithGravity(
         `${remoteMessage.data.message}`,
         Toast.LONG,
