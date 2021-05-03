@@ -122,13 +122,15 @@ def jscFlavor = 'org.webkit:android-jsc:+'
 def enableHermes = project.ext.react.get("enableHermes", false);
 
 android {
+    lintOptions {
+        abortOnError false
+    }
     compileSdkVersion rootProject.ext.compileSdkVersion
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
-
     defaultConfig {
         applicationId "com.dmonster.paperworkshoppartners"
         minSdkVersion rootProject.ext.minSdkVersion
@@ -193,8 +195,9 @@ dependencies {
     implementation platform('com.google.firebase:firebase-bom:26.6.0')
 
     // gif 파일 렌더링 때문에 필요
-    implementation 'com.facebook.fresco:fresco:1.+' 
-    implementation 'com.facebook.fresco:animated-gif:1.+'
+    implementation "com.facebook.react:react-native:+"  // From node_modules
+//    implementation 'com.facebook.fresco:fresco:1.+'
+//    implementation 'com.facebook.fresco:animated-gif:1.+'
 
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.0.0"
 
