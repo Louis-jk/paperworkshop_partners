@@ -27,7 +27,9 @@ import Estimate from '../../src/api/Estimate';
 const index = (props) => {
   const navigation = props.navigation;
   const routeName = props.route.name;
-  const pe_id = props.route.params.pe_id;
+  const {pe_id, cate1} = props.route.params;
+
+  console.log("cate1?",cate1);
 
   const {mb_email} = useSelector((state) => state.UserInfoReducer);
 
@@ -41,6 +43,7 @@ const index = (props) => {
   const [detail, setDetail] = React.useState(null); // 2차 견적 제안 세부 상세 API 호출 시 반화값
   const [chatId, setChatId] = React.useState(null); // 해당 견적건의 채팅방 아이디
 
+  const [memo, setMemo] = React.useState('');
   const [productPrice, setProductPrice] = React.useState('0'); // 제작비
   const [designPrice, setDesignPrice] = React.useState('0'); // 디자인비
   const [deliveryPrice, setDeliveryPrice] = React.useState('0'); // 물류비
@@ -238,6 +241,7 @@ const index = (props) => {
     Estimate.getMoreDetail(method, pe_id)
       .then((res) => {
         if (res.data.result === '1' && res.data.count > 0) {
+          console.log("세부 보기", res);
           setDetail(res.data.item);
           setLoading(false);
         } else {
@@ -267,8 +271,8 @@ const index = (props) => {
         console.log("견적 상세", res);
         if (res.data.result === '1' && res.data.count > 0) {
           setChatId(res.data.item[0].pm_id);
-          console.log("chatID?", res.data.item[0].pm_id);
-          if (res.data.item[0].status === '1') {
+          console.log("pm_id?", res.data.item[0].pm_id);
+          if (res.data.item[0].status === '1') {            
             setProductPrice(res.data.item[0].production_price);
             setDesignPrice(res.data.item[0].design_price);
             setDeliveryPrice(res.data.item[0].reduce_price);
@@ -788,8 +792,8 @@ const index = (props) => {
         {/* 전화하기, 메세지보내기 */}
         {base !== null &&
         estimateUser !== null &&
-        base.status !== '0' &&
-        base.status !== '1' ? (
+        (base.status !== '0' && base.status !== '1')
+         ? (
           <>
             <View style={{paddingHorizontal: 20, paddingVertical: 20}}>
               <View>
@@ -1069,27 +1073,7 @@ const index = (props) => {
                         alignItems: 'center',
                       }}>
                       <Image
-                        source={require('../../src/assets/img02.png')}
-                        resizeMode="cover"
-                        style={{
-                          width: 114,
-                          height: 114,
-                          borderRadius: 5,
-                          marginRight: 10,
-                        }}
-                      />
-                      <Image
-                        source={require('../../src/assets/img03.png')}
-                        resizeMode="cover"
-                        style={{
-                          width: 114,
-                          height: 114,
-                          borderRadius: 5,
-                          marginRight: 10,
-                        }}
-                      />
-                      <Image
-                        source={require('../../src/assets/img04.png')}
+                        source={{uri: `${detail.basic.pe_file}`}}
                         resizeMode="cover"
                         style={{
                           width: 114,
@@ -1249,6 +1233,8 @@ const index = (props) => {
               }}
             />
 
+            {cate1 !== '2' ? 
+            <>
             <View style={{paddingHorizontal: 20}}>
               <TouchableOpacity
                 activeOpacity={1}
@@ -1947,7 +1933,7 @@ const index = (props) => {
                 {/* // 인쇄도수 조정여부 */}
               </Collapsible>
             </View>
-
+           
             <View
               style={{
                 height: 1,
@@ -1962,7 +1948,11 @@ const index = (props) => {
                 width: Dimensions.get('window').width,
               }}
             />
+            </>
+            : null}
 
+            {cate1 !== '2' ? 
+            <>
             <View style={{paddingHorizontal: 20}}>
               <TouchableOpacity
                 activeOpacity={1}
@@ -2674,7 +2664,11 @@ const index = (props) => {
                 width: Dimensions.get('window').width,
               }}
             />
+            </>
+            : null}
 
+            {cate1 !== '2' ? 
+            <>
             <View style={{paddingHorizontal: 20}}>
               <TouchableOpacity
                 activeOpacity={1}
@@ -4350,27 +4344,75 @@ const index = (props) => {
                 ) : null}
                 {/* // 후가공(내지) 조정여부 */}
               </Collapsible>
+              
             </View>
+            </>
+              : null }
           </>
         )}
         {/* // 정보 */}
 
         {/* 경계 라인 */}
-        <View
-          style={{
-            height: 1,
-            backgroundColor: '#E3E3E3',
-            width: Dimensions.get('window').width,
-          }}
-        />
-        <View
-          style={{
-            height: 6,
-            backgroundColor: '#F5F5F5',
-            width: Dimensions.get('window').width,
-          }}
-        />
+        {cate1 !== '2' ? 
+        <>
+          <View
+            style={{
+              height: 1,
+              backgroundColor: '#E3E3E3',
+              width: Dimensions.get('window').width,
+            }}
+          />
+          <View
+            style={{
+              height: 6,
+              backgroundColor: '#F5F5F5',
+              width: Dimensions.get('window').width,
+            }}
+          />
+        </>
+        : null }
         {/* // 경계 라인 */}
+
+        {detail && detail.basic ? 
+        <View style={{paddingHorizontal: 20}}>              
+          <View
+            style={[
+              styles.categoryTitle,
+              styles.mV10,
+              {
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                paddingVertical: 20,
+              },
+            ]}>
+            <Text
+              style={[
+                styles.mediumText,
+                {fontSize: 16, color: '#00A170'},
+              ]}>
+              희망 인쇄물 기입사항
+            </Text>           
+          </View>
+          
+          <View style={{backgroundColor:'#F5F5F5', borderRadius:5, paddingVertical:20, paddingHorizontal:20, marginBottom:30}}>
+            <Text style={{fontSize:14, fontFamily:'SCDream4', color:'#000', lineHeight: 22}}>{detail.basic.memo ? detail.basic.memo : '의뢰 메모가 없습니다.'}</Text>
+          </View>
+        </View>
+        : null}
+            <View
+              style={{
+                height: 1,
+                backgroundColor: '#E3E3E3',
+                width: Dimensions.get('window').width,
+              }}
+            />
+            <View
+              style={{
+                height: 6,
+                backgroundColor: '#F5F5F5',
+                width: Dimensions.get('window').width,
+              }}
+            />
 
         <View style={styles.wrap}>
           <Text
@@ -4990,7 +5032,7 @@ const index = (props) => {
             <View style={styles.submitedBtn}>
               <Text style={styles.submitedBtnText}>주문자 수령완료</Text>
             </View>
-          ) : (
+          ) : base.cate1 !== '2' ? (
             <TouchableOpacity
               onPress={() => sendEstimateAPI('proc_partner_estimate_add')}
               activeOpacity={0.8}>
@@ -4998,7 +5040,15 @@ const index = (props) => {
                 <Text style={styles.submitBtnText}>견적 발송</Text>
               </View>
             </TouchableOpacity>
-          )}
+          ) : 
+            <TouchableOpacity
+              onPress={() => sendEstimateAPI('proc_partner_estimate_detail_etc_add')}
+              activeOpacity={0.8}>
+              <View style={styles.submitBtn}>
+                <Text style={styles.submitBtnText}>견적 발송</Text>
+              </View>
+            </TouchableOpacity>
+          }
         </View>
       </ScrollView>
     </>

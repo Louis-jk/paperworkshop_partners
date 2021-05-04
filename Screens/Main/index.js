@@ -112,6 +112,7 @@ const index = (props) => {
         if (res.data.result === '1' && res.data.count > 0) {
           setList(res.data.item);
           setLoading(false);
+          console.log("list?", res);
         } else if (res.data.result === '1' && res.data.count == 0) {
           setList(res.data.item);
           setLoading(false);
@@ -155,7 +156,7 @@ const index = (props) => {
     setIsActiveToggleDetail(!isActiveToggleDetail);
   };
 
-  const renderRow = ({item, idx}) => {
+  const renderRow = ({item, idx}) => {    
     return (
       <>
         <View style={{paddingHorizontal: 20}} key={idx}>
@@ -163,7 +164,7 @@ const index = (props) => {
             onPress={() =>
               navigation.navigate('OrderStep', {
                 screen: 'OrderStep',
-                params: {pe_id: item.pe_id},
+                params: {pe_id: item.pe_id, cate1: item.cate1},
               })
             }
             activeOpacity={0.8}
