@@ -294,44 +294,7 @@ const DetailEdit = (props) => {
                 justifyContent: 'space-between',
                 alignItems: 'center',
               }}>
-              {uploadImage && uploadImage.length === 1 ? (
-                <TouchableOpacity activeOpacity={0.8} style={{flex: 1}}>
-                  <ImageBackground
-                    source={{uri: `${uploadImage[0].uri}`}}
-                    resizeMode="cover"
-                    borderRadius={4}
-                    style={{
-                      position: 'relative',
-                      width: Dimensions.get('window').width / 5 - 15,
-                      height: Dimensions.get('window').width / 5 - 15,
-                    }}>
-                    <TouchableOpacity
-                      onPress={() => {
-                        removeImg(uploadImage[0].uri);
-                      }}
-                      style={{
-                        position: 'absolute',
-                        top: 0,
-                        right: 0,
-                        width: 35,
-                        height: 35,
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        borderTopRightRadius: 4,
-                        backgroundColor: 'rgba(0,0,0,0.3)',
-                      }}>
-                      <Image
-                        source={require('../../src/assets/icon_close02.png')}
-                        resizeMode="center"
-                        style={{
-                          width: 20,
-                          height: 20,
-                        }}
-                      />
-                    </TouchableOpacity>
-                  </ImageBackground>
-                </TouchableOpacity>
-              ) : uploadImage && uploadImage.length > 1 ? (
+              {uploadImage && uploadImage.length > 0 ? (
                 uploadImage.map((uImg, idx) => (
                   <TouchableOpacity
                     activeOpacity={0.8}
