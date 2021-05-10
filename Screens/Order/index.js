@@ -189,19 +189,77 @@ const index = (props) => {
 
   // 견적 자동 계산
   const priceHandler = () => {
+    
+    let productPriceFormat; 
+    let designPriceFormat; 
+    let deliveryPriceFormat; 
 
-    let productPriceInt = parseInt(productPrice);
-    let designPriceInt = parseInt(designPrice);
-    let deliveryPriceInt = parseInt(deliveryPrice);
-    let depositRatioInt = parseInt(depositRatio);
+    if(productPrice === '' || productPrice === null) {
+      productPriceFormat = '0';
+    } else {
+      productPriceFormat = productPrice;
+    }
 
-    let total = productPriceInt + designPriceInt + deliveryPriceInt;
-    let totalStr = total.toString();
-    setTotalPrice(totalStr);
+    if(designPrice === '' || designPrice === null) {
+      designPriceFormat = '0';
+    } else {
+      designPriceFormat = designPrice;
+    }
 
-    let deposit = total * (depositRatioInt / 100);
-    let depositStr = deposit.toString();
-    setDepositPrice(depositStr);
+    if(deliveryPrice === '' || deliveryPrice === null) {
+      deliveryPriceFormat = '0';
+    } else {
+      deliveryPriceFormat = deliveryPrice;
+    }
+
+    if(productPriceFormat.length > 9) {
+      Alert.alert("제작비는 최대 금액은 수억원대까지 가능합니다.", "금액을 다시 확인해주세요.", [
+        {
+          text: '확인'
+        }
+      ]);
+      setProductPrice('0');
+      productPriceRef.current.focus();
+    } else if(designPriceFormat.length > 9) {
+      Alert.alert("디자인비는 최대 금액은 수억원대까지 가능합니다.", "금액을 다시 확인해주세요.", [
+        {
+          text: '확인'
+        }
+      ]);      
+      setDesignPrice('0');
+      designPriceRef.current.focus();
+    } else if(deliveryPriceFormat.length > 7) {
+      Alert.alert("물류비는 최대 금액은 백만원대까지 가능합니다.", "금액을 다시 확인해주세요.", [
+        {
+          text: '확인'
+        }
+      ]);      
+      setDeliveryPrice('0');
+      deliveryPriceRef.current.focus();
+    } else {
+      let productPriceInt = parseInt(productPriceFormat);
+      let designPriceInt = parseInt(designPriceFormat);
+      let deliveryPriceInt = parseInt(deliveryPriceFormat);
+      let depositRatioInt = parseInt(depositRatio);
+  
+      let total = productPriceInt + designPriceInt + deliveryPriceInt;
+      
+      const isinteger = Number.isInteger(total);
+      if(isinteger) {
+        let totalStr = total.toString();
+        setTotalPrice(totalStr);
+      } else {
+        setTotalPrice('0');
+      }
+  
+      if(isinteger) {
+        let deposit = total * (depositRatioInt / 100);
+        let depositStr = deposit.toString();
+        setDepositPrice(depositStr);
+      } else {
+        setDepositPrice('0');
+      }    
+    }
   };
 
   const depositHandler = (value) => {
@@ -210,7 +268,8 @@ const index = (props) => {
     let depositRatioInt = parseInt(value);
 
     let deposit = total * (depositRatioInt / 100);
-    let depositStr = deposit.toString();
+    let depositFloor = Math.floor(deposit); 
+    let depositStr = depositFloor.toString();
     let depositPriceFormat = depositStr.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
     setDepositPrice(depositPriceFormat);
   };
@@ -475,6 +534,7 @@ const index = (props) => {
   };
 
   const productPriceRef = React.useRef(); // 제작비
+  const designPriceRef = React.useRef(); //  디자인비
   const deliveryPriceRef = React.useRef(); // 물류비
 
   //  견적확정
@@ -728,13 +788,12 @@ const index = (props) => {
     );
   };
 
-
-
   // 이미지 모달 핸들러
   const imageModalHandler = (path) => {
     setModalVisible(!isModalVisible);
     setImgPath(path);
   };
+
 
   return (
     <>
@@ -4601,8 +4660,19 @@ const index = (props) => {
                   value={productPrice}
                   placeholder="금액을 입력하세요."
                   style={styles.textInput}
-                  onChangeText={(text) => setProductPrice(text)}
-                  onEndEditing={() => priceHandler()}
+                  onFocus={() => productPrice === '0' ? setProductPrice('') : productPrice}
+                  onChangeText={(text) => {
+                    const filteredText = text.replace(/(-)|(\.)/gi, '');
+                    setProductPrice(filteredText);
+                  }}
+                  onEndEditing={() => {
+                    if(!productPrice === null || productPrice === '') {
+                      setProductPrice('0');
+                      priceHandler();
+                    } else {
+                      priceHandler();
+                    }                    
+                  }}
                   keyboardType="numeric"
                 />
               ) : (
@@ -4631,11 +4701,23 @@ const index = (props) => {
               <Text style={styles.orderInfoDesc}>디자인비(원)</Text>
               {base.status === '0' || base.status === '1' ? (
                 <TextInput
+                  ref={designPriceRef}
                   value={designPrice}
                   placeholder="금액을 입력하세요."
                   style={styles.textInput}
-                  onChangeText={(text) => setDesignPrice(text)}
-                  onEndEditing={() => priceHandler()}
+                  onFocus={() => designPrice === '0' ? setDesignPrice('') : designPrice}
+                  onChangeText={(text) => {
+                    const filteredText = text.replace(/(-)|(\.)/gi, '');
+                    setDesignPrice(filteredText);
+                  }}
+                  onEndEditing={() => {
+                    if(!designPrice === null || designPrice === '') {
+                      setDesignPrice('0');
+                      priceHandler();
+                    } else {
+                      priceHandler();
+                    }                    
+                  }}
                   keyboardType="numeric"
                 />
               ) : (
@@ -4667,8 +4749,25 @@ const index = (props) => {
                   value={deliveryPrice}
                   placeholder="금액을 입력하세요."
                   style={styles.textInput}
-                  onChangeText={(text) => setDeliveryPrice(text)}
-                  onEndEditing={() => priceHandler()}
+                  onFocus={() => deliveryPrice === '0' ? setDeliveryPrice('') : deliveryPrice}
+                  onChangeText={(text) => {
+                    const filteredText = text.replace(/(-)|(\.)/gi, '');
+                    console.log("filteredText", filteredText);
+                    
+                    if(filteredText !== null || filteredText !== '') {
+                      setDeliveryPrice(filteredText);                      
+                    }else{                      
+                      setDeliveryPrice('0');
+                    }
+                  }}
+                  onSubmitEditing={() => {
+                    if(deliveryPrice === null || deliveryPrice === '') {
+                      setDeliveryPrice('0');
+                      priceHandler();
+                    } else {
+                      priceHandler();
+                    }
+                  }}                 
                   keyboardType="numeric"
                 />
               ) : (
@@ -4753,7 +4852,7 @@ const index = (props) => {
                 <View
                   style={{
                     position: 'absolute',
-                    top: 81,
+                    top: 79,
                     left: 0,
                     width: '100%',
                     backgroundColor: '#fff',
