@@ -161,12 +161,12 @@ const index = (props) => {
                           </Text>
                         ) : null}
                         {room.user_name ? (
-                          <Text style={styles.msgInfoName}>
+                          <Text style={{...styles.msgInfoName, width: '87%'}} numberOfLines={1}>
                             {room.user_name}
                           </Text>
                         ) : null}
                       </View>
-                      <Text style={styles.msgInfoName} numberOfLines={1}>제목 : {room.title}</Text>
+                      <Text style={{...styles.msgInfoName, width: '87%'}} numberOfLines={1}>제목 : {room.title}</Text>
                       {room.msg ? (
                         <View
                           style={{
@@ -182,7 +182,7 @@ const index = (props) => {
                             numberOfLines={1}>
                             최신글 :
                           </Text>
-                          <Text style={styles.msgInfoContent} numberOfLines={1}>
+                          <Text style={{...styles.msgInfoContent, width: '67%'}} numberOfLines={1}>
                             {' '}
                             {room.msg}
                           </Text>
