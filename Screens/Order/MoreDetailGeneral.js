@@ -83,6 +83,8 @@ const Detail = (props) => {
               <AutoHeightImage
                 width={Dimensions.get('window').width - 40}
                 source={{uri: `${imgPath}`}}
+                maxHeight={600}
+                resizeMode="contain"
               />
             ) : (
               <FastImage
@@ -99,7 +101,7 @@ const Detail = (props) => {
           </View>
           <TouchableOpacity
             activeOpacity={0.8}
-            onPress={toggleModal}
+            onPress={() => setModalVisible(!isModalVisible)}
             style={{
               justifyContent: 'center',
               alignItems: 'center',
