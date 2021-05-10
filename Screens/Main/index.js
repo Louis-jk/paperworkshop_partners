@@ -13,7 +13,8 @@ import {
   Alert,
   ActivityIndicator,
   Platform,
-  PermissionsAndroid
+  PermissionsAndroid,
+  BackHandler
 } from 'react-native';
 
 import {useSelector} from 'react-redux';
@@ -135,6 +136,18 @@ const index = (props) => {
       });
   };
 
+  const backAction = () => {
+    Alert.alert("이미 로그인된 상태입니다.", "앱을 종료하시겠습니까?", [
+      {
+        text: "아니요",
+        onPress: () => null,
+        style: "cancel"
+      },
+      { text: "앱종료하기", onPress: () => BackHandler.exitApp() }
+    ]);
+    return true;
+  };
+
   React.useEffect(() => {
     requestAndroidPermission();
   },[]);
@@ -150,6 +163,12 @@ const index = (props) => {
 
     return unsubscribe;
   }, [navigation]);
+
+  React.useEffect(() => {
+    BackHandler.addEventListener("hardwareBackPress", backAction);
+
+    return () => BackHandler.removeEventListener("hardwareBackPress", backAction);
+  },[])
 
   const [isActiveToggleDetail, setIsActiveToggleDetail] = React.useState(false);
   const toggleDetail = () => {
