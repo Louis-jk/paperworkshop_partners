@@ -9,6 +9,10 @@ import {
   Alert,
   ActivityIndicator,
 } from 'react-native';
+import Modal from 'react-native-modal';
+import AutoHeightImage from 'react-native-auto-height-image';
+import FastImage from 'react-native-fast-image';
+
 import DetailHeader from '../Common/DetailHeader';
 import Estimate from '../../src/api/Estimate';
 
@@ -58,6 +62,72 @@ const Detail = (props) => {
     }
   }, []);
 
+  
+  // 이미지 모달창
+  const ImageModal = ({toggleModal, isVisible, imgPath}) => {
+    let extension = '';
+    if (imgPath !== null) {
+      extension = imgPath.slice(imgPath.lastIndexOf('.'));
+    }
+
+    return (
+      <View>
+        <Modal
+          isVisible={isVisible}
+          // onBackdropPress={toggleModal}
+          style={{
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}>
+          <View style={{marginBottom: 20}}>
+            {extension !== '.gif' ? (
+              <AutoHeightImage
+                width={Dimensions.get('window').width - 40}
+                source={{uri: `${imgPath}`}}
+              />
+            ) : (
+              <FastImage
+                source={{uri: `${imgPath}`}}
+                resizeMode={FastImage.resizeMode.contain}
+                style={{
+                  width: Dimensions.get('window').width - 40,
+                  height: 250,
+                  borderRadius: 5,
+                  marginRight: 10,
+                }}
+              />
+            )}
+          </View>
+          <TouchableOpacity
+            activeOpacity={0.8}
+            onPress={toggleModal}
+            style={{
+              justifyContent: 'center',
+              alignItems: 'center',
+              borderRadius: 4,
+              borderWidth: 1,
+              borderColor: '#fff',
+              paddingHorizontal: 14,
+              paddingVertical: 7,
+            }}>
+            <Text style={{fontFamily: 'SCDream4', fontSize: 13, color: '#fff'}}>
+              닫기
+            </Text>
+          </TouchableOpacity>
+        </Modal>
+      </View>
+    );
+  };
+
+  const [isModalVisible, setModalVisible] = React.useState(false);
+  const [imgPath, setImgPath] = React.useState(null);
+
+  // 이미지 모달 핸들러
+  const imageModalHandler = (path) => {
+    setModalVisible(!isModalVisible);
+    setImgPath(path);
+  };
+
 
   return (
     <>
@@ -85,6 +155,11 @@ const Detail = (props) => {
         <ScrollView
           style={styles.container}
           showsVerticalScrollIndicator={false}>
+          <ImageModal
+            imgPath={imgPath}
+            isVisible={isModalVisible}
+            toggleModal={imageModalHandler}
+          />
           <View style={styles.wrap}>
             <Text
               style={{
@@ -163,44 +238,74 @@ const Detail = (props) => {
                 <Text style={styles.detailsDesc}>첨부파일이 없습니다.</Text>
               ) : null}
             </View>
-            {detail.basic.pe_file ? (
-              <View
+            {(detail.basic.pe_file && detail.basic.type_name === 'jpg' ||  detail.basic.pe_file && detail.basic.type_name === 'png') ? (
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    justifyContent: 'flex-start',
+                    alignItems: 'center',
+                  }}>
+                  <TouchableOpacity
+                    activeOpacity={0.8}
+                    onPress={() => imageModalHandler(detail.basic.pe_file)}>
+                    <Image
+                      source={{uri: `${detail.basic.pe_file}`}}
+                      resizeMode="cover"
+                      style={{
+                        width: 114,
+                        height: 114,
+                        borderRadius: 5,
+                        marginRight: 10,
+                      }}
+                    />
+                  </TouchableOpacity>
+                </View>
+              ) 
+              :
+              detail.basic.pe_file && detail.basic.type_name === 'gif' ? (
+                <TouchableOpacity
+                  onPress={() => imageModalHandler(details.pe_file)}>
+                  <FastImage
+                    source={{uri: `${details.pe_file}`}}
+                    resizeMode={FastImage.resizeMode.cover}
+                    style={{
+                      width: 114,
+                      height: 114,
+                      borderRadius: 5,
+                      marginRight: 10,
+                    }}
+                  />
+                </TouchableOpacity>
+              )
+              : 
+              detail.basic.pe_file &&
+              (detail.basic.type_name !== 'jpg' ||
+              detail.basic.type_name !== 'png' ||
+              detail.basic.type_name !== 'gif') ? (
+              <TouchableOpacity
+                activeOpacity={0.8}
+                onPress={() =>
+                  fileDownloadHandler(detail.basic.pe_file, detail.basic.pe_source_file)
+                }
                 style={{
                   flexDirection: 'row',
                   justifyContent: 'flex-start',
                   alignItems: 'center',
                 }}>
                 <Image
-                  source={require('../../src/assets/img02.png')}
+                  source={require('../../src/assets/icon_down.png')}                      
                   resizeMode="cover"
                   style={{
-                    width: 114,
-                    height: 114,
+                    width: 20,
+                    height: 20,
                     borderRadius: 5,
-                    marginRight: 10,
+                    marginRight: 5,
                   }}
                 />
-                <Image
-                  source={require('../../src/assets/img03.png')}
-                  resizeMode="cover"
-                  style={{
-                    width: 114,
-                    height: 114,
-                    borderRadius: 5,
-                    marginRight: 10,
-                  }}
-                />
-                <Image
-                  source={require('../../src/assets/img04.png')}
-                  resizeMode="cover"
-                  style={{
-                    width: 114,
-                    height: 114,
-                    borderRadius: 5,
-                    marginRight: 10,
-                  }}
-                />
-              </View>
+                <Text style={{fontFamily: 'SCDream4'}}>
+                  {detail.basic.pe_source_file}
+                </Text>
+              </TouchableOpacity>
             ) : null}
           </View>
 
@@ -377,6 +482,82 @@ const Detail = (props) => {
                   {detail.end.coating ? detail.end.coating : '없음'}
                 </Text>
               </View>
+              <View style={styles.details}>
+                <Text style={styles.detailsTitle}>첨부파일</Text>
+                {detail.basic2.pe_file2 === null ||
+                detail.basic2.pe_file2 === '' ? (
+                  <Text style={styles.detailsDesc}>첨부파일이 없습니다.</Text>
+                ) : null}
+              </View>
+              {(detail.basic2.pe_file2 && detail.basic2.type_name2 === 'jpg' ||  detail.basic2.pe_file2 && detail.basic2.type_name2 === 'png') ? (
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      justifyContent: 'flex-start',
+                      alignItems: 'center',
+                    }}>
+                    <TouchableOpacity
+                      activeOpacity={0.8}
+                      onPress={() => imageModalHandler(detail.basic2.pe_file2)}>
+                      <Image
+                        source={{uri: `${detail.basic2.pe_file2}`}}
+                        resizeMode="cover"
+                        style={{
+                          width: 114,
+                          height: 114,
+                          borderRadius: 5,
+                          marginRight: 10,
+                        }}
+                      />
+                    </TouchableOpacity>
+                  </View>
+                ) 
+                :
+                detail.basic2.pe_file2 && detail.basic2.type_name2 === 'gif' ? (
+                  <TouchableOpacity
+                    onPress={() => imageModalHandler(basic2.pe_file2)}>
+                    <FastImage
+                      source={{uri: `${detail.basic2.pe_file2}`}}
+                      resizeMode={FastImage.resizeMode.cover}
+                      style={{
+                        width: 114,
+                        height: 114,
+                        borderRadius: 5,
+                        marginRight: 10,
+                      }}
+                    />
+                  </TouchableOpacity>
+                )
+                : 
+                detail.basic2.pe_file2 &&
+                (detail.basic2.type_name2 !== 'jpg' ||
+                detail.basic2.type_name2 !== 'png' ||
+                detail.basic2.type_name2 !== 'gif') ? (
+                <TouchableOpacity
+                  activeOpacity={0.8}
+                  onPress={() =>
+                    fileDownloadHandler(detail.basic2.pe_file2, detail.basic2.pe_source_file2)
+                  }
+                  style={{
+                    flexDirection: 'row',
+                    justifyContent: 'flex-start',
+                    alignItems: 'center',
+                  }}>
+                  <Image
+                    source={require('../../src/assets/icon_down.png')}                      
+                    resizeMode="cover"
+                    style={{
+                      width: 20,
+                      height: 20,
+                      borderRadius: 5,
+                      marginRight: 5,
+                    }}
+                  />
+                  <Text style={{fontFamily: 'SCDream4'}}>
+                    {detail.basic2.pe_source_file2}
+                  </Text>
+                </TouchableOpacity>
+              ) : null}
             </View>
             {/* <TouchableOpacity
             onPress={() => Alert.alert('제출')}

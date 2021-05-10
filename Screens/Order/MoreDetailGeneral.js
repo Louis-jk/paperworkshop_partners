@@ -122,8 +122,9 @@ const Detail = (props) => {
   const [imgPath, setImgPath] = React.useState(null);
 
   // 이미지 모달 핸들러
-  const imageModalHandler = () => {
+  const imageModalHandler = (path) => {
     setModalVisible(!isModalVisible);
+    setImgPath(path);
   };
 
   console.log('more detail', detail);
@@ -237,22 +238,36 @@ const Detail = (props) => {
                 <Text style={styles.detailsDesc}>첨부파일이 없습니다.</Text>
               ) : null}
             </View>
-            {detail.basic.pe_file ? (
-              <View
-                style={{
-                  flexDirection: 'row',
-                  justifyContent: 'flex-start',
-                  alignItems: 'center',
-                }}>
-                <TouchableOpacity
-                  activeOpacity={0.8}
-                  onPress={() => {
-                    imageModalHandler();
-                    setImgPath(detail.basic.pe_file);
+            {(detail.basic.pe_file && detail.basic.type_name === 'jpg' ||  detail.basic.pe_file && detail.basic.type_name === 'png') ? (
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    justifyContent: 'flex-start',
+                    alignItems: 'center',
                   }}>
-                  <Image
-                    source={{uri: `${detail.basic.pe_file}`}}
-                    resizeMode="cover"
+                  <TouchableOpacity
+                    activeOpacity={0.8}
+                    onPress={() => imageModalHandler(detail.basic.pe_file)}>
+                    <Image
+                      source={{uri: `${detail.basic.pe_file}`}}
+                      resizeMode="cover"
+                      style={{
+                        width: 114,
+                        height: 114,
+                        borderRadius: 5,
+                        marginRight: 10,
+                      }}
+                    />
+                  </TouchableOpacity>
+                </View>
+              ) 
+              :
+              detail.basic.pe_file && detail.basic.type_name === 'gif' ? (
+                <TouchableOpacity
+                  onPress={() => imageModalHandler(details.pe_file)}>
+                  <FastImage
+                    source={{uri: `${details.pe_file}`}}
+                    resizeMode={FastImage.resizeMode.cover}
                     style={{
                       width: 114,
                       height: 114,
@@ -261,7 +276,36 @@ const Detail = (props) => {
                     }}
                   />
                 </TouchableOpacity>
-              </View>
+              )
+              : 
+              detail.basic.pe_file &&
+              (detail.basic.type_name !== 'jpg' ||
+              detail.basic.type_name !== 'png' ||
+              detail.basic.type_name !== 'gif') ? (
+              <TouchableOpacity
+                activeOpacity={0.8}
+                onPress={() =>
+                  fileDownloadHandler(detail.basic.pe_file, detail.basic.pe_source_file)
+                }
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'flex-start',
+                  alignItems: 'center',
+                }}>
+                <Image
+                  source={require('../../src/assets/icon_down.png')}                      
+                  resizeMode="cover"
+                  style={{
+                    width: 20,
+                    height: 20,
+                    borderRadius: 5,
+                    marginRight: 5,
+                  }}
+                />
+                <Text style={{fontFamily: 'SCDream4'}}>
+                  {detail.basic.pe_source_file}
+                </Text>
+              </TouchableOpacity>
             ) : null}
           </View>
 
@@ -558,22 +602,36 @@ const Detail = (props) => {
                   <Text style={styles.detailsDesc}>첨부파일이 없습니다.</Text>
                 ) : null}
               </View>
-              {detail.basic2.pe_file2 ? (
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    justifyContent: 'flex-start',
-                    alignItems: 'center',
-                  }}>
-                  <TouchableOpacity
-                    activeOpacity={0.8}
-                    onPress={() => {
-                      imageModalHandler();
-                      setImgPath(detail.basic.pe_file);
+              {(detail.basic2.pe_file2 && detail.basic2.type_name2 === 'jpg' ||  detail.basic2.pe_file2 && detail.basic2.type_name2 === 'png') ? (
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      justifyContent: 'flex-start',
+                      alignItems: 'center',
                     }}>
-                    <Image
+                    <TouchableOpacity
+                      activeOpacity={0.8}
+                      onPress={() => imageModalHandler(detail.basic2.pe_file2)}>
+                      <Image
+                        source={{uri: `${detail.basic2.pe_file2}`}}
+                        resizeMode="cover"
+                        style={{
+                          width: 114,
+                          height: 114,
+                          borderRadius: 5,
+                          marginRight: 10,
+                        }}
+                      />
+                    </TouchableOpacity>
+                  </View>
+                ) 
+                :
+                detail.basic2.pe_file2 && detail.basic2.type_name2 === 'gif' ? (
+                  <TouchableOpacity
+                    onPress={() => imageModalHandler(basic2.pe_file2)}>
+                    <FastImage
                       source={{uri: `${detail.basic2.pe_file2}`}}
-                      resizeMode="cover"
+                      resizeMode={FastImage.resizeMode.cover}
                       style={{
                         width: 114,
                         height: 114,
@@ -582,7 +640,36 @@ const Detail = (props) => {
                       }}
                     />
                   </TouchableOpacity>
-                </View>
+                )
+                : 
+                detail.basic2.pe_file2 &&
+                (detail.basic2.type_name2 !== 'jpg' ||
+                detail.basic2.type_name2 !== 'png' ||
+                detail.basic2.type_name2 !== 'gif') ? (
+                <TouchableOpacity
+                  activeOpacity={0.8}
+                  onPress={() =>
+                    fileDownloadHandler(detail.basic2.pe_file2, detail.basic2.pe_source_file2)
+                  }
+                  style={{
+                    flexDirection: 'row',
+                    justifyContent: 'flex-start',
+                    alignItems: 'center',
+                  }}>
+                  <Image
+                    source={require('../../src/assets/icon_down.png')}                      
+                    resizeMode="cover"
+                    style={{
+                      width: 20,
+                      height: 20,
+                      borderRadius: 5,
+                      marginRight: 5,
+                    }}
+                  />
+                  <Text style={{fontFamily: 'SCDream4'}}>
+                    {detail.basic2.pe_source_file2}
+                  </Text>
+                </TouchableOpacity>
               ) : null}
             </View>
             {/* <TouchableOpacity
