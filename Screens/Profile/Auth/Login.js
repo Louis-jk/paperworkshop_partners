@@ -9,10 +9,13 @@ import {
   Dimensions,
   Alert,
   Platform,
+  ActivityIndicator,
+  Keyboard
 } from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import messaging from '@react-native-firebase/messaging';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 import {
   UserNo,
@@ -63,6 +66,7 @@ const Login = (props) => {
   const [checkPlatform, setCheckPlatform] = React.useState(null); // OS 체크
   const [loginEmail, setLoginEmail] = React.useState(null);
   const [loginPwd, setLoginPwd] = React.useState(null);
+  const [isLoading, setLoading] = React.useState(false);
 
   const [autoLogin, setAutoLogin] = React.useState(false);
   const toggleCheck = () => {
@@ -128,6 +132,8 @@ const Login = (props) => {
 
   // 로그인
   const onLogin = () => {
+    Keyboard.dismiss();
+    setLoading(true);
     Auth.onLogin(loginEmail, loginPwd, fcmToken, checkPlatform)
       .then((res) => {
         if (res.data.result === '1') {
@@ -163,11 +169,14 @@ const Login = (props) => {
 
           if (autoLogin) {
             storeData();
+            setLoading(false);
             navigation.navigate('Stack');
           } else {
+            setLoading(false);
             navigation.navigate('Stack');
           }
         } else {
+          setLoading(false);
           Alert.alert(res.data.message, '다시 확인해주세요.', [
             {
               text: '확인',
@@ -177,6 +186,7 @@ const Login = (props) => {
         }
       })
       .catch((err) => {
+        setLoading(false);
         Alert.alert(err, '관리자에게 문의하세요', [
           {
             text: '확인',
@@ -186,6 +196,26 @@ const Login = (props) => {
   };
 
   return (
+    <>
+    {isLoading && (
+      <View
+        style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          bottom: 0,
+          right: 0,
+          flex: 1,
+          height: Dimensions.get('window').height,
+          justifyContent: 'center',
+          alignItems: 'center',
+          zIndex: 100,
+          elevation: 0,
+          backgroundColor: 'rgba(255,255,255,0.5)',
+        }}>
+        <ActivityIndicator size="large" color="#00A170" />
+      </View>
+    )}
     <View
       style={{
         flex: 1,
@@ -364,6 +394,7 @@ const Login = (props) => {
         </TouchableOpacity>
       </View>
     </View>
+    </>
   );
 };
 
