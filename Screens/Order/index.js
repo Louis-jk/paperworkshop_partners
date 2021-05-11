@@ -1671,7 +1671,7 @@ const index = (props) => {
                               : '없음'}
                           </Text>
                         </View>
-                        </>
+                      </>
                       ) : null}
 
                     <View style={styles.details}>
