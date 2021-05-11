@@ -36,6 +36,9 @@ import {
   joinBankName,
   joinBankAccount,
   joinBankDepositor,
+  joinNoticeYn,
+  joinQaYn,
+  joinEstimateYn
 } from '../../../Modules/JoinReducer';
 
 const Register = (props) => {
@@ -541,25 +544,34 @@ const Register = (props) => {
       frmData.append('bank_account', bankAccount);
       frmData.append('bank_depositor', bankDepositor);
 
+      console.log(frmData);
+      // return false;
 
       Auth.onSignIn(frmData)
         .then((res) => {
-
+          
           if (res.data.result === '1' && res.data.count > 0) {
-            dispatch(joinEmail(res.data.mb_id));
+            console.log("auth result ? ", res);
+
+            dispatch(joinEmail(res.data.item.mb_id));
             dispatch(joinPwd(password));
-            dispatch(joinName(name));
-            dispatch(joinMobile(mobile));
+            dispatch(joinName(res.data.item.mb_name));
+            dispatch(joinMobile(res.data.item.mb_hp));
             dispatch(joinMobileCfm(mobileCfm));
-            dispatch(joinCompany(company));
+            dispatch(joinCompany(res.data.item.mb_2));
             dispatch(joinLicense(licenseFile));
-            // dispatch(joinLocation(values.register_company));
-            // dispatch(joinCate1(values.register_company));
-            // dispatch(joinCaId(values.register_company));
-            dispatch(joinBankName(bankName));
-            dispatch(joinBankAccount(bankAccount));
-            dispatch(joinBankDepositor(bankDepositor));
+            dispatch(joinLocation(res.data.item.location));
+            dispatch(joinCate1(res.data.item.cate1));
+            dispatch(joinCaId(res.data.item.ca_id));
+            dispatch(joinBankName(res.data.item.bank_name));
+            dispatch(joinBankAccount(res.data.item.bank_account));
+            dispatch(joinBankDepositor(res.data.item.bank_depositor));
+            dispatch(joinNoticeYn(res.data.item.notice_yn));
+            dispatch(joinQaYn(res.data.item.qa_yn));
+            dispatch(joinEstimateYn(res.data.item.estimate_yn));
+
             navigation.navigate('Signed');
+
           } else {
             Alert.alert(res.data.message, '회원가입에 실패하였습니다.', [
               {
@@ -704,7 +716,7 @@ const Register = (props) => {
           validationSchema={validationSchema}>
           {(formikProps) => (
             <>
-              <View style={{paddingHorizontal: 20, paddingVertical: 20}}>
+              <View style={{paddingHorizontal: 20, paddingVertical: 20}}>               
                 {/* 이메일 */}
                 <View style={{marginBottom: 25}}>
                   <Text style={[styles.profileTitle, {marginBottom: 10}]}>

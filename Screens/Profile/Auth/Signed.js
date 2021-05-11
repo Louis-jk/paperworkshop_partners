@@ -19,11 +19,16 @@ import {
   UserMobile,
   UserMobileCfm,
   UserCompany,
-  UserType,
+  UserLevel,
   UserProfile,
   UserPtype,
   UserEstimateCnt,
-  UserProfileImg,
+  UserCate1,
+  UserCaId,
+  UserCaName,  
+  UserNo,
+  UserLicense,
+  UserLicenseSource
 } from '../../../Modules/UserInfoReducer';
 
 const Signed = (props) => {
@@ -48,25 +53,28 @@ const Signed = (props) => {
     Auth.onLogin(mb_email, mb_password, fcmToken, checkPlatform)
       .then((res) => {
         if (res.data.result === '1' && res.data.count > 0) {
+          console.log("login res",res);
           dispatch(UserEmail(res.data.item.mb_email));
           dispatch(UserName(res.data.item.mb_name));
           dispatch(UserMobile(res.data.item.mb_hp));
           dispatch(UserMobileCfm(res.data.item.mb_1));
           dispatch(UserCompany(res.data.item.mb_2));
-          dispatch(UserType(res.data.item.mb_level));
+          dispatch(UserLevel(res.data.item.mb_level));
           dispatch(UserProfile(res.data.item.mb_profile));
           dispatch(UserPtype(res.data.item.ptype));
           dispatch(UserEstimateCnt(res.data.item.estimate_cnt));
-          dispatch(UserProfileImg(res.data.item.profileImg));
+          dispatch(UserCate1(res.data.item.cate1));
+          dispatch(UserCaId(res.data.item.ca_id));
+          dispatch(UserCaName(res.data.item.ca_name));
+          dispatch(UserLevel(res.data.item.mb_level));
+          dispatch(UserNo(res.data.item.mb_no));
+          dispatch(UserLicense(res.data.item.license));
+          dispatch(UserLicenseSource(res.data.item.license_source));
 
-          navigation.navigate('Stack');
+          navigation.navigate('Stack', {screen:'Stack'});
+
         } else {
-          Alert.alert(res.data.message, '다시 확인해주세요.', [
-            {
-              text: '확인',
-              onPress: () => loginEmailRef.current.focus(),
-            },
-          ]);
+          navigation.navigate('Login');
         }
       })
       .catch((err) => {
