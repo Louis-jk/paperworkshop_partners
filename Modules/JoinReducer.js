@@ -15,6 +15,10 @@ const JOIN_BANKNAME = 'JOIN_BANKNAME';
 const JOIN_BANKACCOUNT = 'JOIN_BANKACCOUNT';
 const JOIN_BANKDEPOSITOR = 'JOIN_BANKDEPOSITOR';
 
+const JOIN_NOTICE_YN = 'JOIN_NOTICE_YN';
+const JOIN_QA_YN = 'JOIN_QA_YN';
+const JOIN_ESTIMATE_YN = 'JOIN_ESTIMATE_YN';
+
 // action method
 export const joinEmail = (payload) => ({type: JOIN_EMAIL, payload});
 export const joinPwd = (payload) => ({type: JOIN_PWD, payload});
@@ -32,6 +36,9 @@ export const joinBankDepositor = (payload) => ({
   type: JOIN_BANKDEPOSITOR,
   payload,
 });
+export const joinNoticeYn = (payload) => ({type: JOIN_NOTICE_YN, payload});
+export const joinQaYn = (payload) => ({type: JOIN_QA_YN, payload});
+export const joinEstimateYn = (payload) => ({type: JOIN_ESTIMATE_YN, payload});
 
 // initialize
 const initialize = {
@@ -48,6 +55,9 @@ const initialize = {
   bank_name: null, // 은행명
   bank_account: null, // 계좌번호
   bank_depositor: null, // 예금주
+  notice_yn: null, // 공지사항 알림받기
+  qa_yn: null, // 문의사항 알림받기
+  estimate_yn: null // 견적 알림받기
 };
 
 // reducer create
@@ -117,6 +127,21 @@ export default function setJoinInfo(state = initialize, action) {
       return {
         ...state,
         bank_depositor: action.payload,
+      };
+    case JOIN_NOTICE_YN:
+      return {
+        ...state,
+        notice_yn: action.payload,
+      };
+    case JOIN_QA_YN:
+      return {
+        ...state,
+        qa_yn: action.payload,
+      };
+    case JOIN_ESTIMATE_YN:
+      return {
+        ...state,
+        estimate_yn: action.payload,
       };
     default:
       return state;
