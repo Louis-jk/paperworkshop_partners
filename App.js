@@ -1,12 +1,12 @@
 import * as React from 'react';
-import {View, Text, StatusBar, Alert} from 'react-native';
+import {StatusBar, Alert} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import SplashScreen from 'react-native-splash-screen';
 import messaging from '@react-native-firebase/messaging';
 // import {Root, Toast} from 'native-base';
 
 import DrawerNavigator from './navigation/DrawerNavigator';
-import {useDispatch, useSelector} from 'react-redux';
+import {useDispatch} from 'react-redux';
 import Toast from 'react-native-simple-toast';
 import {setFcmToken} from './Modules/InfoReducer';
 
@@ -16,10 +16,10 @@ import {setFcmToken} from './Modules/InfoReducer';
 // import {MainStackNavigator} from './navigation/StackNavigation';
 // import {BottomTabNavigator} from './navigation/TabNavigator';
 
-const App = () => {
+const App = () => { 
   const dispatch = useDispatch();
 
-  const [fFcmToken, setFfcmToken] = React.useState(null); // fcmtoken 현재 페이지 저장
+  // const [fFcmToken, setFfcmToken] = React.useState(null); // fcmtoken 현재 페이지 저장
 
   React.useEffect(() => {
     setTimeout(() => {
@@ -47,7 +47,7 @@ const App = () => {
         Toast.TOP,
         [' UIAlertController '],
       );
-    });
+    });    
   }, []);
 
   return (
