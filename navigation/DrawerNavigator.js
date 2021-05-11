@@ -19,6 +19,9 @@ const DrawerNavigator = () => {
         backgroundColor: '#fff',
         width: Dimensions.get('window').width,
       }}
+      screenOptions={{
+        gestureEnabled: false
+      }}
       drawerContent={(props) => <DrawerMenu {...props} />}>
       <Drawer.Screen name="Home" component={TabNavigator} />
     </Drawer.Navigator>
