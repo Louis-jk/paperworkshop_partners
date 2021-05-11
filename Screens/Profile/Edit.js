@@ -1688,13 +1688,13 @@ const Edit = (props) => {
                 </Text>
               </TouchableOpacity>
             </View>
-
+            {companyFileNameCur ? 
             <TouchableOpacity
               activeOpacity={0.8}
               onPress={() =>
                 fileDownloadHandler(companyFileCur, companyFileNameCur)
               }
-              style={{width: '80%'}}>
+              style={{width: '100%'}}>
               <View
                 style={{
                   flexDirection: 'row',
@@ -1711,6 +1711,7 @@ const Edit = (props) => {
                 <Text style={styles.normalText}>{companyFileNameCur}</Text>
               </View>
             </TouchableOpacity>
+            : null }
             <View
               style={{
                 flexDirection: 'row',
