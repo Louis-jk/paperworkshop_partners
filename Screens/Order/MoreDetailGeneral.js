@@ -30,6 +30,7 @@ const Detail = (props) => {
     setLoading(true);
     Estimate.getMoreDetail(method, pe_id)
       .then((res) => {
+        console.log("detail ?", res);
         if (res.data.result === '1' && res.data.count > 0) {
           setDetail(res.data.item);
           setLoading(false);
@@ -356,16 +357,12 @@ const Detail = (props) => {
                     : '없음'}
                 </Text>
               </View>
-              <View style={styles.details}>
-                <Text style={styles.detailsTitle}>목형</Text>
-                <Text style={styles.detailsDesc}>
-                  {detail.basic2.wood_pattern === 'Y' ? '있음' : '없음'}
-                </Text>
-              </View>
+              {(detail.basic.ca_id === '1' || detail.basic.ca_id === '4') ? 
               <View style={styles.details}>
                 <Text style={styles.detailsTitle}>편집방법</Text>
                 <Text style={styles.detailsDesc}>{detail.basic2.way_edit}</Text>
               </View>
+              : null }
               {detail.basic.ca_id === '1' ? (
                 <View style={styles.details}>
                   <Text style={styles.detailsTitle}>접지방법</Text>
@@ -374,22 +371,28 @@ const Detail = (props) => {
                   </Text>
                 </View>
               ) : null}
+              {(detail.basic.ca_id === '1' || detail.basic.ca_id === '4') ? 
               <View style={styles.details}>
                 <Text style={styles.detailsTitle}>제본방식</Text>
                 <Text style={styles.detailsDesc}>
                   {detail.basic2.bind_type}
                 </Text>
               </View>
-              <View style={styles.details}>
-                <Text style={styles.detailsTitle}>페이지수(표지)</Text>
-                <Text style={styles.detailsDesc}>{detail.basic2.page_cnt}</Text>
-              </View>
-              <View style={styles.details}>
-                <Text style={styles.detailsTitle}>페이지수(내지)</Text>
-                <Text style={styles.detailsDesc}>
-                  {detail.basic2.page_cnt2}
-                </Text>
-              </View>
+              : null }
+              {(detail.basic.ca_id === '1' || detail.basic.ca_id === '4') ? 
+                <>
+                <View style={styles.details}>
+                  <Text style={styles.detailsTitle}>페이지수(표지)</Text>
+                  <Text style={styles.detailsDesc}>{detail.basic2.page_cnt}</Text>
+                </View>
+                <View style={styles.details}>
+                  <Text style={styles.detailsTitle}>페이지수(내지)</Text>
+                  <Text style={styles.detailsDesc}>
+                    {detail.basic2.page_cnt2}
+                  </Text>
+                </View>
+                </>
+              : null }
               <View style={styles.details}>
                 <Text style={styles.detailsTitle}>규격</Text>
                 <Text style={styles.detailsDesc}>{detail.basic2.standard}</Text>
@@ -438,165 +441,241 @@ const Detail = (props) => {
                   </View>
                 </>
               ) : null}
+
+
               <View style={styles.details}>
-                <Text style={styles.detailsTitle}>인쇄도수</Text>
+                <Text style={styles.detailsTitle}>
+                  지류명
+                  {(detail.basic.ca_id === '1' || detail.basic.ca_id === '4') ? '(표지)' : null }
+                </Text>
+                <Text style={styles.detailsDesc}>
+                  {detail.feeder.feeder_name}
+                </Text>
+              </View>
+              <View style={styles.details}>
+                <Text style={styles.detailsTitle}>
+                  지종
+                  {(detail.basic.ca_id === '1' || detail.basic.ca_id === '4') ? '(표지)' : null }
+                </Text>
+                <Text style={styles.detailsDesc}>
+                  {detail.feeder.paper_name ? detail.feeder.paper_name : '없음'}
+                </Text>
+              </View>
+              {detail.feeder.paper_name2 ?
+              <View style={styles.details}>
+                <Text style={styles.detailsTitle}>
+                  지종상세
+                  {(detail.basic.ca_id === '1' || detail.basic.ca_id === '4') ? '(표지)' : null }
+                </Text>
+                <Text style={styles.detailsDesc}>
+                  {detail.feeder.paper_name2}
+                </Text>
+              </View> : null }
+              {detail.feeder.paper_weight ?
+              <View style={styles.details}>
+                <Text style={styles.detailsTitle}>
+                  평량
+                  {(detail.basic.ca_id === '1' || detail.basic.ca_id === '4') ? '(표지)' : null }
+                </Text>
+                <Text style={styles.detailsDesc}>
+                  {detail.feeder.paper_weight}
+                </Text>
+              </View>  
+              : null }
+              {detail.feeder.paper_weight_etc ? 
+              <View style={styles.details}>
+                <Text style={styles.detailsTitle}>
+                  평량
+                  {(detail.basic.ca_id === '1' || detail.basic.ca_id === '4') ? '(표지)' : null }
+                  (직접입력)
+                </Text>
+                <Text style={styles.detailsDesc}>
+                  {detail.feeder.paper_weight_etc}
+                </Text>
+              </View>  
+              : null }          
+              {detail.feeder.paper_color ?   
+              <View style={styles.details}>
+                <Text style={styles.detailsTitle}>
+                  색상
+                  {(detail.basic.ca_id === '1' || detail.basic.ca_id === '4') ? '(표지)' : null }
+                </Text>
+                <Text style={styles.detailsDesc}>
+                  {detail.feeder.paper_color}
+                </Text>
+              </View> : null }
+              {detail.feeder.paper_color_etc ?   
+              <View style={styles.details}>
+                <Text style={styles.detailsTitle}>
+                  색상
+                  {(detail.basic.ca_id === '1' || detail.basic.ca_id === '4') ? '(표지)' : null }
+                  (직접입력)
+                </Text>
+                <Text style={styles.detailsDesc}>
+                  {detail.feeder.paper_color_etc}
+                </Text>
+              </View> : null }
+
+              {/* 내지 부분 */}              
+              {detail.basic.ca_id === '1' || detail.basic.ca_id === '4' ? (
+                <>
+                <View style={styles.details}>
+                  <Text style={styles.detailsTitle}>
+                    지류명(내지)
+                  </Text>
+                  <Text style={styles.detailsDesc}>
+                    {detail.feeder.feeder_name2}
+                  </Text>
+                </View> 
+                
+              
+                <View style={styles.details}>
+                  <Text style={styles.detailsTitle}>
+                    지종(내지)
+                  </Text>
+                  <Text style={styles.detailsDesc}>
+                    {detail.feeder.paper2_name ? detail.feeder.paper2_name : '없음'}
+                  </Text>
+                </View>
+
+                {detail.feeder.paper_name2_02 ?
+                <View style={styles.details}>
+                  <Text style={styles.detailsTitle}>
+                    지종상세(내지)
+                  </Text>
+                  <Text style={styles.detailsDesc}>
+                    {detail.feeder.paper_name2_02}
+                  </Text>
+                </View> : null }
+             
+                {detail.feeder.paper_weight2 ? 
+                <View style={styles.details}>
+                  <Text style={styles.detailsTitle}>평량(내지)</Text>
+                  <Text style={styles.detailsDesc}>
+                    {detail.feeder.paper_weight2}
+                  </Text>
+                </View> : null }
+
+                {detail.feeder.paper_weight_etc2 ? 
+                <View style={styles.details}>
+                  <Text style={styles.detailsTitle}>평량(내지)(직접입력)</Text>
+                  <Text style={styles.detailsDesc}>
+                    {detail.feeder.paper_weight_etc2}
+                  </Text>
+                </View> : null }
+
+                {detail.feeder.paper_color2 ?
+                <View style={styles.details}>
+                  <Text style={styles.detailsTitle}>색상(내지)</Text>
+                  <Text style={styles.detailsDesc}>
+                    {detail.feeder.paper_color2}
+                  </Text>
+                </View> : null }
+
+                {detail.feeder.paper_color_etc2 ?
+                <View style={styles.details}>
+                  <Text style={styles.detailsTitle}>색상(내지)(직접입력)</Text>
+                  <Text style={styles.detailsDesc}>
+                    {detail.feeder.paper_color_etc2}
+                  </Text>
+                </View> : null }
+              </>) 
+              : null }
+
+              <View style={styles.details}>
+                <Text style={styles.detailsTitle}>인쇄도수{(detail.basic.ca_id === '1' || detail.basic.ca_id === '4') ? '(표지)' : null }</Text>
                 <Text style={styles.detailsDesc}>
                   {detail.print.print_frequency}
                 </Text>
               </View>
+             
+              <View style={styles.details}>
+                <Text style={styles.detailsTitle}>인쇄교정{(detail.basic.ca_id === '1' || detail.basic.ca_id === '4') ? '(표지)' : null }</Text>
+                <Text style={styles.detailsDesc}>
+                  {detail.print.proof_printing === 'Y' ? '있음' : '없음'}
+                </Text>
+              </View>
+              
+              <View style={styles.details}>
+                <Text style={styles.detailsTitle}>인쇄감리{(detail.basic.ca_id === '1' || detail.basic.ca_id === '4') ? '(표지)' : null }</Text>
+                <Text style={styles.detailsDesc}>
+                  {detail.print.print_supervision === 'Y' ? '있음' : '없음'}
+                </Text>
+              </View>
+
               {detail.basic.ca_id === '1' || detail.basic.ca_id === '4' ? (
+                <>
                 <View style={styles.details}>
                   <Text style={styles.detailsTitle}>인쇄도수(내지)</Text>
                   <Text style={styles.detailsDesc}>
                     {detail.print.print_frequency2}
                   </Text>
                 </View>
-              ) : null}
-              <View style={styles.details}>
-                <Text style={styles.detailsTitle}>인쇄교정</Text>
-                <Text style={styles.detailsDesc}>
-                  {detail.print.proof_printing === 'Y' ? '있음' : '없음'}
-                </Text>
-              </View>
-              {detail.basic.ca_id === '1' || detail.basic.ca_id === '4' ? (
                 <View style={styles.details}>
                   <Text style={styles.detailsTitle}>인쇄교정(내지)</Text>
                   <Text style={styles.detailsDesc}>
                     {detail.print.proof_printing2 === 'Y' ? '있음' : '없음'}
                   </Text>
                 </View>
-              ) : null}
-              <View style={styles.details}>
-                <Text style={styles.detailsTitle}>인쇄감리</Text>
-                <Text style={styles.detailsDesc}>
-                  {detail.print.print_supervision === 'Y' ? '있음' : '없음'}
-                </Text>
-              </View>
-              {detail.basic.ca_id === '1' || detail.basic.ca_id === '4' ? (
                 <View style={styles.details}>
                   <Text style={styles.detailsTitle}>인쇄감리(내지)</Text>
                   <Text style={styles.detailsDesc}>
                     {detail.print.print_supervision2 === 'Y' ? '있음' : '없음'}
                   </Text>
                 </View>
+                </>
               ) : null}
+              
               <View style={styles.details}>
-                <Text style={styles.detailsTitle}>지류명</Text>
-                <Text style={styles.detailsDesc}>
-                  {detail.feeder.feeder_name}
-                </Text>
-              </View>
-              <View style={styles.details}>
-                <Text style={styles.detailsTitle}>지종</Text>
-                <Text style={styles.detailsDesc}>
-                  {detail.feeder.paper_name}
-                </Text>
-              </View>
-              {detail.feeder.paper_name2 ?
-              <View style={styles.details}>
-                <Text style={styles.detailsTitle}>지종상세</Text>
-                <Text style={styles.detailsDesc}>
-                  {detail.feeder.paper_name2}
-                </Text>
-              </View> : null }
-              <View style={styles.details}>
-                <Text style={styles.detailsTitle}>평량</Text>
-                <Text style={styles.detailsDesc}>
-                  {detail.feeder.paper_weight
-                    ? detail.feeder.paper_weight
-                    : detail.feeder.paper_weight_etc
-                    ? detail.feeder.paper_weight_etc
-                    : null}
-                </Text>
-              </View>
-              {detail.basic.ca_id === '1' || detail.basic.ca_id === '4' ? (
-                <View style={styles.details}>
-                  <Text style={styles.detailsTitle}>평량(내지)</Text>
-                  <Text style={styles.detailsDesc}>
-                    {detail.feeder.paper_weight2}
-                  </Text>
-                </View>
-              ) : null}
-              <View style={styles.details}>
-                <Text style={styles.detailsTitle}>색상</Text>
-                <Text style={styles.detailsDesc}>
-                  {detail.feeder.paper_color
-                    ? detail.feeder.paper_color
-                    : detail.feeder.paper_color_etc
-                    ? detail.feeder.paper_color_etc
-                    : null}
-                </Text>
-              </View>
-              {detail.basic.ca_id === '1' || detail.basic.ca_id === '4' ? (
-                <View style={styles.details}>
-                  <Text style={styles.detailsTitle}>색상(내지)</Text>
-                  <Text style={styles.detailsDesc}>
-                    {detail.feeder.paper_color2}
-                  </Text>
-                </View>
-              ) : null}
-
-              <View style={styles.details}>
-                <Text style={styles.detailsTitle}>색상(직접입력)</Text>
-                <Text style={styles.detailsDesc}>
-                  {detail.feeder.paper_color_etc
-                    ? detail.feeder.paper_color_etc
-                    : '없음'}
-                </Text>
-              </View>
-
-              <View style={styles.details}>
-                <Text style={styles.detailsTitle}>박가공</Text>
+                <Text style={styles.detailsTitle}>박가공{(detail.basic.ca_id === '1' || detail.basic.ca_id === '4') ? '(표지)' : null }</Text>
                 <Text style={styles.detailsDesc}>
                   {detail.end.park_processing === 'Y' ? '있음' : '없음'}
                 </Text>
+              </View>              
+              <View style={styles.details}>
+                <Text style={styles.detailsTitle}>형압{(detail.basic.ca_id === '1' || detail.basic.ca_id === '4') ? '(표지)' : null }</Text>
+                <Text style={styles.detailsDesc}>
+                  {detail.end.press_design === 'Y' ? '있음' : '없음'}
+                </Text>
+              </View>             
+              <View style={styles.details}>
+                <Text style={styles.detailsTitle}>부분 실크{(detail.basic.ca_id === '1' || detail.basic.ca_id === '4') ? '(표지)' : null }</Text>
+                <Text style={styles.detailsDesc}>
+                  {detail.end.partial_silk === 'Y' ? '있음' : '없음'}
+                </Text>
+              </View>              
+              <View style={styles.details}>
+                <Text style={styles.detailsTitle}>코팅{(detail.basic.ca_id === '1' || detail.basic.ca_id === '4') ? '(표지)' : null }</Text>
+                <Text style={styles.detailsDesc}>{detail.end.coating}</Text>
               </View>
+
               {detail.basic.ca_id === '1' || detail.basic.ca_id === '4' ? (
+                <>
                 <View style={styles.details}>
                   <Text style={styles.detailsTitle}>박가공(내지)</Text>
                   <Text style={styles.detailsDesc}>
                     {detail.end.park_processing2 === 'Y' ? '있음' : '없음'}
                   </Text>
                 </View>
-              ) : null}
-              <View style={styles.details}>
-                <Text style={styles.detailsTitle}>형압</Text>
-                <Text style={styles.detailsDesc}>
-                  {detail.end.press_design === 'Y' ? '있음' : '없음'}
-                </Text>
-              </View>
-              {detail.basic.ca_id === '1' || detail.basic.ca_id === '4' ? (
                 <View style={styles.details}>
                   <Text style={styles.detailsTitle}>형압(내지)</Text>
                   <Text style={styles.detailsDesc}>
                     {detail.end.press_design2 === 'Y' ? '있음' : '없음'}
                   </Text>
                 </View>
-              ) : null}
-              <View style={styles.details}>
-                <Text style={styles.detailsTitle}>부분 실크</Text>
-                <Text style={styles.detailsDesc}>
-                  {detail.end.partial_silk === 'Y' ? '있음' : '없음'}
-                </Text>
-              </View>
-              {detail.basic.ca_id === '1' || detail.basic.ca_id === '4' ? (
                 <View style={styles.details}>
                   <Text style={styles.detailsTitle}>부분 실크(내지)</Text>
                   <Text style={styles.detailsDesc}>
                     {detail.end.partial_silk2 === 'Y' ? '있음' : '없음'}
                   </Text>
                 </View>
-              ) : null}
-              <View style={styles.details}>
-                <Text style={styles.detailsTitle}>코팅</Text>
-                <Text style={styles.detailsDesc}>{detail.end.coating}</Text>
-              </View>
-              {detail.basic.ca_id === '1' || detail.basic.ca_id === '4' ? (
                 <View style={styles.details}>
                   <Text style={styles.detailsTitle}>코팅(내지)</Text>
                   <Text style={styles.detailsDesc}>{detail.end.coating2}</Text>
                 </View>
+                </>
               ) : null}
+
               <View style={styles.details}>
                 <Text style={styles.detailsTitle}>첨부파일</Text>
                 {detail.basic2.pe_file2 === null ||

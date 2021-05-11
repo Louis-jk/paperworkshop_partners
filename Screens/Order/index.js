@@ -1532,12 +1532,14 @@ const index = (props) => {
                           : '없음'}
                       </Text>
                     </View>
+                    {(detail.basic.ca_id === '1' || detail.basic.ca_id === '4') ? 
                     <View style={styles.details}>
                       <Text style={styles.detailsTitle}>편집방법</Text>
                       <Text style={styles.detailsDesc}>
                         {detail.basic2.way_edit}
                       </Text>
                     </View>
+                    : null }
                     {detail.basic.ca_id === '1' &&
                     detail.basic2.ground_method ? (
                       <View style={styles.details}>
@@ -1547,12 +1549,14 @@ const index = (props) => {
                         </Text>
                       </View>
                     ) : null}
+                    {(detail.basic.ca_id === '1' || detail.basic.ca_id === '4') ? 
                     <View style={styles.details}>
                       <Text style={styles.detailsTitle}>제본방식</Text>
                       <Text style={styles.detailsDesc}>
                         {detail.basic2.bind_type}
                       </Text>
                     </View>
+                    : null }
                     <View style={styles.details}>
                       <Text style={styles.detailsTitle}>페이지수(표지)</Text>
                       <Text style={styles.detailsDesc}>
@@ -1617,14 +1621,28 @@ const index = (props) => {
                     )}
 
                     <View style={styles.details}>
-                      <Text style={styles.detailsTitle}>인쇄도수</Text>
+                      <Text style={styles.detailsTitle}>인쇄도수{(detail.basic.ca_id === '1' || detail.basic.ca_id === '4') ? '(표지)' : null}</Text>
                       <Text style={styles.detailsDesc}>
                         {detail.print.print_frequency}
                       </Text>
                     </View>
+                    <View style={styles.details}>
+                      <Text style={styles.detailsTitle}>인쇄교정{(detail.basic.ca_id === '1' || detail.basic.ca_id === '4') ? '(표지)' : null}</Text>
+                      <Text style={styles.detailsDesc}>
+                        {detail.print.proof_printing === 'Y' ? '있음' : '없음'}
+                      </Text>
+                    </View>
+                    <View style={styles.details}>
+                      <Text style={styles.detailsTitle}>인쇄감리{(detail.basic.ca_id === '1' || detail.basic.ca_id === '4') ? '(표지)' : null}</Text>
+                      <Text style={styles.detailsDesc}>
+                        {detail.print.print_supervision === 'Y'
+                          ? '있음'
+                          : '없음'}
+                      </Text>
+                    </View>
 
-                    {detail.basic.ca_id === '1' ||
-                      (detail.basic.ca_id === '4' && (
+                    {(detail.basic.ca_id === '1' || detail.basic.ca_id === '4' ) ? (
+                      <>
                         <View style={styles.details}>
                           <Text style={styles.detailsTitle}>
                             인쇄도수(내지)
@@ -1633,17 +1651,6 @@ const index = (props) => {
                             {detail.print.print_frequency2}
                           </Text>
                         </View>
-                      ))}
-
-                    <View style={styles.details}>
-                      <Text style={styles.detailsTitle}>인쇄교정</Text>
-                      <Text style={styles.detailsDesc}>
-                        {detail.print.proof_printing === 'Y' ? '있음' : '없음'}
-                      </Text>
-                    </View>
-
-                    {detail.basic.ca_id === '1' ||
-                      (detail.basic.ca_id === '4' && (
                         <View style={styles.details}>
                           <Text style={styles.detailsTitle}>
                             인쇄교정(내지)
@@ -1654,19 +1661,6 @@ const index = (props) => {
                               : '없음'}
                           </Text>
                         </View>
-                      ))}
-
-                    <View style={styles.details}>
-                      <Text style={styles.detailsTitle}>인쇄감리</Text>
-                      <Text style={styles.detailsDesc}>
-                        {detail.print.print_supervision === 'Y'
-                          ? '있음'
-                          : '없음'}
-                      </Text>
-                    </View>
-
-                    {detail.basic.ca_id === '1' ||
-                      (detail.basic.ca_id === '4' && (
                         <View style={styles.details}>
                           <Text style={styles.detailsTitle}>
                             인쇄감리(내지)
@@ -1677,7 +1671,8 @@ const index = (props) => {
                               : '없음'}
                           </Text>
                         </View>
-                      ))}
+                        </>
+                      ) : null}
 
                     <View style={styles.details}>
                       <Text style={styles.detailsTitle}>첨부파일</Text>
@@ -2297,55 +2292,30 @@ const index = (props) => {
                   </View>
                 ) : detail.basic.cate1 === '0' ? (
                   <View style={[styles.infoBox, {marginBottom: 20}]}>
+                    {detail.basic.ca_id === '1' || detail.basic.ca_id === '4' ? 
+                      <Text style={{fontFamily:'SCDream5', color: '#000', marginBottom: 10}}>
+                        {`<표지>`}
+                      </Text>
+                    : null}
                     <View style={styles.details}>
                       <Text style={styles.detailsTitle}>
                         지류명
-                        {detail.basic.ca_id === '1' ||
-                        detail.basic.ca_id === '4'
-                          ? '(표지)'
-                          : null}
                       </Text>
                       <Text style={styles.detailsDesc}>
                         {detail.feeder.feeder_name}
                       </Text>
-                    </View>
-                    {detail.basic.ca_id === '1' ||
-                    detail.basic.ca_id === '4' ? (
-                      <View style={styles.details}>
-                        <Text style={styles.detailsTitle}>지류명(내지)</Text>
-                        <Text style={styles.detailsDesc}>
-                          {detail.feeder.feeder_name2}
-                        </Text>
-                      </View>
-                    ) : null}
+                    </View>                    
                     <View style={styles.details}>
                       <Text style={styles.detailsTitle}>
                         지종
-                        {detail.basic.ca_id === '1' ||
-                        detail.basic.ca_id === '4'
-                          ? '(표지)'
-                          : null}
                       </Text>
                       <Text style={styles.detailsDesc}>
-                        {detail.feeder.paper_name}
+                        {detail.feeder.paper_name ? detail.feeder.paper_name : '없음'}
                       </Text>
                     </View>
-                    {detail.basic.ca_id === '1' ||
-                    detail.basic.ca_id === '4' ? (
-                      <View style={styles.details}>
-                        <Text style={styles.detailsTitle}>지종(내지)</Text>
-                        <Text style={styles.detailsDesc}>
-                          {detail.feeder.paper2_name}
-                        </Text>
-                      </View>
-                    ) : null}
                     <View style={styles.details}>
                       <Text style={styles.detailsTitle}>
                         지종상세
-                        {detail.basic.ca_id === '1' ||
-                        detail.basic.ca_id === '4'
-                          ? '(표지)'
-                          : null}
                       </Text>
                       <Text style={styles.detailsDesc}>
                         {detail.feeder.paper_name2
@@ -2353,25 +2323,9 @@ const index = (props) => {
                           : '없음'}
                       </Text>
                     </View>
-                    {detail.basic.ca_id === '1' ||
-                    detail.basic.ca_id === '4' ? (
-                      <View style={styles.details}>
-                        <Text style={styles.detailsTitle}>지종상세(내지)</Text>
-                        <Text style={styles.detailsDesc}>
-                          {detail.feeder.paper_name22
-                            ? detail.feeder.paper_name22
-                            : '없음'}
-                        </Text>
-                      </View>
-                    ) : null}
-
                     <View style={styles.details}>
                       <Text style={styles.detailsTitle}>
                         평량
-                        {detail.basic.ca_id === '1' ||
-                        detail.basic.ca_id === '4'
-                          ? '(표지)'
-                          : null}
                       </Text>
                       <Text style={styles.detailsDesc}>
                         {detail.feeder.paper_weight
@@ -2381,23 +2335,9 @@ const index = (props) => {
                           : null}
                       </Text>
                     </View>
-                    {detail.basic.ca_id === '1' ||
-                    detail.basic.ca_id === '4' ? (
-                      <View style={styles.details}>
-                        <Text style={styles.detailsTitle}>평량(내지)</Text>
-                        <Text style={styles.detailsDesc}>
-                          {detail.feeder.paper_weight2}
-                        </Text>
-                      </View>
-                    ) : null}
                     <View style={styles.details}>
                       <Text style={styles.detailsTitle}>
-                        평량
-                        {detail.basic.ca_id === '1' ||
-                        detail.basic.ca_id === '4'
-                          ? '(표지)'
-                          : null}
-                        (직접입력)
+                        평량(직접입력)
                       </Text>
                       <Text style={styles.detailsDesc}>
                         {detail.feeder.paper_weight_etc
@@ -2405,26 +2345,9 @@ const index = (props) => {
                           : '없음'}
                       </Text>
                     </View>
-                    {detail.basic.ca_id === '1' ||
-                    detail.basic.ca_id === '4' ? (
-                      <View style={styles.details}>
-                        <Text style={styles.detailsTitle}>
-                          평량(내지)(직접입력)
-                        </Text>
-                        <Text style={styles.detailsDesc}>
-                          {detail.feeder.paper_weight_etc2
-                            ? detail.feeder.paper_weight_etc2
-                            : '없음'}
-                        </Text>
-                      </View>
-                    ) : null}
                     <View style={styles.details}>
                       <Text style={styles.detailsTitle}>
                         색상
-                        {detail.basic.ca_id === '1' ||
-                        detail.basic.ca_id === '4'
-                          ? '(표지)'
-                          : null}
                       </Text>
                       <Text style={styles.detailsDesc}>
                         {detail.feeder.paper_color
@@ -2434,24 +2357,9 @@ const index = (props) => {
                           : null}
                       </Text>
                     </View>
-                    {detail.basic.ca_id === '1' ||
-                    detail.basic.ca_id === '4' ? (
-                      <View style={styles.details}>
-                        <Text style={styles.detailsTitle}>색상(내지)</Text>
-                        <Text style={styles.detailsDesc}>
-                          {detail.feeder.paper_color2}
-                        </Text>
-                      </View>
-                    ) : null}
-
                     <View style={styles.details}>
                       <Text style={styles.detailsTitle}>
-                        색상
-                        {detail.basic.ca_id === '1' ||
-                        detail.basic.ca_id === '4'
-                          ? '(표지)'
-                          : null}
-                        (직접입력)
+                        색상(직접입력)
                       </Text>
                       <Text style={styles.detailsDesc}>
                         {detail.feeder.paper_color_etc
@@ -2459,11 +2367,77 @@ const index = (props) => {
                           : '없음'}
                       </Text>
                     </View>
+
+                    {detail.basic.ca_id === '1' || detail.basic.ca_id === '4' ? 
+                      <Text style={{fontFamily:'SCDream5', color: '#000', marginTop: 20, marginBottom: 10}}>
+                        {`<내지>`}
+                      </Text>
+                    : null}
+                    {detail.basic.ca_id === '1' ||
+                    detail.basic.ca_id === '4' ? (
+                      <View style={styles.details}>
+                        <Text style={styles.detailsTitle}>지류명</Text>
+                        <Text style={styles.detailsDesc}>
+                          {detail.feeder.feeder_name2}
+                        </Text>
+                      </View>
+                    ) : null}
+                    {detail.basic.ca_id === '1' ||
+                    detail.basic.ca_id === '4' ? (
+                      <View style={styles.details}>
+                        <Text style={styles.detailsTitle}>지종</Text>
+                        <Text style={styles.detailsDesc}>
+                          {detail.feeder.paper2_name}
+                        </Text>
+                      </View>
+                    ) : null}                    
+                    {detail.basic.ca_id === '1' ||
+                    detail.basic.ca_id === '4' ? (
+                      <View style={styles.details}>
+                        <Text style={styles.detailsTitle}>지종상세</Text>
+                        <Text style={styles.detailsDesc}>
+                          {detail.feeder.paper_name22
+                            ? detail.feeder.paper_name22
+                            : '없음'}
+                        </Text>
+                      </View>
+                    ) : null}
+                    {detail.basic.ca_id === '1' ||
+                    detail.basic.ca_id === '4' ? (
+                      <View style={styles.details}>
+                        <Text style={styles.detailsTitle}>평량</Text>
+                        <Text style={styles.detailsDesc}>
+                          {detail.feeder.paper_weight2}
+                        </Text>
+                      </View>
+                    ) : null}
                     {detail.basic.ca_id === '1' ||
                     detail.basic.ca_id === '4' ? (
                       <View style={styles.details}>
                         <Text style={styles.detailsTitle}>
-                          색상(내지)(직접입력)
+                          평량(직접입력)
+                        </Text>
+                        <Text style={styles.detailsDesc}>
+                          {detail.feeder.paper_weight_etc2
+                            ? detail.feeder.paper_weight_etc2
+                            : '없음'}
+                        </Text>
+                      </View>
+                    ) : null}
+                    {detail.basic.ca_id === '1' ||
+                    detail.basic.ca_id === '4' ? (
+                      <View style={styles.details}>
+                        <Text style={styles.detailsTitle}>색상</Text>
+                        <Text style={styles.detailsDesc}>
+                          {detail.feeder.paper_color2}
+                        </Text>
+                      </View>
+                    ) : null}
+                    {detail.basic.ca_id === '1' ||
+                    detail.basic.ca_id === '4' ? (
+                      <View style={styles.details}>
+                        <Text style={styles.detailsTitle}>
+                          색상(직접입력)
                         </Text>
                         <Text style={styles.detailsDesc}>
                           {detail.feeder.paper_color_etc2
@@ -2983,22 +2957,53 @@ const index = (props) => {
                   </View>
                 ) : detail.basic.cate1 === '0' ? (
                   <View style={[styles.infoBox, {marginBottom: 20}]}>
+                    {detail.basic.ca_id === '1' || detail.basic.ca_id === '4' ? 
+                      <Text style={{fontFamily:'SCDream5', color: '#000', marginBottom: 10}}>
+                        {`<표지>`}
+                      </Text>
+                    : null}
                     <View style={styles.details}>
                       <Text style={styles.detailsTitle}>
                         박가공
-                        {detail.basic.ca_id === '1' ||
-                        detail.basic.ca_id === '4'
-                          ? '(표지)'
-                          : null}
                       </Text>
                       <Text style={styles.detailsDesc}>
                         {detail.end.park_processing === 'Y' ? '있음' : '없음'}
                       </Text>
                     </View>
+                    <View style={styles.details}>
+                      <Text style={styles.detailsTitle}>
+                        형압
+                      </Text>
+                      <Text style={styles.detailsDesc}>
+                        {detail.end.press_design === 'Y' ? '있음' : '없음'}
+                      </Text>
+                    </View>
+                    <View style={styles.details}>
+                      <Text style={styles.detailsTitle}>
+                        부분 실크
+                      </Text>
+                      <Text style={styles.detailsDesc}>
+                        {detail.end.partial_silk === 'Y' ? '있음' : '없음'}
+                      </Text>
+                    </View>
+                    <View style={styles.details}>
+                      <Text style={styles.detailsTitle}>
+                        코팅
+                      </Text>
+                      <Text style={styles.detailsDesc}>
+                        {detail.end.coating}
+                      </Text>
+                    </View>
+
+                    {detail.basic.ca_id === '1' || detail.basic.ca_id === '4' ? 
+                      <Text style={{fontFamily:'SCDream5', color: '#000', marginTop: 20, marginBottom: 10}}>
+                        {`<내지>`}
+                      </Text>
+                    : null}
                     {detail.basic.ca_id === '1' ||
                     detail.basic.ca_id === '4' ? (
                       <View style={styles.details}>
-                        <Text style={styles.detailsTitle}>박가공(내지)</Text>
+                        <Text style={styles.detailsTitle}>박가공</Text>
                         <Text style={styles.detailsDesc}>
                           {detail.end.park_processing2 === 'Y'
                             ? '있음'
@@ -3006,64 +3011,28 @@ const index = (props) => {
                         </Text>
                       </View>
                     ) : null}
-                    <View style={styles.details}>
-                      <Text style={styles.detailsTitle}>
-                        형압{' '}
-                        {detail.basic.ca_id === '1' ||
-                        detail.basic.ca_id === '4'
-                          ? '(표지)'
-                          : null}
-                      </Text>
-                      <Text style={styles.detailsDesc}>
-                        {detail.end.press_design === 'Y' ? '있음' : '없음'}
-                      </Text>
-                    </View>
                     {detail.basic.ca_id === '1' ||
                     detail.basic.ca_id === '4' ? (
                       <View style={styles.details}>
-                        <Text style={styles.detailsTitle}>형압(내지)</Text>
+                        <Text style={styles.detailsTitle}>형압</Text>
                         <Text style={styles.detailsDesc}>
                           {detail.end.press_design2 === 'Y' ? '있음' : '없음'}
                         </Text>
                       </View>
                     ) : null}
-                    <View style={styles.details}>
-                      <Text style={styles.detailsTitle}>
-                        부분 실크
-                        {detail.basic.ca_id === '1' ||
-                        detail.basic.ca_id === '4'
-                          ? '(표지)'
-                          : null}
-                      </Text>
-                      <Text style={styles.detailsDesc}>
-                        {detail.end.partial_silk === 'Y' ? '있음' : '없음'}
-                      </Text>
-                    </View>
                     {detail.basic.ca_id === '1' ||
                     detail.basic.ca_id === '4' ? (
                       <View style={styles.details}>
-                        <Text style={styles.detailsTitle}>부분 실크(내지)</Text>
+                        <Text style={styles.detailsTitle}>부분 실크</Text>
                         <Text style={styles.detailsDesc}>
                           {detail.end.partial_silk2 === 'Y' ? '있음' : '없음'}
                         </Text>
                       </View>
                     ) : null}
-                    <View style={styles.details}>
-                      <Text style={styles.detailsTitle}>
-                        코팅
-                        {detail.basic.ca_id === '1' ||
-                        detail.basic.ca_id === '4'
-                          ? '(표지)'
-                          : null}
-                      </Text>
-                      <Text style={styles.detailsDesc}>
-                        {detail.end.coating}
-                      </Text>
-                    </View>
                     {detail.basic.ca_id === '1' ||
                     detail.basic.ca_id === '4' ? (
                       <View style={styles.details}>
-                        <Text style={styles.detailsTitle}>코팅(내지)</Text>
+                        <Text style={styles.detailsTitle}>코팅</Text>
                         <Text style={styles.detailsDesc}>
                           {detail.end.coating2}
                         </Text>
