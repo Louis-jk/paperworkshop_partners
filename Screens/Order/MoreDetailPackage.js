@@ -8,6 +8,7 @@ import {
   Image,
   Alert,
   ActivityIndicator,
+  TouchableOpacity
 } from 'react-native';
 import Modal from 'react-native-modal';
 import AutoHeightImage from 'react-native-auto-height-image';
@@ -26,11 +27,13 @@ const Detail = (props) => {
   const [isLoading, setLoading] = React.useState(false);
   const [detail, setDetail] = React.useState(null);
 
-  const getEstimateMoreDetailAPI = (method) => {
+  const getEstimateMoreDetailAPI = () => {
     setLoading(true);
-    Estimate.getMoreDetail(method, pe_id)
+    Estimate.getMoreDetail('proc_my_real_estimate_detail2', pe_id)
       .then((res) => {
+        
         if (res.data.result === '1' && res.data.count > 0) {
+          console.log("resres ??? ", res);
           setDetail(res.data.item);
           setLoading(false);
         } else {
@@ -53,13 +56,14 @@ const Detail = (props) => {
   };
 
   React.useEffect(() => {
-    if (cate1 === '1') {
-      getEstimateMoreDetailAPI('proc_my_real_estimate_detail2');
-    } else if (cate1 === '0') {
-      getEstimateMoreDetailAPI('proc_my_real_estimate_detail');
-    } else {
-      getEstimateMoreDetailAPI('proc_my_real_estimate_detail3');
-    }
+    getEstimateMoreDetailAPI();
+    // if (cate1 === '1') {
+    //   getEstimateMoreDetailAPI('proc_my_real_estimate_detail2');
+    // } else if (cate1 === '0') {
+    //   getEstimateMoreDetailAPI('proc_my_real_estimate_detail');
+    // } else {
+    //   getEstimateMoreDetailAPI('proc_my_real_estimate_detail3');
+    // }
   }, []);
 
   
@@ -422,46 +426,63 @@ const Detail = (props) => {
                   {detail.feeder.paper_name2}
                 </Text>
               </View> : null }
-              {detail.basic.ca_id !== '10' ? (
-                <View style={styles.details}>
-                  <Text style={styles.detailsTitle}>평량</Text>
-                  <Text style={styles.detailsDesc}>
-                    {detail.feeder.paper_weight
-                      ? detail.feeder.paper_weight
-                      : detail.feeder.paper_weight_etc
-                      ? detail.feeder.paper_weight_etc
-                      : '없음'}
-                  </Text>
-                </View>
-              ) : null}
-              {detail.basic.ca_id === '10' || detail.basic.ca_id === '11' ? (
+
+              {(detail.basic.ca_id === '10' || detail.basic.ca_id === '11') && detail.feeder.paper_goal ? (
                 <View style={styles.details}>
                   <Text style={styles.detailsTitle}>골</Text>
                   <Text style={styles.detailsDesc}>
-                    {detail.feeder.paper_goal
-                      ? detail.feeder.paper_goal
-                      : detail.feeder.paper_goal_etc
-                      ? detail.feeder.paper_goal_etc
-                      : '없음'}
+                    {detail.feeder.paper_goal}
                   </Text>
                 </View>
               ) : null}
+
+              {(detail.basic.ca_id === '10' || detail.basic.ca_id === '11') && detail.feeder.paper_goal_etc ? (
+                <View style={styles.details}>
+                  <Text style={styles.detailsTitle}>골(직접입력)</Text>
+                  <Text style={styles.detailsDesc}>
+                    {detail.feeder.paper_goal_etc}
+                  </Text>
+                </View>
+              ) : null}
+
+              {detail.basic.ca_id !== '10' && detail.feeder.paper_weight ? (
+                <View style={styles.details}>
+                  <Text style={styles.detailsTitle}>평량</Text>
+                  <Text style={styles.detailsDesc}>
+                    {detail.feeder.paper_weight}
+                  </Text>
+                </View>
+              ) : null}
+
+              {detail.basic.ca_id !== '10' && detail.feeder.paper_weight_etc ? (
+                <View style={styles.details}>
+                  <Text style={styles.detailsTitle}>평량(직접입력)</Text>
+                  <Text style={styles.detailsDesc}>
+                    {detail.feeder.paper_weight_etc}
+                  </Text>
+                </View>
+              ) : null}
+             
+             {detail.feeder.paper_color ?
               <View style={styles.details}>
                 <Text style={styles.detailsTitle}>색상</Text>
                 <Text style={styles.detailsDesc}>
-                  {detail.feeder.paper_color
-                    ? detail.feeder.paper_color
-                    : detail.feeder.paper_color_etc
-                    ? detail.feeder.paper_color_etc
-                    : '없음'}
+                  {detail.feeder.paper_color}
                 </Text>
-              </View>
+              </View> : null }
+
+              {detail.feeder.paper_color_etc ?
+              <View style={styles.details}>
+                <Text style={styles.detailsTitle}>색상(직접입력)</Text>
+                <Text style={styles.detailsDesc}>
+                  {detail.feeder.paper_color_etc}
+                </Text>
+              </View> : null }
+
               <View style={styles.details}>
                 <Text style={styles.detailsTitle}>박가공</Text>
                 <Text style={styles.detailsDesc}>
-                  {detail.end.park_processing
-                    ? detail.end.park_processing
-                    : '없음'}
+                  {detail.end.park_processing === 'Y' ? '있음' : '없음'}
                 </Text>
               </View>
               <View style={styles.details}>

@@ -26,9 +26,11 @@ const Detail = (props) => {
   const [isLoading, setLoading] = React.useState(false);
   const [detail, setDetail] = React.useState(null);
 
-  const getEstimateMoreDetailAPI = (method) => {
+  console.log("일반인쇄 상세");
+
+  const getEstimateMoreDetailAPI = () => {
     setLoading(true);
-    Estimate.getMoreDetail(method, pe_id)
+    Estimate.getMoreDetail('proc_my_real_estimate_detail', pe_id)
       .then((res) => {
         console.log("detail ?", res);
         if (res.data.result === '1' && res.data.count > 0) {
@@ -54,13 +56,14 @@ const Detail = (props) => {
   };
 
   React.useEffect(() => {
-    if (cate1 === '1') {
-      getEstimateMoreDetailAPI('proc_my_real_estimate_detail2');
-    } else if (cate1 === '0') {
-      getEstimateMoreDetailAPI('proc_my_real_estimate_detail');
-    } else {
-      getEstimateMoreDetailAPI('proc_my_real_estimate_detail3');
-    }
+    getEstimateMoreDetailAPI();
+    // if (cate1 === '1') {
+    //   getEstimateMoreDetailAPI('proc_my_real_estimate_detail2');
+    // } else if (cate1 === '0') {
+    //   getEstimateMoreDetailAPI('proc_my_real_estimate_detail');
+    // } else {
+    //   getEstimateMoreDetailAPI('proc_my_real_estimate_detail3');
+    // }
   }, []);
 
   // 이미지 모달창
@@ -367,7 +370,7 @@ const Detail = (props) => {
                 <View style={styles.details}>
                   <Text style={styles.detailsTitle}>접지방법</Text>
                   <Text style={styles.detailsDesc}>
-                    {detail.basic2.ground_method}
+                    {detail.basic2.ground_method ? detail.basic2.ground_method : '없음'}
                   </Text>
                 </View>
               ) : null}
