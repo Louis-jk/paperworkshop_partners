@@ -518,15 +518,16 @@ const index = (props) => {
   };
 
   const goMoreDetail = (checkId) => {
+    console.log("checkId?", checkId);
     if (checkId === '1') {
       navigation.navigate('OrderDetailPackage', {
         screen: 'OrderDetailPackage',
-        params: {pe_id: pe_id, cate1: base.cate1},
+        params: {pe_id: pe_id, cate1: checkId},
       });
     } else if (checkId === '0') {
       navigation.navigate('OrderDetailGeneral', {
         screen: 'OrderDetailGeneral',
-        params: {pe_id: pe_id, cate1: base.cate1},
+        params: {pe_id: pe_id, cate1: checkId},
       });
     } else {
       // 기타
@@ -1478,7 +1479,7 @@ const index = (props) => {
                         <View style={styles.details}>
                           <Text style={styles.detailsTitle}>싸바리형태</Text>
                           <Text style={styles.detailsDesc}>
-                            {detail.basic2.stype === 'Y' ? '있음' : '없음'}
+                            {detail.basic2.stype ? detail.basic2.stype : '없음'}
                           </Text>
                         </View>
 
@@ -2254,41 +2255,59 @@ const index = (props) => {
                         {detail.feeder.paper_name2}
                       </Text>
                     </View> : null }
-                    {detail.basic.ca_id !== '10' ? (
-                      <View style={styles.details}>
-                        <Text style={styles.detailsTitle}>평량</Text>
-                        <Text style={styles.detailsDesc}>
-                          {detail.feeder.paper_weight
-                            ? detail.feeder.paper_weight
-                            : detail.feeder.paper_weight_etc
-                            ? detail.feeder.paper_weight_etc
-                            : '없음'}
-                        </Text>
-                      </View>
-                    ) : null}
-                    {detail.basic.ca_id === '10' ||
-                    detail.basic.ca_id === '11' ? (
+
+                    {(detail.basic.ca_id === '10' || detail.basic.ca_id === '11') && detail.feeder.paper_goal ? (
                       <View style={styles.details}>
                         <Text style={styles.detailsTitle}>골</Text>
                         <Text style={styles.detailsDesc}>
-                          {detail.feeder.paper_goal
-                            ? detail.feeder.paper_goal
-                            : detail.feeder.paper_goal_etc
-                            ? detail.feeder.paper_goal_etc
-                            : '없음'}
+                          {detail.feeder.paper_goal}
                         </Text>
                       </View>
                     ) : null}
+
+                    {(detail.basic.ca_id === '10' || detail.basic.ca_id === '11') && detail.feeder.paper_goal_etc ? (
+                      <View style={styles.details}>
+                        <Text style={styles.detailsTitle}>골(직접입력)</Text>
+                        <Text style={styles.detailsDesc}>
+                          {detail.feeder.paper_goal_etc}
+                        </Text>
+                      </View>
+                    ) : null}
+
+                    {detail.basic.ca_id !== '10' && detail.feeder.paper_weight ? (
+                      <View style={styles.details}>
+                        <Text style={styles.detailsTitle}>평량</Text>
+                        <Text style={styles.detailsDesc}>
+                          {detail.feeder.paper_weight}
+                        </Text>
+                      </View>
+                    ) : null}
+
+                    {detail.basic.ca_id !== '10' && detail.feeder.paper_weight_etc ? (
+                      <View style={styles.details}>
+                        <Text style={styles.detailsTitle}>평량(직접입력)</Text>
+                        <Text style={styles.detailsDesc}>
+                          {detail.feeder.paper_weight_etc}
+                        </Text>
+                      </View>
+                    ) : null}
+                  
+                    {detail.feeder.paper_color ?
                     <View style={styles.details}>
                       <Text style={styles.detailsTitle}>색상</Text>
                       <Text style={styles.detailsDesc}>
-                        {detail.feeder.paper_color
-                          ? detail.feeder.paper_color
-                          : detail.feeder.paper_color_etc
-                          ? detail.feeder.paper_color_etc
-                          : '없음'}
+                        {detail.feeder.paper_color}
                       </Text>
-                    </View>
+                    </View> : null }
+                    
+                    {detail.feeder.paper_color_etc ? 
+                    <View style={styles.details}>
+                      <Text style={styles.detailsTitle}>색상(직접입력)</Text>
+                      <Text style={styles.detailsDesc}>
+                        {detail.feeder.paper_color_etc}
+                      </Text>
+                    </View> : null }
+
                   </View>
                 ) : detail.basic.cate1 === '0' ? (
                   <View style={[styles.infoBox, {marginBottom: 20}]}>
