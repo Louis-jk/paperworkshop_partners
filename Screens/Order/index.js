@@ -30,9 +30,8 @@ import Estimate from '../../src/api/Estimate';
 const index = (props) => {
   const navigation = props.navigation;
   const routeName = props.route.name;
-  const {pe_id, cate1} = props.route.params;
+  const {pe_id, cate1, isEstimated} = props.route.params;
 
-  console.log("cate1?",cate1);
 
   const {mb_email} = useSelector((state) => state.UserInfoReducer);
 
@@ -140,6 +139,7 @@ const index = (props) => {
   const [collapseArrow03, setCollapseArrow03] = React.useState(true);
   const [collapseArrow04, setCollapseArrow04] = React.useState(true);
   const [collapseArrow05, setCollapseArrow05] = React.useState(true);
+
 
   const setCollapseArrowFunc01 = () => {
     setCollapseArrow01((prev) => !prev);
@@ -338,7 +338,7 @@ const index = (props) => {
         if (res.data.result === '1' && res.data.count > 0) {
           setChatId(res.data.item[0].pm_id);
           console.log("pm_id?", res.data.item[0].pm_id);
-          if (res.data.item[0].status === '1') {            
+          if (res.data.item[0].status !== '0') {            
             setProductPrice(res.data.item[0].production_price);
             setDesignPrice(res.data.item[0].design_price);
             setDeliveryPrice(res.data.item[0].reduce_price);
@@ -415,10 +415,7 @@ const index = (props) => {
             }
           }
 
-          if (
-            res.data.item[0].status !== '0' ||
-            res.data.item[0].status !== '1'
-          ) {
+          if (res.data.item[0].status !== '0' && res.data.item[0].status !== '1') {
             getEstimateUserInfoAPI(res.data.item[0].mb_id);
           }
 
@@ -647,8 +644,8 @@ const index = (props) => {
     const frmData = new FormData();
     frmData.append('method', method);
     frmData.append('company_id', mb_email);
-    if (base.status === '0') frmData.append('pe_id', pe_id);
-    if (base.status === '1') frmData.append('pd_id', base.pdr_id);
+    if ((base.status === '0' && isEstimated === 'N') || (base.status === '1' && isEstimated === 'N')) frmData.append('pe_id', pe_id);
+    if (base.status === '1' && isEstimated === 'Y') frmData.append('pd_id', base.pdr_id);
     frmData.append('mb_id', base.mb_id);
     frmData.append('total_price', totalPrice);
     frmData.append('production_price', productPrice);
@@ -727,6 +724,7 @@ const index = (props) => {
 
     Estimate.sendEstimate(frmData)
       .then((res) => {
+        console.log("견적발송 결과", res);
         if (res.data.result === '1') {
           Alert.alert(
             res.data.message,
@@ -795,6 +793,8 @@ const index = (props) => {
     setImgPath(path);
   };
 
+  console.log("마지막 deliveryDate", deliveryDate);
+
 
   return (
     <>
@@ -829,8 +829,10 @@ const index = (props) => {
             <Text style={styles.infoStepDesc}>
               {base.status === '0'
                 ? '비교 견적요청'
-                : base.status === '1'
-                ? '입찰중'
+                : base.status === '1' && isEstimated === 'N'  
+                ? '다른 업체가 현재 입찰중'
+                : base.status === '1' && isEstimated === 'Y'  
+                ? '견적발송(입찰중)'
                 : base.status === '2'
                 ? '파트너스최종선정 (견적확정대기)'
                 : base.status === '3'
@@ -1341,39 +1343,73 @@ const index = (props) => {
                         }}>
                         납품 가능한 날짜를 선택해주세요.
                       </Text>
-                      <TouchableOpacity
-                        activeOpacity={1}
-                        onPress={showDatepicker01}
-                        style={{
-                          flexDirection: 'row',
-                          justifyContent: 'space-between',
-                          alignItems: 'center',
-                          borderWidth: 1,
-                          borderColor: '#E3E3E3',
-                          borderRadius: 4,
-                          marginBottom: 5,
-                        }}>
-                        <TextInput
-                          value={moment(deliveryDate).format('YY-MM-DD')}
-                          placeholder="00-00-00"
-                          placeholderTextColor="#A2A2A2"
-                          style={[
-                            styles.normalText,
-                            {
-                              paddingHorizontal: 10,
-                              width: '70%',
-                              color: deliveryDate ? '#111' : '#A2A2A2',
-                            },
-                          ]}
-                          autoCapitalize="none"
-                          editable={false}
-                        />
-                        <Image
-                          source={require('../../src/assets/icon03.png')}
-                          resizeMode="contain"
-                          style={{width: 30, height: 30, marginRight: 10}}
-                        />
-                      </TouchableOpacity>
+                      {base.status === '0' || base.status === '1' ? 
+                        <TouchableOpacity
+                          activeOpacity={1}
+                          onPress={showDatepicker01}
+                          style={{
+                            flexDirection: 'row',
+                            justifyContent: 'space-between',
+                            alignItems: 'center',
+                            borderWidth: 1,
+                            borderColor: '#E3E3E3',
+                            borderRadius: 4,
+                            marginBottom: 5,
+                          }}>
+                          <TextInput
+                            value={moment(deliveryDate).format('YY-MM-DD')}
+                            placeholder="00-00-00"
+                            placeholderTextColor="#A2A2A2"
+                            style={[
+                              styles.normalText,
+                              {
+                                paddingHorizontal: 10,
+                                width: '70%',
+                                color: deliveryDate ? '#111' : '#A2A2A2',
+                              },
+                            ]}
+                            autoCapitalize="none"
+                            editable={false}
+                          />
+                          <Image
+                            source={require('../../src/assets/icon03.png')}
+                            resizeMode="contain"
+                            style={{width: 30, height: 30, marginRight: 10}}
+                          />
+                        </TouchableOpacity>
+                      : 
+                        <View
+                          style={{
+                            flexDirection: 'row',
+                            justifyContent: 'space-between',
+                            alignItems: 'center',
+                            borderWidth: 1,
+                            borderColor: '#E3E3E3',
+                            borderRadius: 4,
+                            marginBottom: 5,
+                          }}>
+                          <TextInput
+                            value={moment(deliveryDate).format('YY-MM-DD')}
+                            placeholder="00-00-00"
+                            placeholderTextColor="#A2A2A2"
+                            style={[
+                              styles.normalText,
+                              {
+                                paddingHorizontal: 10,
+                                width: '70%',
+                                color: deliveryDate ? '#111' : '#A2A2A2',
+                              },
+                            ]}
+                            autoCapitalize="none"
+                            editable={false}
+                          />
+                          <Image
+                            source={require('../../src/assets/icon03.png')}
+                            resizeMode="contain"
+                            style={{width: 30, height: 30, marginRight: 10}}
+                          />
+                        </View>
+                      }
                     </View>
                   )}
                   {show01 && (
@@ -5207,7 +5243,7 @@ const index = (props) => {
           </View>
           {/* // 견적서 파일 */}
           {base.status === '1' &&
-          (base.pdr_id !== null || base.pdr_id !== '') ? (
+          (base.pdr_id !== null || base.pdr_id !== '') && isEstimated === 'Y' ? (
             <TouchableOpacity
               onPress={() => sendEstimateAPI('proc_partner_estimate_modify')}
               activeOpacity={0.8}>
@@ -5216,7 +5252,7 @@ const index = (props) => {
               </View>
             </TouchableOpacity>
           ) : base.status === '1' &&
-            (base.pdr_id === null || base.pdr_id === '') ? (
+            (base.pdr_id === null || base.pdr_id === '') && isEstimated === 'N' ? (
             <TouchableOpacity
               onPress={() => sendEstimateAPI('proc_partner_estimate_add')}
               activeOpacity={0.8}>
@@ -5224,7 +5260,7 @@ const index = (props) => {
                 <Text style={styles.submitBtnText}>견적 발송</Text>
               </View>
             </TouchableOpacity>
-          ) : base.status === '2' ? (
+          ) : base.status === '2' && isEstimated === 'Y' ? (
             <>
               <View style={{marginBottom:20}}>
                 <Text style={{fontSize:14, fontFamily:'SCDream4', color:'#00A170', lineHeight:20}}>상대방이 귀사의 견적을 채택하였습니다. </Text>
@@ -5238,11 +5274,11 @@ const index = (props) => {
                 </View>
               </TouchableOpacity>            
             </>
-          ) : base.status === '3' ? (
+          ) : base.status === '3' && isEstimated === 'Y' ? (
             <View style={styles.submitedBtn}>
               <Text style={styles.submitedBtnText}>계약금 입금 대기 중</Text>
             </View>
-          ) : base.status === '4' ? (
+          ) : base.status === '4' && isEstimated === 'Y' ? (
             <>
               <View style={{marginBottom:20}}>
                 <Text style={{fontSize:14, fontFamily:'SCDream4', color:'#00A170', lineHeight:20}}>상대방이 계약금을 입금하였습니다. </Text>
@@ -5256,11 +5292,11 @@ const index = (props) => {
                 </View>
               </TouchableOpacity>
             </>
-          ) : base.status === '5' ? (
+          ) : base.status === '5' && isEstimated === 'Y' ? (
             <View style={styles.submitedBtn}>
               <Text style={styles.submitedBtnText}>인쇄/제작 요청 대기중</Text>
             </View>
-          ) : base.status === '6' ? (           
+          ) : base.status === '6' && isEstimated === 'Y' ? (           
             <TouchableOpacity
               onPress={() => sendDeliveryAPI()}
               activeOpacity={0.8}>
@@ -5268,31 +5304,15 @@ const index = (props) => {
                 <Text style={styles.submitBtnText}>납품 완료</Text>
               </View>
             </TouchableOpacity>
-          ) : base.status === '7' ? (
+          ) : base.status === '7' && isEstimated === 'Y' ? (
             <View style={styles.submitedBtn}>
               <Text style={styles.submitedBtnText}>수령 대기중</Text>
             </View>
-          ) : base.status === '8' ? (
+          ) : base.status === '8' && isEstimated === 'Y' ? (
             <View style={styles.submitedBtn}>
               <Text style={styles.submitedBtnText}>주문자 수령완료</Text>
             </View>
-          ) : base.cate1 !== '2' ? (
-            <TouchableOpacity
-              onPress={() => sendEstimateAPI('proc_partner_estimate_add')}
-              activeOpacity={0.8}>
-              <View style={styles.submitBtn}>
-                <Text style={styles.submitBtnText}>견적 발송</Text>
-              </View>
-            </TouchableOpacity>
-          ) : 
-            <TouchableOpacity
-              onPress={() => sendEstimateAPI('proc_partner_estimate_detail_etc_add')}
-              activeOpacity={0.8}>
-              <View style={styles.submitBtn}>
-                <Text style={styles.submitBtnText}>견적 발송</Text>
-              </View>
-            </TouchableOpacity>
-          }
+          ) : null }
         </View>
       </ScrollView>
     </>
