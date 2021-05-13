@@ -139,7 +139,7 @@ const index = (props) => {
             onPress={() =>
               navigation.navigate('OrderStep', {
                 screen: 'OrderStep',
-                params: {pe_id: item.pe_id, cate1: item.cate1},
+                params: {pe_id: item.pe_id, cate1: item.cate1, isEstimated: item.is_estimated},
               })
             }
             activeOpacity={0.8}

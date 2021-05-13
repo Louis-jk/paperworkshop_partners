@@ -208,7 +208,7 @@ const index = (props) => {
             onPress={() =>
               navigation.navigate('OrderStep', {
                 screen: 'OrderStep',
-                params: {pe_id: item.pe_id, cate1: item.cate1},
+                params: {pe_id: item.pe_id, cate1: item.cate1, isEstimated: item.is_estimated},
               })
             }
             activeOpacity={0.8}
@@ -233,8 +233,11 @@ const index = (props) => {
                     </Text>
                   </View>
                 ) : item.status === '1' ? (
-                  <View style={styles.listStep02Badge}>
-                    <Text style={styles.listStep02BadgeText}>입찰중</Text>
+                  <View style={{flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center', marginBottom: 5}}>
+                    <View style={styles.listStep02Badge02}>
+                      <Text style={styles.listStep02BadgeText}>입찰중</Text>
+                    </View>
+                    <Text style={{marginLeft: 5, fontFamily:'SCDream4'}}>{item.ecnt}건</Text>
                   </View>
                 ) : item.status === '2' ? (
                   <View style={styles.listStep02Badge}>
@@ -781,6 +784,14 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 5,
+    borderWidth: 1,
+    borderColor: '#00A170',
+    borderRadius: 2,
+  },
+  listStep02Badge02: {
+    alignSelf: 'flex-start',
+    justifyContent: 'center',
+    alignItems: 'center',    
     borderWidth: 1,
     borderColor: '#00A170',
     borderRadius: 2,
