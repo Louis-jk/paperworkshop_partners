@@ -7,6 +7,7 @@ import {
   Dimensions,
   Image,
   Alert,
+  FlatList,
 } from 'react-native';
 
 import {useSelector} from 'react-redux';
@@ -24,15 +25,44 @@ const index = (props) => {
   const [accumulatePrice, setAccumulatePrice] = React.useState(null); // 누적 금액
   const [deliveryPrice, setDeliveryPrice] = React.useState(null); // 납품 실적 금액
 
-  const yearformat = new Date();
-  let curYear = yearformat.getFullYear();
 
-  const yearCount = ['2017', '2018', '2019', '2020', '2021'];
-  const [year, setYear] = React.useState('2021');
+  const now = new Date();
+  const nowYear = now.getFullYear();
+  const getNowMonth = now.getMonth();
+  const nowMonth = getNowMonth + 1;
+
+  const nowYearStr = nowYear.toString();
+  const nowMonthStr = nowMonth.toString();
+
+  const yearStart = 2021;
+
+  // 년도 배열 만들기
+  const [yearCount, setYearCount] = React.useState([]);
+  const getYearRangeHandler = (param1, param2) => {    
+    
+    let arr = [];
+
+    let start = param1;
+    let end = param2;
+    
+    let i = start;
+    for(i; i <= end; i++) {
+      arr.push(i);    
+    }
+    
+    setYearCount(arr);    
+  }
+
+  
+  const [year, setYear] = React.useState(nowYearStr);
   const [isActiveToggleYear, setIsActiveToggleYear] = React.useState(false);
   const toggleYear = () => {
     setIsActiveToggleYear(!isActiveToggleYear);
   };
+
+  console.log("현재", now);
+  console.log("현재 년 type", nowYear);
+  console.log("현재 월", nowMonth);
 
   const monthCount = [
     '01',
@@ -48,7 +78,7 @@ const index = (props) => {
     '11',
     '12',
   ];
-  const [month, setMonth] = React.useState('01');
+  const [month, setMonth] = React.useState(nowMonthStr);
   const [isActiveToggleMonth, setIsActiveToggleMonth] = React.useState(false);
   const toggleMonth = () => {
     setIsActiveToggleMonth(!isActiveToggleMonth);
@@ -78,11 +108,13 @@ const index = (props) => {
 
   const getStatisticsAPI = () => {
     let regionValue = region === 'all' ? '' : region;
+    let monthValue = month === nowMonthStr ? nowMonthStr : month;
 
-
-    StatisticsAPI.getStatistics(mb_email, year, month, regionValue)
+    StatisticsAPI.getStatistics(mb_email, year, monthValue, regionValue)
       .then((res) => {
+        console.log("resres",res);
         if (res.data.result === '1') {
+          console.log("success??",res);
           setInfo(res.data.item[0]);
           setAccumulatePrice(res.data.item[0].accumulate_price);
           let dvPrice = res.data.item[0].delivery_price.toString();
@@ -100,13 +132,34 @@ const index = (props) => {
 
   React.useEffect(() => {
     getStatisticsAPI();
+
+    const getNow = new Date();
+    const getNowYear = getNow.getFullYear();
+
+    getYearRangeHandler(2021, getNowYear);
   }, [year, month, region]);
 
+
+  const yearRender = ({item, idx}) => {
+    return (
+      <TouchableOpacity
+        key={idx}
+        style={{paddingVertical: 7, marginBottom: 7}}
+        activeOpacity={0.8}
+        onPress={() => {
+          setYear(item);
+          setIsActiveToggleYear(false);
+        }}
+        >
+        <Text style={{fontFamily: 'SCDream4'}}>{item}년</Text>
+      </TouchableOpacity>
+    )
+  }
 
   return (
     <>
       <DetailHeader title={routeName} navigation={navigation} />
-      <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
+      <View style={styles.container} showsVerticalScrollIndicator={false}>
         {info !== null && accumulatePrice !== null && (
           <View
             style={{
@@ -225,18 +278,15 @@ const index = (props) => {
                 borderBottomLeftRadius: 5,
                 zIndex: 100,
               }}>
-              {yearCount.map((v, idx) => (
-                <TouchableOpacity
-                  key={idx}
-                  style={{paddingVertical: 7, marginBottom: 7}}
-                  activeOpacity={0.8}
-                  onPress={() => {
-                    setYear(v);
-                    setIsActiveToggleYear(false);
-                  }}>
-                  <Text style={{fontFamily: 'SCDream4'}}>{v}년</Text>
-                </TouchableOpacity>
-              ))}
+
+              <FlatList
+                scrollEnabled={true}
+                data={yearCount}
+                renderItem={yearRender}
+                keyExtractor={(item, index) => index.toString()}
+                persistentScrollbar={true}
+                showsVerticalScrollIndicator={true}
+              />
             </View>
           )}
           <View
@@ -517,7 +567,7 @@ const index = (props) => {
             </View>
           </View>
         )}
-      </ScrollView>
+      </View>
     </>
   );
 };
