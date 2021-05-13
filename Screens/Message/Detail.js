@@ -76,14 +76,9 @@ const Detail = (props) => {
     getChatHistoryAPI();
   },[]);
 
-  // const onEndReached = () => {
-  //   if (isLoading) {
-  //     return;
-  //   } else {
-  //     getChatHistoryAPI();
-  //   }
-  // };
 
+
+  
 
   // 이미지 모달창
   const ImageModal = ({toggleModal, isVisible, imgPath}) => {
@@ -95,8 +90,9 @@ const Detail = (props) => {
     return (
       <View>
         <Modal
+          coverScreen={true}
           isVisible={isVisible}
-          // onBackdropPress={toggleModal}
+          animationInTiming={500}
           style={{
             justifyContent: 'center',
             alignItems: 'center',
