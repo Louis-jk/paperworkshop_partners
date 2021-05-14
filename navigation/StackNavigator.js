@@ -30,6 +30,13 @@ import ServiceScreen from '../Screens/Common/Infos/Service';
 
 // 고객센터
 import CustomerScreen from '../Screens/Customer';
+import CCenterDetailScreen from '../Screens/Customer/Details';
+import CCenterNoticeScreen from '../Screens/Customer/Notice';
+import CCenterNoticeDetailScreen from '../Screens/Customer/NoticeDetail';
+import CCenterQnAScreen from '../Screens/Customer/QnA';
+import CCenterQnADetailScreen from '../Screens/Customer/QnADetail';
+import CCenterQnAwriteScreen from '../Screens/Customer/QnAwrite';
+
 
 import Alarm from '../Screens/Common/Alarm';
 import Statistics from '../Screens/Common/Statistics';
@@ -160,7 +167,19 @@ export const PartnersInfoStackNavigator = () => {
 export const CustomerStackNavigator = () => {
   return (
     <Stack.Navigator screenOptions={{headerShown: false}}>
-      <Stack.Screen name="Customer" component={CustomerScreen} />
+      <Stack.Screen name="CCenter" component={CustomerScreen} />
+      <Stack.Screen name="CCenterDetail" component={CCenterDetailScreen} />
+      <Stack.Screen name="CCenterNotice" component={CCenterNoticeScreen} />
+      <Stack.Screen
+        name="CCenterNoticeDetail"
+        component={CCenterNoticeDetailScreen}
+      />
+      <Stack.Screen name="CCenterQnA" component={CCenterQnAScreen} />
+      <Stack.Screen
+        name="CCenterQnADetail"
+        component={CCenterQnADetailScreen}
+      />
+      <Stack.Screen name="CCenterQnAwrite" component={CCenterQnAwriteScreen} />
     </Stack.Navigator>
   );
 };

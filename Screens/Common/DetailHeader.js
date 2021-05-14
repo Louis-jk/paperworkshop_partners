@@ -83,9 +83,24 @@ const DetailHeader = (props) => {
       case 'CompanyInfo':
         setTitle('회사소개');
         break;
-      case 'Customer':
+      case 'CCenter':
         setTitle('고객센터');
         break;
+      case 'CCenterDetail':
+        setTitle('고객센터');
+        break;
+      case 'CCenterNotice':
+        setTitle('공지사항');
+        break;
+      case 'CCenterNoticeDetail':
+        setTitle('공지사항');
+        break;
+      case 'CCenterQnA':
+        setTitle('1:1문의');
+        break;
+      case 'CCenterQnADetail':
+        setTitle('1:1문의');
+        break;   
       default:
         return false;
     }

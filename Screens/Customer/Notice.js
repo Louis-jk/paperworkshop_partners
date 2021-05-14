@@ -3,10 +3,12 @@ import {
   View,
   Text,
   StyleSheet,
+  SafeAreaView,
   Image,
   ScrollView,
   Dimensions,
   TouchableOpacity,
+  ImageBackground,
   TextInput,
   Alert,
   ActivityIndicator,
@@ -16,18 +18,17 @@ import {
 import Header from '../Common/DetailHeader';
 import Info from '../../src/api/Info';
 
-const index = (props) => {
+const Notice = (props) => {
   const navigation = props.navigation;
   const routeName = props.route.name;
 
   const [isLoading, setLoading] = React.useState(false);
   const [list, setList] = React.useState([]);
-  const [step01, setStep01] = React.useState('');
   const [keyword, setKeyword] = React.useState('');
 
-  const getFaqListHandler = (payload) => {
+  const getNoticeListHandler = (payload) => {
     setLoading(true);
-    Info.getFaqList(payload)
+    Info.getNoticeList(payload)
       .then((res) => {
         if (res.data.result === '1' && res.data.count > 0) {
           setList(res.data.item);
@@ -48,7 +49,7 @@ const index = (props) => {
   };
 
   React.useEffect(() => {
-    getFaqListHandler();
+    getNoticeListHandler();
   }, []);
 
   const renderRow = ({item, index}) => {
@@ -58,7 +59,7 @@ const index = (props) => {
           style={{paddingHorizontal: 20}}
           activeOpacity={0.8}
           onPress={() =>
-            navigation.navigate('CCenterDetail', {fa_id: item.fa_id})
+            navigation.navigate('CCenterNoticeDetail', {item: item})
           }>
           <View style={styles.categoryWrap}>
             <View
@@ -71,12 +72,14 @@ const index = (props) => {
                   flexDirection: 'row',
                   justifyContent: 'flex-start',
                   alignItems: 'center',
-                  // marginBottom: 12,
+                  marginBottom: 12,
                 }}>
-                <Text style={styles.categoryTitle}>{item.fa_subject}</Text>
-                {/* <Text style={styles.new}>NEW</Text> */}
+                <Text style={styles.categoryTitle}>{item.title}</Text>
+                <Text style={styles.new}>
+                  {item.new_yn === 'Y' ? 'NEW' : null}
+                </Text>
               </View>
-              {/* <Text style={styles.categoryDate}>2020.11.01</Text> */}
+              <Text style={styles.categoryDate}>{item.datetime}</Text>
             </View>
           </View>
         </TouchableOpacity>
@@ -121,23 +124,6 @@ const index = (props) => {
             alignItems: 'center',
             paddingVertical: 20,
           }}>
-          <TouchableOpacity
-            onPress={() => navigation.navigate('CCenterNotice')}
-            activeOpacity={0.8}
-            hitSlop={{top: 5, bottom: 5, right: 5, left: 5}}>
-            <Text
-              style={[
-                styles.normalText,
-                {
-                  fontSize: 15,
-                  marginRight: 20,
-                  color: '#707070',
-                },
-              ]}>
-              공지사항
-            </Text>
-          </TouchableOpacity>
-
           <View style={{position: 'relative'}}>
             <Text
               style={[
@@ -148,7 +134,7 @@ const index = (props) => {
                   color: '#000000',
                 },
               ]}>
-              FAQ
+              공지사항
             </Text>
             <View
               style={{
@@ -162,6 +148,23 @@ const index = (props) => {
               }}
             />
           </View>
+
+          <TouchableOpacity
+            onPress={() => navigation.navigate('CCenter')}
+            activeOpacity={0.8}
+            hitSlop={{top: 5, bottom: 5, right: 5, left: 5}}>
+            <Text
+              style={[
+                styles.normalText,
+                {
+                  fontSize: 15,
+                  marginRight: 20,
+                  color: '#707070',
+                },
+              ]}>
+              FAQ
+            </Text>
+          </TouchableOpacity>
 
           <TouchableOpacity
             onPress={() => navigation.navigate('CCenterQnA')}
@@ -207,14 +210,14 @@ const index = (props) => {
               autoFocus={false}
               style={[styles.normalText, {width: '80%'}]}
               onChangeText={text => setKeyword(text)}
-              onSubmitEditing={() => getFaqListHandler(keyword)}
+              onSubmitEditing={() => getNoticeListHandler(keyword)}
             />
             {keyword ? 
             <TouchableOpacity
               activeOpacity={1}
               onPress={() => {
                 setKeyword(null);
-                getFaqListHandler(null);
+                getNoticeListHandler(null);
               }}>
               <View
                 style={{
@@ -238,9 +241,11 @@ const index = (props) => {
             </TouchableOpacity>
             : null}
             <TouchableOpacity
-              activeOpacity={0.8}
-              onPress={() => getFaqListHandler(keyword)}
-            >
+                activeOpacity={1}
+                onPress={() => {
+                    setKeyword(null);
+                    getNoticeListHandler(null);
+            }}>
               <Image
                 source={require('../../src/assets/top_seach.png')}
                 resizeMode="contain"
@@ -251,7 +256,7 @@ const index = (props) => {
         </View>
       </View>
 
-      {/* 자주묻는질문(FAQ) 리스트 */}
+      {/* 공지사항 리스트 */}
       <FlatList
         data={list}
         renderItem={renderRow}
@@ -277,7 +282,7 @@ const index = (props) => {
           </View>
         }
       />
-      {/* // 자주묻는질문(FAQ) 리스트 */}
+      {/* // 공지사항 리스트 */}
     </>
   );
 };
@@ -328,4 +333,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default index;
+export default Notice;

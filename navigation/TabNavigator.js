@@ -149,7 +149,13 @@ const TabNavigator = () => {
       <Stack.Screen name="Signed" component={SignedStackNavigator} />
       <Stack.Screen name="FindId" component={FindIdStackNavigator} />
       <Stack.Screen name="FindPwd" component={FindPwdStackNavigator} />
-      <Stack.Screen name="Customer" component={CustomerStackNavigator} />
+      <Stack.Screen name="CCenter" component={CustomerStackNavigator} />
+      <Stack.Screen name="CCenterDetail" component={CustomerStackNavigator} />
+      <Stack.Screen name="CCenterNotice" component={CustomerStackNavigator} />
+      <Stack.Screen name="CCenterNoticeDetail" component={CustomerStackNavigator} />
+      <Stack.Screen name="CCenterQnA" component={CustomerStackNavigator} />
+      <Stack.Screen name="CCenterQnADetail" component={CustomerStackNavigator} />
+      <Stack.Screen name="CCenterQnAwrite" component={CustomerStackNavigator} />
     </Stack.Navigator>
   );
 };
