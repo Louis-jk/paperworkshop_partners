@@ -10,14 +10,12 @@ import {
   Alert,
   Platform,
   ActivityIndicator,
-  Keyboard,
-  BackHandler, 
-  ToastAndroid
+  Keyboard
 } from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import messaging from '@react-native-firebase/messaging';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import { CommonActions, StackActions } from "@react-navigation/native";
 
 import {
   UserNo,
@@ -57,15 +55,14 @@ import Auth from '../../../src/api/Auth';
 
 const Login = (props) => {
   const navigation = props.navigation;
-  const screen = props.route.name;
-
-  console.log("Login porps", props.route.name);
+  const routeName = props.route.name;
 
   const dispatch = useDispatch();
   const {fcmToken} = useSelector((state) => state.InfoReducer);
 
   const loginEmailRef = React.useRef(null);
   const loginPwdRef = React.useRef(null);
+
 
   const [fFcmToken, setFfcmToken] = React.useState(null); // fcmtoken 현재 페이지 저장
   const [checkPlatform, setCheckPlatform] = React.useState(null); // OS 체크
@@ -105,33 +102,6 @@ const Login = (props) => {
     setPwdEyes(!pwdEyes);
   };
 
-  React.useEffect(() => {
-    if (Platform.OS === 'ios') {
-      setCheckPlatform('ios');
-    } else {
-      setCheckPlatform('aos');
-    }
-  }, []);
-
-  // 안드로이드 뒤로가기 버튼 제어  
-  let currentCount = 0;
-
-  const backAction = () => {    
-    if (currentCount < 1) {      
-      ToastAndroid.show("한번 더 누르면 앱을 종료합니다.", ToastAndroid.SHORT);
-      console.log("0에 해당");
-      currentCount++;
-    } else {
-      console.log("1에 해당");
-      BackHandler.exitApp();
-    }
-
-    setTimeout(() => {
-      currentCount = 0;
-    }, 2000);
-
-    return true;
-  };
 
   React.useEffect(() => {
     messaging()
@@ -154,9 +124,7 @@ const Login = (props) => {
       setCheckPlatform('aos');
     }
 
-    BackHandler.addEventListener("hardwareBackPress", backAction);
-
-    return () => BackHandler.removeEventListener("hardwareBackPress", backAction);
+    
 
   }, []);
 
@@ -200,11 +168,18 @@ const Login = (props) => {
           if (autoLogin) {
             storeData();
             setLoading(false);
-            navigation.navigate('Stack');
+            // navigation.navigate('Stack');
           } else {
             setLoading(false);
-            navigation.navigate('Stack');
+            // navigation.navigate('Stack');
           }
+          const resetAction = CommonActions.reset({
+            index: 1,
+            routes: [
+              { name: 'Stack' },
+            ],
+          });
+          navigation.dispatch(resetAction);
         } else {
           setLoading(false);
           Alert.alert(res.data.message, '다시 확인해주세요.', [

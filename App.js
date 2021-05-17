@@ -1,25 +1,43 @@
 import * as React from 'react';
-import {StatusBar, Alert} from 'react-native';
+import {StatusBar, Alert, BackHandler, ToastAndroid} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import SplashScreen from 'react-native-splash-screen';
 import messaging from '@react-native-firebase/messaging';
-// import {Root, Toast} from 'native-base';
 
 import DrawerNavigator from './navigation/DrawerNavigator';
 import {useDispatch} from 'react-redux';
 import Toast from 'react-native-simple-toast';
 import {setFcmToken} from './Modules/InfoReducer';
 
-// import MainScreen from './Screens/Main';
-// import PartnersScreen from './Screens/Partners';
-
-// import {MainStackNavigator} from './navigation/StackNavigation';
-// import {BottomTabNavigator} from './navigation/TabNavigator';
 
 const App = () => { 
   const dispatch = useDispatch();
+  
+  // 안드로이드 뒤로가기 버튼 제어  
+  const [exitApp, setExitApp] = React.useState(false);
+  const ref = React.createRef(null);
 
-  // const [fFcmToken, setFfcmToken] = React.useState(null); // fcmtoken 현재 페이지 저장
+  const backAction = () => {   
+    let tmp = (ref.current?.getRootState().routes[0].state.index!=undefined)? ref.current?.getRootState().routes[0].state.index:tmp;
+
+    let timeout;
+
+    if(tmp==0){
+  
+      if (exitApp == undefined || !exitApp) {
+        ToastAndroid.show("한번 더 누르면 앱을 종료합니다.", ToastAndroid.SHORT);
+          setExitApp(true);
+  
+          timeout = setTimeout(() => {
+                setExitApp(false);
+              },2000);
+      } else {
+          clearTimeout(timeout);
+          BackHandler.exitApp();  // 앱 종료
+      }
+      return true;
+    }
+  };
 
   React.useEffect(() => {
     setTimeout(() => {
@@ -48,12 +66,23 @@ const App = () => {
         [' UIAlertController '],
       );
     });    
+
   }, []);
+
+  React.useEffect(() => {
+    
+    const backHandler = BackHandler.addEventListener(
+      "hardwareBackPress",
+      backAction
+    );
+    
+    return () => BackHandler.removeEventListener('hardwareBackPress', backHandler);
+}, [exitApp]);
 
   return (
     <>
       <StatusBar hidden={true} />
-      <NavigationContainer>
+      <NavigationContainer ref={ref}>
         <DrawerNavigator />
       </NavigationContainer>
     </>

@@ -135,48 +135,7 @@ const index = (props) => {
       });
   };
 
-  // const [btnClkCount, setBtnClkCount] = React.useState(0);
-  // const backAction = () => {    
-    
-  //   setTimeout(() => {
-  //     setBtnClkCount(btnClkCount + 1);
-  //   }, 2000)
-
-  //   setBtnClkCount(0);
-
-  //   return true;
-
-  //   // BackHandler.exitApp();
-  //   // Alert.alert("이미 로그인된 상태입니다.", "앱을 종료하시겠습니까?", [
-  //   //   {
-  //   //     text: "아니요",
-  //   //     onPress: () => null,
-  //   //     style: "cancel"
-  //   //   },
-  //   //   { text: "앱종료하기", onPress: () => BackHandler.exitApp() }
-  //   // ]);
-  //   // return true;
-  // };
-//   const backAction = () => {    
-//     if (BackHandler.exitApp == undefined || !BackHandler.exitApp) {
-//       ToastAndroid.show('한번 더 누르시면 종료됩니다.', ToastAndroid.SHORT);
-//       BackHandler.exitApp = true;
-
-//       BackHandler.timeout = setTimeout(
-//         () => {
-//           BackHandler.exitApp = false;
-//         },
-//         2000, // 2초
-//       );
-//     } else {
-//       clearTimeout(this.timeout);
-
-//       BackHandler.exitApp(); // 앱 종료
-//     }
-//     return true;
-//   };
-// };
-
+  
   React.useEffect(() => {
     // ToastAndroid.showWithGravity("한번 더 누르면 앱을 종료합니다.", ToastAndroid.SHORT, ToastAndroid.BOTTOM);
     requestAndroidPermission();

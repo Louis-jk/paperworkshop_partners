@@ -3,6 +3,7 @@ import {View, Text, Alert, ActivityIndicator} from 'react-native';
 import {useDispatch} from 'react-redux';
 import messaging from '@react-native-firebase/messaging';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { CommonActions, StackActions } from "@react-navigation/native";
 
 import {setFcmToken} from '../../../Modules/InfoReducer';
 import {
@@ -76,8 +77,7 @@ const Check = (props) => {
         // 있다면 로그인API 호출 (UserID, UserPwd, FcmToken, Platform)
         login(uId, uPwd, token, device);
       } else {
-        // 없다면 로그인 화면으로 이동
-        navigation.navigate('Login');
+        navigation.reset({routes: [{name: 'Login'}]});
       }
     } catch (e) {
       // error reading value
@@ -120,13 +120,13 @@ const Check = (props) => {
           dispatch(UserPortfolio(res.data.item.portfolioImg));
           dispatch(UserLocation(res.data.item.location));
 
-          navigation.navigate('Stack');
-        } else {
-          navigation.navigate('Login');
+          navigation.reset({routes: [{name: 'Stack'}]});
+        } else {        
+          navigation.reset({routes: [{name: 'Login'}]});
         }
       })
-      .catch((err) => {
-        navigation.navigate('Login');
+      .catch((err) => {     
+        navigation.reset({routes: [{name: 'Login'}]});
       });
   };
 
