@@ -16,7 +16,7 @@ import DocumentPicker from 'react-native-document-picker'; // 파일 업로드 �
 import ImagePicker from 'react-native-image-crop-picker';
 import FastImage from 'react-native-fast-image';
 
-import Header from '../Common/Header';
+import Header from '../Common/DetailHeader';
 import Category from '../../src/api/Category';
 import Modal from '../Common/PartnersInfoModal';
 import Auth from '../../src/api/Auth';
@@ -1754,7 +1754,7 @@ const Edit = (props) => {
               </View>
             </TouchableOpacity>
             <TouchableOpacity
-              onPress={() => Alert.alert('취소')}
+              onPress={() => navigation.goBack()}
               activeOpacity={0.8}>
               <View style={styles.cancelBtn}>
                 <Text style={styles.cancelBtnText}>취소</Text>
