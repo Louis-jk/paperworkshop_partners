@@ -168,10 +168,8 @@ const Login = (props) => {
           if (autoLogin) {
             storeData();
             setLoading(false);
-            // navigation.navigate('Stack');
           } else {
             setLoading(false);
-            // navigation.navigate('Stack');
           }
           const resetAction = CommonActions.reset({
             index: 1,

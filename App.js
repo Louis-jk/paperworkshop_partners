@@ -77,7 +77,7 @@ const App = () => {
     );
     
     return () => BackHandler.removeEventListener('hardwareBackPress', backHandler);
-}, [exitApp]);
+  }, [exitApp]);
 
   return (
     <>
