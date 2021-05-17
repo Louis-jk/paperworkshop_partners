@@ -101,6 +101,9 @@ const DetailHeader = (props) => {
       case 'CCenterQnADetail':
         setTitle('1:1문의');
         break;   
+      case 'ProfileEdit':
+        setTitle('회원 정보 수정');
+        break;
       default:
         return false;
     }
