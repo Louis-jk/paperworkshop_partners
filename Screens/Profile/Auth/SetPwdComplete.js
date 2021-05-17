@@ -65,10 +65,10 @@ const SetPwdComplete = (props) => {
               width: '100%',
             }}>
             <TouchableOpacity
-              onPress={() => navigation.navigate('Stack')}
+              onPress={() => navigation.reset({routes: [{name: 'Login'}]})}
               activeOpacity={0.8}>
               <View style={[styles.submitBtn, {marginBottom: 10}]}>
-                <Text style={styles.submitBtnText}>홈으로</Text>
+                <Text style={styles.submitBtnText}>로그인 하기</Text>
               </View>
             </TouchableOpacity>
           </View>
