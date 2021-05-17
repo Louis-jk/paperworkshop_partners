@@ -4,29 +4,158 @@ import {
   Text,
   ScrollView,
   StyleSheet,
-  TouchableWithoutFeedback,
   TouchableOpacity,
   Keyboard,
-  Dimensions,
   TextInput,
-  Button,
-  Image,
   Alert,
 } from 'react-native';
 
-// import RNPickerSelect from 'react-native-picker-select';
-import {Picker} from '@react-native-community/picker';
-
 import DetailHeader from '../../Common/DetailHeader';
-import Footer from '../../Common/Footer';
+import Auth from '../../../src/api/Auth';
+import Timer from '../../Common/Timer';
 
 const FindId = (props) => {
   const navigation = props.navigation;
   const routeName = props.route.name;
 
-  const [category01, setCategory01] = React.useState(null);
-  const [category02, setCategory02] = React.useState(null);
-  const [value, setValue] = React.useState(null);
+  const mobileRef = React.useRef(null);
+  const mobileCertNumRef = React.useRef(null);
+
+  // 인증시 카운터
+  const [minutes, setMinutes] = React.useState(0);
+  const [seconds, setSeconds] = React.useState(0);
+  const [isCounter, setIsCounter] = React.useState(false);
+  const confirmCount = (num) => {
+    setIsCounter(true);
+    setMinutes(num);
+  };
+  const confirmClearCount = (num) => {
+    setIsCounter(false);
+    setMinutes(num);
+  };
+
+  const [userName, setUserName] = React.useState(null);
+  const [userMobile, setUserMobile] = React.useState(null);
+  const [mobileCertNum, setMobileCertNum] = React.useState(null);
+
+  // 모바일 인증 아이디 저장 및 버튼 색상 변화 상태
+  const [mobileConfirmId, setMobileConfirmId] = React.useState(null);
+  const [isMobileConfimed, setMobileConfimed] = React.useState(false);
+
+  const [isSend, setIsSend] = React.useState(false);
+
+  // 본인 인증 시간 초과의 경우 상태관리
+  const [reSend, setReSend] = React.useState(false);
+  const [reSendStatus, setReSendStatus] = React.useState('n');
+  const onFailConfirm = () => {
+    setIsSend(false);
+    setReSend(true);
+    setReSendStatus('y');
+  };
+
+  
+  const getUserIdStep01 = () => {
+    if (userName === null) {
+      Alert.alert('성함을 입력해주세요.', '', [
+        {
+          text: '확인',
+        },
+      ]);
+    }
+    if (userMobile === null) {
+      Alert.alert('휴대폰 번호를 입력해주세요.', '', [
+        {
+          text: '확인',
+        },
+      ]);
+    } else {
+      Auth.onSearchIdStep01(userName, userMobile, '4')
+        .then((res) => {
+          if (res.data.result === '1') {
+            Alert.alert(
+              `${userMobile}로 인증번호가 발송되었습니다.`,
+              '인증번호 확인 후 입력해주세요.',
+              [
+                {
+                  text: '확인',
+                  onPress: () => {
+                    setIsSend(true);
+                    confirmCount(3);
+                  },
+                },
+              ],
+            );
+          } else {
+            Alert.alert(res.data.message, '', [
+              {
+                text: '확인',
+              },
+            ]);
+          }
+        })
+        .catch((err) => Alert.alert(`${err.messaging()}`));
+    }
+  };
+
+  const getUserIdStep02 = () => {
+    if (userName === null) {
+      Alert.alert('성함을 입력해주세요.', '', [
+        {
+          text: '확인',
+        },
+      ]);
+      return false;
+    } else if (userMobile === null) {
+      Alert.alert('휴대폰 번호를 입력해주세요.', '', [
+        {
+          text: '확인',
+        },
+      ]);
+      return false;
+    } else if (mobileCertNum === null) {
+      Alert.alert('인증번호를 입력해주세요.', '', [
+        {
+          text: '확인',
+        },
+      ]);
+      return false;
+    } else {
+      Auth.onSearchIdStep02(
+        userName,
+        userMobile,
+        mobileCertNum,
+        '4',
+        reSendStatus,
+      )
+        .then((res) => {
+          if (res.data.result.result === '1') {
+            Alert.alert(res.data.result.message, '아이디를 확인해주세요.', [
+              {
+                text: '확인',
+                onPress: () => {
+                  setMobileConfimed(true);
+                  confirmClearCount(0);
+                },
+              },
+            ]);
+          } else {
+            Alert.alert(res.data.result.message, '', [
+              {
+                text: '확인',
+              },
+            ]);
+          }
+        })
+        .catch((err) => {
+          Alert.alert(err, '관리자에게 문의하세요.', '', [
+            {
+              text: '확인'
+            }
+          ]);
+        }
+       );
+    }
+  };
 
   return (
     <>
@@ -37,7 +166,7 @@ const FindId = (props) => {
           <View style={{marginBottom: 20}}>
             <Text style={[styles.profileTitle, {marginBottom: 10}]}>성함</Text>
             <TextInput
-              value=""
+              value={userName}
               placeholder="성함을 입력해주세요."
               placeholderTextColor="#A2A2A2"
               style={[
@@ -49,7 +178,9 @@ const FindId = (props) => {
                   paddingHorizontal: 10,
                 },
               ]}
+              onChangeText={(text) => setUserName(text)}
               autoCapitalize="none"
+              onSubmitEditing={() => mobileRef.current.focus()}
             />
           </View>
           {/* // 성함  */}
@@ -67,7 +198,8 @@ const FindId = (props) => {
                 marginBottom: 5,
               }}>
               <TextInput
-                value=""
+                ref={mobileRef}
+                value={userMobile}
                 placeholder="휴대전화번호를 입력해주세요."
                 placeholderTextColor="#A2A2A2"
                 style={[
@@ -81,19 +213,27 @@ const FindId = (props) => {
                     marginRight: 10,
                   },
                 ]}
+                onChangeText={(text) => {
+                  setIsSend(false);
+                  setUserMobile(text);
+                }}
+                editable={!isSend ? true : false}
                 keyboardType="number-pad"
                 autoCapitalize="none"
+                onSubmitEditing={() => getUserIdStep01()}
               />
               <TouchableOpacity
+                onPress={() => getUserIdStep01()}
                 activeOpacity={0.8}
                 style={{
                   justifyContent: 'center',
                   alignItems: 'center',
-                  backgroundColor: '#00A170',
+                  backgroundColor: isSend ? '#ccc' : '#00A170',
                   borderRadius: 4,
                   height: 50,
-                  paddingHorizontal: 15,
-                }}>
+                  paddingHorizontal: 20,
+                }}
+                disabled={isSend ? true : false}>
                 <Text
                   style={[
                     styles.normalText,
@@ -103,6 +243,15 @@ const FindId = (props) => {
                 </Text>
               </TouchableOpacity>
             </View>
+            {isCounter ? (
+              <Timer
+                minutes={minutes}
+                setMinutes={setMinutes}
+                seconds={seconds}
+                setSeconds={setSeconds}
+                onFailConfirm={onFailConfirm}
+              />
+            ) : null}
             <View
               style={{
                 flexDirection: 'row',
@@ -111,7 +260,7 @@ const FindId = (props) => {
                 marginBottom: 5,
               }}>
               <TextInput
-                value=""
+                value={mobileCertNum}
                 placeholder="인증번호를 입력해주세요."
                 placeholderTextColor="#A2A2A2"
                 style={[
@@ -125,10 +274,17 @@ const FindId = (props) => {
                     marginRight: 10,
                   },
                 ]}
+                onChangeText={(text) => {
+                  setMobileConfimed(false);
+                  setMobileConfirmId(text);
+                  setMobileCertNum(text);
+                }}
                 keyboardType="number-pad"
                 autoCapitalize="none"
+                editable={isMobileConfimed ? false : true}
+                onSubmitEditing={() => getUserIdStep02()}
               />
-              <TouchableOpacity
+              {/* <TouchableOpacity
                 activeOpacity={0.8}
                 style={{
                   justifyContent: 'center',
@@ -145,26 +301,31 @@ const FindId = (props) => {
                   ]}>
                   인증번호 확인
                 </Text>
-              </TouchableOpacity>
+              </TouchableOpacity> */}
             </View>
           </View>
           {/* // 휴대폰 번호  */}
         </View>
 
         <View style={{paddingHorizontal: 20, marginBottom: 50}}>
-          <TouchableOpacity
-            onPress={() =>
-              Alert.alert('고객님의 아이디는', '*** 입니다.', [
-                {
-                  text: '확인',
-                },
-              ])
-            }
-            activeOpacity={0.8}>
-            <View style={[styles.submitBtn, {marginBottom: 10}]}>
-              <Text style={styles.submitBtnText}>아이디 찾기</Text>
-            </View>
-          </TouchableOpacity>
+          {isMobileConfimed ? (
+            <TouchableOpacity
+              onPress={() => navigation.navigate('Login')}
+              activeOpacity={0.8}>
+              <View style={[styles.submitBtn, {marginBottom: 10}]}>
+                <Text style={styles.submitBtnText}>로그인 하기</Text>
+              </View>
+            </TouchableOpacity>
+          ) : (
+            <TouchableOpacity
+              onPress={() => getUserIdStep02()}
+              activeOpacity={0.8}>
+              <View style={[styles.submitBtn, {marginBottom: 10}]}>
+                <Text style={styles.submitBtnText}>아이디 찾기</Text>
+              </View>
+            </TouchableOpacity>
+          )}
+
           <TouchableOpacity
             onPress={() => navigation.goBack()}
             activeOpacity={0.8}>

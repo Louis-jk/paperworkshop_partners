@@ -20,7 +20,9 @@ const HeaderBackBtnNotSearch = (props) => {
       case 'CCenterQnAwrite':
         setTitle('1:1문의');
         break;
-
+      case 'SetPwd':
+        setTitle('비밀번호 변경');
+        break;
       default:
         return false;
     }

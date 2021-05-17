@@ -520,7 +520,7 @@ const DrawerMenu = (props) => {
             backgroundColor: '#F5F5F5',
           }}
         />
-        <TouchableOpacity
+        {/* <TouchableOpacity
           activeOpacity={1}
           onPress={() => navigation.navigate('Steps')}
           style={{
@@ -532,9 +532,9 @@ const DrawerMenu = (props) => {
           <Text style={[styles.categoryTitle, {color: '#e5e5e5'}]}>
             견적발송및채택-테스트
           </Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
 
-        <TouchableOpacity
+        {/* <TouchableOpacity
           activeOpacity={1}
           onPress={() => navigation.navigate('Product')}
           style={{
@@ -546,7 +546,7 @@ const DrawerMenu = (props) => {
           <Text style={[styles.categoryTitle, {color: '#e5e5e5'}]}>
             제작납품-테스트
           </Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
 
         <View style={{height: 80}} />
 
