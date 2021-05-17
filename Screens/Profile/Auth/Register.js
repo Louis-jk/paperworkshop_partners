@@ -197,13 +197,11 @@ const Register = (props) => {
   const confirmCount = (num) => {
     setIsCounter(true);
     setMinutes(num);
-    // setSeconds(num);
   };
 
   const confirmClearCount = (num) => {
     setIsCounter(false);
     setMinutes(num);
-    // setSeconds(num);
   };
 
   // 본인인증(휴대전화번호) 문자발송 버튼
@@ -224,10 +222,7 @@ const Register = (props) => {
         [
           {
             text: '확인',
-            onPress: () => {
-              setIsSend(true);
-              mobileCfmRef.current.focus();
-            },
+            onPress: () => setIsSend(true)
           },
         ],
       );
@@ -236,9 +231,10 @@ const Register = (props) => {
           if (res.data.result == '1') {
             setMobileConfimed(false);
           } else {
-            Alert.alert(res.data.message, '', [
+            Alert.alert(res.data.message, '가입여부를 확인해주세요.', [
               {
                 text: '확인',
+                onPress: () => confirmClearCount(0)
               },
             ]);
           }
@@ -266,7 +262,6 @@ const Register = (props) => {
             text: '확인',
             onPress: () => {
               setIsSend(true);
-              mobileCfmRef.current.focus();
             },
           },
         ],
@@ -305,7 +300,6 @@ const Register = (props) => {
         [
           {
             text: '확인',
-            onPress: () => {},
           },
         ],
       );

@@ -87,7 +87,6 @@ const FindPwd = (props) => {
                   onPress: () => {
                     setIsSend(true);
                     confirmCount(3);
-                    mobileCertNumRef.current.focus();
                   },
                 },
               ],
