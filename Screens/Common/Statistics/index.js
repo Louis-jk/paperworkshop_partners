@@ -2,7 +2,6 @@ import * as React from 'react';
 import {
   View,
   Text,
-  ScrollView,
   StyleSheet,
   Dimensions,
   Image,
@@ -12,7 +11,7 @@ import {
 
 import {useSelector} from 'react-redux';
 import DetailHeader from '../DetailHeader';
-import {TouchableOpacity} from 'react-native-gesture-handler';
+import {TouchableOpacity, ScrollView} from 'react-native-gesture-handler';
 import StatisticsAPI from '../../../src/api/Statistics';
 
 const index = (props) => {
@@ -60,9 +59,9 @@ const index = (props) => {
     setIsActiveToggleYear(!isActiveToggleYear);
   };
 
-  console.log("현재", now);
-  console.log("현재 년 type", nowYear);
-  console.log("현재 월", nowMonth);
+  // console.log("현재", now);
+  // console.log("현재 년 type", nowYear);
+  // console.log("현재 월", nowMonth);
 
   const monthCount = [
     '01',
@@ -108,7 +107,7 @@ const index = (props) => {
 
   const getStatisticsAPI = () => {
     let regionValue = region === 'all' ? '' : region;
-    let monthValue = month === nowMonthStr ? nowMonthStr : month;
+    let monthValue = month === nowMonthStr ? `0${nowMonthStr}` : month;
 
     StatisticsAPI.getStatistics(mb_email, year, monthValue, regionValue)
       .then((res) => {
@@ -130,18 +129,18 @@ const index = (props) => {
       });
   };
 
-  React.useEffect(() => {
-    getStatisticsAPI();
+  React.useEffect(() => {    
 
     const getNow = new Date();
     const getNowYear = getNow.getFullYear();
 
-    getYearRangeHandler(2021, getNowYear);
+    getStatisticsAPI();
+    getYearRangeHandler(2000, getNowYear);
   }, [year, month, region]);
 
 
   const yearRender = ({item, idx}) => {
-    return (
+    return (      
       <TouchableOpacity
         key={idx}
         style={{paddingVertical: 7, marginBottom: 7}}
@@ -153,6 +152,7 @@ const index = (props) => {
         >
         <Text style={{fontFamily: 'SCDream4'}}>{item}년</Text>
       </TouchableOpacity>
+      
     )
   }
 
@@ -262,13 +262,19 @@ const index = (props) => {
               )}
             </TouchableOpacity>
           </View>
-          {isActiveToggleYear && (
-            <View
+          {isActiveToggleYear ?
+            <ScrollView 
+              contentContainerStyle={{ flexGrow: 1 }}
+              scrollEnabled={true}
+              scrollToOverflowEnabled={true}
+              showsVerticalScrollIndicator={true}
               style={{
+                flex:1,
                 position: 'absolute',
                 top: 70,
                 left: '4.1%',
                 width: '30%',
+                height: 300,
                 backgroundColor: '#fff',
                 paddingHorizontal: 10,
                 paddingVertical: 10,
@@ -278,17 +284,24 @@ const index = (props) => {
                 borderBottomLeftRadius: 5,
                 zIndex: 100,
               }}>
-
-              <FlatList
-                scrollEnabled={true}
-                data={yearCount}
-                renderItem={yearRender}
-                keyExtractor={(item, index) => index.toString()}
-                persistentScrollbar={true}
-                showsVerticalScrollIndicator={true}
-              />
-            </View>
-          )}
+                <View style={{marginBottom: 20}}>
+                  {yearCount.map((year, idx) => (
+                    <TouchableOpacity
+                      key={idx}
+                      style={{paddingVertical: 7, marginBottom: 7}}
+                      activeOpacity={0.8}
+                      onPress={() => {
+                        setYear(year);
+                        setIsActiveToggleYear(false);
+                      }}
+                      >
+                      <Text style={{fontFamily: 'SCDream4'}}>{year}년</Text>
+                    </TouchableOpacity>
+                  ))}
+                </View>
+              </ScrollView>
+            : null }
+         
           <View
             style={{
               borderWidth: 1,
@@ -325,12 +338,13 @@ const index = (props) => {
             </TouchableOpacity>
           </View>
           {isActiveToggleMonth && (
-            <View
+            <ScrollView 
               style={{
                 position: 'absolute',
                 top: 70,
                 left: '35.4%',
                 width: '25%',
+                height: 300,
                 backgroundColor: '#fff',
                 paddingHorizontal: 10,
                 paddingVertical: 10,
@@ -340,19 +354,21 @@ const index = (props) => {
                 borderBottomLeftRadius: 5,
                 zIndex: 100,
               }}>
-              {monthCount.map((v, idx) => (
-                <TouchableOpacity
-                  key={idx}
-                  style={{paddingVertical: 7, marginBottom: 7}}
-                  activeOpacity={0.8}
-                  onPress={() => {
-                    setMonth(v);
-                    setIsActiveToggleMonth(false);
-                  }}>
-                  <Text style={{fontFamily: 'SCDream4'}}>{v}월</Text>
-                </TouchableOpacity>
-              ))}
-            </View>
+                <View style={{marginBottom: 20}}>
+                  {monthCount.map((v, idx) => (
+                    <TouchableOpacity
+                      key={idx}
+                      style={{paddingVertical: 7, marginBottom: 7}}
+                      activeOpacity={0.8}
+                      onPress={() => {
+                        setMonth(v);
+                        setIsActiveToggleMonth(false);
+                      }}>
+                      <Text style={{fontFamily: 'SCDream4'}}>{v}월</Text>
+                    </TouchableOpacity>
+                  ))}
+                </View>
+            </ScrollView>
           )}
           <View
             style={{
@@ -419,12 +435,13 @@ const index = (props) => {
             </TouchableOpacity>
           </View>
           {isActiveToggleRegion && (
-            <View
+            <ScrollView 
               style={{
                 position: 'absolute',
                 top: 70,
                 right: '4%',
                 width: '45%',
+                height: 300,
                 backgroundColor: '#fff',
                 paddingHorizontal: 10,
                 paddingVertical: 10,
@@ -434,49 +451,51 @@ const index = (props) => {
                 borderBottomLeftRadius: 5,
                 zIndex: 100,
               }}>
-              {regionCount.map((r, idx) => (
-                <TouchableOpacity
-                  key={idx}
-                  style={{paddingVertical: 7, marginBottom: 7}}
-                  activeOpacity={0.8}
-                  onPress={() => {
-                    setRegion(r);
-                    setIsActiveToggleRegion(false);
-                  }}>
-                  <Text style={{fontFamily: 'SCDream4'}}>
-                    {r === 'all'
-                      ? '전체'
-                      : r === 'seoul'
-                      ? '서울'
-                      : r === 'busan'
-                      ? '부산'
-                      : r === 'daegu'
-                      ? '대구'
-                      : r === 'incheon'
-                      ? '인천'
-                      : r === 'gwangju'
-                      ? '광주'
-                      : r === 'sejong'
-                      ? '세종/대전/청주'
-                      : r === 'ulsan'
-                      ? '울산'
-                      : r === 'gyeongi'
-                      ? '경기'
-                      : r === 'gangwon'
-                      ? '강원'
-                      : r === 'choongcheong'
-                      ? '충청'
-                      : r === 'jeonra'
-                      ? '전라'
-                      : r === 'gyeongsang'
-                      ? '경상'
-                      : r === 'jeju'
-                      ? '제주'
-                      : null}
-                  </Text>
-                </TouchableOpacity>
-              ))}
-            </View>
+                <View style={{marginBottom: 20}}>
+                  {regionCount.map((r, idx) => (
+                    <TouchableOpacity
+                      key={idx}
+                      style={{paddingVertical: 7, marginBottom: 7}}
+                      activeOpacity={0.8}
+                      onPress={() => {
+                        setRegion(r);
+                        setIsActiveToggleRegion(false);
+                      }}>
+                      <Text style={{fontFamily: 'SCDream4'}}>
+                        {r === 'all'
+                          ? '전체'
+                          : r === 'seoul'
+                          ? '서울'
+                          : r === 'busan'
+                          ? '부산'
+                          : r === 'daegu'
+                          ? '대구'
+                          : r === 'incheon'
+                          ? '인천'
+                          : r === 'gwangju'
+                          ? '광주'
+                          : r === 'sejong'
+                          ? '세종/대전/청주'
+                          : r === 'ulsan'
+                          ? '울산'
+                          : r === 'gyeongi'
+                          ? '경기'
+                          : r === 'gangwon'
+                          ? '강원'
+                          : r === 'choongcheong'
+                          ? '충청'
+                          : r === 'jeonra'
+                          ? '전라'
+                          : r === 'gyeongsang'
+                          ? '경상'
+                          : r === 'jeju'
+                          ? '제주'
+                          : null}
+                      </Text>
+                    </TouchableOpacity>
+                  ))}
+              </View>
+            </ScrollView>
           )}
         </View>
 
