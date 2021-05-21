@@ -20,6 +20,7 @@
 		686F43C367827F50F7B94078 /* libPods-paper_workshop_partners.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BA5C953B8669E62ACBD3FE0B /* libPods-paper_workshop_partners.a */; };
 		6F83C68793E7A77968FC4480 /* libPods-paper_workshop_partners-paper_workshop_partnersTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6F67D0D293061C847B489305 /* libPods-paper_workshop_partners-paper_workshop_partnersTests.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
+		B8459F1326579F7500A910CC /* Fonts in Resources */ = {isa = PBXBuildFile; fileRef = B8459F1226579F7500A910CC /* Fonts */; };
 		B8BCFCCF2657412300ED4A5D /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = B8BCFCCE2657412300ED4A5D /* GoogleService-Info.plist */; };
 		B8BCFCE22657424400ED4A5D /* 1024.png in Resources */ = {isa = PBXBuildFile; fileRef = B8BCFCE12657424400ED4A5D /* 1024.png */; };
 /* End PBXBuildFile section */
@@ -65,6 +66,7 @@
 		6F67D0D293061C847B489305 /* libPods-paper_workshop_partners-paper_workshop_partnersTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-paper_workshop_partners-paper_workshop_partnersTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = paper_workshop_partners/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		8586AFD4D469DB38AD5E8D6A /* Pods-paper_workshop_partners-tvOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-paper_workshop_partners-tvOSTests.debug.xcconfig"; path = "Target Support Files/Pods-paper_workshop_partners-tvOSTests/Pods-paper_workshop_partners-tvOSTests.debug.xcconfig"; sourceTree = "<group>"; };
+		B8459F1226579F7500A910CC /* Fonts */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Fonts; sourceTree = "<group>"; };
 		B8BCFCCE2657412300ED4A5D /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		B8BCFCD82657414A00ED4A5D /* paper_workshop_partners.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = paper_workshop_partners.entitlements; path = paper_workshop_partners/paper_workshop_partners.entitlements; sourceTree = "<group>"; };
 		B8BCFCE12657424400ED4A5D /* 1024.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 1024.png; sourceTree = "<group>"; };
@@ -130,6 +132,7 @@
 		13B07FAE1A68108700A75B9A /* paper_workshop_partners */ = {
 			isa = PBXGroup;
 			children = (
+				B8459F1226579F7500A910CC /* Fonts */,
 				B8BCFCD82657414A00ED4A5D /* paper_workshop_partners.entitlements */,
 				B8BCFCE12657424400ED4A5D /* 1024.png */,
 				B8BCFCCE2657412300ED4A5D /* GoogleService-Info.plist */,
@@ -349,6 +352,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B8459F1326579F7500A910CC /* Fonts in Resources */,
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				B8BCFCE22657424400ED4A5D /* 1024.png in Resources */,
