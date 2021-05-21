@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>512027257209-3i9bsi7t6ocuvhcpsjjdn6ftrvmebjgl.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.512027257209-3i9bsi7t6ocuvhcpsjjdn6ftrvmebjgl</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>512027257209-ngpohbj5535jgmelmf0cdhnlmakhh3d3.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyBOfpuY5daDq5VODFAoJ9ja94xBLiK7q6k</string>
+	<key>GCM_SENDER_ID</key>
+	<string>512027257209</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.dmonster.paperworkshop</string>
+	<key>PROJECT_ID</key>
+	<string>paperworkshop-7328d</string>
+	<key>STORAGE_BUCKET</key>
+	<string>paperworkshop-7328d.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:512027257209:ios:3a3ed4c16692c49de6e7a8</string>
+</dict>
+</plist>
