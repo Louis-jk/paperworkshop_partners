@@ -5,7 +5,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
-	<string>페이퍼공작소\n파트너스</string>
+	<string>페이퍼공작소파트너스</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -39,6 +39,12 @@
 	</dict>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string></string>
+  <key>UIAppFonts</key>
+  <array>
+    <string>Fonts/S-CoreDream-4Regular.otf</string>
+    <string>Fonts/S-CoreDream-5Medium.otf</string>
+    <string>Fonts/S-CoreDream-6Bold.otf</string>
+  </array>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>remote-notification</string>
