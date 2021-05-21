@@ -16,7 +16,6 @@ import {useDispatch, useSelector} from 'react-redux';
 import messaging from '@react-native-firebase/messaging';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { CommonActions, StackActions } from "@react-navigation/native";
-
 import {
   UserNo,
   UserName,
@@ -48,10 +47,9 @@ import {
   UserEstimateCnt,
   UserLocation,
 } from '../../../Modules/UserInfoReducer';
-
 import {setFcmToken} from '../../../Modules/InfoReducer';
-
 import Auth from '../../../src/api/Auth';
+import {SCDream4, SCDream5, SCDream6} from '../../../src/font';
 
 const Login = (props) => {
   const navigation = props.navigation;
@@ -412,13 +410,13 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   normalText: {
-    fontFamily: 'SCDream4',
+    fontFamily: SCDream4,
   },
   mediumText: {
-    fontFamily: 'SCDream5',
+    fontFamily: SCDream5,
   },
   boldText: {
-    fontFamily: 'SCDream6',
+    fontFamily: SCDream6,
   },
 });
 

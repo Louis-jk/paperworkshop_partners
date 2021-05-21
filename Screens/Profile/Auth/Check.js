@@ -4,7 +4,7 @@ import {useDispatch} from 'react-redux';
 import messaging from '@react-native-firebase/messaging';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { CommonActions, StackActions } from "@react-navigation/native";
-
+import {SCDream4, SCDream5, SCDream6} from '../../../src/font';
 import {setFcmToken} from '../../../Modules/InfoReducer';
 import {
   UserNo,
@@ -142,7 +142,7 @@ const Check = (props) => {
         alignItems: 'center',
         backgroundColor: '#00A170',
       }}>
-      <Text style={{fontFamily: 'SCDream4', color: '#fff', marginBottom: 10}}>
+      <Text style={{fontFamily: SCDream4, color: '#fff', marginBottom: 10}}>
         사용자 확인중...
       </Text>
       <ActivityIndicator size="large" color="#fff" />

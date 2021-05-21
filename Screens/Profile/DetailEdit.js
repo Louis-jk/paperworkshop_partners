@@ -13,10 +13,10 @@ import {
 } from 'react-native';
 import {useSelector, useDispatch} from 'react-redux';
 import ImagePicker from 'react-native-image-crop-picker';
-
 import Header from '../Common/DetailHeader';
 import Modal from '../Common/PartnersInfoModal';
 import Auth from '../../src/api/Auth';
+import {SCDream4, SCDream5, SCDream6} from '../../src/font';
 import {
   UserDescription,
   UserBusinessTime,
@@ -199,7 +199,7 @@ const DetailEdit = (props) => {
               placeholderTextColor="#A2A2A2"
               onChangeText={(text) => setDescriptionEdit(text)}
               style={{
-                fontFamily: 'SCDream4',
+                fontFamily: SCDream4,
                 borderRadius: 5,
                 backgroundColor: '#F5F5F5',
                 paddingLeft: 10,
@@ -217,7 +217,7 @@ const DetailEdit = (props) => {
               placeholderTextColor="#A2A2A2"
               onChangeText={(text) => setBusinessTimeEdit(text)}
               style={{
-                fontFamily: 'SCDream4',
+                fontFamily: SCDream4,
                 borderRadius: 5,
                 backgroundColor: '#F5F5F5',
                 paddingLeft: 10,
@@ -235,7 +235,7 @@ const DetailEdit = (props) => {
               placeholderTextColor="#A2A2A2"
               onChangeText={(text) => setCloseDayEdit(text)}
               style={{
-                fontFamily: 'SCDream4',
+                fontFamily: SCDream4,
                 borderRadius: 5,
                 backgroundColor: '#F5F5F5',
                 paddingLeft: 10,
@@ -254,7 +254,7 @@ const DetailEdit = (props) => {
                 placeholderTextColor="#A2A2A2"
                 onChangeText={(text) => setUsedEdit(text)}
                 style={{
-                  fontFamily: 'SCDream4',
+                  fontFamily: SCDream4,
                   borderRadius: 5,
                   backgroundColor: '#F5F5F5',
                   paddingLeft: 10,
@@ -506,13 +506,13 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   profileTitle: {
-    fontFamily: 'SCDream5',
+    fontFamily: SCDream5,
     fontSize: 15,
     lineHeight: 19,
     marginBottom: 7,
   },
   profileDesc: {
-    fontFamily: 'SCDream4',
+    fontFamily: SCDream4,
     fontSize: 15,
     color: '#111',
   },
@@ -523,7 +523,7 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
   },
   submitBtnText: {
-    fontFamily: 'SCDream4',
+    fontFamily: SCDream4,
     fontSize: 16,
     color: '#FFFFFF',
     textAlign: 'center',
@@ -535,7 +535,7 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
   },
   cancelBtnText: {
-    fontFamily: 'SCDream4',
+    fontFamily: SCDream4,
     fontSize: 16,
     color: '#111',
     textAlign: 'center',
@@ -547,24 +547,24 @@ const styles = StyleSheet.create({
     paddingVertical: 20,
   },
   listTitle: {
-    fontFamily: 'SCDream4',
+    fontFamily: SCDream4,
     fontSize: 14,
     lineHeight: 19,
     marginBottom: 5,
   },
   listDesc: {
-    fontFamily: 'SCDream4',
+    fontFamily: SCDream4,
     fontSize: 12,
     lineHeight: 16,
     color: '#A2A2A2',
   },
   listStep: {
-    fontFamily: 'SCDream4',
+    fontFamily: SCDream4,
     fontSize: 14,
     color: '#00A170',
   },
   listDday: {
-    fontFamily: 'SCDream4',
+    fontFamily: SCDream4,
     alignSelf: 'flex-end',
     fontSize: 14,
     color: '#A2A2A2',
@@ -575,19 +575,19 @@ const styles = StyleSheet.create({
     backgroundColor: '#E3E3E3',
   },
   orderInfoTitle: {
-    fontFamily: 'SCDream5',
+    fontFamily: SCDream5,
     fontSize: 15,
     color: '#000000',
     marginTop: 20,
   },
   normalText: {
-    fontFamily: 'SCDream4',
+    fontFamily: SCDream4,
   },
   mediumText: {
-    fontFamily: 'SCDream5',
+    fontFamily: SCDream5,
   },
   boldText: {
-    fontFamily: 'SCDream6',
+    fontFamily: SCDream6,
   },
 });
 

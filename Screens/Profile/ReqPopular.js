@@ -11,10 +11,9 @@ import {
   TextInput,
 } from 'react-native';
 import {useSelector} from 'react-redux';
-
 import DetailHeader from '../Common/DetailHeader';
-import AuthAPI from '../../src/api/Auth';
 import Auth from '../../src/api/Auth';
+import {SCDream4, SCDream5, SCDream6} from '../../src/font';
 
 const ReqPopular = (props) => {
   const navigation = props.navigation;
@@ -118,7 +117,7 @@ const ReqPopular = (props) => {
           }}>
           <Text
             style={{
-              fontFamily: 'SCDream4',
+              fontFamily: SCDream4,
               fontSize: 13,
               color: '#00A170',
               marginBottom: 20,
@@ -162,7 +161,7 @@ const ReqPopular = (props) => {
                     />
                     <Text
                       style={{
-                        fontFamily: 'SCDream4',
+                        fontFamily: SCDream4,
                         fontSize: 14,
                         color: '#000',
                       }}>
@@ -209,7 +208,7 @@ const ReqPopular = (props) => {
           }}>
           <Text
             style={{
-              fontFamily: 'SCDream4',
+              fontFamily: SCDream4,
               fontSize: 14,
               color: '#FFFFFF',
               marginBottom: 5,
@@ -224,7 +223,7 @@ const ReqPopular = (props) => {
             }}>
             <Text
               style={{
-                fontFamily: 'SCDream4',
+                fontFamily: SCDream4,
                 fontSize: 14,
                 color: '#FFFFFF',
                 marginRight: 10,
@@ -232,7 +231,7 @@ const ReqPopular = (props) => {
               562-66312-4512644
             </Text>
             <Text
-              style={{fontFamily: 'SCDream4', fontSize: 14, color: '#FFFFFF'}}>
+              style={{fontFamily: SCDream4, fontSize: 14, color: '#FFFFFF'}}>
               페이퍼공작소
             </Text>
           </View>
@@ -249,7 +248,7 @@ const ReqPopular = (props) => {
               placeholder="내용을 적어주세요"
               placeholderTextColor="#A2A2A2"
               style={{
-                fontFamily: 'SCDream4',
+                fontFamily: SCDream4,
                 borderRadius: 5,
                 backgroundColor: '#F5F5F5',
                 height: 120,
@@ -274,7 +273,7 @@ const ReqPopular = (props) => {
               placeholder="내용을 적어주세요"
               placeholderTextColor="#A2A2A2"
               style={{
-                fontFamily: 'SCDream4',
+                fontFamily: SCDream4,
                 borderRadius: 5,
                 backgroundColor: '#F5F5F5',
                 height: 120,
@@ -302,7 +301,7 @@ const ReqPopular = (props) => {
           <View style={{flexDirection: 'row'}}>
             <Text
               style={{
-                fontFamily: 'SCDream4',
+                fontFamily: SCDream4,
                 fontSize: 12,
                 color: '#707070',
                 marginRight: 5,
@@ -312,7 +311,7 @@ const ReqPopular = (props) => {
             <View style={{paddingRight: 10}}>
               <Text
                 style={{
-                  fontFamily: 'SCDream4',
+                  fontFamily: SCDream4,
                   fontSize: 12,
                   lineHeight: 20,
                   color: '#707070',
@@ -350,7 +349,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   orderInfoContentTitle: {
-    fontFamily: 'SCDream4',
+    fontFamily: SCDream4,
     fontSize: 15,
     color: '#111',
   },
@@ -375,13 +374,13 @@ const styles = StyleSheet.create({
     marginVertical: 15,
   },
   partnerInfoTitle: {
-    fontFamily: 'SCDream4',
+    fontFamily: SCDream4,
     fontSize: 15,
     color: '#00A170',
     marginBottom: 10,
   },
   partnerInfoDesc: {
-    fontFamily: 'SCDream4',
+    fontFamily: SCDream4,
     fontSize: 13,
     lineHeight: 20,
     color: '#000000',
@@ -393,19 +392,19 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
   },
   submitBtnText: {
-    fontFamily: 'SCDream4',
+    fontFamily: SCDream4,
     fontSize: 16,
     color: '#FFFFFF',
     textAlign: 'center',
   },
   normalText: {
-    fontFamily: 'SCDream4',
+    fontFamily: SCDream4,
   },
   mediumText: {
-    fontFamily: 'SCDream5',
+    fontFamily: SCDream5,
   },
   boldText: {
-    fontFamily: 'SCDream6',
+    fontFamily: SCDream6,
   },
 });
 

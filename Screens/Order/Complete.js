@@ -13,6 +13,7 @@ import {
 } from 'react-native';
 import DetailHeader from '../Common/DetailHeader';
 import {TouchableOpacity} from 'react-native-gesture-handler';
+import {SCDream4, SCDream5, SCDream6} from '../../src/font';
 
 const Complete = (props) => {
   const navigation = props.navigation;
@@ -48,7 +49,7 @@ const Complete = (props) => {
                 style={{alignSelf: 'flex-end'}}>
                 <Text
                   style={{
-                    fontFamily: 'SCDream4',
+                    fontFamily: SCDream4,
                     fontSize: 12,
                     textDecorationLine: 'underline',
                     color: '#A2A2A2',
@@ -113,7 +114,7 @@ const Complete = (props) => {
               placeholder="메모를 입력해주세요."
               placeholderTextColor="#A2A2A2"
               style={{
-                fontFamily: 'SCDream4',
+                fontFamily: SCDream4,
                 borderRadius: 5,
                 backgroundColor: '#F5F5F5',
                 height: 120,
@@ -168,13 +169,13 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
   infoStepDesc: {
-    fontFamily: 'SCDream4',
+    fontFamily: SCDream4,
     fontSize: 12,
     color: '#00A170',
     lineHeight: 23,
   },
   infoStepTitle: {
-    fontFamily: 'SCDream4',
+    fontFamily: SCDream4,
     fontSize: 16,
     color: '#000000',
   },
@@ -191,13 +192,13 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   detailsTitle: {
-    fontFamily: 'SCDream4',
+    fontFamily: SCDream4,
     width: 100,
     fontSize: 14,
     color: '#A2A2A2',
   },
   detailsDesc: {
-    fontFamily: 'SCDream4',
+    fontFamily: SCDream4,
     fontSize: 14,
     color: '#000',
   },
@@ -207,20 +208,20 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   orderInfoTitle: {
-    fontFamily: 'SCDream4',
+    fontFamily: SCDream4,
     fontSize: 18,
     color: '#000000',
     marginTop: 20,
     marginBottom: 25,
   },
   orderInfoDesc: {
-    fontFamily: 'SCDream4',
+    fontFamily: SCDream4,
     fontSize: 15,
     color: '#000',
     marginBottom: 10,
   },
   textInput: {
-    fontFamily: 'SCDream4',
+    fontFamily: SCDream4,
     borderWidth: 1,
     borderColor: '#E3E3E3',
     borderRadius: 4,
@@ -255,12 +256,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   orderInfoContentTitle: {
-    fontFamily: 'SCDream4',
+    fontFamily: SCDream4,
     fontSize: 15,
     color: '#111',
   },
   orderInfoContentDetail: {
-    fontFamily: 'SCDream4',
+    fontFamily: SCDream4,
     fontSize: 14,
     color: '#707070',
   },
@@ -271,7 +272,7 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
   },
   submitBtnText: {
-    fontFamily: 'SCDream4',
+    fontFamily: SCDream4,
     fontSize: 16,
     color: '#FFFFFF',
     textAlign: 'center',
@@ -285,19 +286,19 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
   },
   submitBtnBorderText: {
-    fontFamily: 'SCDream4',
+    fontFamily: SCDream4,
     fontSize: 16,
     color: '#00A170',
     textAlign: 'center',
   },
   normalText: {
-    fontFamily: 'SCDream4',
+    fontFamily: SCDream4,
   },
   mediumText: {
-    fontFamily: 'SCDream5',
+    fontFamily: SCDream5,
   },
   boldText: {
-    fontFamily: 'SCDream6',
+    fontFamily: SCDream6,
   },
 });
 

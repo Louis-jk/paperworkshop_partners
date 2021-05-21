@@ -8,6 +8,7 @@ import {
   ScrollView,
   StyleSheet,
 } from 'react-native';
+import {SCDream4, SCDream5, SCDream6} from '../../src/font';
 
 import Modal from 'react-native-modal';
 
@@ -78,7 +79,7 @@ const PartnersInfoModal = ({toggleModal, isVisible}) => {
                   }}>
                   <Text
                     style={{
-                      fontFamily: 'SCDream4',
+                      fontFamily: SCDream4,
                       fontSize: 12,
                       lineHeight: 20,
                       color: '#00A170',
@@ -89,7 +90,7 @@ const PartnersInfoModal = ({toggleModal, isVisible}) => {
                   <View>
                     <Text
                       style={{
-                        fontFamily: 'SCDream4',
+                        fontFamily: SCDream4,
                         fontSize: 12,
                         lineHeight: 20,
                         color: '#00A170',
@@ -98,7 +99,7 @@ const PartnersInfoModal = ({toggleModal, isVisible}) => {
                     </Text>
                     <Text
                       style={{
-                        fontFamily: 'SCDream4',
+                        fontFamily: SCDream4,
                         fontSize: 12,
                         lineHeight: 20,
                         color: '#00A170',
@@ -153,7 +154,7 @@ const PartnersInfoModal = ({toggleModal, isVisible}) => {
                 <View style={{flexDirection: 'row'}}>
                   <Text
                     style={{
-                      fontFamily: 'SCDream4',
+                      fontFamily: SCDream4,
                       fontSize: 12,
                       lineHeight: 20,
                       color: '#707070',
@@ -164,7 +165,7 @@ const PartnersInfoModal = ({toggleModal, isVisible}) => {
                   <View>
                     <Text
                       style={{
-                        fontFamily: 'SCDream4',
+                        fontFamily: SCDream4,
                         fontSize: 12,
                         lineHeight: 20,
                         color: '#707070',
@@ -194,25 +195,25 @@ const styles = StyleSheet.create({
     marginVertical: 15,
   },
   partnerInfoTitle: {
-    fontFamily: 'SCDream4',
+    fontFamily: SCDream4,
     fontSize: 15,
     color: '#00A170',
     marginBottom: 10,
   },
   partnerInfoDesc: {
-    fontFamily: 'SCDream4',
+    fontFamily: SCDream4,
     fontSize: 13,
     lineHeight: 20,
     color: '#000000',
   },
   normalText: {
-    fontFamily: 'SCDream4',
+    fontFamily: SCDream4,
   },
   mediumText: {
-    fontFamily: 'SCDream5',
+    fontFamily: SCDream5,
   },
   boldText: {
-    fontFamily: 'SCDream6',
+    fontFamily: SCDream6,
   },
 });
 

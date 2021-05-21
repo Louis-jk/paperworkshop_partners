@@ -8,9 +8,7 @@ import {
   Platform,
   Alert,
 } from 'react-native';
-
 import {useSelector, useDispatch} from 'react-redux';
-
 import Header from '../../Common/Header';
 import Auth from '../../../src/api/Auth';
 import {
@@ -30,6 +28,7 @@ import {
   UserLicense,
   UserLicenseSource
 } from '../../../Modules/UserInfoReducer';
+import {SCDream4, SCDream5, SCDream6} from '../../../src/font';
 
 const Signed = (props) => {
   const {navigation} = props;
@@ -100,7 +99,7 @@ const Signed = (props) => {
           }}>
           <Text
             style={{
-              fontFamily: 'SCDream4',
+              fontFamily: SCDream4,
               fontSize: 18,
               color: '#00A170',
               marginTop: 20,
@@ -109,7 +108,7 @@ const Signed = (props) => {
           </Text>
           <Text
             style={{
-              fontFamily: 'SCDream4',
+              fontFamily: SCDream4,
               fontSize: 16,
               color: '#111',
               marginTop: 10,
@@ -144,19 +143,19 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
   },
   submitBtnText: {
-    fontFamily: 'SCDream4',
+    fontFamily: SCDream4,
     fontSize: 16,
     color: '#FFFFFF',
     textAlign: 'center',
   },
   normalText: {
-    fontFamily: 'SCDream4',
+    fontFamily: SCDream4,
   },
   mediumText: {
-    fontFamily: 'SCDream5',
+    fontFamily: SCDream5,
   },
   boldText: {
-    fontFamily: 'SCDream6',
+    fontFamily: SCDream6,
   },
 });
 

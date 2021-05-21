@@ -13,6 +13,7 @@ import {useSelector} from 'react-redux';
 import DetailHeader from '../DetailHeader';
 import {TouchableOpacity, ScrollView} from 'react-native-gesture-handler';
 import StatisticsAPI from '../../../src/api/Statistics';
+import {SCDream4, SCDream5, SCDream6} from '../../../src/font';
 
 const index = (props) => {
   const navigation = props.navigation;
@@ -150,7 +151,7 @@ const index = (props) => {
           setIsActiveToggleYear(false);
         }}
         >
-        <Text style={{fontFamily: 'SCDream4'}}>{item}년</Text>
+        <Text style={{fontFamily: SCDream4}}>{item}년</Text>
       </TouchableOpacity>
       
     )
@@ -176,7 +177,7 @@ const index = (props) => {
               }}>
               <Text
                 style={{
-                  fontFamily: 'SCDream4',
+                  fontFamily: SCDream4,
                   fontSize: 15,
                   color: '#000000',
                 }}>
@@ -184,7 +185,7 @@ const index = (props) => {
               </Text>
               <Text
                 style={{
-                  fontFamily: 'SCDream4',
+                  fontFamily: SCDream4,
                   fontSize: 15,
                   color: '#00A170',
                 }}>
@@ -200,7 +201,7 @@ const index = (props) => {
               }}>
               <Text
                 style={{
-                  fontFamily: 'SCDream4',
+                  fontFamily: SCDream4,
                   fontSize: 15,
                   color: '#000000',
                 }}>
@@ -208,7 +209,7 @@ const index = (props) => {
               </Text>
               <Text
                 style={{
-                  fontFamily: 'SCDream4',
+                  fontFamily: SCDream4,
                   fontSize: 15,
                   color: '#00A170',
                 }}>
@@ -246,7 +247,7 @@ const index = (props) => {
                 height: 50,
                 paddingHorizontal: 10,
               }}>
-              <Text style={{fontFamily: 'SCDream4'}}>{year}년</Text>
+              <Text style={{fontFamily: SCDream4}}>{year}년</Text>
               {isActiveToggleYear ? (
                 <Image
                   source={require('../../../src/assets/arr01_top.png')}
@@ -295,7 +296,7 @@ const index = (props) => {
                         setIsActiveToggleYear(false);
                       }}
                       >
-                      <Text style={{fontFamily: 'SCDream4'}}>{year}년</Text>
+                      <Text style={{fontFamily: SCDream4}}>{year}년</Text>
                     </TouchableOpacity>
                   ))}
                 </View>
@@ -321,7 +322,7 @@ const index = (props) => {
                 height: 50,
                 paddingHorizontal: 10,
               }}>
-              <Text style={{fontFamily: 'SCDream4'}}>{month}월</Text>
+              <Text style={{fontFamily: SCDream4}}>{month}월</Text>
               {isActiveToggleMonth ? (
                 <Image
                   source={require('../../../src/assets/arr01_top.png')}
@@ -364,7 +365,7 @@ const index = (props) => {
                         setMonth(v);
                         setIsActiveToggleMonth(false);
                       }}>
-                      <Text style={{fontFamily: 'SCDream4'}}>{v}월</Text>
+                      <Text style={{fontFamily: SCDream4}}>{v}월</Text>
                     </TouchableOpacity>
                   ))}
                 </View>
@@ -388,7 +389,7 @@ const index = (props) => {
                 height: 50,
                 paddingHorizontal: 10,
               }}>
-              <Text style={{fontFamily: 'SCDream4'}}>
+              <Text style={{fontFamily: SCDream4}}>
                 {region === 'all'
                   ? '전체'
                   : region === 'seoul'
@@ -461,7 +462,7 @@ const index = (props) => {
                         setRegion(r);
                         setIsActiveToggleRegion(false);
                       }}>
-                      <Text style={{fontFamily: 'SCDream4'}}>
+                      <Text style={{fontFamily: SCDream4}}>
                         {r === 'all'
                           ? '전체'
                           : r === 'seoul'
@@ -536,7 +537,7 @@ const index = (props) => {
               }}>
               <Text
                 style={{
-                  fontFamily: 'SCDream4',
+                  fontFamily: SCDream4,
                   fontSize: 15,
                   color: '#111111',
                 }}>
@@ -544,7 +545,7 @@ const index = (props) => {
               </Text>
               <Text
                 style={{
-                  fontFamily: 'SCDream4',
+                  fontFamily: SCDream4,
                   fontSize: 15,
                   color: '#00A170',
                 }}>
@@ -569,7 +570,7 @@ const index = (props) => {
               }}>
               <Text
                 style={{
-                  fontFamily: 'SCDream4',
+                  fontFamily: SCDream4,
                   fontSize: 15,
                   color: '#111111',
                 }}>
@@ -577,7 +578,7 @@ const index = (props) => {
               </Text>
               <Text
                 style={{
-                  fontFamily: 'SCDream4',
+                  fontFamily: SCDream4,
                   fontSize: 15,
                   color: '#00A170',
                 }}>
@@ -600,25 +601,25 @@ const styles = StyleSheet.create({
     marginVertical: 15,
   },
   partnerInfoTitle: {
-    fontFamily: 'SCDream4',
+    fontFamily: SCDream4,
     fontSize: 15,
     color: '#00A170',
     marginBottom: 10,
   },
   partnerInfoDesc: {
-    fontFamily: 'SCDream4',
+    fontFamily: SCDream4,
     fontSize: 13,
     lineHeight: 20,
     color: '#000000',
   },
   normalText: {
-    fontFamily: 'SCDream4',
+    fontFamily: SCDream4,
   },
   mediumText: {
-    fontFamily: 'SCDream5',
+    fontFamily: SCDream5,
   },
   boldText: {
-    fontFamily: 'SCDream6',
+    fontFamily: SCDream6,
   },
 });
 

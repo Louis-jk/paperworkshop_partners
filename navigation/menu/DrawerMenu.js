@@ -15,6 +15,7 @@ import Carousel, {Pagination} from 'react-native-snap-carousel';
 import Modal from 'react-native-modal';
 import FastImage from 'react-native-fast-image';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {SCDream4, SCDream5, SCDream6} from '../../src/font';
 
 const DrawerMenu = (props) => {
   const navigation = props.navigation;  
@@ -141,7 +142,7 @@ const DrawerMenu = (props) => {
                 }}
               />
             </TouchableOpacity>
-            <Text style={{fontFamily: 'SCDream4'}}>
+            <Text style={{fontFamily: SCDream4}}>
               현재 페이퍼공작소 무료이용 가능합니다.
             </Text>
           </View>
@@ -246,7 +247,7 @@ const DrawerMenu = (props) => {
                   }}>
                   <Text
                     style={{
-                      fontFamily: 'SCDream4',
+                      fontFamily: SCDream4,
                       color: '#00A170',
                       paddingHorizontal: 10,
                       paddingVertical: 5,
@@ -262,7 +263,7 @@ const DrawerMenu = (props) => {
                 </View>
                 <Text
                   style={{
-                    fontFamily: 'SCDream4',
+                    fontFamily: SCDream4,
                     color: '#fff',
                     fontSize: 18,
                   }}>
@@ -608,16 +609,16 @@ const DrawerMenu = (props) => {
 
 const styles = StyleSheet.create({
   whiteFont: {
-    fontFamily: 'SCDream4',
+    fontFamily: SCDream4,
     color: '#fff',
   },
   categoryText: {
-    fontFamily: 'SCDream4',
+    fontFamily: SCDream4,
     fontSize: 14,
     lineHeight: 28,
   },
   categoryTitle: {
-    fontFamily: 'SCDream5',
+    fontFamily: SCDream5,
     fontSize: 16,
     paddingVertical: 15,
   },
@@ -634,13 +635,13 @@ const styles = StyleSheet.create({
     marginVertical: 10,
   },
   normalText: {
-    fontFamily: 'SCDream4',
+    fontFamily: SCDream4,
   },
   mediumText: {
-    fontFamily: 'SCDream5',
+    fontFamily: SCDream5,
   },
   boldText: {
-    fontFamily: 'SCDream6',
+    fontFamily: SCDream6,
   },
 });
 

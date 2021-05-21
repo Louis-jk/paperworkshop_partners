@@ -10,13 +10,11 @@ import {
   TextInput,
   Button,
 } from 'react-native';
-
 // import RNPickerSelect from 'react-native-picker-select';
 import {Picker} from '@react-native-community/picker';
-
 import Header from '../Common/Header';
-import Footer from '../Common/Footer';
 import {TouchableOpacity} from 'react-native-gesture-handler';
+import {SCDream4, SCDream5, SCDream6} from '../../src/font';
 
 const index = (props) => {
   const navigation = props.navigation;
@@ -401,41 +399,41 @@ const styles = StyleSheet.create({
     paddingVertical: 20,
   },
   listTitle: {
-    fontFamily: 'SCDream4',
+    fontFamily: SCDream4,
     fontSize: 14,
     lineHeight: 19,
     marginBottom: 5,
   },
   listDesc: {
-    fontFamily: 'SCDream4',
+    fontFamily: SCDream4,
     fontSize: 12,
     lineHeight: 16,
     color: '#A2A2A2',
   },
   listStep: {
-    fontFamily: 'SCDream4',
+    fontFamily: SCDream4,
     fontSize: 14,
     color: '#00A170',
   },
   listDday: {
-    fontFamily: 'SCDream4',
+    fontFamily: SCDream4,
     alignSelf: 'flex-end',
     fontSize: 14,
     color: '#A2A2A2',
   },
   listStep02: {
-    fontFamily: 'SCDream4',
+    fontFamily: SCDream4,
     fontSize: 14,
     color: '#275696',
   },
   listDday02: {
-    fontFamily: 'SCDream4',
+    fontFamily: SCDream4,
     alignSelf: 'flex-end',
     fontSize: 14,
     color: '#000000',
   },
   listStep03: {
-    fontFamily: 'SCDream4',
+    fontFamily: SCDream4,
     fontSize: 14,
     color: '#000000',
   },
@@ -454,7 +452,7 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-start',
   },
   listStep02BadgeText: {
-    fontFamily: 'SCDream4',
+    fontFamily: SCDream4,
     fontSize: 12,
     color: '#000000',
     paddingVertical: 2,
@@ -469,20 +467,20 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-start',
   },
   listStep03BadgeText: {
-    fontFamily: 'SCDream4',
+    fontFamily: SCDream4,
     fontSize: 12,
     color: '#000000',
     paddingVertical: 2,
     paddingHorizontal: 5,
   },
   normalText: {
-    fontFamily: 'SCDream4',
+    fontFamily: SCDream4,
   },
   mediumText: {
-    fontFamily: 'SCDream5',
+    fontFamily: SCDream5,
   },
   boldText: {
-    fontFamily: 'SCDream6',
+    fontFamily: SCDream6,
   },
 });
 

@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 
 import DetailHeader from '../DetailHeader';
+import {SCDream4, SCDream5, SCDream6} from '../../../src/font';
 
 const PartnerInfo = (props) => {
   const navigation = props.navigation;
@@ -33,7 +34,7 @@ const PartnerInfo = (props) => {
           <View style={{flexDirection: 'row'}}>
             <Text
               style={{
-                fontFamily: 'SCDream4',
+                fontFamily: SCDream4,
                 fontSize: 13,
                 color: '#00A170',
                 marginRight: 5,
@@ -43,7 +44,7 @@ const PartnerInfo = (props) => {
             <View>
               <Text
                 style={{
-                  fontFamily: 'SCDream4',
+                  fontFamily: SCDream4,
                   fontSize: 13,
                   color: '#00A170',
                   marginBottom: 5,
@@ -52,7 +53,7 @@ const PartnerInfo = (props) => {
               </Text>
               <Text
                 style={{
-                  fontFamily: 'SCDream4',
+                  fontFamily: SCDream4,
                   fontSize: 13,
                   color: '#00A170',
                 }}>
@@ -104,7 +105,7 @@ const PartnerInfo = (props) => {
           <View style={{flexDirection: 'row'}}>
             <Text
               style={{
-                fontFamily: 'SCDream4',
+                fontFamily: SCDream4,
                 fontSize: 12,
                 lineHeight: 20,
                 color: '#707070',
@@ -115,7 +116,7 @@ const PartnerInfo = (props) => {
             <View style={{paddingRight: 10}}>
               <Text
                 style={{
-                  fontFamily: 'SCDream4',
+                  fontFamily: SCDream4,
                   fontSize: 12,
                   lineHeight: 20,
                   color: '#707070',
@@ -140,25 +141,25 @@ const styles = StyleSheet.create({
     marginVertical: 15,
   },
   partnerInfoTitle: {
-    fontFamily: 'SCDream4',
+    fontFamily: SCDream4,
     fontSize: 15,
     color: '#00A170',
     marginBottom: 10,
   },
   partnerInfoDesc: {
-    fontFamily: 'SCDream4',
+    fontFamily: SCDream4,
     fontSize: 13,
     lineHeight: 20,
     color: '#000000',
   },
   normalText: {
-    fontFamily: 'SCDream4',
+    fontFamily: SCDream4,
   },
   mediumText: {
-    fontFamily: 'SCDream5',
+    fontFamily: SCDream5,
   },
   boldText: {
-    fontFamily: 'SCDream6',
+    fontFamily: SCDream6,
   },
 });
 

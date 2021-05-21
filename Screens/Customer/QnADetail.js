@@ -11,6 +11,7 @@ import {
 
 import Header from '../Common/DetailHeader';
 import Info from '../../src/api/Info';
+import {SCDream4, SCDream5, SCDream6} from '../../src/font';
 
 const QnADetail = (props) => {
   const navigation = props.navigation;
@@ -231,13 +232,13 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   normalText: {
-    fontFamily: 'SCDream4',
+    fontFamily: SCDream4,
   },
   mediumText: {
-    fontFamily: 'SCDream5',
+    fontFamily: SCDream5,
   },
   boldText: {
-    fontFamily: 'SCDream6',
+    fontFamily: SCDream6,
   },
   categoryWrap: {
     marginTop: 20,
@@ -251,23 +252,23 @@ const styles = StyleSheet.create({
     marginRight: 5,
   },
   categoryBtnTxt: {
-    fontFamily: 'SCDream4',
+    fontFamily: SCDream4,
     fontSize: 11,
     color: '#fff',
   },
   new: {
-    fontFamily: 'SCDream4',
+    fontFamily: SCDream4,
     fontSize: 12,
     color: '#366DE5',
   },
   categoryTitle: {
-    fontFamily: 'SCDream5',
+    fontFamily: SCDream5,
     fontSize: 15,
     lineHeight: 24,
     color: '#000',
   },
   categoryDate: {
-    fontFamily: 'SCDream4',
+    fontFamily: SCDream4,
     fontSize: 13,
     color: '#A2A2A2',
   },

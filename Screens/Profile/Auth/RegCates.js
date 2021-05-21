@@ -1,5 +1,6 @@
 import * as React from 'react';
 import {View, Text, TouchableOpacity, Image} from 'react-native';
+import {SCDream4, SCDream5, SCDream6} from '../../../src/font';
 
 const RegCates = (props) => {
   const categories = props.categories;
@@ -98,7 +99,7 @@ const RegCates = (props) => {
               height: 50,
               paddingHorizontal: 10,
             }}>
-            <Text style={{fontFamily: 'SCDream4'}}>{printType}</Text>
+            <Text style={{fontFamily: SCDream4}}>{printType}</Text>
             {isActiveTogglePrintType ? (
               <Image
                 source={require('../../../src/assets/arr01_top.png')}
@@ -146,7 +147,7 @@ const RegCates = (props) => {
                   setIsActiveToggleDetail(false);
                   setCategories_item_handle(idx, v);
                 }}>
-                <Text style={{fontFamily: 'SCDream4'}}>{v}</Text>
+                <Text style={{fontFamily: SCDream4}}>{v}</Text>
               </TouchableOpacity>
             ))}
           </View>
@@ -173,7 +174,7 @@ const RegCates = (props) => {
               height: 50,
               paddingHorizontal: 10,
             }}>
-            <Text style={{fontFamily: 'SCDream4'}}>
+            <Text style={{fontFamily: SCDream4}}>
               {printType === '패키지' && !printDetailType
                 ? packageTypes[0]
                 : printType === '일반인쇄' && !printDetailType
@@ -229,7 +230,7 @@ const RegCates = (props) => {
                       setIsActiveToggleDetail(false);
                       // setIsActiveTogglePrintType(false);
                     }}>
-                    <Text style={{fontFamily: 'SCDream4'}}>{v}</Text>
+                    <Text style={{fontFamily: SCDream4}}>{v}</Text>
                   </TouchableOpacity>
                 ))
               : printType === '일반인쇄'
@@ -248,7 +249,7 @@ const RegCates = (props) => {
                       setIsActiveToggleDetail(false);
                       // setIsActiveTogglePrintType(false);
                     }}>
-                    <Text style={{fontFamily: 'SCDream4'}}>{v}</Text>
+                    <Text style={{fontFamily: SCDream4}}>{v}</Text>
                   </TouchableOpacity>
                 ))
               : etcTypes.map((v, idx) => (
@@ -266,7 +267,7 @@ const RegCates = (props) => {
                       setIsActiveToggleDetail(false);
                       // setIsActiveTogglePrintType(false);
                     }}>
-                    <Text style={{fontFamily: 'SCDream4'}}>{v}</Text>
+                    <Text style={{fontFamily: SCDream4}}>{v}</Text>
                   </TouchableOpacity>
                 ))}
           </View>

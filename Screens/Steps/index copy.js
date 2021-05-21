@@ -14,10 +14,10 @@ import {
   Alert,
 } from 'react-native';
 import {useSelector} from 'react-redux';
-
 import Header from '../Common/Header';
 import Estimate from '../../src/api/Estimate';
 import Category from '../../src/api/Category';
+import {SCDream4, SCDream5, SCDream6} from '../../src/font';
 
 const index = (props) => {
   const navigation = props.navigation;
@@ -274,7 +274,7 @@ const index = (props) => {
                     height: 50,
                     paddingHorizontal: 10,
                   }}>
-                  <Text style={{fontFamily: 'SCDream4'}}>{printType}</Text>
+                  <Text style={{fontFamily: SCDream4}}>{printType}</Text>
                   {isActiveTogglePrintType ? (
                     <Image
                       source={require('../../src/assets/arr01_top.png')}
@@ -326,7 +326,7 @@ const index = (props) => {
                     height: 50,
                     paddingHorizontal: 10,
                   }}>
-                  <Text style={{fontFamily: 'SCDream4'}}>
+                  <Text style={{fontFamily: SCDream4}}>
                     {printType === '패키지' && !printDetailType
                       ? packageTypes[0]
                       : printType === '일반인쇄' && !printDetailType
@@ -387,7 +387,7 @@ const index = (props) => {
                     height: 50,
                     paddingHorizontal: 10,
                   }}>
-                  <Text style={{fontFamily: 'SCDream4'}}>
+                  <Text style={{fontFamily: SCDream4}}>
                     {search === 'title' ? '제목' : '회사'}
                   </Text>
                   {isActiveToggleSearchType ? (
@@ -410,7 +410,7 @@ const index = (props) => {
                 <TextInput
                   placeholder="검색어를 입력하세요."
                   style={{
-                    fontFamily: 'SCDream4',
+                    fontFamily: SCDream4,
                     borderWidth: 1,
                     borderColor: '#E3E3E3',
                     borderRadius: 4,
@@ -436,7 +436,7 @@ const index = (props) => {
                 }}>
                 <Text
                   style={{
-                    fontFamily: 'SCDream4',
+                    fontFamily: SCDream4,
                     color: '#fff',
                     paddingHorizontal: 20,
                   }}>
@@ -465,7 +465,7 @@ const index = (props) => {
                 flex: 1,
                 height: Dimensions.get('window').height - 330,
               }}>
-              <Text style={{fontFamily: 'SCDream4'}}>
+              <Text style={{fontFamily: SCDream4}}>
                 등록된 견적 요청사항이 없습니다.
               </Text>
             </View>
@@ -516,7 +516,7 @@ const index = (props) => {
                     getCategoryDetail('2');
                   }
                 }}>
-                <Text style={{fontFamily: 'SCDream4'}}>{v}</Text>
+                <Text style={{fontFamily: SCDream4}}>{v}</Text>
               </TouchableOpacity>
             ))}
           </View>
@@ -552,7 +552,7 @@ const index = (props) => {
                       setIsActiveToggleDetail(false);
                       // setIsActiveTogglePrintType(false);
                     }}>
-                    <Text style={{fontFamily: 'SCDream4'}}>{v}</Text>
+                    <Text style={{fontFamily: SCDream4}}>{v}</Text>
                   </TouchableOpacity>
                 ))
               : printType === '일반인쇄'
@@ -571,7 +571,7 @@ const index = (props) => {
                       setIsActiveToggleDetail(false);
                       // setIsActiveTogglePrintType(false);
                     }}>
-                    <Text style={{fontFamily: 'SCDream4'}}>{v}</Text>
+                    <Text style={{fontFamily: SCDream4}}>{v}</Text>
                   </TouchableOpacity>
                 ))
               : etcTypes.map((v, idx) => (
@@ -589,7 +589,7 @@ const index = (props) => {
                       setIsActiveToggleDetail(false);
                       // setIsActiveTogglePrintType(false);
                     }}>
-                    <Text style={{fontFamily: 'SCDream4'}}>{v}</Text>
+                    <Text style={{fontFamily: SCDream4}}>{v}</Text>
                   </TouchableOpacity>
                 ))}
           </View>
@@ -626,7 +626,7 @@ const index = (props) => {
                   // setIsActiveTogglePrintType(false);
                   // setIsActiveToggleDetail(false);
                 }}>
-                <Text style={{fontFamily: 'SCDream4'}}>
+                <Text style={{fontFamily: SCDream4}}>
                   {v === 'title' ? '제목' : '회사'}
                 </Text>
               </TouchableOpacity>
@@ -650,25 +650,25 @@ const styles = StyleSheet.create({
     paddingVertical: 20,
   },
   listTitle: {
-    fontFamily: 'SCDream4',
+    fontFamily: SCDream4,
     fontSize: 14,
     lineHeight: 19,
     marginBottom: 5,
   },
   listDesc: {
-    fontFamily: 'SCDream4',
+    fontFamily: SCDream4,
     fontSize: 12,
     lineHeight: 16,
     color: '#A2A2A2',
   },
   listStep: {
-    fontFamily: 'SCDream4',
+    fontFamily: SCDream4,
     fontSize: 14,
     color: '#00A170',
     marginBottom: 5,
   },
   listDday: {
-    fontFamily: 'SCDream4',
+    fontFamily: SCDream4,
     alignSelf: 'flex-end',
     fontSize: 14,
     color: '#A2A2A2',
@@ -679,19 +679,19 @@ const styles = StyleSheet.create({
     backgroundColor: '#E3E3E3',
   },
   listStep02: {
-    fontFamily: 'SCDream4',
+    fontFamily: SCDream4,
     fontSize: 14,
     color: '#00A170',
     marginBottom: 5,
   },
   listDday02: {
-    fontFamily: 'SCDream4',
+    fontFamily: SCDream4,
     alignSelf: 'flex-end',
     fontSize: 14,
     color: '#000000',
   },
   listStep03: {
-    fontFamily: 'SCDream4',
+    fontFamily: SCDream4,
     fontSize: 14,
     color: '#000000',
   },
@@ -710,7 +710,7 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-start',
   },
   listStep02BadgeText: {
-    fontFamily: 'SCDream4',
+    fontFamily: SCDream4,
     fontSize: 12,
     color: '#000000',
     paddingVertical: 2,
@@ -725,20 +725,20 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-start',
   },
   listStep03BadgeText: {
-    fontFamily: 'SCDream4',
+    fontFamily: SCDream4,
     fontSize: 12,
     color: '#000000',
     paddingVertical: 2,
     paddingHorizontal: 5,
   },
   normalText: {
-    fontFamily: 'SCDream4',
+    fontFamily: SCDream4,
   },
   mediumText: {
-    fontFamily: 'SCDream5',
+    fontFamily: SCDream5,
   },
   boldText: {
-    fontFamily: 'SCDream6',
+    fontFamily: SCDream6,
   },
 });
 

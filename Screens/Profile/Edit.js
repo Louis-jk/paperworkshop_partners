@@ -20,6 +20,7 @@ import Header from '../Common/DetailHeader';
 import Category from '../../src/api/Category';
 import Modal from '../Common/PartnersInfoModal';
 import Auth from '../../src/api/Auth';
+import {SCDream4, SCDream5, SCDream6} from '../../src/font';
 import {
   UserName,
   UserProfile,
@@ -726,7 +727,7 @@ const Edit = (props) => {
               placeholderTextColor="#A2A2A2"
               onChangeText={(text) => setName(text)}
               style={{
-                fontFamily: 'SCDream4',
+                fontFamily: SCDream4,
                 borderWidth: 1,
                 borderColor: '#E3E3E3',
                 borderRadius: 4,
@@ -787,7 +788,7 @@ const Edit = (props) => {
                 }}>
                 <Text
                   style={{
-                    fontFamily: 'SCDream4',
+                    fontFamily: SCDream4,
                     fontSize: 12,
                     color: '#fff',
                     paddingHorizontal: 10,
@@ -814,7 +815,7 @@ const Edit = (props) => {
                 borderColor: '#E3E3E3',
                 borderRadius: 4,
                 paddingHorizontal: 10,
-                fontFamily: 'SCDream4',
+                fontFamily: SCDream4,
               }}
               autoCapitalize="none"
             />
@@ -838,7 +839,7 @@ const Edit = (props) => {
               </Text>
               <Text
                 style={{
-                  fontFamily: 'SCDream4',
+                  fontFamily: SCDream4,
                   fontSize: 12,
                   color: '#00A170',
                 }}>
@@ -922,7 +923,7 @@ const Edit = (props) => {
               <View>
                 <Text
                   style={{
-                    fontFamily: 'SCDream4',
+                    fontFamily: SCDream4,
                     fontSize: 12,
                     color: 'red',
                   }}>
@@ -957,7 +958,7 @@ const Edit = (props) => {
                   borderRadius: 4,
                   paddingHorizontal: 10,
                   marginRight: 10,
-                  fontFamily: 'SCDream4',
+                  fontFamily: SCDream4,
                 }}
                 keyboardType="number-pad"
                 autoCapitalize="none"
@@ -974,7 +975,7 @@ const Edit = (props) => {
                 }}>
                 <Text
                   style={{
-                    fontFamily: 'SCDream4',
+                    fontFamily: SCDream4,
                     color: '#fff',
                     textAlign: 'center',
                   }}>
@@ -1001,7 +1002,7 @@ const Edit = (props) => {
                   borderRadius: 4,
                   paddingHorizontal: 10,
                   marginRight: 10,
-                  fontFamily: 'SCDream4',
+                  fontFamily: SCDream4,
                 }}
                 keyboardType="number-pad"
                 autoCapitalize="none"
@@ -1018,7 +1019,7 @@ const Edit = (props) => {
                 }}>
                 <Text
                   style={{
-                    fontFamily: 'SCDream4',
+                    fontFamily: SCDream4,
                     color: '#fff',
                     textAlign: 'center',
                   }}>
@@ -1046,7 +1047,7 @@ const Edit = (props) => {
               </Text>
               <Text
                 style={{
-                  fontFamily: 'SCDream4',
+                  fontFamily: SCDream4,
                   fontSize: 12,
                   color: '#00A170',
                 }}>
@@ -1154,7 +1155,7 @@ const Edit = (props) => {
                 <Text
                   style={{
                     width: '100%',
-                    fontFamily: 'SCDream4',
+                    fontFamily: SCDream4,
                     fontSize: 12,
                     lineHeight: 18,
                     color: '#00A170',
@@ -1223,7 +1224,7 @@ const Edit = (props) => {
               <Text
                 style={{
                   width: '100%',
-                  fontFamily: 'SCDream4',
+                  fontFamily: SCDream4,
                   fontSize: 12,
                   lineHeight: 18,
                   color: '#00A170',
@@ -1258,7 +1259,7 @@ const Edit = (props) => {
                   borderRadius: 4,
                   paddingHorizontal: 10,
                   marginRight: 10,
-                  fontFamily: 'SCDream4',
+                  fontFamily: SCDream4,
                 }}
                 editable={false}
               />
@@ -1275,7 +1276,7 @@ const Edit = (props) => {
                 }}>
                 <Text
                   style={{
-                    fontFamily: 'SCDream4',
+                    fontFamily: SCDream4,
                     color: '#fff',
                     textAlign: 'center',
                   }}>
@@ -1390,7 +1391,7 @@ const Edit = (props) => {
               <Text
                 style={{
                   width: '100%',
-                  fontFamily: 'SCDream4',
+                  fontFamily: SCDream4,
                   fontSize: 12,
                   lineHeight: 18,
                   color: '#00A170',
@@ -1443,7 +1444,7 @@ const Edit = (props) => {
                 }}>
                 <Text
                   style={{
-                    fontFamily: 'SCDream4',
+                    fontFamily: SCDream4,
                     fontSize: 14,
                     marginVertical: 10,
                   }}>
@@ -1469,7 +1470,7 @@ const Edit = (props) => {
                 }}>
                 <Text
                   style={{
-                    fontFamily: 'SCDream4',
+                    fontFamily: SCDream4,
                     fontSize: 14,
                     marginVertical: 10,
                   }}>
@@ -1495,7 +1496,7 @@ const Edit = (props) => {
                 }}>
                 <Text
                   style={{
-                    fontFamily: 'SCDream4',
+                    fontFamily: SCDream4,
                     fontSize: 14,
                     marginVertical: 10,
                   }}>
@@ -1555,7 +1556,7 @@ const Edit = (props) => {
                     />
                     <Text
                       style={{
-                        fontFamily: 'SCDream4',
+                        fontFamily: SCDream4,
                         fontSize: 13,
                         marginRight: 15,
                         marginVertical: 7,
@@ -1571,7 +1572,7 @@ const Edit = (props) => {
               <Text
                 style={{
                   width: '100%',
-                  fontFamily: 'SCDream4',
+                  fontFamily: SCDream4,
                   fontSize: 12,
                   lineHeight: 18,
                   color: '#00A170',
@@ -1600,7 +1601,7 @@ const Edit = (props) => {
               placeholderTextColor="#A2A2A2"
               onChangeText={(text) => setBank(text)}
               style={{
-                fontFamily: 'SCDream4',
+                fontFamily: SCDream4,
                 borderWidth: 1,
                 borderColor: '#E3E3E3',
                 borderRadius: 4,
@@ -1614,7 +1615,7 @@ const Edit = (props) => {
               placeholderTextColor="#A2A2A2"
               onChangeText={(text) => setBankAccount(text)}
               style={{
-                fontFamily: 'SCDream4',
+                fontFamily: SCDream4,
                 borderWidth: 1,
                 borderColor: '#E3E3E3',
                 borderRadius: 4,
@@ -1628,7 +1629,7 @@ const Edit = (props) => {
               placeholderTextColor="#A2A2A2"
               onChangeText={(text) => setDepositor(text)}
               style={{
-                fontFamily: 'SCDream4',
+                fontFamily: SCDream4,
                 borderWidth: 1,
                 borderColor: '#E3E3E3',
                 borderRadius: 4,
@@ -1663,7 +1664,7 @@ const Edit = (props) => {
                   borderRadius: 4,
                   paddingHorizontal: 10,
                   marginRight: 10,
-                  fontFamily: 'SCDream4',
+                  fontFamily: SCDream4,
                 }}
                 editable={false}
               />
@@ -1680,7 +1681,7 @@ const Edit = (props) => {
                 }}>
                 <Text
                   style={{
-                    fontFamily: 'SCDream4',
+                    fontFamily: SCDream4,
                     color: '#fff',
                     textAlign: 'center',
                   }}>
@@ -1780,13 +1781,13 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   profileTitle: {
-    fontFamily: 'SCDream5',
+    fontFamily: SCDream5,
     fontSize: 15,
     lineHeight: 19,
     marginBottom: 7,
   },
   profileDesc: {
-    fontFamily: 'SCDream4',
+    fontFamily: SCDream4,
     fontSize: 15,
     color: '#111',
   },
@@ -1797,7 +1798,7 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
   },
   submitBtnText: {
-    fontFamily: 'SCDream4',
+    fontFamily: SCDream4,
     fontSize: 16,
     color: '#FFFFFF',
     textAlign: 'center',
@@ -1809,7 +1810,7 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
   },
   cancelBtnText: {
-    fontFamily: 'SCDream4',
+    fontFamily: SCDream4,
     fontSize: 16,
     color: '#111',
     textAlign: 'center',
@@ -1821,24 +1822,24 @@ const styles = StyleSheet.create({
     paddingVertical: 20,
   },
   listTitle: {
-    fontFamily: 'SCDream4',
+    fontFamily: SCDream4,
     fontSize: 14,
     lineHeight: 19,
     marginBottom: 5,
   },
   listDesc: {
-    fontFamily: 'SCDream4',
+    fontFamily: SCDream4,
     fontSize: 12,
     lineHeight: 16,
     color: '#A2A2A2',
   },
   listStep: {
-    fontFamily: 'SCDream4',
+    fontFamily: SCDream4,
     fontSize: 14,
     color: '#00A170',
   },
   listDday: {
-    fontFamily: 'SCDream4',
+    fontFamily: SCDream4,
     alignSelf: 'flex-end',
     fontSize: 14,
     color: '#A2A2A2',
@@ -1849,13 +1850,13 @@ const styles = StyleSheet.create({
     backgroundColor: '#E3E3E3',
   },
   normalText: {
-    fontFamily: 'SCDream4',
+    fontFamily: SCDream4,
   },
   mediumText: {
-    fontFamily: 'SCDream5',
+    fontFamily: SCDream5,
   },
   boldText: {
-    fontFamily: 'SCDream6',
+    fontFamily: SCDream6,
   },
 });
 

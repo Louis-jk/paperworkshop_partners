@@ -13,6 +13,7 @@ import {useSelector} from 'react-redux';
 
 import Header from '../Common/HeaderBackBtnNotSearch';
 import Info from '../../src/api/Info';
+import {SCDream4, SCDream5, SCDream6} from '../../src/font';
 
 const QnAwrite = (props) => {
   const navigation = props.navigation;
@@ -111,7 +112,7 @@ const QnAwrite = (props) => {
             <Text
               style={{
                 width: '100%',
-                fontFamily: 'SCDream4',
+                fontFamily: SCDream4,
                 fontSize: 12,
                 lineHeight: 18,
                 color: '#00A170',
@@ -162,7 +163,7 @@ const QnAwrite = (props) => {
             <Text
               style={{
                 width: '100%',
-                fontFamily: 'SCDream4',
+                fontFamily: SCDream4,
                 fontSize: 12,
                 lineHeight: 18,
                 color: '#00A170',
@@ -196,21 +197,21 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   normalText: {
-    fontFamily: 'SCDream4',
+    fontFamily: SCDream4,
   },
   mediumText: {
-    fontFamily: 'SCDream5',
+    fontFamily: SCDream5,
   },
   boldText: {
-    fontFamily: 'SCDream6',
+    fontFamily: SCDream6,
   },
   profileTitle: {
-    fontFamily: 'SCDream5',
+    fontFamily: SCDream5,
     fontSize: 15,
     color: '#111',
   },
   profileRequired: {
-    fontFamily: 'SCDream4',
+    fontFamily: SCDream4,
     fontSize: 14,
     color: '#00A170',
   },
@@ -221,7 +222,7 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
   },
   submitBtnText: {
-    fontFamily: 'SCDream4',
+    fontFamily: SCDream4,
     fontSize: 16,
     color: '#FFFFFF',
     textAlign: 'center',
@@ -233,7 +234,7 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
   },
   cancelBtnText: {
-    fontFamily: 'SCDream4',
+    fontFamily: SCDream4,
     fontSize: 16,
     color: '#111',
     textAlign: 'center',

@@ -26,6 +26,7 @@ import Modal from 'react-native-modal';
 
 import DetailHeader from '../Common/DetailHeader';
 import Estimate from '../../src/api/Estimate';
+import {SCDream4, SCDream5, SCDream6} from '../../src/font';
 
 const index = (props) => {
   const navigation = props.navigation;
@@ -778,7 +779,7 @@ const index = (props) => {
               paddingHorizontal: 14,
               paddingVertical: 7,
             }}>
-            <Text style={{fontFamily: 'SCDream4', fontSize: 13, color: '#fff'}}>
+            <Text style={{fontFamily: SCDream4, fontSize: 13, color: '#fff'}}>
               닫기
             </Text>
           </TouchableOpacity>
@@ -884,7 +885,7 @@ const index = (props) => {
                 style={{alignSelf: 'flex-end'}}>
                 <Text
                   style={{
-                    fontFamily: 'SCDream4',
+                    fontFamily: SCDream4,
                     fontSize: 12,
                     textDecorationLine: 'underline',
                     color: '#00A170',
@@ -923,7 +924,7 @@ const index = (props) => {
               <View>
                 <Text
                   style={{
-                    fontFamily: 'SCDream5',
+                    fontFamily: SCDream5,
                     fontSize: 16,
                     color: '#00A170',
                     marginBottom: 15,
@@ -951,7 +952,7 @@ const index = (props) => {
                   />
                   <Text
                     style={{
-                      fontFamily: 'SCDream4',
+                      fontFamily: SCDream4,
                       fontSize: 14,
                       marginRight: 20,
                     }}>
@@ -969,7 +970,7 @@ const index = (props) => {
                       />
                       <Text
                         style={{
-                          fontFamily: 'SCDream4',
+                          fontFamily: SCDream4,
                           fontSize: 14,
                         }}>
                         회사명 : {estimateUser.mb_2}
@@ -1253,7 +1254,7 @@ const index = (props) => {
                           marginRight: 5,
                         }}
                       />
-                      <Text style={{fontFamily: 'SCDream4'}}>
+                      <Text style={{fontFamily: SCDream4}}>
                         {detail.basic.pe_source_file}
                       </Text>
                     </TouchableOpacity>
@@ -1262,7 +1263,7 @@ const index = (props) => {
                 <View style={{marginBottom: 20}}>
                   <Text
                     style={{
-                      fontFamily: 'SCDream5',
+                      fontFamily: SCDream5,
                       fontSize: 14,
                       marginBottom: 10,
                     }}>
@@ -1299,7 +1300,7 @@ const index = (props) => {
                         resizeMode="contain"
                         style={{width: 20, height: 20, marginRight: 5}}
                       />
-                      <Text style={{fontSize: 14, fontFamily: 'SCDream4'}}>
+                      <Text style={{fontSize: 14, fontFamily: SCDream4}}>
                         가능
                       </Text>
                     </TouchableOpacity>
@@ -1327,7 +1328,7 @@ const index = (props) => {
                         style={{width: 20, height: 20, marginRight: 5}}
                       />
 
-                      <Text style={{fontSize: 14, fontFamily: 'SCDream4'}}>
+                      <Text style={{fontSize: 14, fontFamily: SCDream4}}>
                         조정필요
                       </Text>
                     </TouchableOpacity>
@@ -1337,7 +1338,7 @@ const index = (props) => {
                       <Text
                         style={{
                           fontSize: 13,
-                          fontFamily: 'SCDream4',
+                          fontFamily: SCDream4,
                           marginBottom: 10,
                           color: '#00A170',
                         }}>
@@ -1784,7 +1785,7 @@ const index = (props) => {
                             marginRight: 5,
                           }}
                         />
-                        <Text style={{fontFamily: 'SCDream4'}}>
+                        <Text style={{fontFamily: SCDream4}}>
                           {detail.basic2.pe_source_file2}
                         </Text>
                       </TouchableOpacity>
@@ -1797,7 +1798,7 @@ const index = (props) => {
                 <View style={{marginBottom: 20}}>
                   <Text
                     style={{
-                      fontFamily: 'SCDream5',
+                      fontFamily: SCDream5,
                       fontSize: 14,
                       marginBottom: 10,
                     }}>
@@ -1833,7 +1834,7 @@ const index = (props) => {
                         resizeMode="contain"
                         style={{width: 20, height: 20, marginRight: 5}}
                       />
-                      <Text style={{fontSize: 14, fontFamily: 'SCDream4'}}>
+                      <Text style={{fontSize: 14, fontFamily: SCDream4}}>
                         가능
                       </Text>
                     </TouchableOpacity>
@@ -1861,7 +1862,7 @@ const index = (props) => {
                         style={{width: 20, height: 20, marginRight: 5}}
                       />
 
-                      <Text style={{fontSize: 14, fontFamily: 'SCDream4'}}>
+                      <Text style={{fontSize: 14, fontFamily: SCDream4}}>
                         조정필요
                       </Text>
                     </TouchableOpacity>
@@ -1871,7 +1872,7 @@ const index = (props) => {
                       <Text
                         style={{
                           fontSize: 13,
-                          fontFamily: 'SCDream4',
+                          fontFamily: SCDream4,
                           marginBottom: 5,
                           color: '#00A170',
                         }}>
@@ -1903,7 +1904,7 @@ const index = (props) => {
                 <View style={{marginBottom: 20}}>
                   <Text
                     style={{
-                      fontFamily: 'SCDream5',
+                      fontFamily: SCDream5,
                       fontSize: 14,
                       marginBottom: 10,
                     }}>
@@ -1939,7 +1940,7 @@ const index = (props) => {
                         resizeMode="contain"
                         style={{width: 20, height: 20, marginRight: 5}}
                       />
-                      <Text style={{fontSize: 14, fontFamily: 'SCDream4'}}>
+                      <Text style={{fontSize: 14, fontFamily: SCDream4}}>
                         가능
                       </Text>
                     </TouchableOpacity>
@@ -1967,7 +1968,7 @@ const index = (props) => {
                         style={{width: 20, height: 20, marginRight: 5}}
                       />
 
-                      <Text style={{fontSize: 14, fontFamily: 'SCDream4'}}>
+                      <Text style={{fontSize: 14, fontFamily: SCDream4}}>
                         조정필요
                       </Text>
                     </TouchableOpacity>
@@ -1977,7 +1978,7 @@ const index = (props) => {
                       <Text
                         style={{
                           fontSize: 13,
-                          fontFamily: 'SCDream4',
+                          fontFamily: SCDream4,
                           marginBottom: 5,
                           color: '#00A170',
                         }}>
@@ -2009,7 +2010,7 @@ const index = (props) => {
                 <View style={{marginBottom: 20}}>
                   <Text
                     style={{
-                      fontFamily: 'SCDream5',
+                      fontFamily: SCDream5,
                       fontSize: 14,
                       marginBottom: 10,
                     }}>
@@ -2045,7 +2046,7 @@ const index = (props) => {
                         resizeMode="contain"
                         style={{width: 20, height: 20, marginRight: 5}}
                       />
-                      <Text style={{fontSize: 14, fontFamily: 'SCDream4'}}>
+                      <Text style={{fontSize: 14, fontFamily: SCDream4}}>
                         가능
                       </Text>
                     </TouchableOpacity>
@@ -2072,7 +2073,7 @@ const index = (props) => {
                         resizeMode="contain"
                         style={{width: 20, height: 20, marginRight: 5}}
                       />
-                      <Text style={{fontSize: 14, fontFamily: 'SCDream4'}}>
+                      <Text style={{fontSize: 14, fontFamily: SCDream4}}>
                         조정필요
                       </Text>
                     </TouchableOpacity>
@@ -2082,7 +2083,7 @@ const index = (props) => {
                       <Text
                         style={{
                           fontSize: 13,
-                          fontFamily: 'SCDream4',
+                          fontFamily: SCDream4,
                           marginBottom: 5,
                           color: '#00A170',
                         }}>
@@ -2114,7 +2115,7 @@ const index = (props) => {
                 <View style={{marginBottom: 20}}>
                   <Text
                     style={{
-                      fontFamily: 'SCDream5',
+                      fontFamily: SCDream5,
                       fontSize: 14,
                       marginBottom: 10,
                     }}>
@@ -2150,7 +2151,7 @@ const index = (props) => {
                         resizeMode="contain"
                         style={{width: 20, height: 20, marginRight: 5}}
                       />
-                      <Text style={{fontSize: 14, fontFamily: 'SCDream4'}}>
+                      <Text style={{fontSize: 14, fontFamily: SCDream4}}>
                         가능
                       </Text>
                     </TouchableOpacity>
@@ -2177,7 +2178,7 @@ const index = (props) => {
                         resizeMode="contain"
                         style={{width: 20, height: 20, marginRight: 5}}
                       />
-                      <Text style={{fontSize: 14, fontFamily: 'SCDream4'}}>
+                      <Text style={{fontSize: 14, fontFamily: SCDream4}}>
                         조정필요
                       </Text>
                     </TouchableOpacity>
@@ -2187,7 +2188,7 @@ const index = (props) => {
                       <Text
                         style={{
                           fontSize: 13,
-                          fontFamily: 'SCDream4',
+                          fontFamily: SCDream4,
                           marginBottom: 5,
                           color: '#00A170',
                         }}>
@@ -2348,7 +2349,7 @@ const index = (props) => {
                 ) : detail.basic.cate1 === '0' ? (
                   <View style={[styles.infoBox, {marginBottom: 20}]}>
                     {detail.basic.ca_id === '1' || detail.basic.ca_id === '4' ? 
-                      <Text style={{fontFamily:'SCDream5', color: '#000', marginBottom: 10}}>
+                      <Text style={{fontFamily:SCDream5, color: '#000', marginBottom: 10}}>
                         {`<표지>`}
                       </Text>
                     : null}
@@ -2424,7 +2425,7 @@ const index = (props) => {
                     </View>
 
                     {detail.basic.ca_id === '1' || detail.basic.ca_id === '4' ? 
-                      <Text style={{fontFamily:'SCDream5', color: '#000', marginTop: 20, marginBottom: 10}}>
+                      <Text style={{fontFamily:SCDream5, color: '#000', marginTop: 20, marginBottom: 10}}>
                         {`<내지>`}
                       </Text>
                     : null}
@@ -2508,7 +2509,7 @@ const index = (props) => {
                 <View style={{marginBottom: 20}}>
                   <Text
                     style={{
-                      fontFamily: 'SCDream5',
+                      fontFamily: SCDream5,
                       fontSize: 14,
                       marginBottom: 10,
                     }}>
@@ -2548,7 +2549,7 @@ const index = (props) => {
                         resizeMode="contain"
                         style={{width: 20, height: 20, marginRight: 5}}
                       />
-                      <Text style={{fontSize: 14, fontFamily: 'SCDream4'}}>
+                      <Text style={{fontSize: 14, fontFamily: SCDream4}}>
                         가능
                       </Text>
                     </TouchableOpacity>
@@ -2575,7 +2576,7 @@ const index = (props) => {
                         resizeMode="contain"
                         style={{width: 20, height: 20, marginRight: 5}}
                       />
-                      <Text style={{fontSize: 14, fontFamily: 'SCDream4'}}>
+                      <Text style={{fontSize: 14, fontFamily: SCDream4}}>
                         조정필요
                       </Text>
                     </TouchableOpacity>
@@ -2586,7 +2587,7 @@ const index = (props) => {
                         <Text
                           style={{
                             fontSize: 13,
-                            fontFamily: 'SCDream4',
+                            fontFamily: SCDream4,
                             marginBottom: 5,
                             color: '#00A170',
                           }}>
@@ -2617,7 +2618,7 @@ const index = (props) => {
                         <Text
                           style={{
                             fontSize: 13,
-                            fontFamily: 'SCDream4',
+                            fontFamily: SCDream4,
                             marginBottom: 5,
                             color: '#00A170',
                           }}>
@@ -2646,7 +2647,7 @@ const index = (props) => {
                         <Text
                           style={{
                             fontSize: 13,
-                            fontFamily: 'SCDream4',
+                            fontFamily: SCDream4,
                             marginBottom: 5,
                             color: '#00A170',
                           }}>
@@ -2677,7 +2678,7 @@ const index = (props) => {
                         <Text
                           style={{
                             fontSize: 13,
-                            fontFamily: 'SCDream4',
+                            fontFamily: SCDream4,
                             marginBottom: 5,
                             color: '#00A170',
                           }}>
@@ -2704,7 +2705,7 @@ const index = (props) => {
                         <Text
                           style={{
                             fontSize: 12,
-                            fontFamily: 'SCDream4',
+                            fontFamily: SCDream4,
                             marginBottom: 10,
                             color: '#BEBEBE',
                           }}>
@@ -2720,7 +2721,7 @@ const index = (props) => {
                   <View style={{marginBottom: 20}}>
                     <Text
                       style={{
-                        fontFamily: 'SCDream5',
+                        fontFamily: SCDream5,
                         fontSize: 14,
                         marginBottom: 10,
                       }}>
@@ -2757,7 +2758,7 @@ const index = (props) => {
                           resizeMode="contain"
                           style={{width: 20, height: 20, marginRight: 5}}
                         />
-                        <Text style={{fontSize: 14, fontFamily: 'SCDream4'}}>
+                        <Text style={{fontSize: 14, fontFamily: SCDream4}}>
                           가능
                         </Text>
                       </TouchableOpacity>
@@ -2785,7 +2786,7 @@ const index = (props) => {
                           style={{width: 20, height: 20, marginRight: 5}}
                         />
 
-                        <Text style={{fontSize: 14, fontFamily: 'SCDream4'}}>
+                        <Text style={{fontSize: 14, fontFamily: SCDream4}}>
                           조정필요
                         </Text>
                       </TouchableOpacity>
@@ -2796,7 +2797,7 @@ const index = (props) => {
                           <Text
                             style={{
                               fontSize: 13,
-                              fontFamily: 'SCDream4',
+                              fontFamily: SCDream4,
                               marginBottom: 5,
                               color: '#00A170',
                             }}>
@@ -2827,7 +2828,7 @@ const index = (props) => {
                           <Text
                             style={{
                               fontSize: 13,
-                              fontFamily: 'SCDream4',
+                              fontFamily: SCDream4,
                               marginBottom: 5,
                               color: '#00A170',
                             }}>
@@ -2858,7 +2859,7 @@ const index = (props) => {
                           <Text
                             style={{
                               fontSize: 13,
-                              fontFamily: 'SCDream4',
+                              fontFamily: SCDream4,
                               marginBottom: 5,
                               color: '#00A170',
                             }}>
@@ -2889,7 +2890,7 @@ const index = (props) => {
                           <Text
                             style={{
                               fontSize: 13,
-                              fontFamily: 'SCDream4',
+                              fontFamily: SCDream4,
                               marginBottom: 5,
                               color: '#00A170',
                             }}>
@@ -2916,7 +2917,7 @@ const index = (props) => {
                           <Text
                             style={{
                               fontSize: 12,
-                              fontFamily: 'SCDream4',
+                              fontFamily: SCDream4,
                               marginBottom: 10,
                               color: '#BEBEBE',
                             }}>
@@ -3013,7 +3014,7 @@ const index = (props) => {
                 ) : detail.basic.cate1 === '0' ? (
                   <View style={[styles.infoBox, {marginBottom: 20}]}>
                     {detail.basic.ca_id === '1' || detail.basic.ca_id === '4' ? 
-                      <Text style={{fontFamily:'SCDream5', color: '#000', marginBottom: 10}}>
+                      <Text style={{fontFamily:SCDream5, color: '#000', marginBottom: 10}}>
                         {`<표지>`}
                       </Text>
                     : null}
@@ -3051,7 +3052,7 @@ const index = (props) => {
                     </View>
 
                     {detail.basic.ca_id === '1' || detail.basic.ca_id === '4' ? 
-                      <Text style={{fontFamily:'SCDream5', color: '#000', marginTop: 20, marginBottom: 10}}>
+                      <Text style={{fontFamily:SCDream5, color: '#000', marginTop: 20, marginBottom: 10}}>
                         {`<내지>`}
                       </Text>
                     : null}
@@ -3108,7 +3109,7 @@ const index = (props) => {
                   }}>
                   <Text
                     style={{
-                      fontFamily: 'SCDream5',
+                      fontFamily: SCDream5,
                       fontSize: 14,
                       marginBottom: 10,
                     }}>
@@ -3146,7 +3147,7 @@ const index = (props) => {
                         resizeMode="contain"
                         style={{width: 20, height: 20, marginRight: 5}}
                       />
-                      <Text style={{fontSize: 14, fontFamily: 'SCDream4'}}>
+                      <Text style={{fontSize: 14, fontFamily: SCDream4}}>
                         가능
                       </Text>
                     </TouchableOpacity>
@@ -3174,7 +3175,7 @@ const index = (props) => {
                         style={{width: 20, height: 20, marginRight: 5}}
                       />
 
-                      <Text style={{fontSize: 14, fontFamily: 'SCDream4'}}>
+                      <Text style={{fontSize: 14, fontFamily: SCDream4}}>
                         조정필요
                       </Text>
                     </TouchableOpacity>
@@ -3193,7 +3194,7 @@ const index = (props) => {
                           <Text
                             style={{
                               fontSize: 14,
-                              fontFamily: 'SCDream4',
+                              fontFamily: SCDream4,
                               color: '#000',
                             }}>
                             박가공
@@ -3227,7 +3228,7 @@ const index = (props) => {
                             <Text
                               style={{
                                 fontSize: 14,
-                                fontFamily: 'SCDream4',
+                                fontFamily: SCDream4,
                                 color: editedFoil === 'Y' ? '#00A170' : '#000',
                               }}>
                               있음
@@ -3254,7 +3255,7 @@ const index = (props) => {
                             <Text
                               style={{
                                 fontSize: 14,
-                                fontFamily: 'SCDream4',
+                                fontFamily: SCDream4,
                                 color: editedFoil === 'N' ? '#00A170' : '#000',
                               }}>
                               없음
@@ -3276,7 +3277,7 @@ const index = (props) => {
                           <Text
                             style={{
                               fontSize: 14,
-                              fontFamily: 'SCDream4',
+                              fontFamily: SCDream4,
                               color: '#000',
                             }}>
                             형압
@@ -3310,7 +3311,7 @@ const index = (props) => {
                             <Text
                               style={{
                                 fontSize: 14,
-                                fontFamily: 'SCDream4',
+                                fontFamily: SCDream4,
                                 color: editedPress === 'Y' ? '#00A170' : '#000',
                               }}>
                               있음
@@ -3337,7 +3338,7 @@ const index = (props) => {
                             <Text
                               style={{
                                 fontSize: 14,
-                                fontFamily: 'SCDream4',
+                                fontFamily: SCDream4,
                                 color: editedPress === 'N' ? '#00A170' : '#000',
                               }}>
                               없음
@@ -3359,7 +3360,7 @@ const index = (props) => {
                           <Text
                             style={{
                               fontSize: 14,
-                              fontFamily: 'SCDream4',
+                              fontFamily: SCDream4,
                               color: '#000',
                             }}>
                             부분실크
@@ -3393,7 +3394,7 @@ const index = (props) => {
                             <Text
                               style={{
                                 fontSize: 14,
-                                fontFamily: 'SCDream4',
+                                fontFamily: SCDream4,
                                 color: editedSilk === 'Y' ? '#00A170' : '#000',
                               }}>
                               있음
@@ -3420,7 +3421,7 @@ const index = (props) => {
                             <Text
                               style={{
                                 fontSize: 14,
-                                fontFamily: 'SCDream4',
+                                fontFamily: SCDream4,
                                 color: editedSilk === 'N' ? '#00A170' : '#000',
                               }}>
                               없음
@@ -3442,7 +3443,7 @@ const index = (props) => {
                           <Text
                             style={{
                               fontSize: 14,
-                              fontFamily: 'SCDream4',
+                              fontFamily: SCDream4,
                               color: '#000',
                               marginRight: 10,
                             }}>
@@ -3451,7 +3452,7 @@ const index = (props) => {
                           <Text
                             style={{
                               fontSize: 14,
-                              fontFamily: 'SCDream4',
+                              fontFamily: SCDream4,
 
                               color: '#00A170',
                             }}>
@@ -3489,7 +3490,7 @@ const index = (props) => {
                           <Text
                             style={{
                               fontSize: 14,
-                              fontFamily: 'SCDream4',
+                              fontFamily: SCDream4,
                               color: '#000',
                             }}>
                             에폭시
@@ -3523,7 +3524,7 @@ const index = (props) => {
                             <Text
                               style={{
                                 fontSize: 14,
-                                fontFamily: 'SCDream4',
+                                fontFamily: SCDream4,
                                 color: epoxy === 'Y' ? '#00A170' : '#000',
                               }}>
                               있음
@@ -3550,7 +3551,7 @@ const index = (props) => {
                             <Text
                               style={{
                                 fontSize: 14,
-                                fontFamily: 'SCDream4',
+                                fontFamily: SCDream4,
                                 color: epoxy === 'N' ? '#00A170' : '#000',
                               }}>
                               없음
@@ -3572,7 +3573,7 @@ const index = (props) => {
                           <Text
                             style={{
                               fontSize: 14,
-                              fontFamily: 'SCDream4',
+                              fontFamily: SCDream4,
                               color: '#000',
                             }}>
                             오시
@@ -3606,7 +3607,7 @@ const index = (props) => {
                             <Text
                               style={{
                                 fontSize: 14,
-                                fontFamily: 'SCDream4',
+                                fontFamily: SCDream4,
                                 color: oshi === 'Y' ? '#00A170' : '#000',
                               }}>
                               있음
@@ -3633,7 +3634,7 @@ const index = (props) => {
                             <Text
                               style={{
                                 fontSize: 14,
-                                fontFamily: 'SCDream4',
+                                fontFamily: SCDream4,
                                 color: oshi === 'N' ? '#00A170' : '#000',
                               }}>
                               없음
@@ -3655,7 +3656,7 @@ const index = (props) => {
                           <Text
                             style={{
                               fontSize: 14,
-                              fontFamily: 'SCDream4',
+                              fontFamily: SCDream4,
                               color: '#000',
                             }}>
                             미싱
@@ -3689,7 +3690,7 @@ const index = (props) => {
                             <Text
                               style={{
                                 fontSize: 14,
-                                fontFamily: 'SCDream4',
+                                fontFamily: SCDream4,
                                 color: mishin === 'Y' ? '#00A170' : '#000',
                               }}>
                               있음
@@ -3716,7 +3717,7 @@ const index = (props) => {
                             <Text
                               style={{
                                 fontSize: 14,
-                                fontFamily: 'SCDream4',
+                                fontFamily: SCDream4,
                                 color: mishin === 'N' ? '#00A170' : '#000',
                               }}>
                               없음
@@ -3738,7 +3739,7 @@ const index = (props) => {
                           <Text
                             style={{
                               fontSize: 14,
-                              fontFamily: 'SCDream4',
+                              fontFamily: SCDream4,
                               color: '#000',
                             }}>
                             타공
@@ -3772,7 +3773,7 @@ const index = (props) => {
                             <Text
                               style={{
                                 fontSize: 14,
-                                fontFamily: 'SCDream4',
+                                fontFamily: SCDream4,
                                 color: hole === 'Y' ? '#00A170' : '#000',
                               }}>
                               있음
@@ -3799,7 +3800,7 @@ const index = (props) => {
                             <Text
                               style={{
                                 fontSize: 14,
-                                fontFamily: 'SCDream4',
+                                fontFamily: SCDream4,
                                 color: hole === 'N' ? '#00A170' : '#000',
                               }}>
                               없음
@@ -3818,7 +3819,7 @@ const index = (props) => {
                   <View style={{marginBottom: 20}}>
                     <Text
                       style={{
-                        fontFamily: 'SCDream5',
+                        fontFamily: SCDream5,
                         fontSize: 14,
                         marginBottom: 10,
                       }}>
@@ -3854,7 +3855,7 @@ const index = (props) => {
                           resizeMode="contain"
                           style={{width: 20, height: 20, marginRight: 5}}
                         />
-                        <Text style={{fontSize: 14, fontFamily: 'SCDream4'}}>
+                        <Text style={{fontSize: 14, fontFamily: SCDream4}}>
                           가능
                         </Text>
                       </TouchableOpacity>
@@ -3882,7 +3883,7 @@ const index = (props) => {
                           style={{width: 20, height: 20, marginRight: 5}}
                         />
 
-                        <Text style={{fontSize: 14, fontFamily: 'SCDream4'}}>
+                        <Text style={{fontSize: 14, fontFamily: SCDream4}}>
                           조정필요
                         </Text>
                       </TouchableOpacity>
@@ -3901,7 +3902,7 @@ const index = (props) => {
                             <Text
                               style={{
                                 fontSize: 14,
-                                fontFamily: 'SCDream4',
+                                fontFamily: SCDream4,
                                 color: '#000',
                               }}>
                               박가공
@@ -3939,7 +3940,7 @@ const index = (props) => {
                               <Text
                                 style={{
                                   fontSize: 14,
-                                  fontFamily: 'SCDream4',
+                                  fontFamily: SCDream4,
                                   color:
                                     editedFoil02 === 'Y' ? '#00A170' : '#000',
                                 }}>
@@ -3971,7 +3972,7 @@ const index = (props) => {
                               <Text
                                 style={{
                                   fontSize: 14,
-                                  fontFamily: 'SCDream4',
+                                  fontFamily: SCDream4,
                                   color:
                                     editedFoil === 'N' ? '#00A170' : '#000',
                                 }}>
@@ -3994,7 +3995,7 @@ const index = (props) => {
                             <Text
                               style={{
                                 fontSize: 14,
-                                fontFamily: 'SCDream4',
+                                fontFamily: SCDream4,
                                 color: '#000',
                               }}>
                               형압
@@ -4032,7 +4033,7 @@ const index = (props) => {
                               <Text
                                 style={{
                                   fontSize: 14,
-                                  fontFamily: 'SCDream4',
+                                  fontFamily: SCDream4,
                                   color:
                                     editedPress02 === 'Y' ? '#00A170' : '#000',
                                 }}>
@@ -4064,7 +4065,7 @@ const index = (props) => {
                               <Text
                                 style={{
                                   fontSize: 14,
-                                  fontFamily: 'SCDream4',
+                                  fontFamily: SCDream4,
                                   color:
                                     editedPress === 'N' ? '#00A170' : '#000',
                                 }}>
@@ -4087,7 +4088,7 @@ const index = (props) => {
                             <Text
                               style={{
                                 fontSize: 14,
-                                fontFamily: 'SCDream4',
+                                fontFamily: SCDream4,
                                 color: '#000',
                               }}>
                               부분실크
@@ -4125,7 +4126,7 @@ const index = (props) => {
                               <Text
                                 style={{
                                   fontSize: 14,
-                                  fontFamily: 'SCDream4',
+                                  fontFamily: SCDream4,
                                   color:
                                     editedSilk02 === 'Y' ? '#00A170' : '#000',
                                 }}>
@@ -4157,7 +4158,7 @@ const index = (props) => {
                               <Text
                                 style={{
                                   fontSize: 14,
-                                  fontFamily: 'SCDream4',
+                                  fontFamily: SCDream4,
                                   color:
                                     editedSilk === 'N' ? '#00A170' : '#000',
                                 }}>
@@ -4180,7 +4181,7 @@ const index = (props) => {
                             <Text
                               style={{
                                 fontSize: 14,
-                                fontFamily: 'SCDream4',
+                                fontFamily: SCDream4,
                                 color: '#000',
                                 marginRight: 10,
                               }}>
@@ -4189,7 +4190,7 @@ const index = (props) => {
                             <Text
                               style={{
                                 fontSize: 14,
-                                fontFamily: 'SCDream4',
+                                fontFamily: SCDream4,
 
                                 color: '#00A170',
                               }}>
@@ -4227,7 +4228,7 @@ const index = (props) => {
                             <Text
                               style={{
                                 fontSize: 14,
-                                fontFamily: 'SCDream4',
+                                fontFamily: SCDream4,
                                 color: '#000',
                               }}>
                               에폭시
@@ -4265,7 +4266,7 @@ const index = (props) => {
                               <Text
                                 style={{
                                   fontSize: 14,
-                                  fontFamily: 'SCDream4',
+                                  fontFamily: SCDream4,
                                   color: epoxy02 === 'Y' ? '#00A170' : '#000',
                                 }}>
                                 있음
@@ -4296,7 +4297,7 @@ const index = (props) => {
                               <Text
                                 style={{
                                   fontSize: 14,
-                                  fontFamily: 'SCDream4',
+                                  fontFamily: SCDream4,
                                   color: epoxy02 === 'N' ? '#00A170' : '#000',
                                 }}>
                                 없음
@@ -4318,7 +4319,7 @@ const index = (props) => {
                             <Text
                               style={{
                                 fontSize: 14,
-                                fontFamily: 'SCDream4',
+                                fontFamily: SCDream4,
                                 color: '#000',
                               }}>
                               오시
@@ -4356,7 +4357,7 @@ const index = (props) => {
                               <Text
                                 style={{
                                   fontSize: 14,
-                                  fontFamily: 'SCDream4',
+                                  fontFamily: SCDream4,
                                   color: oshi02 === 'Y' ? '#00A170' : '#000',
                                 }}>
                                 있음
@@ -4387,7 +4388,7 @@ const index = (props) => {
                               <Text
                                 style={{
                                   fontSize: 14,
-                                  fontFamily: 'SCDream4',
+                                  fontFamily: SCDream4,
                                   color: oshi02 === 'N' ? '#00A170' : '#000',
                                 }}>
                                 없음
@@ -4409,7 +4410,7 @@ const index = (props) => {
                             <Text
                               style={{
                                 fontSize: 14,
-                                fontFamily: 'SCDream4',
+                                fontFamily: SCDream4,
                                 color: '#000',
                               }}>
                               미싱
@@ -4447,7 +4448,7 @@ const index = (props) => {
                               <Text
                                 style={{
                                   fontSize: 14,
-                                  fontFamily: 'SCDream4',
+                                  fontFamily: SCDream4,
                                   color: mishin02 === 'Y' ? '#00A170' : '#000',
                                 }}>
                                 있음
@@ -4478,7 +4479,7 @@ const index = (props) => {
                               <Text
                                 style={{
                                   fontSize: 14,
-                                  fontFamily: 'SCDream4',
+                                  fontFamily: SCDream4,
                                   color: mishin02 === 'N' ? '#00A170' : '#000',
                                 }}>
                                 없음
@@ -4500,7 +4501,7 @@ const index = (props) => {
                             <Text
                               style={{
                                 fontSize: 14,
-                                fontFamily: 'SCDream4',
+                                fontFamily: SCDream4,
                                 color: '#000',
                               }}>
                               타공
@@ -4538,7 +4539,7 @@ const index = (props) => {
                               <Text
                                 style={{
                                   fontSize: 14,
-                                  fontFamily: 'SCDream4',
+                                  fontFamily: SCDream4,
                                   color: hole === 'Y' ? '#00A170' : '#000',
                                 }}>
                                 있음
@@ -4569,7 +4570,7 @@ const index = (props) => {
                               <Text
                                 style={{
                                   fontSize: 14,
-                                  fontFamily: 'SCDream4',
+                                  fontFamily: SCDream4,
                                   color: hole === 'N' ? '#00A170' : '#000',
                                 }}>
                                 없음
@@ -4635,7 +4636,7 @@ const index = (props) => {
           </View>
           
           <View style={{backgroundColor:'#F5F5F5', borderRadius:5, paddingVertical:20, paddingHorizontal:20, marginBottom:30}}>
-            <Text style={{fontSize:14, fontFamily:'SCDream4', color:'#000', lineHeight: 22}}>{detail.basic.memo ? detail.basic.memo : '의뢰 메모가 없습니다.'}</Text>
+            <Text style={{fontSize:14, fontFamily:SCDream4, color:'#000', lineHeight: 22}}>{detail.basic.memo ? detail.basic.memo : '의뢰 메모가 없습니다.'}</Text>
           </View>
         </View>
         : null}
@@ -4667,7 +4668,7 @@ const index = (props) => {
           {base.status === '1' && (
             <Text
               style={{
-                fontFamily: 'SCDream4',
+                fontFamily: SCDream4,
                 fontSize: 12,
                 color: '#00A170',
                 marginBottom: 25,
@@ -4711,7 +4712,7 @@ const index = (props) => {
                     paddingHorizontal: 10,
                     marginRight: 5,
                   }}>
-                  <Text style={{fontFamily: 'SCDream4', fontSize: 15}}>
+                  <Text style={{fontFamily: SCDream4, fontSize: 15}}>
                     {base.production_price &&
                       base.production_price.replace(
                         /\B(?=(\d{3})+(?!\d))/g,
@@ -4756,7 +4757,7 @@ const index = (props) => {
                     height: 50,
                     marginRight: 5,
                   }}>
-                  <Text style={{fontFamily: 'SCDream4', fontSize: 15}}>
+                  <Text style={{fontFamily: SCDream4, fontSize: 15}}>
                     {base.design_price &&
                       base.design_price.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
                   </Text>
@@ -4806,7 +4807,7 @@ const index = (props) => {
                     paddingHorizontal: 10,
                     marginRight: 5,
                   }}>
-                  <Text style={{fontFamily: 'SCDream4', fontSize: 15}}>
+                  <Text style={{fontFamily: SCDream4, fontSize: 15}}>
                     {base.reduce_price &&
                       base.reduce_price.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
                   </Text>
@@ -4836,7 +4837,7 @@ const index = (props) => {
                       height: 50,
                       paddingHorizontal: 10,
                     }}>
-                    <Text style={{fontFamily: 'SCDream4'}}>
+                    <Text style={{fontFamily: SCDream4}}>
                       {depositRatio}%
                     </Text>
                     {isActiveTogglePayPer ? (
@@ -4866,7 +4867,7 @@ const index = (props) => {
                     paddingHorizontal: 10,
                     marginRight: 5,
                   }}>
-                  <Text style={{fontFamily: 'SCDream4', fontSize: 15}}>
+                  <Text style={{fontFamily: SCDream4, fontSize: 15}}>
                     {base.deposit_rate}%
                   </Text>
                 </View>
@@ -4898,7 +4899,7 @@ const index = (props) => {
                         setIsActiveTogglePayPer(false);
                         depositHandler(v);
                       }}>
-                      <Text style={{fontFamily: 'SCDream4'}}>{v}%</Text>
+                      <Text style={{fontFamily: SCDream4}}>{v}%</Text>
                     </TouchableOpacity>
                   ))}
                 </View>
@@ -4936,7 +4937,7 @@ const index = (props) => {
                     }}>
                     <Text
                       style={{
-                        fontFamily: 'SCDream4',
+                        fontFamily: SCDream4,
                         fontSize: 14,
                       }}>
                       {depositPrice &&
@@ -4956,7 +4957,7 @@ const index = (props) => {
                     paddingHorizontal: 10,
                     marginRight: 5,
                   }}>
-                  <Text style={{fontFamily: 'SCDream4', fontSize: 15}}>
+                  <Text style={{fontFamily: SCDream4, fontSize: 15}}>
                     {base.deposit &&
                       base.deposit.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
                   </Text>
@@ -4992,7 +4993,7 @@ const index = (props) => {
                     }}>
                     <Text
                       style={{
-                        fontFamily: 'SCDream4',
+                        fontFamily: SCDream4,
                         fontSize: 15,
                         color: '#00A170',
                       }}>
@@ -5015,7 +5016,7 @@ const index = (props) => {
                   }}>
                   <Text
                     style={{
-                      fontFamily: 'SCDream4',
+                      fontFamily: SCDream4,
                       fontSize: 15,
                       color: '#00A170',
                     }}>
@@ -5042,7 +5043,7 @@ const index = (props) => {
                 placeholder="견적 상세 설명을 입력해주세요."
                 placeholderTextColor="#A2A2A2"
                 style={{
-                  fontFamily: 'SCDream4',
+                  fontFamily: SCDream4,
                   borderRadius: 5,
                   backgroundColor: '#F5F5F5',
                   height: 120,
@@ -5069,7 +5070,7 @@ const index = (props) => {
                 }}>
                 <Text
                   style={{
-                    fontFamily: 'SCDream4',
+                    fontFamily: SCDream4,
                     fontSize: 14,
                     lineHeight: 22,
                   }}>
@@ -5104,7 +5105,7 @@ const index = (props) => {
                     borderRadius: 4,
                     paddingHorizontal: 10,
                     marginRight: 10,
-                    fontFamily: 'SCDream4',
+                    fontFamily: SCDream4,
                   }}
                   editable={false}
                 />
@@ -5121,7 +5122,7 @@ const index = (props) => {
                   }}>
                   <Text
                     style={{
-                      fontFamily: 'SCDream4',
+                      fontFamily: SCDream4,
                       color: '#fff',
                       textAlign: 'center',
                     }}>
@@ -5152,7 +5153,7 @@ const index = (props) => {
                     borderRadius: 4,
                     paddingHorizontal: 10,
                     marginRight: 10,
-                    fontFamily: 'SCDream4',
+                    fontFamily: SCDream4,
                   }}
                   editable={false}
                 />
@@ -5169,7 +5170,7 @@ const index = (props) => {
                   disabled={true}>
                   <Text
                     style={{
-                      fontFamily: 'SCDream4',
+                      fontFamily: SCDream4,
                       textAlign: 'center',
                       color: '#ccc',
                     }}>
@@ -5263,8 +5264,8 @@ const index = (props) => {
           ) : base.status === '2' && isEstimated === 'Y' ? (
             <>
               <View style={{marginBottom:20}}>
-                <Text style={{fontSize:14, fontFamily:'SCDream4', color:'#00A170', lineHeight:20}}>상대방이 귀사의 견적을 채택하였습니다. </Text>
-                <Text style={{fontSize:14, fontFamily:'SCDream4', color:'#00A170', lineHeight:20}}>견적확정 버튼을 누르시면 다음 단계로 진행됩니다.</Text>
+                <Text style={{fontSize:14, fontFamily:SCDream4, color:'#00A170', lineHeight:20}}>상대방이 귀사의 견적을 채택하였습니다. </Text>
+                <Text style={{fontSize:14, fontFamily:SCDream4, color:'#00A170', lineHeight:20}}>견적확정 버튼을 누르시면 다음 단계로 진행됩니다.</Text>
               </View>
               <TouchableOpacity
                 onPress={() => sendEstimateCfmAPI()}
@@ -5281,8 +5282,8 @@ const index = (props) => {
           ) : base.status === '4' && isEstimated === 'Y' ? (
             <>
               <View style={{marginBottom:20}}>
-                <Text style={{fontSize:14, fontFamily:'SCDream4', color:'#00A170', lineHeight:20}}>상대방이 계약금을 입금하였습니다. </Text>
-                <Text style={{fontSize:14, fontFamily:'SCDream4', color:'#00A170', lineHeight:20}}>입금확인 후 버튼을 누르시면 다음 단계로 진행됩니다.</Text>
+                <Text style={{fontSize:14, fontFamily:SCDream4, color:'#00A170', lineHeight:20}}>상대방이 계약금을 입금하였습니다. </Text>
+                <Text style={{fontSize:14, fontFamily:SCDream4, color:'#00A170', lineHeight:20}}>입금확인 후 버튼을 누르시면 다음 단계로 진행됩니다.</Text>
               </View>
               <TouchableOpacity
                 onPress={() => sendPaymentCfmAPI()}
@@ -5341,13 +5342,13 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
   infoStepDesc: {
-    fontFamily: 'SCDream4',
+    fontFamily: SCDream4,
     fontSize: 12,
     color: '#00A170',
     lineHeight: 23,
   },
   infoStepTitle: {
-    fontFamily: 'SCDream5',
+    fontFamily: SCDream5,
     fontSize: 16,
     color: '#000000',
   },
@@ -5364,20 +5365,20 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   detailsTitle: {
-    fontFamily: 'SCDream4',
+    fontFamily: SCDream4,
     width: 145,
     fontSize: 14,
     color: '#A2A2A2',
     marginVertical: 5,
   },
   detailsTitle02: {
-    fontFamily: 'SCDream4',
+    fontFamily: SCDream4,
     width: 100,
     fontSize: 14,
     color: '#A2A2A2',
   },
   detailsDesc: {
-    fontFamily: 'SCDream4',
+    fontFamily: SCDream4,
     fontSize: 14,
     color: '#000',
   },
@@ -5387,27 +5388,27 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   orderInfoTitle: {
-    fontFamily: 'SCDream5',
+    fontFamily: SCDream5,
     fontSize: 16,
     color: '#00A170',
     marginTop: 20,
     marginBottom: 25,
   },
   orderInfoTitle02: {
-    fontFamily: 'SCDream5',
+    fontFamily: SCDream5,
     fontSize: 16,
     color: '#00A170',
     marginTop: 20,
     marginBottom: 5,
   },
   orderInfoDesc: {
-    fontFamily: 'SCDream4',
+    fontFamily: SCDream4,
     fontSize: 14,
     color: '#000',
     marginBottom: 10,
   },
   textInput: {
-    fontFamily: 'SCDream4',
+    fontFamily: SCDream4,
     borderWidth: 1,
     borderColor: '#E3E3E3',
     borderRadius: 4,
@@ -5436,12 +5437,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   orderInfoContentTitle: {
-    fontFamily: 'SCDream4',
+    fontFamily: SCDream4,
     fontSize: 15,
     color: '#111',
   },
   orderInfoContentDetail: {
-    fontFamily: 'SCDream4',
+    fontFamily: SCDream4,
     fontSize: 14,
     color: '#707070',
   },
@@ -5458,25 +5459,25 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
   },
   submitBtnText: {
-    fontFamily: 'SCDream4',
+    fontFamily: SCDream4,
     fontSize: 16,
     color: '#FFFFFF',
     textAlign: 'center',
   },
   submitedBtnText: {
-    fontFamily: 'SCDream4',
+    fontFamily: SCDream4,
     fontSize: 16,
     color: '#ccc',
     textAlign: 'center',
   },
   normalText: {
-    fontFamily: 'SCDream4',
+    fontFamily: SCDream4,
   },
   mediumText: {
-    fontFamily: 'SCDream5',
+    fontFamily: SCDream5,
   },
   boldText: {
-    fontFamily: 'SCDream6',
+    fontFamily: SCDream6,
   },
 });
 

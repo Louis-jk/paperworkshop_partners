@@ -25,6 +25,7 @@ import DocumentPicker from 'react-native-document-picker'; // 파일 업로드 �
 
 import DetailHeader from '../Common/DetailHeader';
 import ChatAPI from '../../src/api/Chat';
+import {SCDream4, SCDream5, SCDream6} from '../../src/font';
 
 const Detail = (props) => {
   const navigation = props.navigation;
@@ -133,7 +134,7 @@ const Detail = (props) => {
               paddingHorizontal: 14,
               paddingVertical: 7,
             }}>
-            <Text style={{fontFamily: 'SCDream4', fontSize: 13, color: '#fff'}}>
+            <Text style={{fontFamily: SCDream4, fontSize: 13, color: '#fff'}}>
               닫기
             </Text>
           </TouchableOpacity>
@@ -317,7 +318,7 @@ const Detail = (props) => {
             </View>
             <Text
               style={{
-                fontFamily: 'SCDream4',
+                fontFamily: SCDream4,
                 alignSelf: 'flex-end',
                 fontSize: 12,
                 color: '#000000',
@@ -361,7 +362,7 @@ const Detail = (props) => {
             </View>
             <Text
               style={{
-                fontFamily: 'SCDream4',
+                fontFamily: SCDream4,
                 alignSelf: 'flex-end',
                 fontSize: 12,
                 color: '#000000',
@@ -405,7 +406,7 @@ const Detail = (props) => {
             </View>
             <Text
               style={{
-                fontFamily: 'SCDream4',
+                fontFamily: SCDream4,
                 alignSelf: 'flex-end',
                 fontSize: 12,
                 color: '#000000',
@@ -454,7 +455,7 @@ const Detail = (props) => {
             </View>
             <Text
               style={{
-                fontFamily: 'SCDream4',
+                fontFamily: SCDream4,
                 alignSelf: 'flex-end',
                 fontSize: 12,
                 color: '#000000',
@@ -488,7 +489,7 @@ const Detail = (props) => {
             </View>
             <Text
               style={{
-                fontFamily: 'SCDream4',
+                fontFamily: SCDream4,
                 alignSelf: 'flex-end',
                 fontSize: 12,
                 color: '#000000',
@@ -542,7 +543,7 @@ const Detail = (props) => {
             </View>
             <Text
               style={{
-                fontFamily: 'SCDream4',
+                fontFamily: SCDream4,
                 alignSelf: 'flex-end',
                 fontSize: 12,
                 color: '#000000',
@@ -586,7 +587,7 @@ const Detail = (props) => {
             </View>
             <Text
               style={{
-                fontFamily: 'SCDream4',
+                fontFamily: SCDream4,
                 alignSelf: 'flex-end',
                 fontSize: 12,
                 color: '#000000',
@@ -645,7 +646,7 @@ const Detail = (props) => {
             </View>
             <Text
               style={{
-                fontFamily: 'SCDream4',
+                fontFamily: SCDream4,
                 alignSelf: 'flex-end',
                 fontSize: 12,
                 color: '#000000',
@@ -701,7 +702,7 @@ const Detail = (props) => {
               flex: 1,
               height: Dimensions.get('window').height - 230,
             }}>
-            <Text style={{fontFamily: 'SCDream4'}}>
+            <Text style={{fontFamily: SCDream4}}>
               채팅 내역이 없습니다.
             </Text>
           </View>
@@ -725,7 +726,7 @@ const Detail = (props) => {
             }}>
             <Text
               style={{
-                fontFamily: 'SCDream4',
+                fontFamily: SCDream4,
                 fontSize: 14,
                 color: '#000',
                 paddingHorizontal: 30,
@@ -764,7 +765,7 @@ const Detail = (props) => {
             autoCapitalize="none"
             style={{
               textAlignVertical: 'center',
-              fontFamily: 'SCDream4',
+              fontFamily: SCDream4,
               color: '#000',
               fontSize: 14,
               lineHeight: 22,
@@ -809,7 +810,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   msgText: {
-    fontFamily: 'SCDream4',
+    fontFamily: SCDream4,
     fontSize: 14,
     lineHeight: 20,
     color: '#000000',
@@ -827,19 +828,19 @@ const styles = StyleSheet.create({
     marginLeft: 5,
   },
   msgTextP: {
-    fontFamily: 'SCDream4',
+    fontFamily: SCDream4,
     fontSize: 14,
     lineHeight: 20,
     color: '#fff',
   },
   normalText: {
-    fontFamily: 'SCDream4',
+    fontFamily: SCDream4,
   },
   mediumText: {
-    fontFamily: 'SCDream5',
+    fontFamily: SCDream5,
   },
   boldText: {
-    fontFamily: 'SCDream6',
+    fontFamily: SCDream6,
   },
 });
 

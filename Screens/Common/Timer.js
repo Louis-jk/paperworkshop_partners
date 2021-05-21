@@ -1,5 +1,6 @@
 import * as React from 'react';
 import {View, Text, Alert} from 'react-native';
+import {SCDream4, SCDream5, SCDream6} from '../../src/font';
 
 const Timer = ({minutes, setMinutes, seconds, setSeconds, onFailConfirm}) => {
   const [timeOver, setTimeOver] = React.useState(false);
@@ -47,7 +48,7 @@ const Timer = ({minutes, setMinutes, seconds, setSeconds, onFailConfirm}) => {
           }}>
           <Text
             style={{
-              fontFamily: 'SCDream4',
+              fontFamily: SCDream4,
               fontSize: 12,
               color: '#111',
               marginRight: 5,
@@ -56,14 +57,14 @@ const Timer = ({minutes, setMinutes, seconds, setSeconds, onFailConfirm}) => {
           </Text>
           <Text
             style={{
-              fontFamily: 'SCDream4',
+              fontFamily: SCDream4,
               fontSize: 12,
               color: '#111',
               marginRight: 5,
             }}>
             {minutes}:{seconds < 10 ? `0${seconds}` : seconds}
           </Text>
-          <Text style={{fontFamily: 'SCDream4', fontSize: 11, color: '#ccc'}}>
+          <Text style={{fontFamily: SCDream4, fontSize: 11, color: '#ccc'}}>
             (인증번호 입력까지 남은시간)
           </Text>
         </View>
@@ -74,7 +75,7 @@ const Timer = ({minutes, setMinutes, seconds, setSeconds, onFailConfirm}) => {
           }}>
           <Text
             style={{
-              fontFamily: 'SCDream4',
+              fontFamily: SCDream4,
               fontSize: 12,
               color: '#ff5e78',
               marginRight: 5,
