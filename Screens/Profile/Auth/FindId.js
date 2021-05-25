@@ -177,6 +177,7 @@ const FindId = (props) => {
                   borderColor: '#E3E3E3',
                   borderRadius: 4,
                   paddingHorizontal: 10,
+                  height: 50
                 },
               ]}
               onChangeText={(text) => setUserName(text)}
@@ -212,6 +213,7 @@ const FindId = (props) => {
                     borderRadius: 4,
                     paddingHorizontal: 10,
                     marginRight: 10,
+                    height: 50
                   },
                 ]}
                 onChangeText={(text) => {
@@ -273,6 +275,7 @@ const FindId = (props) => {
                     borderRadius: 4,
                     paddingHorizontal: 10,
                     marginRight: 10,
+                    height: 50
                   },
                 ]}
                 onChangeText={(text) => {

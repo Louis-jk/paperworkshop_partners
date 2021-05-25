@@ -253,7 +253,7 @@ const Login = (props) => {
                 value={loginEmail}
                 ref={loginEmailRef}
                 placeholder="이메일"
-                style={[styles.normalText, {width: '80%'}]}
+                style={[styles.normalText, {width: '80%', height: 50}]}
                 onChangeText={(text) => setLoginEmail(text)}
                 autoCapitalize="none"
                 keyboardType="email-address"
@@ -278,7 +278,7 @@ const Login = (props) => {
                 ref={loginPwdRef}
                 placeholder="비밀번호"
                 placeholderTextColor="#A2A2A2"
-                style={[styles.normalText, {width: '80%'}]}
+                style={[styles.normalText, {width: '80%', height: 50}]}
                 onChangeText={(text) => setLoginPwd(text)}
                 autoCapitalize="none"
                 secureTextEntry={pwdEyes}

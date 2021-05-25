@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {Image} from 'react-native';
+import {Image, Platform} from 'react-native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {createStackNavigator} from '@react-navigation/stack';
 
@@ -44,9 +44,9 @@ export const BottomTabNavigator = () => {
         },
         style: {
           justifyContent: 'center',
-          height: 65,
+          height: Platform.OS === 'android' ? 65 : 90,
           backgroundColor: '#00A170',
-          paddingBottom: 5,
+          paddingBottom: Platform.OS === 'android' ? 5 : 20,
         },
         showLabel: false,
       }}

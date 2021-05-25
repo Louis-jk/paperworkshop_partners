@@ -8,6 +8,8 @@ import {
   StyleSheet,
   ScrollView,
   Alert,
+  SafeAreaView,
+  Platform
 } from 'react-native';
 
 import {useSelector} from 'react-redux';
@@ -155,6 +157,7 @@ const DrawerMenu = (props) => {
             backgroundColor: '#00A170',
             paddingHorizontal: 20,
             paddingVertical: 25,
+            paddingTop: Platform.OS === 'ios' ? 50 : 0
           }}>
           <View
             style={{

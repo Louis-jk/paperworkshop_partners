@@ -821,7 +821,7 @@ const Register = (props) => {
                       ref={passwordRef}
                       placeholder="비밀번호를 입력해주세요."
                       placeholderTextColor="#A2A2A2"
-                      style={[styles.normalText, {width: '90%'}]}
+                      style={[styles.normalText, {width: '90%', height: 50}]}
                       onChangeText={formikProps.handleChange('register_pw')}
                       autoCapitalize="none"
                       onBlur={formikProps.handleBlur('register_pw')}
@@ -893,7 +893,7 @@ const Register = (props) => {
                       ref={passwordCfmRef}
                       placeholder="비밀번호를 재입력해주세요."
                       placeholderTextColor="#A2A2A2"
-                      style={[styles.normalText, {width: '90%'}]}
+                      style={[styles.normalText, {width: '90%', height: 50}]}
                       onChangeText={formikProps.handleChange(
                         'register_confirmPw',
                       )}
@@ -955,6 +955,7 @@ const Register = (props) => {
                           formikProps.errors.register_name
                             ? 5
                             : 0,
+                        height: 50
                       },
                     ]}
                     onChangeText={(value) => {
@@ -1008,6 +1009,7 @@ const Register = (props) => {
                           borderRadius: 4,
                           paddingHorizontal: 10,
                           marginRight: 10,
+                          height: 50
                         },
                       ]}
                       value={formikProps.values.register_mobile}
@@ -1204,6 +1206,7 @@ const Register = (props) => {
                           formikProps.errors.register_company
                             ? 5
                             : 0,
+                        height: 50
                       },
                     ]}
                     onChangeText={(value) => {
@@ -1261,6 +1264,7 @@ const Register = (props) => {
                           borderRadius: 4,
                           paddingHorizontal: 10,
                           marginRight: 10,
+                          height: 50
                         },
                       ]}
                       editable={false}
@@ -1632,6 +1636,7 @@ const Register = (props) => {
                         borderRadius: 4,
                         paddingHorizontal: 10,
                         marginBottom: 5,
+                        height: 50
                       },
                     ]}
                     onSubmitEditing={() => bankAccountRef.current.focus()}
@@ -1668,6 +1673,7 @@ const Register = (props) => {
                         borderRadius: 4,
                         paddingHorizontal: 10,
                         marginBottom: 5,
+                        height: 50
                       },
                     ]}
                     onSubmitEditing={() => bankDepoRef.current.focus()}
@@ -1702,6 +1708,7 @@ const Register = (props) => {
                       borderRadius: 4,
                       paddingHorizontal: 10,
                       marginBottom: 5,
+                      height: 50
                     }}
                   />
                   {formikProps.touched.register_bankDepositor &&

@@ -204,6 +204,7 @@ const DetailEdit = (props) => {
                 backgroundColor: '#F5F5F5',
                 paddingLeft: 10,
                 paddingVertical: 10,
+                height: 50
               }}
             />
           </View>
@@ -222,6 +223,7 @@ const DetailEdit = (props) => {
                 backgroundColor: '#F5F5F5',
                 paddingLeft: 10,
                 paddingVertical: 10,
+                height: 50
               }}
             />
           </View>
@@ -240,6 +242,7 @@ const DetailEdit = (props) => {
                 backgroundColor: '#F5F5F5',
                 paddingLeft: 10,
                 paddingVertical: 10,
+                height: 50
               }}
             />
           </View>
@@ -259,6 +262,7 @@ const DetailEdit = (props) => {
                   backgroundColor: '#F5F5F5',
                   paddingLeft: 10,
                   paddingVertical: 10,
+                  height: 50
                 }}
               />
             </View>
