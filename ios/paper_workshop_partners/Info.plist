@@ -22,6 +22,10 @@
 	<string>????</string>
 	<key>CFBundleVersion</key>
 	<string>1</string>
+	<key>NSCameraUsageDescription</key>
+	<string>카메라 접근 허용</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>사진앨범에 접근할 수 있도록 허용 버튼을 눌러주세요.</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSAppTransportSecurity</key>
@@ -39,12 +43,12 @@
 	</dict>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string></string>
-  <key>UIAppFonts</key>
-  <array>
-    <string>Fonts/S-CoreDream-4Regular.otf</string>
-    <string>Fonts/S-CoreDream-5Medium.otf</string>
-    <string>Fonts/S-CoreDream-6Bold.otf</string>
-  </array>
+	<key>UIAppFonts</key>
+	<array>
+		<string>Fonts/S-CoreDream-4Regular.otf</string>
+		<string>Fonts/S-CoreDream-5Medium.otf</string>
+		<string>Fonts/S-CoreDream-6Bold.otf</string>
+	</array>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>remote-notification</string>

@@ -816,6 +816,7 @@ const Edit = (props) => {
                 borderRadius: 4,
                 paddingHorizontal: 10,
                 fontFamily: SCDream4,
+                height: 50
               }}
               autoCapitalize="none"
             />
@@ -1075,6 +1076,7 @@ const Edit = (props) => {
                     borderRadius: 4,
                     paddingHorizontal: 10,
                     marginRight: 10,
+                    height: 50,
                   },
                 ]}
                 value={mobileNo}
@@ -1260,6 +1262,7 @@ const Edit = (props) => {
                   paddingHorizontal: 10,
                   marginRight: 10,
                   fontFamily: SCDream4,
+                  height: 50,
                 }}
                 editable={false}
               />
@@ -1294,7 +1297,7 @@ const Edit = (props) => {
                 style={{
                   flexDirection: 'row',
                   justifyContent: 'flex-start',
-                  alignItems: 'baseline',
+                  alignItems: 'center',
                   marginTop: 10,
                   marginBottom: 5,
                 }}>
@@ -1607,6 +1610,7 @@ const Edit = (props) => {
                 borderRadius: 4,
                 paddingHorizontal: 10,
                 marginBottom: 5,
+                height: 50,
               }}
             />
             <TextInput
@@ -1621,6 +1625,7 @@ const Edit = (props) => {
                 borderRadius: 4,
                 paddingHorizontal: 10,
                 marginBottom: 5,
+                height: 50,
               }}
             />
             <TextInput
@@ -1635,6 +1640,7 @@ const Edit = (props) => {
                 borderRadius: 4,
                 paddingHorizontal: 10,
                 marginBottom: 5,
+                height: 50,
               }}
             />
           </View>
@@ -1665,6 +1671,7 @@ const Edit = (props) => {
                   paddingHorizontal: 10,
                   marginRight: 10,
                   fontFamily: SCDream4,
+                  height: 50,
                 }}
                 editable={false}
               />

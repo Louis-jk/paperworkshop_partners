@@ -9,6 +9,8 @@ import {
   TouchableOpacity,
   Alert,
   TextInput,
+  InputAccessoryView,
+  Button
 } from 'react-native';
 import {useSelector} from 'react-redux';
 import DetailHeader from '../Common/DetailHeader';
@@ -104,6 +106,7 @@ const ReqPopular = (props) => {
     requestPopularInfoAPI();
   }, []);
 
+  const nextFieldRef = React.useRef(null);
 
   return (
     <>
@@ -260,7 +263,19 @@ const ReqPopular = (props) => {
               }}
               onChangeText={(text) => setInfoTxt(text)}
               multiline={true}
+              inputAccessoryViewID="Next"
             />
+            <InputAccessoryView nativeID="Next" backgroundColor="#000">
+              <TouchableOpacity onPress={() => Alert.alert("hi?", "", [
+                {
+                  text: '확인'
+                }
+                ])}
+                style={styles.accessory}
+              >
+                <Text>버튼</Text>
+              </TouchableOpacity>
+            </InputAccessoryView>
           </View>
           {/* 업체 소개 TextArea */}
           {/* 업체 소개 TextArea */}
@@ -269,6 +284,7 @@ const ReqPopular = (props) => {
           </Text>
           <View style={styles.mgB40}>
             <TextInput
+              ref={nextFieldRef}
               value={cateTxt}
               placeholder="내용을 적어주세요"
               placeholderTextColor="#A2A2A2"
@@ -285,6 +301,7 @@ const ReqPopular = (props) => {
               }}
               onChangeText={(text) => setCateTxt(text)}
               multiline={true}
+              inputAccessoryViewID="Done"
             />
           </View>
           {/* 업체 소개 TextArea */}
@@ -342,6 +359,16 @@ const ReqPopular = (props) => {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: '#fff',
+  },
+  accessory: {
+    width: Dimensions.get('window').width,
+    height: 48,
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+    backgroundColor: '#F8F8F8',
+    paddingHorizontal: 8,
+    zIndex: 1000
   },
   orderInfoContentRow: {
     flexDirection: 'row',

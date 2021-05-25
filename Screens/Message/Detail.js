@@ -11,7 +11,8 @@ import {
   ActivityIndicator,
   FlatList,
   KeyboardAvoidingView,
-  Keyboard
+  Keyboard,
+  Platform
 } from 'react-native';
 
 import {useSelector} from 'react-redux';
@@ -22,6 +23,7 @@ import Modal from 'react-native-modal';
 import AutoHeightImage from 'react-native-auto-height-image';
 import FastImage from 'react-native-fast-image'; // gif 이미지 출력 패키지
 import RNFetchBlob from 'rn-fetch-blob'; // 파일 다운로드 패키지
+import ImagePicker from 'react-native-image-crop-picker'; // 이미지 업로드 패키지
 import DocumentPicker from 'react-native-document-picker'; // 파일 업로드 패키지
 
 import DetailHeader from '../Common/DetailHeader';
@@ -230,6 +232,46 @@ const Detail = (props) => {
           {
             text: '확인',
           },
+        ]);
+      });
+  };
+
+  // 이미지 업로드
+  const pickImageHandler = () => {
+    ImagePicker.openPicker({
+      mediaType: 'photo',
+      sortOrder: 'none',
+      compressImageMaxWidth: 500,
+      compressImageMaxHeight: 500,
+      compressImageQuality: 1,
+      compressVideoPreset: 'MediumQuality',
+      includeExif: true,
+      cropperCircleOverlay: true,
+      useFrontCamera: false,
+      // includeBase64: true,
+      cropping: false,
+    })
+      .then((img) => {
+        setMsgFile({
+          uri: img.path,
+          type: img.mime,
+          name: img.path.slice(img.path.lastIndexOf('/')),
+        });
+        Alert.alert('이미지를 전송하시겠습니까?', '', [
+          {
+            text: '확인',
+            onPress: () => sendMessageFileAPI(img.path, img.mime, img.path.slice(img.path.lastIndexOf('/'))),
+          },
+          {
+            text: '취소'
+          }
+        ]);
+      })
+      .catch((err) => {
+        Alert.alert(err, '이미지 업로드중 에러가 발생하였습니다.', [
+          {
+            text: '확인'
+          }
         ]);
       });
   };
@@ -603,12 +645,28 @@ const Detail = (props) => {
           justifyContent: 'space-between',
           alignItems: 'center',
           backgroundColor: '#00A170',
-          paddingVertical: 10,
+          paddingVertical: Platform.OS === 'android' ? 10 : 0,
           paddingHorizontal: 20,
         }}>
         <TouchableOpacity
           activeOpacity={0.8}
-          onPress={() => filePicker()}
+          onPress={() => {
+            if(Platform.OS === 'ios') {
+              Alert.alert('파일과 이미지중 어느쪽을 전송하시겠습니까?', '아래 버튼 중 선택해주세요.', [
+                {
+                  text: '파일선택',
+                  onPress: () => filePicker()
+                },
+                {
+                  text: '이미지선택',
+                  onPress: () => pickImageHandler()
+                }
+              ])
+              } else {
+                filePicker()
+              }
+            }
+          }
           style={{flex: 1}}>
           <Image
             source={require('../../src/assets/chat_fileupload.png')}
@@ -631,13 +689,20 @@ const Detail = (props) => {
               backgroundColor: '#fff',
               borderRadius: 5,
               paddingLeft: 10,
+              paddingTop: 10,
               marginHorizontal: 10,
+              marginVertical: 10,
+              height: 50
             }}
             onChangeText={(text) => setMessage(text)}
             multiline={true}
             autoCompleteType="off"
             autoCorrect={false}
+            enablesReturnKeyAutomatically={true}
             importantForAutofill="no"
+            returnKeyType="send"
+            returnKeyLabel="전송"
+            blurOnSubmit={true}
           />
         </View>
         <TouchableOpacity
@@ -668,9 +733,9 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     paddingVertical: 10,
     paddingHorizontal: 20,
-    borderBottomLeftRadius: 50,
-    borderBottomRightRadius: 50,
-    borderTopRightRadius: 50,
+    borderBottomLeftRadius: 20,
+    borderBottomRightRadius: 20,
+    borderTopRightRadius: 20,
     marginRight: 5,
     marginTop: 10,
   },
@@ -687,9 +752,9 @@ const styles = StyleSheet.create({
     backgroundColor: '#00A170',
     paddingVertical: 10,
     paddingHorizontal: 20,
-    borderBottomRightRadius: 50,
-    borderBottomLeftRadius: 50,
-    borderTopLeftRadius: 50,
+    borderBottomRightRadius: 20,
+    borderBottomLeftRadius: 20,
+    borderTopLeftRadius: 20,
     marginLeft: 5,
   },
   msgTextP: {

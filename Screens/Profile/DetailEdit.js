@@ -159,9 +159,12 @@ const DetailEdit = (props) => {
       frmData.append('bf_file[]', img);
     });
 
+    console.log("파트너스 정보 수정 frmData :: ",frmData);
 
     Auth.onEdit(frmData).then((res) => {
+      console.log("파트너스 정보 수정 res :: ");
       if (res.data.result === '1') {
+        console.log("파트너스 정보 수정 res :: ", res);
         dispatch(UserDescription(descriptionEdit));
         dispatch(UserBusinessTime(businessTimeEdit));
         dispatch(UserCloseDay(closeDayEdit));
@@ -174,6 +177,12 @@ const DetailEdit = (props) => {
           },
         ]);
       }
+    }).catch(err => {
+      Alert.alert(err, '관리자에게 문의하세요.', [
+        {
+          text: '확인'
+        }
+      ])
     });
   };
 

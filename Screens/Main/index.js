@@ -139,7 +139,10 @@ const index = (props) => {
   
   React.useEffect(() => {
     // ToastAndroid.showWithGravity("한번 더 누르면 앱을 종료합니다.", ToastAndroid.SHORT, ToastAndroid.BOTTOM);
-    requestAndroidPermission();
+    if(Platform.OS === 'android') {
+      requestAndroidPermission();
+    }
+    
   },[]);
 
   React.useEffect(() => {    

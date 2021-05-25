@@ -29,6 +29,8 @@ const PartnersInfoModal = ({toggleModal, isVisible}) => {
               position: 'relative',
               backgroundColor: '#fff',
               borderRadius: 5,
+              height: Dimensions.get('window').height - 200,
+              width: Dimensions.get('window').width - 50
             }}>
             <TouchableOpacity
               activeOpacity={0.8}
