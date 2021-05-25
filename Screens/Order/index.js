@@ -1366,6 +1366,7 @@ const index = (props) => {
                               {
                                 paddingHorizontal: 10,
                                 width: '70%',
+                                height: 50,
                                 color: deliveryDate ? '#111' : '#A2A2A2',
                               },
                             ]}
@@ -1398,6 +1399,7 @@ const index = (props) => {
                               {
                                 paddingHorizontal: 10,
                                 width: '70%',
+                                height: 50,
                                 color: deliveryDate ? '#111' : '#A2A2A2',
                               },
                             ]}
@@ -1891,6 +1893,7 @@ const index = (props) => {
                             borderColor: '#DEDEDE',
                             borderRadius: 5,
                             paddingHorizontal: 10,
+                            height: 50
                           },
                         ]}
                         onChangeText={(text) => setEditedType(text)}
@@ -1997,6 +2000,7 @@ const index = (props) => {
                             borderColor: '#DEDEDE',
                             borderRadius: 5,
                             paddingHorizontal: 10,
+                            height: 50
                           },
                         ]}
                         onChangeText={(text) => setEditedSize(text)}
@@ -2102,6 +2106,7 @@ const index = (props) => {
                             borderColor: '#DEDEDE',
                             borderRadius: 5,
                             paddingHorizontal: 10,
+                            height: 50
                           },
                         ]}
                         onChangeText={(text) => setEditedQuantity(text)}
@@ -2207,6 +2212,7 @@ const index = (props) => {
                             borderColor: '#DEDEDE',
                             borderRadius: 5,
                             paddingHorizontal: 10,
+                            height: 50
                           },
                         ]}
                         onChangeText={(text) => setEditedPrint(text)}
@@ -2606,6 +2612,7 @@ const index = (props) => {
                               borderColor: '#DEDEDE',
                               borderRadius: 5,
                               paddingHorizontal: 10,
+                              height: 50
                             },
                           ]}
                           onChangeText={(text) => setEditedPaper(text)}
@@ -2637,6 +2644,7 @@ const index = (props) => {
                               borderColor: '#DEDEDE',
                               borderRadius: 5,
                               paddingHorizontal: 10,
+                              height: 50
                             },
                           ]}
                           onChangeText={(text) => setEditedWeight(text)}
@@ -2666,6 +2674,7 @@ const index = (props) => {
                               borderColor: '#DEDEDE',
                               borderRadius: 5,
                               paddingHorizontal: 10,
+                              height: 50
                             },
                           ]}
                           onChangeText={(text) => setEditedColor(text)}
@@ -2698,6 +2707,7 @@ const index = (props) => {
                               borderRadius: 5,
                               paddingHorizontal: 10,
                               marginBottom: 5,
+                              height: 50
                             },
                           ]}
                           onChangeText={(text) => setEditedPattern(text)}
@@ -2816,6 +2826,7 @@ const index = (props) => {
                                 borderColor: '#DEDEDE',
                                 borderRadius: 5,
                                 paddingHorizontal: 10,
+                                height: 50
                               },
                             ]}
                             onChangeText={(text) => setEditedPaper02(text)}
@@ -2847,6 +2858,7 @@ const index = (props) => {
                                 borderColor: '#DEDEDE',
                                 borderRadius: 5,
                                 paddingHorizontal: 10,
+                                height: 50
                               },
                             ]}
                             onChangeText={(text) => setEditedWeight02(text)}
@@ -2878,6 +2890,7 @@ const index = (props) => {
                                 borderColor: '#DEDEDE',
                                 borderRadius: 5,
                                 paddingHorizontal: 10,
+                                height: 50
                               },
                             ]}
                             onChangeText={(text) => setEditedColor02(text)}
@@ -2910,6 +2923,7 @@ const index = (props) => {
                                 borderRadius: 5,
                                 paddingHorizontal: 10,
                                 marginBottom: 5,
+                                height: 50
                               },
                             ]}
                             onChangeText={(text) => setEditedPattern02(text)}
@@ -3471,6 +3485,7 @@ const index = (props) => {
                               borderColor: '#DEDEDE',
                               borderRadius: 5,
                               paddingHorizontal: 10,
+                              height: 50
                             },
                           ]}
                           onChangeText={(text) => setEditedLaminate(text)}
@@ -4209,6 +4224,7 @@ const index = (props) => {
                                 borderColor: '#DEDEDE',
                                 borderRadius: 5,
                                 paddingHorizontal: 10,
+                                height: 50
                               },
                             ]}
                             onChangeText={(text) => setEditedLaminate02(text)}
@@ -4684,7 +4700,7 @@ const index = (props) => {
                   ref={productPriceRef}
                   value={productPrice}
                   placeholder="금액을 입력하세요."
-                  style={styles.textInput}
+                  style={{...styles.textInput, height:50}}
                   onFocus={() => productPrice === '0' ? setProductPrice('') : productPrice}
                   onChangeText={(text) => {
                     const filteredText = text.replace(/(-)|(\.)/gi, '');
@@ -4729,7 +4745,7 @@ const index = (props) => {
                   ref={designPriceRef}
                   value={designPrice}
                   placeholder="금액을 입력하세요."
-                  style={styles.textInput}
+                  style={{...styles.textInput, height:50, width: '100%'}}
                   onFocus={() => designPrice === '0' ? setDesignPrice('') : designPrice}
                   onChangeText={(text) => {
                     const filteredText = text.replace(/(-)|(\.)/gi, '');
@@ -4773,7 +4789,7 @@ const index = (props) => {
                   ref={deliveryPriceRef}
                   value={deliveryPrice}
                   placeholder="금액을 입력하세요."
-                  style={styles.textInput}
+                  style={{...styles.textInput, height:50}}
                   onFocus={() => deliveryPrice === '0' ? setDeliveryPrice('') : deliveryPrice}
                   onChangeText={(text) => {
                     const filteredText = text.replace(/(-)|(\.)/gi, '');
@@ -4826,6 +4842,7 @@ const index = (props) => {
                     borderBottomLeftRadius: isActiveTogglePayPer ? 0 : 4,
                     borderBottomRightRadius: isActiveTogglePayPer ? 0 : 4,
                     backgroundColor: '#fff',
+                    width: '100%'
                   }}>
                   <TouchableOpacity
                     onPress={togglePayPer}
@@ -4834,7 +4851,7 @@ const index = (props) => {
                       flexDirection: 'row',
                       justifyContent: 'space-between',
                       alignItems: 'center',
-                      height: 50,
+                      height: 48,
                       paddingHorizontal: 10,
                     }}>
                     <Text style={{fontFamily: SCDream4}}>
@@ -4990,6 +5007,7 @@ const index = (props) => {
                       height: 50,
                       paddingHorizontal: 10,
                       marginRight: 5,
+                      width: '100%'
                     }}>
                     <Text
                       style={{
@@ -5106,6 +5124,7 @@ const index = (props) => {
                     paddingHorizontal: 10,
                     marginRight: 10,
                     fontFamily: SCDream4,
+                    height: 50
                   }}
                   editable={false}
                 />
